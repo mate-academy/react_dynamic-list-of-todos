@@ -11,7 +11,12 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { getFilterTodos } from './utils/getFilterTodos';
 import { Status } from './types/Status';
-// import { User } from './types/User';
+
+const todosFilter = (visibleTodos: Todo[], query: string) => {
+  return visibleTodos.filter(todo =>
+    todo.title.toLowerCase().includes(query.trim().toLowerCase()),
+  );
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,9 +28,7 @@ export const App: React.FC = () => {
   let visibleTodos = getFilterTodos([...todos], filter);
 
   if (query) {
-    visibleTodos = visibleTodos.filter(todo =>
-      todo.title.toLowerCase().includes(query.trim().toLowerCase()),
-    );
+    visibleTodos = todosFilter(visibleTodos, query);
   }
 
   useEffect(() => {

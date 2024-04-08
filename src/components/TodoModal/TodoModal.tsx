@@ -3,6 +3,7 @@ import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
+import cn from 'classnames';
 
 type Props = {
   selectedTodo: Todo | null;
@@ -18,6 +19,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setIsLoading(true);
+
     if (selectedTodo) {
       getUser(selectedTodo?.userId)
         .then(setUser)
@@ -44,7 +46,6 @@ export const TodoModal: React.FC<Props> = ({
             >
               {`Todo #${selectedTodo.id}`}
             </div>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -58,11 +59,15 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectedTodo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong
+                className={cn(
+                  selectedTodo.completed
+                    ? 'has-text-success'
+                    : 'has-text-danger',
+                )}
+              >
+                {selectedTodo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
               <a href={`mailto:${user.email}`}>{user.name}</a>
