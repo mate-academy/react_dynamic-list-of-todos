@@ -12,29 +12,22 @@ import { getTodos } from './api';
 import { Filter } from './types/Filters';
 
 const filteredTodos = (tasks: Todo[], filter: Filter, query: string) => {
-  let copyTasks = [...tasks];
   const queryLowerCase = query.trim().toLocaleLowerCase();
+  const filteredTasks = tasks.filter(task => {
+    const isTitleMatch = task.title
+      .toLocaleLowerCase()
+      .includes(queryLowerCase);
 
-  switch (filter) {
-    case 'active':
-      copyTasks = copyTasks.filter(t => t.completed === false);
-      break;
+    if (filter === 'active') {
+      return !task.completed && (!queryLowerCase || isTitleMatch);
+    } else if (filter === 'completed') {
+      return task.completed && (!queryLowerCase || isTitleMatch);
+    } else {
+      return !queryLowerCase || isTitleMatch;
+    }
+  });
 
-    case 'completed':
-      copyTasks = copyTasks.filter(t => t.completed === true);
-      break;
-
-    default:
-      break;
-  }
-
-  if (queryLowerCase) {
-    return copyTasks.filter(task =>
-      task.title.toLocaleLowerCase().includes(queryLowerCase),
-    );
-  }
-
-  return copyTasks;
+  return filteredTasks;
 };
 
 export const App: React.FC = () => {
@@ -73,8 +66,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isloading && <Loader />}
-              {!isloading && todos.length > 0 && (
-                <TodoList todos={newTodos} setTodo={setTodo} />
+              {!isloading && todos.length && (
+                <TodoList todo={todo} todos={newTodos} setTodo={setTodo} />
               )}
             </div>
           </div>
