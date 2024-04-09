@@ -48,7 +48,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              {!isLoading && todos.length > 0 && (
+              {!isLoading && todos.length && (
                 <TodoList
                   todos={visibleTodos}
                   modalInfo={modalInfo}
