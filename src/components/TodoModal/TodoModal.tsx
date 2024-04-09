@@ -11,18 +11,19 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => setIsError(true));
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
-        <Loader />
-      ) : (
+      {user ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -57,6 +58,25 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
           </div>
         </div>
+      ) : isError ? (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              Ups something gone wrong
+            </div>
+            <button
+              onClick={onClose}
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+            />
+          </header>
+        </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );

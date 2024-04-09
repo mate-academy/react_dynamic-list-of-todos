@@ -15,14 +15,17 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos)
+      .catch(() => setIsError(true));
   }, []);
 
   const filteredTodos = useMemo(() => {
     if (!todos) {
-      return todos;
+      return null;
     }
 
     let newFilteredTodos;
@@ -77,13 +80,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!filteredTodos && <Loader />}
-              {filteredTodos && (
+              {filteredTodos ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoId}
                   onSelect={handleSelectTodo}
                 />
+              ) : isError ? (
+                <p>Ups something gone wrong</p>
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
