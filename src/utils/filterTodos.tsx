@@ -3,7 +3,7 @@ import { Todo } from '../types/Todo';
 export function searchQueryInField(
   selectedBy: string,
   query: string,
-  list: Todo[],
+  list: Todo[] = [],
 ): Todo[] {
   let listCopy = [...list];
 

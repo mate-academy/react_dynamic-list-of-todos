@@ -12,7 +12,7 @@ import { getTodos } from './api';
 import { searchQueryInField } from './utils/filterTodos';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>();
   const [selectedBy, setSelectedBy] = useState('');
 
   const [searchBy, setSearchBy] = useState('');
@@ -41,7 +41,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!!todos && <Loader />}
+              {!todos && <Loader />}
 
               <TodoList
                 items={visibleItems}
