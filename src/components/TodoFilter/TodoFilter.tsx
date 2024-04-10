@@ -1,13 +1,17 @@
+import { Status } from '../../types/Status';
+
 type Props = {
-  querry: string;
-  setQuerry: (querry: string) => void;
-  setFilterBy: (querry: string) => void;
+  query: string;
+  setQuery: (query: string) => void;
+  setFilterBy: (filterBy: Status) => void;
+  filterBy: Status;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  querry,
-  setQuerry,
+  query,
+  setQuery,
   setFilterBy,
+  filterBy,
 }) => {
   return (
     <form className="field has-addons">
@@ -15,11 +19,12 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => setFilterBy(event.target.value)}
+            value={filterBy}
+            onChange={e => setFilterBy(e.target.value as Status)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -30,24 +35,23 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={querry}
-          onChange={event => setQuerry(event.target.value)}
+          value={query}
+          onChange={event => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {querry && (
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuerry('')}
+              onClick={() => setQuery('')}
             />
-          )}
-        </span>
+          </span>
+        )}
       </p>
     </form>
   );
