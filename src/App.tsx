@@ -10,10 +10,9 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
-import { FilteredOptions } from './components/TodoFilter';
-// import { User } from './types/User';
+import { FilteredOptions } from './types/FilteredOptions';
 
-function letFiltred(
+function filterTodosByStatusAndQuery(
   todos: Todo[],
   options: FilteredOptions,
   query: string,
@@ -40,7 +39,7 @@ function letFiltred(
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -49,21 +48,19 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    setLoading(true);
+    setisLoading(true);
 
     getTodos()
-      .then(newTodos => {
-        setTodos(newTodos);
-      })
+      .then(setTodos)
       .catch(() => {
         setError('something wrong');
       })
       .finally(() => {
-        setLoading(false);
+        setisLoading(false);
       });
   }, []);
 
-  const visibleTodos = letFiltred(todos, filteredField, query);
+  const visibleTodos = filterTodosByStatusAndQuery(todos, filteredField, query);
 
   return (
     <>
@@ -82,11 +79,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {error && !loading && <span>{error}</span>}
+              {error && !isLoading && <span>{error}</span>}
 
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={visibleTodos}
                   setSelectTodo={setSelectTodo}

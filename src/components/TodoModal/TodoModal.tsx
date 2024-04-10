@@ -14,12 +14,11 @@ export const TodoModal: React.FC<Props> = ({ selectTodo, setSelectTodo }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (selectTodo) {
-      setIsLoading(true);
-      getUser(selectTodo.userId)
-        .then(setUser)
-        .finally(() => setIsLoading(false));
-    }
+    setIsLoading(true);
+
+    getUser(selectTodo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
   }, [selectTodo]);
 
   return (

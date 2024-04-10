@@ -1,11 +1,4 @@
-// import { useState } from 'react';
-// import { Todo } from '../../types/Todo';
-
-export enum FilteredOptions {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
+import { FilteredOptions } from '../../types/FilteredOptions';
 
 interface Props {
   query: string;
@@ -31,9 +24,11 @@ export const TodoFilter: React.FC<Props> = ({
               setFilterField(event.target.value as FilteredOptions);
             }}
           >
-            <option value={FilteredOptions.All}>All</option>
-            <option value={FilteredOptions.Active}>Active</option>
-            <option value={FilteredOptions.Completed}>Completed</option>
+            {Object.values(FilteredOptions).map(option => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -52,7 +47,6 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {query && (
             <button
               data-cy="clearSearchButton"
