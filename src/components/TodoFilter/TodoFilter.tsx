@@ -1,9 +1,10 @@
 import React from 'react';
+import { TaskStatus } from '../../types/types';
 
 interface Props {
   query: string;
-  setQuery: (arg) => void;
-  setTaskStatusFilter: (arg) => void;
+  setQuery: (_: string) => void;
+  setTaskStatusFilter: (_: TaskStatus) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -11,16 +12,16 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   setTaskStatusFilter,
 }) => (
-  <form className="field has-addons" onSubmit={event => event.preventDefault()}>
+  <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={event => setTaskStatusFilter(event.target.value)}
+          onChange={event => setTaskStatusFilter(event.target.value as TaskStatus)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={TaskStatus.All}>All</option>
+          <option value={TaskStatus.Active}>Active</option>
+          <option value={TaskStatus.Completed}>Completed</option>
         </select>
       </span>
     </p>

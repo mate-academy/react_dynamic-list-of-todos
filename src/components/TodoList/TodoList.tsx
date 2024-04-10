@@ -5,7 +5,7 @@ import cn from 'classnames';
 interface Props {
   todos: Todo[];
   selectedTodo: Todo;
-  selectTodo: (event) => void;
+  selectTodo: (todo: Todo) => void;
 }
 
 export const TodoList: React.FC<Props> = ({

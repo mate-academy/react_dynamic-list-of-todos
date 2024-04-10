@@ -7,7 +7,7 @@ import cn from 'classnames';
 
 interface Props {
   selectedTodo: Todo;
-  setSelectedTodo: (arg: Todo | null) => void;
+  setSelectedTodo: (_: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({

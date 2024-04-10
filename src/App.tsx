@@ -23,33 +23,32 @@ const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
   const normalizeStr = (str: string): string => str.trim().toLowerCase();
 
   if (query) {
-    filteredTodos = todos.filter(todo =>
+    filteredTodos = filteredTodos.filter(todo =>
       normalizeStr(todo.title).includes(normalizeStr(query)),
     );
   }
 
-  if (taskStatusFilter === 'completed') {
-    filteredTodos = todos.filter(todo => todo.completed);
+  switch (taskStatusFilter) {
+    case TaskStatus.Active:
+      return filteredTodos.filter(todo => !todo.completed);
+    case TaskStatus.Completed:
+      return filteredTodos.filter(todo => todo.completed);
+    default:
+      return filteredTodos;
   }
-
-  if (taskStatusFilter === 'active') {
-    filteredTodos = todos.filter(todo => !todo.completed);
-  }
-
-  return filteredTodos;
 };
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isTodoArrayLoaded, setIsTodoArrayLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState('');
-  const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatus>('all');
+  const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatus>(TaskStatus.All);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setIsTodoArrayLoaded(true));
+      .finally(() => setIsLoaded(true));
   }, []);
 
   const filteredTodos = getFilteredTodos(todos, { query, taskStatusFilter });
@@ -70,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isTodoArrayLoaded ? (
+              {isLoaded ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
@@ -84,7 +83,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo !== null && (
+      {selectedTodo && (
         <TodoModal
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
