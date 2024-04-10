@@ -28,9 +28,13 @@ export const TodoList: React.FC<Props> = ({
         </tr>
       </thead>
 
-      {items?.map(todo => (
-        <tbody key={todo.id}>
-          <tr data-cy="todo" className="has-background-info-light">
+      <tbody>
+        {items?.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className="has-background-info-light"
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -67,8 +71,8 @@ export const TodoList: React.FC<Props> = ({
               </button>
             </td>
           </tr>
-        </tbody>
-      ))}
+        ))}
+      </tbody>
     </table>
   );
 };

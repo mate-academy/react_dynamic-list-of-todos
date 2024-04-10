@@ -9,51 +9,22 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { searchQueryInField } from './utils/filterTodos';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>();
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedBy, setSelectedBy] = useState('');
-  const [searchBy, setSearchBy] = useState('');
 
+  const [searchBy, setSearchBy] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
-      .then(data => {
-        switch (selectedBy) {
-          case 'all':
-            return setTodos(
-              data.filter(item => {
-                return item;
-              }),
-            );
-          case 'active':
-            return setTodos(
-              data.filter(item => {
-                return !item.completed;
-              }),
-            );
-          case 'completed':
-            return setTodos(
-              data.filter(item => {
-                return item.completed;
-              }),
-            );
-
-          default:
-            return setTodos(data);
-        }
-      })
+      .then(setTodos)
       .catch(e => alert(e));
-  }, [selectedBy, searchBy]);
+  }, []);
 
-  const filteredTodos = todos?.filter(item => {
-    if (searchBy) {
-      return item.title.toLowerCase().includes(searchBy.toLowerCase());
-    } else {
-      return item;
-    }
-  });
+  const visibleItems = searchQueryInField(selectedBy, searchBy, todos);
 
   return (
     <>
@@ -70,10 +41,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos && <Loader />}
+              {!!todos && <Loader />}
 
               <TodoList
-                items={filteredTodos}
+                items={visibleItems}
                 setSelectedTodo={e => setSelectedTodo(e)}
                 selectedTodo={selectedTodo}
               />

@@ -9,13 +9,12 @@ export const TodoFilter: React.FC<Props> = ({ selectedBy, searchBy }) => {
   const [search, setSearch] = useState('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    searchBy(search);
     setSearch(e.target.value);
+    searchBy(e.target.value);
   };
 
   const deleteSearchField = () => {
     setSearch('');
-    selectedBy('');
     searchBy('');
   };
 
