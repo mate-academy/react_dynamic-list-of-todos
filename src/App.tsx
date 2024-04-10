@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,54 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>();
+  const [selectedBy, setSelectedBy] = useState('');
+  const [searchBy, setSearchBy] = useState('');
+
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    getTodos()
+      .then(data => {
+        switch (selectedBy) {
+          case 'all':
+            return setTodos(
+              data.filter(item => {
+                return item;
+              }),
+            );
+          case 'active':
+            return setTodos(
+              data.filter(item => {
+                return !item.completed;
+              }),
+            );
+          case 'completed':
+            return setTodos(
+              data.filter(item => {
+                return item.completed;
+              }),
+            );
+
+          default:
+            return setTodos(data);
+        }
+      })
+      .catch(e => alert(e));
+  }, [selectedBy, searchBy]);
+
+  const filteredTodos = todos?.filter(item => {
+    if (searchBy) {
+      return item.title.toLowerCase().includes(searchBy.toLowerCase());
+    } else {
+      return item;
+    }
+  });
+
   return (
     <>
       <div className="section">
@@ -17,18 +63,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                selectedBy={s => setSelectedBy(s)}
+                searchBy={s => setSearchBy(s)}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!todos && <Loader />}
+
+              <TodoList
+                items={filteredTodos}
+                setSelectedTodo={e => setSelectedTodo(e)}
+                selectedTodo={selectedTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      <TodoModal
+        selectedTodo={selectedTodo}
+        setSelectedTodo={e => setSelectedTodo(e)}
+      />
     </>
   );
 };
