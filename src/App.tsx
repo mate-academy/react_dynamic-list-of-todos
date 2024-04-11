@@ -1,14 +1,17 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { StateContext } from './context/ReduxContext';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const { todos, seeMore, query } = useContext(StateContext);
+
   return (
     <>
       <div className="section">
@@ -21,14 +24,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
+              {!todos.length && !query.length && <Loader />}
+
               <TodoList />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {seeMore && <TodoModal />}
     </>
   );
 };
