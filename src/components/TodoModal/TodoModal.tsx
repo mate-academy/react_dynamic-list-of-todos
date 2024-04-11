@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { DispatchContext, StateContext } from '../../context/ReduxContext';
 import { getUser } from '../../api';
@@ -9,9 +9,17 @@ export const TodoModal: React.FC = () => {
 
   const dispatch = useContext(DispatchContext);
 
-  getUser(userId).then(users => {
-    return dispatch({ type: 'setUsers', payload: users });
-  });
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    getUser(userId).then(users => {
+      return dispatch({ type: 'setUsers', payload: users });
+    });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [dispatch, userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">

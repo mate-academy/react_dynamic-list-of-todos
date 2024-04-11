@@ -10,7 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  const { todos, seeMore } = useContext(StateContext);
+  const { todos, seeMore, query } = useContext(StateContext);
 
   return (
     <>
@@ -24,7 +24,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length && <Loader />}
+              {!todos.length && !query.length && <Loader />}
 
               <TodoList />
             </div>

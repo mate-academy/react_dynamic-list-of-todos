@@ -115,48 +115,38 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    switch (state.select) {
-      case 'all':
-        getTodos().then(todos => {
-          return dispatch({
-            type: 'setTodos',
-            payload: todos.filter(todo =>
-              todo.title.toUpperCase().includes(state.query.toUpperCase()),
-            ),
-          });
-        });
+    // Create a variable to store the abort controller
+    const abortController = new AbortController();
 
-        break;
+    // Fetch todos and filter them
+    getTodos().then(todos => {
+      let filteredTodos = todos.filter(todo =>
+        todo.title.toUpperCase().includes(state.query.toUpperCase()),
+      );
 
-      case 'active':
-        getTodos().then(todos => {
-          return dispatch({
-            type: 'setTodos',
-            payload: todos
-              .filter(todo => !todo.completed)
-              .filter(todo =>
-                todo.title.toUpperCase().includes(state.query.toUpperCase()),
-              ),
-          });
-        });
+      switch (state.select) {
+        case 'active':
+          filteredTodos = filteredTodos.filter(todo => !todo.completed);
+          break;
+        case 'completed':
+          filteredTodos = filteredTodos.filter(todo => todo.completed);
+          break;
+        default:
+          break;
+      }
 
-        break;
+      // Dispatch the filtered todos
+      dispatch({
+        type: 'setTodos',
+        payload: filteredTodos,
+      });
+    });
 
-      case 'completed':
-        getTodos().then(todos => {
-          return dispatch({
-            type: 'setTodos',
-            payload: todos
-              .filter(todo => todo.completed)
-              .filter(todo =>
-                todo.title.toUpperCase().includes(state.query.toUpperCase()),
-              ),
-          });
-        });
-
-        break;
-    }
-  }, [state.select, state.query, state.todos]);
+    // Return a cleanup function to cancel the fetch request
+    return () => {
+      abortController.abort();
+    };
+  }, [state.select, state.query]); // Remove state.todos as a dependency
 
   return (
     <DispatchContext.Provider value={dispatch}>

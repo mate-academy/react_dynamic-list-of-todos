@@ -13,6 +13,16 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
   const { id, title, completed, userId } = todo;
 
+  const handleSeeClick = () => {
+    dispatch({
+      type: 'seeMore',
+      curruntId: id,
+      currentTitile: title,
+      statusComleted: completed,
+      userId: userId,
+    });
+  };
+
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{id}</td>
@@ -35,15 +45,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
 
       <td className="has-text-right is-vcentered">
         <button
-          onClick={() =>
-            dispatch({
-              type: 'seeMore',
-              curruntId: id,
-              currentTitile: title,
-              statusComleted: completed,
-              userId: userId,
-            })
-          }
+          onClick={handleSeeClick}
           data-cy="selectButton"
           className="button"
           type="button"
