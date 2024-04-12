@@ -12,19 +12,20 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, setSelectedTodo }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     getUser(todo.userId)
       .then(setSelectedUser)
-      .finally(() => setIsLoading(true));
+      .finally(() => setIsLoading(false));
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

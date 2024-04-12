@@ -1,13 +1,12 @@
 import React from 'react';
 import { Status } from '../../types/Status';
-import classNames from 'classnames';
 
 type Props = {
   query: string;
   selectedStatus: Status;
   onReset: () => void;
-  onQueryChange: (event: string) => void;
-  onStatusChange: (event: Status) => void;
+  onQueryChange: (query: string) => void;
+  onStatusChange: (status: Status) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -25,9 +24,11 @@ export const TodoFilter: React.FC<Props> = ({
           value={selectedStatus}
           onChange={event => onStatusChange(event.target.value as Status)}
         >
-          <option value={Status.all}>All</option>
-          <option value={Status.active}>Active</option>
-          <option value={Status.completed}>Completed</option>
+          {Object.entries(Status).map(([key, value]) => (
+            <option key={key} value={value}>
+              {key}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -46,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       {query && (
-        <span className={classNames('icon is-right', { pointerEvents: 'all' })}>
+        <span className="icon is-right clear-button">
           <button
             data-cy="clearSearchButton"
             type="button"

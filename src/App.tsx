@@ -19,10 +19,10 @@ const getPreparedTodos = (
   let preparedTodos = [...todos];
 
   switch (selectedStatus) {
-    case Status.active:
+    case Status.Active:
       preparedTodos = todos.filter(todo => !todo.completed);
       break;
-    case Status.completed:
+    case Status.Completed:
       preparedTodos = todos.filter(todo => todo.completed);
       break;
   }
@@ -44,22 +44,23 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [query, setQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.all);
+  const [selectedStatus, setSelectedStatus] = useState<Status>(Status.All);
 
   const visibleTodos = getPreparedTodos(todos, { selectedStatus, query });
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setIsLoading(true));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleReset = () => {
     setQuery('');
-    setSelectedStatus(Status.all);
+    setSelectedStatus(Status.All);
   };
 
   return (
@@ -79,7 +80,7 @@ export const App: React.FC = () => {
               />
             </div>
 
-            {!isLoading ? (
+            {isLoading ? (
               <Loader />
             ) : (
               <div className="block">
