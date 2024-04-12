@@ -4,10 +4,12 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
-export const TodoModal: React.FC<{
+type Props = {
   todo: Todo;
   setTodo: (todo: Todo | null) => void;
-}> = ({ todo, setTodo }) => {
+};
+
+export const TodoModal: React.FC<Props> = ({ todo, setTodo }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [author, setAuthor] = useState<User | null>(null);
 
