@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -6,53 +7,64 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Todo } from './types/Todo';
+// eslint-disable-next-line import/extensions
+import { FilterCriteria, Select, Status } from './types/otherTypes';
 
-enum FilterType {
-  Active = 'active',
-  Completed = 'completed',
-  All = 'all',
-}
+const filterTodos = (
+  todos: Todo[],
+  { status, searchInput }: FilterCriteria,
+): Todo[] => {
+  return todos.filter(todo => {
+    if (status === Status.Active && todo.completed) {
+      return false;
+    }
 
-const filterTodos = (todos: Todo[], filterType: string, filterText: string) => {
-  let filteredTodos: Todo[] = [...todos];
+    if (status === Status.Completed && !todo.completed) {
+      return false;
+    }
 
-  if (filterType === FilterType.Active) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return !todo.completed;
-    });
-  }
+    if (
+      searchInput &&
+      !todo.title.toLowerCase().includes(searchInput.toLowerCase())
+    ) {
+      return false;
+    }
 
-  if (filterType === FilterType.Completed) {
-    filteredTodos = filteredTodos.filter(todo => {
-      return todo.completed;
-    });
-  }
-
-  if (filterText) {
-    filteredTodos = filteredTodos.filter(todo =>
-      todo.title.toLowerCase().includes(filterText.toLowerCase()),
-    );
-  }
-
-  return filteredTodos;
+    return true;
+  });
 };
 
 export const App: React.FC = () => {
-  const [todos, setTodods] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [filterType, setFilterType] = useState<string>('All');
-  const [filterText, setFilterText] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isTodosLoading, setIsTodosLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Select>(null);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState<FilterCriteria>({
+    status: Status.All,
+    searchInput: '',
+  });
 
   useEffect(() => {
-    setIsLoading(true);
-    getTodos().then(data => {
-      setTodods(data);
-      setIsLoading(false);
-    });
-  }, []);
+    setIsTodosLoading(true);
+    getTodos()
+      .then((todos: Todo[]) => {
+        const filteredTodos = filterTodos(todos, filter);
+
+        setTodosFromServer(filteredTodos);
+      })
+      .finally(() => {
+        setIsTodosLoading(false);
+      });
+  }, [filter]);
+
+  const handleFilterChange = (filterCriteria: FilterCriteria) => {
+    setFilter(filterCriteria);
+  };
+
+  const handleSelectedTodo = (selectedTodoChange: Select) => {
+    setSelectedTodo(selectedTodoChange);
+  };
 
   return (
     <>
@@ -62,21 +74,17 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter
-                filterText={filterText}
-                setFilterText={setFilterText}
-                setFilterType={setFilterType}
-              />
+              <TodoFilter onFilterChange={handleFilterChange} />
             </div>
 
             <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
+              {isTodosLoading && <Loader />}
+
+              {!isTodosLoading && (
                 <TodoList
-                  todos={filterTodos(todos, filterType, filterText)}
-                  setSelectedTodo={setSelectedTodo}
+                  todos={todosFromServer}
                   selectedTodo={selectedTodo}
+                  onSelect={handleSelectedTodo}
                 />
               )}
             </div>
@@ -85,10 +93,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
+        <TodoModal selectedTodo={selectedTodo} onSelect={handleSelectedTodo} />
       )}
     </>
   );

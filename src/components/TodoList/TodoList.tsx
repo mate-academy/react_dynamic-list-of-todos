@@ -1,74 +1,85 @@
 import React from 'react';
+// eslint-disable-next-line import/extensions
+import { Select } from '../../types/otherTypes';
 import { Todo } from '../../types/Todo';
-type TodoListProps = {
+import cn from 'classnames';
+
+interface TodoListProps {
   todos: Todo[];
-  selectedTodo: Todo | null;
-  setSelectedTodo: (selectedTodo: Todo) => void;
-};
+  selectedTodo: Select;
+  onSelect: (todo: Todo) => void;
+}
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
   selectedTodo,
-  setSelectedTodo,
+  onSelect,
 }) => {
   return (
-    <table className="table is-narrow is-fullwidth">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>
-            <span className="icon">
-              <i className="fas fa-check" />
-            </span>
-          </th>
-          <th>Title</th>
-          <th> </th>
-        </tr>
-      </thead>
-      {/* "has-text-danger" */}
-      <tbody>
-        {todos.map(todo => (
-          <tr key={todo.id} data-cy="todo" className="">
-            <td className="is-vcentered">{todo.id}</td>
-            {todo.completed ? (
-              <td className="is-vcentered">
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              </td>
-            ) : (
-              <td className="is-vcentered" />
-            )}
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => setSelectedTodo(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={
-                      selectedTodo && selectedTodo.id === todo.id
-                        ? 'far fa-eye-slash'
-                        : 'far fa-eye'
-                    }
-                  />
-                </span>
-              </button>
-            </td>
+    <>
+      <table className="table is-narrow is-fullwidth">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>
+              <span className="icon">
+                <i className="fas fa-check" />
+              </span>
+            </th>
+            <th>Title</th>
+            <th> </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {todos.map((todo, index) => (
+            <tr
+              key={index}
+              data-cy="todo"
+              className={cn({
+                'has-background-info-light':
+                  selectedTodo && todo.id === selectedTodo.id,
+              })}
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td className="is-vcentered is-expanded">
+                <p
+                  className={cn({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
+                >
+                  {todo.title}
+                </p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => onSelect(todo)}
+                >
+                  {' '}
+                  <span className="icon">
+                    {selectedTodo && todo.id === selectedTodo.id ? (
+                      <i className="far fa-eye-slash" />
+                    ) : (
+                      <i className="far fa-eye" />
+                    )}
+                  </span>
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
