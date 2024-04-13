@@ -14,20 +14,21 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     getUser(selectedTodo.userId)
       .then(setUser)
-      .finally(() => setIsUserLoaded(true));
+      .finally(() => setIsLoading(false));
   }, [selectedTodo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!isUserLoaded ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -45,7 +46,6 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 setSelectedTodo(null);
-                setIsUserLoaded(false);
               }}
             />
           </header>

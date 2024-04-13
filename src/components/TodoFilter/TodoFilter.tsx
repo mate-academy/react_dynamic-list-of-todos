@@ -3,8 +3,8 @@ import { TaskStatus } from '../../types/types';
 
 interface Props {
   query: string;
-  setQuery: (_: string) => void;
-  setTaskStatusFilter: (_: TaskStatus) => void;
+  setQuery: (query: string) => void;
+  setTaskStatusFilter: (taskStatus: TaskStatus) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({

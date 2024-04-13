@@ -10,6 +10,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TaskStatus } from './types/types';
+import { normalizeStr } from './utils/stringFormat';
 
 type FilterOptions = {
   query: string;
@@ -18,9 +19,7 @@ type FilterOptions = {
 
 const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
   const { query, taskStatusFilter } = options;
-  let filteredTodos = [...todos];
-
-  const normalizeStr = (str: string): string => str.trim().toLowerCase();
+  let filteredTodos = todos;
 
   if (query) {
     filteredTodos = filteredTodos.filter(todo =>
@@ -41,14 +40,15 @@ const getFilteredTodos = (todos: Todo[], options: FilterOptions) => {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatus>(TaskStatus.All);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setIsLoaded(true));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = getFilteredTodos(todos, { query, taskStatusFilter });
@@ -69,14 +69,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoaded ? (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   selectTodo={setSelectedTodo}
                 />
-              ) : (
-                <Loader />
               )}
             </div>
           </div>
