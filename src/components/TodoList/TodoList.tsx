@@ -71,11 +71,11 @@ const TodoList: React.FC = () => {
             const { id, completed, title } = todo;
 
             return (
-              <tr data-cy="todo" className="" key={id}>
+              <tr data-cy="todo" key={id}>
                 {/*has-background-info-light*/}
                 <td className="is-vcentered">{id}</td>
                 <td className="is-vcentered">
-                  <span className="icon" data-cy="iconCompleted">
+                  <span className="icon" data-cy={completed ? 'iconCompleted' : ''}>
                     <i className={cn('fas', { 'fa-check': completed })} />
                   </span>
                 </td>
