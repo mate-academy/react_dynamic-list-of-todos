@@ -1,29 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { Todo } from '../../types/Todo';
-import { getDisplayedTodos } from '../../utis';
-type Props = {
-  todos: Todo[];
-  updateTodos: (todos: Todo[]) => void;
-};
+import { useContext, useEffect, useRef, useState } from 'react';
+import { TodoContext } from '../../Store';
+import { Filter } from '../../types/Filter';
 
-export const TodoFilter: React.FC<Props> = ({ todos, updateTodos }) => {
+export const TodoFilter: React.FC = () => {
+  const { setAppliedQuery, filter, setFilter } = useContext(TodoContext);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
   const timerID = useRef(0);
 
   useEffect(() => {
-    let displayedTodos = getDisplayedTodos(todos, filter, '');
-
-    updateTodos(displayedTodos);
-
-    if (query) {
-      timerID.current = window.setTimeout(() => {
-        displayedTodos = getDisplayedTodos(todos, filter, query);
-
-        updateTodos(displayedTodos);
-      }, 1000);
-    }
-  }, [todos, filter, query]);
+    window.clearTimeout(timerID.current);
+    timerID.current = window.setTimeout(() => {
+      setAppliedQuery(query);
+    }, 1000);
+  }, [query, setAppliedQuery]);
 
   return (
     <form className="field has-addons">
@@ -33,12 +22,12 @@ export const TodoFilter: React.FC<Props> = ({ todos, updateTodos }) => {
             data-cy="statusSelect"
             value={filter}
             onChange={e => {
-              setFilter(e.target.value);
+              setFilter(e.target.value as Filter);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.all}>All</option>
+            <option value={Filter.active}>Active</option>
+            <option value={Filter.completed}>Completed</option>
           </select>
         </span>
       </p>

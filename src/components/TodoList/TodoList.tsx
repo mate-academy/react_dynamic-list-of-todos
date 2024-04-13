@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { TodoContext } from '../../Store';
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | null;
-  selectTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = React.memo(
-  ({ todos, selectedTodo, selectTodo }) => {
+  ({ todos, selectedTodo }) => {
+    const { setSelectedTodo } = useContext(TodoContext);
+
     return (
       <table className="table is-narrow is-fullwidth">
         <thead>
@@ -57,7 +59,7 @@ export const TodoList: React.FC<Props> = React.memo(
                     data-cy="selectButton"
                     className="button"
                     type="button"
-                    onClick={() => selectTodo(todo)}
+                    onClick={() => setSelectedTodo(todo)}
                   >
                     <span className="icon">
                       <i

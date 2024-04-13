@@ -3,7 +3,7 @@ import { Todo } from './types/Todo';
 
 export function getDisplayedTodos(
   todos: Todo[],
-  filter: string,
+  filter: Filter,
   query: string,
 ) {
   let displayedTodos = [...todos];
