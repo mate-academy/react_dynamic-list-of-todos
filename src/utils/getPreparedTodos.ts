@@ -1,27 +1,27 @@
 import { Status } from '../types/Status';
 import { Todo } from '../types/Todo';
 
-export const getPreparedTodos = (
-  todoList: Todo[],
-  select: Status,
+export function getPreparedTodos(
+  todoItems: Todo[],
+  filterStatus: Status,
   query: string,
-) => {
-  const visibleTodos = [...todoList];
+): Todo[] {
+  let filtered = todoItems.filter(todo => {
+    switch (filterStatus) {
+      case Status.All:
+        return true;
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      default:
+        return false;
+    }
+  });
 
-  return visibleTodos
-    .filter(todo =>
-      todo.title.toLowerCase().includes(query.trim().toLowerCase()),
-    )
-    .filter(({ completed }) => {
-      switch (select) {
-        case Status.Active:
-          return !completed;
+  filtered = filtered.filter(todo =>
+    todo.title.toLowerCase().includes(query.toLowerCase()),
+  );
 
-        case Status.Completed:
-          return completed;
-
-        default:
-          return visibleTodos;
-      }
-    });
-};
+  return filtered;
+}
