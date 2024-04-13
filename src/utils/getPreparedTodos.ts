@@ -8,14 +8,12 @@ export function getPreparedTodos(
 ): Todo[] {
   let filtered = todoItems.filter(todo => {
     switch (filterStatus) {
-      case Status.All:
-        return true;
       case Status.Active:
         return !todo.completed;
       case Status.Completed:
         return todo.completed;
       default:
-        return false;
+        return true;
     }
   });
 
