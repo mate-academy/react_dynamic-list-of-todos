@@ -1,12 +1,41 @@
 import React from 'react';
+import { getUser } from '../../api';
+
+import { useTodoState, useTodoDispatch } from '../TodoProvider';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+const TodoModal: React.FC = () => {
+  const { selectedTodo, user, modalVisible, isLoadingUsers } = useTodoState();
+  const dispatch = useTodoDispatch();
+
+  React.useEffect(() => {
+    if (selectedTodo?.userId) {
+      dispatch({
+        type: 'FETCH_USERS',
+      });
+      getUser(selectedTodo.userId).then(currUser => {
+        dispatch({
+          type: 'FETCH_USERS_SUCCESS',
+          payload: currUser,
+        });
+      });
+    }
+  }, [selectedTodo?.userId, dispatch]);
+
+  if (!modalVisible) {
+    return null;
+  }
+
+  const handleCloseModal = () => {
+    dispatch({
+      type: 'CLOSE_MODAL',
+    });
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {true ? (
+      {isLoadingUsers ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +44,37 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo {selectedTodo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleCloseModal}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={
+                  selectedTodo?.completed
+                    ? 'has-text-success'
+                    : 'has-text-danger'
+                }
+              >
+                {selectedTodo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={user?.email}>{user?.name}</a>
             </p>
           </div>
         </div>
@@ -41,3 +82,5 @@ export const TodoModal: React.FC = () => {
     </div>
   );
 };
+
+export default React.memo(TodoModal);
