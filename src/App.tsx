@@ -50,10 +50,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getTodos().then(data => {
-      setTodos(data);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(data => {
+        setTodos(data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   return (

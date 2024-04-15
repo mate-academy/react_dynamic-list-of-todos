@@ -43,9 +43,10 @@ export const TodoList: React.FC<Props> = ({
             )}
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed == true,
+                  'has-text-danger': todo.completed !== true,
+                })}
               >
                 {todo.title}
               </p>
