@@ -51,12 +51,8 @@ export const App: React.FC = () => {
     setIsLoading(true);
 
     getTodos()
-      .then(data => {
-        setTodos(data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
