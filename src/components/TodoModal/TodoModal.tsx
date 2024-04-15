@@ -10,20 +10,21 @@ type Props = {
 };
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    getUser(todo.userId).then(u => {
+    getUser(todo.userId)
+    .then(u => {
       setSelectedUser(u);
-    });
+    })
+    .catch(() => setError(true));
   }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectedUser ? (
-        <Loader />
-      ) : (
+      {selectedUser ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -48,7 +49,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
@@ -60,15 +60,28 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
             </p>
           </div>
-        </div>
+        </div> 
+      ) : error ? (
+        <div className="modal-card">
+        <header className="modal-card-head">
+          <div
+            className="modal-card-title has-text-weight-medium"
+            data-cy="modal-header"
+          >
+            Something went wrong
+          </div>
+          <button
+            onClick={onClose}
+            type="button"
+            className="delete"
+            data-cy="modal-close"
+          />
+        </header>
+      </div>
+      ) : (
+        <Loader />
       )}
     </div>
   );
 };
-// function useMemo(arg0: () => any, arg1: any[]) {
-//   throw new Error('Function not implemented.');
-// }
 
-// function useEffect(arg0: () => void, arg1: never[]) {
-//   throw new Error('Function not implemented.');
-// }
