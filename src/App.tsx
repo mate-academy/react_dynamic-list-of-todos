@@ -10,15 +10,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
+import { FilterEnum } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
-  const [statusFilter, setStatusFilter] = useState<
-  'all' | 'active' | 'completed'
-  >('all');
+  const [statusFilter, setStatusFilter] = useState<FilterEnum>('all');
   const [titleFilter, setTitleFilter] = useState<string>('');
 
   useEffect(() => {

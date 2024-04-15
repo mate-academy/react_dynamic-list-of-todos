@@ -1,8 +1,8 @@
+import { FilterEnum } from '../../types/FilterEnum';
+
 export const TodoFilter: React.FC<{
   statusFilter: 'all' | 'active' | 'completed';
-  setStatusFilter: React.Dispatch<
-  React.SetStateAction<'all' | 'active' | 'completed'>
-  >;
+  setStatusFilter: React.Dispatch<React.SetStateAction<FilterEnum>>;
   titleFilter: string;
   setTitleFilter: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ statusFilter, setStatusFilter, titleFilter, setTitleFilter }) => {
