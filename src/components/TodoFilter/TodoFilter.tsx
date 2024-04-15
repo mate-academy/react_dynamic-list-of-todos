@@ -1,7 +1,8 @@
 export const TodoFilter: React.FC<{
   statusFilter: 'all' | 'active' | 'completed';
-  // eslint-disable-next-line max-len, prettier/prettier
-  setStatusFilter: React.Dispatch<React.SetStateAction<'all' | 'active' | 'completed'>>;
+  setStatusFilter: React.Dispatch<
+  React.SetStateAction<'all' | 'active' | 'completed'>
+  >;
   titleFilter: string;
   setTitleFilter: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ statusFilter, setStatusFilter, titleFilter, setTitleFilter }) => {

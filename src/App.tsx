@@ -15,8 +15,10 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  // eslint-disable-next-line
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'completed'>('all');
+
+  const [statusFilter, setStatusFilter] = useState<
+  'all' | 'active' | 'completed'
+  >('all');
   const [titleFilter, setTitleFilter] = useState<string>('');
 
   useEffect(() => {
