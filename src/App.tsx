@@ -1,14 +1,64 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { FilterType, TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [query, setQuery] = useState('');
+  const [filterType, setFilterType] = useState<FilterType>('all');
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    getTodos()
+    .then(todosFromServer => {
+      setTodos(todosFromServer);
+    })
+    .catch(()=> setError(true));
+  }, []);
+
+  const filteredTodos = useMemo(() => {
+    let filtered = todos;
+
+    if (filterType === 'active') {
+      filtered = todos.filter(todo => !todo.completed);
+    } else if (filterType === 'completed') {
+      filtered = todos.filter(todo => todo.completed);
+    }
+
+    if (query) {
+      filtered = filtered.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    return filtered;
+  }, [todos, filterType, query]);
+
+  const selectedTodo = useMemo(() => {
+    if (selectedTodoId && filteredTodos) {
+      return filteredTodos.find(t => t.id === selectedTodoId);
+    }
+
+    return null;
+  }, [selectedTodoId, filteredTodos]);
+
+  const handleSelectTodo = (id: number | null) => setSelectedTodoId(id);
+
+  const handleModalClose = () => setSelectedTodoId(null);
+
+  const handleQuery = (input: string) => setQuery(input);
+
+  const handleFilterType = (type: FilterType) => setFilterType(type);
+
   return (
     <>
       <div className="section">
@@ -17,18 +67,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onChange={handleQuery}
+                onFilterChange={handleFilterType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              
+                <TodoList
+                todos={filteredTodos}
+                selectedTodoId={selectedTodoId}
+                onSelect={handleSelectTodo}
+              />
+              {filteredTodos && <Loader />}
+
+               {error && (
+                <p>Something went wrong</p>
+              ) }
+              
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={handleModalClose} />
+      )}
     </>
   );
 };
