@@ -2,13 +2,13 @@ import React from 'react';
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
-type Props = {
+interface TodoListProps {
   todos: Todo[];
   selectedTodo: Todo | null;
   setSelectedTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
-};
+}
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<TodoListProps> = ({
   todos,
   selectedTodo,
   setSelectedTodo,
@@ -33,17 +33,17 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map(todo => (
+        {todos.map(({ id, completed, title }) => (
           <tr
             data-cy="todo"
             className={classNames({
-              'has-background-info-light': selectedTodo?.id === todo.id,
+              'has-background-info-light': selectedTodo?.id === id,
             })}
-            key={todo.id}
+            key={id}
           >
-            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">{id}</td>
             <td className="is-vcentered">
-              {todo.completed && (
+              {completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -51,11 +51,11 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
+                'has-text-danger': !completed,
+                'has-text-success': completed,
               })}
               >
-                {todo.title}
+                {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
@@ -63,10 +63,15 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleSelectedTodo(todo)}
+                onClick={() => handleSelectedTodo({
+                  id,
+                  title,
+                  completed,
+                  userId: 0,
+                })}
               >
                 <span className="icon">
-                  {selectedTodo?.id === todo.id ? (
+                  {selectedTodo?.id === id ? (
                     <i className="far fa-eye-slash" />
                   ) : (
                     <i className="far fa-eye" />
