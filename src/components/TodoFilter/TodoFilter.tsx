@@ -15,13 +15,13 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
-      case 'all':
+      case Filter.All:
         setFilter(Filter.All);
         break;
-      case 'active':
+      case Filter.Active:
         setFilter(Filter.Active);
         break;
-      case 'completed':
+      case Filter.Completed:
         setFilter(Filter.Completed);
         break;
 
