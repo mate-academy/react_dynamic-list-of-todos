@@ -1,10 +1,11 @@
 import React from 'react';
+import { Options } from '../../types/Options';
 
 type Props = {
   text: string;
   setText: (text: string) => void;
-  option: string;
-  setOption: (text: string) => void;
+  option: Options;
+  setOption: (text: Options) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -19,11 +20,25 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={option}
-          onChange={e => setOption(e.target.value)}
+          onChange={e => {
+            switch (e.target.value) {
+              case Options.All:
+                setOption(Options.All);
+                break;
+
+              case Options.Active:
+                setOption(Options.Active);
+                break;
+
+              case Options.Completed:
+                setOption(Options.Completed);
+                break;
+            }
+          }}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Options.All}>All</option>
+          <option value={Options.Active}>Active</option>
+          <option value={Options.Completed}>Completed</option>
         </select>
       </span>
     </p>
