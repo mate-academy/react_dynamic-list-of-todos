@@ -38,6 +38,7 @@ export const App: React.FC = () => {
       case Filter.Completed:
         currentTodos = currentTodos.filter(todo => todo.completed);
         break;
+
       case Filter.Active:
         currentTodos = currentTodos.filter(todo => !todo.completed);
         break;

@@ -18,9 +18,11 @@ export const TodoFilter: React.FC<Props> = ({
       case Filter.All:
         setFilter(Filter.All);
         break;
+
       case Filter.Active:
         setFilter(Filter.Active);
         break;
+
       case Filter.Completed:
         setFilter(Filter.Completed);
         break;
@@ -38,9 +40,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select value={filter} onChange={handleChange} data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.Active}>Active</option>
+            <option value={Filter.Completed}>Completed</option>
           </select>
         </span>
       </p>
