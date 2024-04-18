@@ -4,13 +4,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { FilterEnum } from './types/FilterEnum';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
 import { getTodos } from './api';
-import { FilterEnum } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -20,10 +20,15 @@ export const App: React.FC = () => {
   const [titleFilter, setTitleFilter] = useState<string>('');
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setIsLoading(false);
+      })
+      .catch(e => {
+        setIsLoading(false);
+        throw new Error(e);
+      });
   }, []);
 
   const filteredTodos = useMemo(() => {

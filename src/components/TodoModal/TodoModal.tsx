@@ -13,10 +13,15 @@ export const TodoModal: React.FC<{
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getUser(userId).then(userFromServer => {
-      setUser(userFromServer);
-      setIsLoading(false);
-    });
+    getUser(userId)
+      .then(userFromServer => {
+        setUser(userFromServer);
+        setIsLoading(false);
+      })
+      .catch(e => {
+        setIsLoading(false);
+        throw new Error(e);
+      });
   }, []);
 
   return (
