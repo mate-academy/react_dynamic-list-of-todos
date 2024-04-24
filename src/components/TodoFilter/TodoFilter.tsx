@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import { Filter } from '../../types/Filter';
 
 type Props = {

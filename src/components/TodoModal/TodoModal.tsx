@@ -5,7 +5,6 @@ import { getUser } from '../../api';
 import { useEffect, useState } from 'react';
 import { User } from '../../types/User';
 
-// add 'is-active' to the first div classname to show the card
 type Props = {
   activeTodo: Todo;
   setActiveTodo: (todo: null) => void;
@@ -62,7 +61,6 @@ export const TodoModal = ({ activeTodo, setActiveTodo }: Props) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {activeTodo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (

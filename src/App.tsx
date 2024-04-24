@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
+import { useEffect, useState } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
@@ -9,7 +9,6 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import { useEffect, useState } from 'react';
 
 function filterTodos(todos: Todo[], activeFilter: Filter, query: string) {
   const q = query.toLowerCase().trim();
