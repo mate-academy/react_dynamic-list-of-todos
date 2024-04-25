@@ -1,0 +1,54 @@
+{
+    "sourceFile": "src/components/TodoFilter/TodoFilter.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 9,
+            "patches": [
+                {
+                    "date": 1714050655432,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714050689717,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,4 @@\n-import React = require(\"react\");\n-\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714050742798,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,6 @@\n+i\n+\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714050748040,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-i\n+import react\n \n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n"
+                },
+                {
+                    "date": 1714050756070,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import react\n+import React from \n \n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n"
+                },
+                {
+                    "date": 1714050771647,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,4 @@\n-import React from \n-\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714050796701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,6 @@\n+import React from 'react';\n+\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052004954,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,7 @@\n import React from 'react';\n \n+\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052010532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React from 'react';\n \n-export type \n+export type S\n export const TodoFilter = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052054818,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { FC } from 'react';\n \n export type StatusFilter = 'all' | 'active' | 'completed';\n \n-export const TodoFilter: FC = () => (\n+export const TodoFilter: FC<Props> = () => (\n   <form className=\"field has-addons\">\n     <p className=\"control\">\n       <span className=\"select\">\n         <select data-cy=\"statusSelect\">\n"
+                }
+            ],
+            "date": 1714050655432,
+            "name": "Commit-0",
+            "content": "import React = require(\"react\");\n\nexport const TodoFilter = () => (\n  <form className=\"field has-addons\">\n    <p className=\"control\">\n      <span className=\"select\">\n        <select data-cy=\"statusSelect\">\n          <option value=\"all\">All</option>\n          <option value=\"active\">Active</option>\n          <option value=\"completed\">Completed</option>\n        </select>\n      </span>\n    </p>\n\n    <p className=\"control is-expanded has-icons-left has-icons-right\">\n      <input\n        data-cy=\"searchInput\"\n        type=\"text\"\n        className=\"input\"\n        placeholder=\"Search...\"\n      />\n      <span className=\"icon is-left\">\n        <i className=\"fas fa-magnifying-glass\" />\n      </span>\n\n      <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n        <button data-cy=\"clearSearchButton\" type=\"button\" className=\"delete\" />\n      </span>\n    </p>\n  </form>\n);\n"
+        }
+    ]
+}

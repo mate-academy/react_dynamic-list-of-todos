@@ -1,0 +1,150 @@
+{
+    "sourceFile": "src/components/TodoModal/TodoModal.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 33,
+            "patches": [
+                {
+                    "date": 1714055966341,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714056002142,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,11 @@\n import React from 'react';\n import { Loader } from '../Loader';\n \n-type Props \n-export const TodoModal: React.FC = () => {\n+type Props = {\n+\n+}\n+export const TodoModal: React.FC<Props> = () => {\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056007740,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,10 @@\n import React from 'react';\n import { Loader } from '../Loader';\n+import { Todo } from '../../types/Todo';\n \n type Props = {\n-\n+  todo: Todo\n }\n export const TodoModal: React.FC<Props> = () => {\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n"
+                },
+                {
+                    "date": 1714056080876,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,10 @@\n import { Loader } from '../Loader';\n import { Todo } from '../../types/Todo';\n \n type Props = {\n-  todo: Todo\n+  todo: Todo[];\n+  onClose\n }\n export const TodoModal: React.FC<Props> = () => {\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n"
+                },
+                {
+                    "date": 1714056087055,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { Todo } from '../../types/Todo';\n \n type Props = {\n   todo: Todo[];\n-  onClose\n+  onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = () => {\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n"
+                },
+                {
+                    "date": 1714056092077,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n type Props = {\n   todo: Todo[];\n   onClose: () => void;\n }\n-export const TodoModal: React.FC<Props> = () => {\n+export const TodoModal: React.FC<Props> = ({ todo, onClose}) => {\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056118563,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,11 @@\n type Props = {\n   todo: Todo[];\n   onClose: () => void;\n }\n-export const TodoModal: React.FC<Props> = ({ todo, onClose}) => {\n+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n+\n+  \n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056124101,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  \n+  const [ ] = useState<\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056130270,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [ ] = useState<\n+  const [ ] = useState<User | null\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056135752,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [ ] = useState<User | null\n+  const [ ] = useState<User | null>)\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056144948,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [ ] = useState<User | null>)\n+  const [user, ] = useState<User | null>([])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056153309,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React from 'react';\n+import React, { useState } from 'react';\n import { Loader } from '../Loader';\n import { Todo } from '../../types/Todo';\n \n type Props = {\n@@ -7,9 +7,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [user, ] = useState<User | null>([])\n+  const [user, setUser] = useState<User | null>([])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056164160,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,8 @@\n import React, { useState } from 'react';\n import { Loader } from '../Loader';\n import { Todo } from '../../types/Todo';\n+import { User } from '../../types/User';\n \n type Props = {\n   todo: Todo[];\n   onClose: () => void;\n"
+                },
+                {
+                    "date": 1714056183585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [user, setUser] = useState<User | null>([])\n+  const [user, setUser] = useState<User | null>(null)\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056221889,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,10 @@\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n-  const [user, setUser] = useState<User | null>(null)\n+  const [user, setUser] = useState<User | null>(null);\n+  \n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056229210,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n   const [user, setUser] = useState<User | null>(null);\n-  \n+  const []\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056235834,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n   const [user, setUser] = useState<User | null>(null);\n-  const []\n+  const [error, setError] = useS\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056245086,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n   const [user, setUser] = useState<User | null>(null);\n-  const [error, setError] = useS\n+  const [error, setError] = useState<boolean>(false)\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056252657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import React, { useState } from 'react';\n+import React, { useEffect, useState } from 'react';\n import { Loader } from '../Loader';\n import { Todo } from '../../types/Todo';\n import { User } from '../../types/User';\n \n@@ -9,9 +9,11 @@\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n   const [user, setUser] = useState<User | null>(null);\n-  const [error, setError] = useState<boolean>(false)\n+  const [error, setError] = useState<boolean>(false);\n+\n+  useEffect\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056259084,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n \n   const [user, setUser] = useState<User | null>(null);\n   const [error, setError] = useState<boolean>(false);\n \n-  useEffect\n+  useEffect(() => {}, [])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056268485,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,11 @@\n \n   const [user, setUser] = useState<User | null>(null);\n   const [error, setError] = useState<boolean>(false);\n \n-  useEffect(() => {}, [])\n+  useEffect(() => {\n+\n+  }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n"
+                },
+                {
+                    "date": 1714056280001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   const [user, setUser] = useState<User | null>(null);\n   const [error, setError] = useState<boolean>(false);\n \n   useEffect(() => {\n-\n+    get\n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056285618,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   const [user, setUser] = useState<User | null>(null);\n   const [error, setError] = useState<boolean>(false);\n \n   useEffect(() => {\n-    get\n+    getUser()\n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056292245,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,10 @@\n   const [user, setUser] = useState<User | null>(null);\n   const [error, setError] = useState<boolean>(false);\n \n   useEffect(() => {\n-    getUser()\n+    getUser(todo.userId)\n+      \n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056298223,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n   const [error, setError] = useState<boolean>(false);\n \n   useEffect(() => {\n     getUser(todo.userId)\n-      \n+      .then(setUser)\n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056306715,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,9 @@\n \n   useEffect(() => {\n     getUser(todo.userId)\n       .then(setUser)\n+      .then\n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056312135,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n \n   useEffect(() => {\n     getUser(todo.userId)\n       .then(setUser)\n-      .then\n+      .catch(())\n   }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n"
+                },
+                {
+                    "date": 1714056364191,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,59 @@\n+import React, { useEffect, useState } from 'react';\n+import { Loader } from '../Loader';\n+import { Todo } from '../../types/Todo';\n+import { User } from '../../types/User';\n+import { getUser } from '../../api';\n+\n+type Props = {\n+  todo: Todo[];\n+  onClose: () => void;\n+}\n+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n+\n+  const [user, setUser] = useState<User | null>(null);\n+  const [error, setError] = useState<boolean>(false);\n+\n+  useEffect(() => {\n+    getUser(todo.userId)\n+      .then(setUser)\n+      .catch(() => setError(true))\n+  }, [todo.userId])\n+  return (\n+    <div className=\"modal is-active\" data-cy=\"modal\">\n+      <div className=\"modal-background\" />\n+\n+      {true ? (\n+        <Loader />\n+      ) : (\n+        <div className=\"modal-card\">\n+          <header className=\"modal-card-head\">\n+            <div\n+              className=\"modal-card-title has-text-weight-medium\"\n+              data-cy=\"modal-header\"\n+            >\n+              Todo #2\n+            </div>\n+\n+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+            <button type=\"button\" className=\"delete\" data-cy=\"modal-close\" />\n+          </header>\n+\n+          <div className=\"modal-card-body\">\n+            <p className=\"block\" data-cy=\"modal-title\">\n+              quis ut nam facilis et officia qui\n+            </p>\n+\n+            <p className=\"block\" data-cy=\"modal-user\">\n+              {/* <strong className=\"has-text-success\">Done</strong> */}\n+              <strong className=\"has-text-danger\">Planned</strong>\n+\n+              {' by '}\n+\n+              <a href=\"mailto:Sincere@april.biz\">Leanne Graham</a>\n+            </p>\n+          </div>\n+        </div>\n+      )}\n+    </div>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714056383861,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,72 +16,15 @@\n   useEffect(() => {\n     getUser(todo.userId)\n       .then(setUser)\n       .catch(() => setError(true))\n-  }, [todo.userId])\n-  return (\n-    <div className=\"modal is-active\" data-cy=\"modal\">\n-      <div className=\"modal-background\" />\n+  }, [todo.userId]);\n \n-      {true ? (\n-        <Loader />\n-      ) : (\n-        <div className=\"modal-card\">\n-          <header className=\"modal-card-head\">\n-            <div\n-              className=\"modal-card-title has-text-weight-medium\"\n-              data-cy=\"modal-header\"\n-            >\n-              Todo #2\n-            </div>\n-\n-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-            <button type=\"button\" className=\"delete\" data-cy=\"modal-close\" />\n-          </header>\n-\n-          <div className=\"modal-card-body\">\n-            <p className=\"block\" data-cy=\"modal-title\">\n-              quis ut nam facilis et officia qui\n-            </p>\n-\n-            <p className=\"block\" data-cy=\"modal-user\">\n-              {/* <strong className=\"has-text-success\">Done</strong> */}\n-              <strong className=\"has-text-danger\">Planned</strong>\n-\n-              {' by '}\n-\n-              <a href=\"mailto:Sincere@april.biz\">Leanne Graham</a>\n-            </p>\n-          </div>\n-        </div>\n-      )}\n-    </div>\n-  );\n-};\n-import React, { useEffect, useState } from 'react';\n-import { Loader } from '../Loader';\n-import { Todo } from '../../types/Todo';\n-import { User } from '../../types/User';\n-\n-type Props = {\n-  todo: Todo[];\n-  onClose: () => void;\n-}\n-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n-\n-  const [user, setUser] = useState<User | null>(null);\n-  const [error, setError] = useState<boolean>(false);\n-\n-  useEffect(() => {\n-    getUser(todo.userId)\n-      .then(setUser)\n-      .catch(())\n-  }, [todo.userId])\n   return (\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n-      {true ? (\n+      {user ? (\n         <Loader />\n       ) : (\n         <div className=\"modal-card\">\n           <header className=\"modal-card-head\">\n"
+                },
+                {
+                    "date": 1714056392621,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,10 +23,8 @@\n     <div className=\"modal is-active\" data-cy=\"modal\">\n       <div className=\"modal-background\" />\n \n       {user ? (\n-        <Loader />\n-      ) : (\n         <div className=\"modal-card\">\n           <header className=\"modal-card-head\">\n             <div\n               className=\"modal-card-title has-text-weight-medium\"\n"
+                },
+                {
+                    "date": 1714056419921,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,30 +29,55 @@\n             <div\n               className=\"modal-card-title has-text-weight-medium\"\n               data-cy=\"modal-header\"\n             >\n-              Todo #2\n+              Todo #{todo.id}\n             </div>\n-\n-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-            <button type=\"button\" className=\"delete\" data-cy=\"modal-close\" />\n+            <button\n+              onClick={onClose}\n+              type=\"button\"\n+              className=\"delete\"\n+              data-cy=\"modal-close\"\n+            />\n           </header>\n \n           <div className=\"modal-card-body\">\n             <p className=\"block\" data-cy=\"modal-title\">\n-              quis ut nam facilis et officia qui\n+              {todo.title}\n             </p>\n \n             <p className=\"block\" data-cy=\"modal-user\">\n-              {/* <strong className=\"has-text-success\">Done</strong> */}\n-              <strong className=\"has-text-danger\">Planned</strong>\n+              {todo.completed ? (\n+                <strong className=\"has-text-success\">Done</strong>\n+              ) : (\n+                <strong className=\"has-text-danger\">Planned</strong>\n+              )}\n \n               {' by '}\n \n-              <a href=\"mailto:Sincere@april.biz\">Leanne Graham</a>\n+              <a href={`mailto:${user.email}`}>{user.name}</a>\n             </p>\n           </div>\n         </div>\n+      ) : isError ? (\n+        <div className=\"modal-card\">\n+          <header className=\"modal-card-head\">\n+            <div\n+              className=\"modal-card-title has-text-weight-medium\"\n+              data-cy=\"modal-header\"\n+            >\n+              Ups something gone wrong\n+            </div>\n+            <button\n+              onClick={onClose}\n+              type=\"button\"\n+              className=\"delete\"\n+              data-cy=\"modal-close\"\n+            />\n+          </header>\n+        </div>\n+      ) : (\n+        <Loader />\n       )}\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714056425657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,9 +57,9 @@\n               <a href={`mailto:${user.email}`}>{user.name}</a>\n             </p>\n           </div>\n         </div>\n-      ) : isError ? (\n+      ) : ierror ? (\n         <div className=\"modal-card\">\n           <header className=\"modal-card-head\">\n             <div\n               className=\"modal-card-title has-text-weight-medium\"\n"
+                },
+                {
+                    "date": 1714056459514,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -57,9 +57,9 @@\n               <a href={`mailto:${user.email}`}>{user.name}</a>\n             </p>\n           </div>\n         </div>\n-      ) : ierror ? (\n+      ) : error ? (\n         <div className=\"modal-card\">\n           <header className=\"modal-card-head\">\n             <div\n               className=\"modal-card-title has-text-weight-medium\"\n"
+                },
+                {
+                    "date": 1714056505616,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n import { User } from '../../types/User';\n import { getUser } from '../../api';\n \n type Props = {\n-  todo: Todo[];\n+  todo: Todo;\n   onClose: () => void;\n }\n export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {\n \n"
+                }
+            ],
+            "date": 1714055966341,
+            "name": "Commit-0",
+            "content": "import React from 'react';\nimport { Loader } from '../Loader';\n\ntype Props \nexport const TodoModal: React.FC = () => {\n  return (\n    <div className=\"modal is-active\" data-cy=\"modal\">\n      <div className=\"modal-background\" />\n\n      {true ? (\n        <Loader />\n      ) : (\n        <div className=\"modal-card\">\n          <header className=\"modal-card-head\">\n            <div\n              className=\"modal-card-title has-text-weight-medium\"\n              data-cy=\"modal-header\"\n            >\n              Todo #2\n            </div>\n\n            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n            <button type=\"button\" className=\"delete\" data-cy=\"modal-close\" />\n          </header>\n\n          <div className=\"modal-card-body\">\n            <p className=\"block\" data-cy=\"modal-title\">\n              quis ut nam facilis et officia qui\n            </p>\n\n            <p className=\"block\" data-cy=\"modal-user\">\n              {/* <strong className=\"has-text-success\">Done</strong> */}\n              <strong className=\"has-text-danger\">Planned</strong>\n\n              {' by '}\n\n              <a href=\"mailto:Sincere@april.biz\">Leanne Graham</a>\n            </p>\n          </div>\n        </div>\n      )}\n    </div>\n  );\n};\n"
+        }
+    ]
+}
