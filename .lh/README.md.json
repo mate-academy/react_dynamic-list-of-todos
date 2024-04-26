@@ -1,0 +1,18 @@
+{
+    "sourceFile": "README.md",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1714151909102,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1714151909102,
+            "name": "Commit-0",
+            "content": "# React dynamic list of TODOs\n\nThe goal of this task is to teach you:\n- how to work with a not detailed task description;\n- to learn the existing code before you start;\n- to understand tests and why they fail;\n- to try the working page and implement the same behaviour;\n\n> Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)\n\nYou are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`\nand `Loader` components. Load data from the API and show it using the given components.\n\n1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is\nloaded and show them using `TodoList` (check the code in the `api.ts`);\n1. Show the `Loader` when waiting any data from the server (check the `components` folder);\n1. Check how the `wait` function is used in the `api.ts` to ensure that `Loader` works as expected;\n1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;\n1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);\n1. Show the Loader while waiting for the user;\n1. `x` button should close the modal;\n1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos;\n1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;\n    - show the `x` button when the `query` is entered;\n    - the `x` button should clear the `query` and reset the todos;\n\n## Instructions\n- Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.\n- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).\n- Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).\n- Open one more terminal and run tests with `npm test` to ensure your solution is correct.\n- Replace `<your_account>` with your Github username in the [DEMO LINK](https://.github.io/react_dynamic-list-of-todos/) and add it to the PR description.\n"
+        }
+    ]
+}

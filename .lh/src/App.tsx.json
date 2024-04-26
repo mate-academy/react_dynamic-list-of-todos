@@ -1,0 +1,58 @@
+{
+    "sourceFile": "src/App.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1713972942621,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1713972948006,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,8 +27,8 @@\n           </div>\n         </div>\n       </div>\n \n-      <TodoModal />\n+      {/* <TodoModal /> */}\n     </>\n   );\n };\n"
+                },
+                {
+                    "date": 1713973163569,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,8 +8,9 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973169706,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n-  \n+  const [todos, ]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973176083,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n-  const [todos, ]\n+  const [todos, setTodos] = use\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973181552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n /* eslint-disable max-len */\n-import React from 'react';\n+import React, { useState } from 'react';\n import 'bulma/css/bulma.css';\n import '@fortawesome/fontawesome-free/css/all.css';\n \n import { TodoList } from './components/TodoList';\n@@ -8,9 +8,9 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = use\n+  const [todos, setTodos] = useState([])\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973187945,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = useState([])\n+  const [todos, setTodos] = useState<>([])\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973193927,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,10 @@\n // import { TodoModal } from './components/TodoModal';\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<>([])\n+  const [todos, setTodos] = useState<Todo>([]);\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973205039,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,10 @@\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo>([]);\n-  \n+  const [loading]\n+\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1713973211531,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo>([]);\n-  const [loading, setLoading] =\n+  const [loading, setLoading] =u\n \n   return (\n     <>\n       <div className=\"section\">\n"
+                },
+                {
+                    "date": 1713973490140,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo>([]);\n \n   useEffect(() => {\n-  getTodos().then((todosData: T))\n+  getTodos().then((todosData: To))\n })\n \n   return (\n     <>\n"
+                }
+            ],
+            "date": 1713972942621,
+            "name": "Commit-0",
+            "content": "/* eslint-disable max-len */\nimport React from 'react';\nimport 'bulma/css/bulma.css';\nimport '@fortawesome/fontawesome-free/css/all.css';\n\nimport { TodoList } from './components/TodoList';\nimport { TodoFilter } from './components/TodoFilter';\n// import { TodoModal } from './components/TodoModal';\nimport { Loader } from './components/Loader';\n\nexport const App: React.FC = () => {\n  return (\n    <>\n      <div className=\"section\">\n        <div className=\"container\">\n          <div className=\"box\">\n            <h1 className=\"title\">Todos:</h1>\n\n            <div className=\"block\">\n              <TodoFilter />\n            </div>\n\n            <div className=\"block\">\n              <Loader />\n              <TodoList />\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <TodoModal />\n    </>\n  );\n};\n"
+        }
+    ]
+}
