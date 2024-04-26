@@ -2,16 +2,16 @@ import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
-interface Props {
+interface TodoListProps {
   todos: Todo[];
-  handleModalClick: (todo: Todo) => void;
-  selectedTodoId: number | null;
+  onModalClick: (todo: Todo) => void;
+  activeTodoId: number | null;
 }
 
-export const TodoList: React.FC<Props> = ({
+export const TodoList: React.FC<TodoListProps> = ({
   todos,
-  handleModalClick,
-  selectedTodoId,
+  onModalClick,
+  activeTodoId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -32,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
         <tr
           data-cy="todo"
           className={cn({
-            'has-background-info-light': todo.id === selectedTodoId,
+            'has-background-info-light': todo.id === activeTodoId,
           })}
           key={todo.id}
         >
@@ -54,13 +54,11 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => handleModalClick(todo)}
+              onClick={() => onModalClick(todo)}
             >
               <span className="icon">
                 <i
-                  className={`far fa-eye${
-                    selectedTodoId === todo.id ? '-slash' : ''
-                  }`}
+                  className={`far fa-eye${activeTodoId === todo.id ? '-slash' : ''}`}
                 />
               </span>
             </button>

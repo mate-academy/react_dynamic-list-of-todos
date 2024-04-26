@@ -1,37 +1,37 @@
-import { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
-interface Props {
-  applyStatusQuery: (query: string) => void;
-  applyTitleQuery: (query: string) => void;
+interface TodoFilterProps {
+  onApplyStatusQuery: (query: string) => void;
+  onApplyTitleQuery: (query: string) => void;
 }
 
-export const TodoFilter: React.FC<Props> = ({
-  applyStatusQuery,
-  applyTitleQuery,
+export const TodoFilter: React.FC<TodoFilterProps> = ({
+  onApplyStatusQuery,
+  onApplyTitleQuery,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleStatusQueryChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      applyStatusQuery(event.target.value.trim().toLowerCase());
+      onApplyStatusQuery(event.target.value.trim().toLowerCase());
     },
-    [applyStatusQuery],
+    [onApplyStatusQuery],
   );
 
   const handleTitleQueryChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      applyTitleQuery(event.target.value.trim().toLowerCase());
+      onApplyTitleQuery(event.target.value.trim().toLowerCase());
     },
-    [applyTitleQuery],
+    [onApplyTitleQuery],
   );
 
   const handleClearQuery = useCallback(() => {
-    applyTitleQuery('');
+    onApplyTitleQuery('');
 
     if (inputRef.current) {
       inputRef.current.value = '';
     }
-  }, [applyTitleQuery, inputRef]);
+  }, [onApplyTitleQuery, inputRef]);
 
   return (
     <form className="field has-addons">
@@ -60,7 +60,6 @@ export const TodoFilter: React.FC<Props> = ({
 
         {inputRef?.current?.value && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"

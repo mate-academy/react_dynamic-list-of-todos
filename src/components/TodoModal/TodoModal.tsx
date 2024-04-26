@@ -4,12 +4,12 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 
-interface Props {
+interface TodoModalProps {
   todo: Todo;
-  handleCloseModal: () => void;
+  onCloseModal: () => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, handleCloseModal }) => {
+export const TodoModal: React.FC<TodoModalProps> = ({ todo, onCloseModal }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
@@ -36,12 +36,11 @@ export const TodoModal: React.FC<Props> = ({ todo, handleCloseModal }) => {
               Todo #{todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={handleCloseModal}
+              onClick={onCloseModal}
             />
           </header>
 

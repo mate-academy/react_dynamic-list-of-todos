@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -41,10 +40,14 @@ export const App: React.FC = () => {
   }, [todos, statusQuery, titleQuery]);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const handleModalClick = useCallback((todo: Todo) => {
@@ -55,11 +58,11 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   }, []);
 
-  const applyStatusQuery = (newQuery: string) => {
+  const handleApplyStatusQuery = (newQuery: string) => {
     setStatusQuery(newQuery);
   };
 
-  const applyTitleQuery = (newQuery: string) => {
+  const handleApplyTitleQuery = (newQuery: string) => {
     setTitleQuery(newQuery);
   };
 
@@ -72,8 +75,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                applyStatusQuery={applyStatusQuery}
-                applyTitleQuery={applyTitleQuery}
+                onApplyStatusQuery={handleApplyStatusQuery}
+                onApplyTitleQuery={handleApplyTitleQuery}
               />
             </div>
 
@@ -82,8 +85,8 @@ export const App: React.FC = () => {
               {!isLoading && (
                 <TodoList
                   todos={filteredTodos}
-                  handleModalClick={handleModalClick}
-                  selectedTodoId={selectedTodo?.id || null}
+                  onModalClick={handleModalClick}
+                  activeTodoId={selectedTodo?.id || null}
                 />
               )}
             </div>
@@ -91,7 +94,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo !== null && (
-        <TodoModal todo={selectedTodo} handleCloseModal={handleCloseModal} />
+        <TodoModal todo={selectedTodo} onCloseModal={handleCloseModal} />
       )}
     </>
   );
