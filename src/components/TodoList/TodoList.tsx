@@ -19,8 +19,8 @@ export const TodoList: React.FC<Props> = ({
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
-    setFilteredTodos(prev =>
-      prev.filter((todo: Todo) => {
+    setFilteredTodos(
+      todos.filter((todo: Todo) => {
         const titleFit = filterTitle
           ? todo.title.toLowerCase().includes(filterTitle.toLowerCase())
           : true;
@@ -33,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
         );
       }),
     );
-  }, [filterTitle, filterStatus]);
+  }, [filterTitle, filterStatus, todos]);
 
   return (
     <table className="table is-narrow is-fullwidth">
