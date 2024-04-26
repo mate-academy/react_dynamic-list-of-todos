@@ -1,0 +1,162 @@
+{
+    "sourceFile": "src/App.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 36,
+            "patches": [
+                {
+                    "date": 1714050672930,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714050679197,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,12 @@\n import React from 'react';\n import 'bulma/css/bulma.css';\n import '@fortawesome/fontawesome-free/css/all.css';\n \n-import { TodoList } from './components/TodoList';\n-import { TodoFilter } from './components/TodoFilter/';\n-import { TodoModal } from './components/TodoModal';\n-import { Loader } from './components/Loader';\n+import { TodoList } from './components/TodoList/TodoList';\n+import { TodoFilter } from './components/TodoFilter/TodoFilter';\n+import { TodoModal } from './components/TodoModal/TodoModal';\n+import { Loader } from './components/Loader/';\n \n export const App: React.FC = () => {\n   return (\n     <>\n"
+                },
+                {
+                    "date": 1714050883342,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n \n import { TodoList } from './components/TodoList/TodoList';\n import { TodoFilter } from './components/TodoFilter/TodoFilter';\n import { TodoModal } from './components/TodoModal/TodoModal';\n-import { Loader } from './components/Loader/';\n+import { Loader } from './components/Loader';\n \n export const App: React.FC = () => {\n   return (\n     <>\n"
+                },
+                {
+                    "date": 1714050889975,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,10 +4,10 @@\n import '@fortawesome/fontawesome-free/css/all.css';\n \n import { TodoList } from './components/TodoList/TodoList';\n import { TodoFilter } from './components/TodoFilter/TodoFilter';\n-import { TodoModal } from './components/TodoModal/TodoModal';\n-import { Loader } from './components/Loader';\n+import { TodoModal } from './components/TodoModal/index';\n+import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n   return (\n     <>\n"
+                },
+                {
+                    "date": 1714051208050,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,14 +2,15 @@\n import React from 'react';\n import 'bulma/css/bulma.css';\n import '@fortawesome/fontawesome-free/css/all.css';\n \n-import { TodoList } from './components/TodoList/TodoList';\n-import { TodoFilter } from './components/TodoFilter/TodoFilter';\n+import { TodoList } from './components/TodoList/index';\n+import { TodoFilter } from './components/TodoFilter/index';\n import { TodoModal } from './components/TodoModal/index';\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n+  const [todos, setTodos]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051215261,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n import { TodoModal } from './components/TodoModal/index';\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos]\n+  const [todos, setTodos] = useState<Todo[]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051220436,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n import { TodoModal } from './components/TodoModal/index';\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<Todo[]\n+  const [todos, setTodos] = useState<Todo[] | null>()\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051226148,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n import { TodoModal } from './components/TodoModal/index';\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<Todo[] | null>()\n+  const [todos, setTodos] = useState<Todo[] | null>(null)\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051232875,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n /* eslint-disable max-len */\n-import React from 'react';\n+import React, { useState } from 'react';\n import 'bulma/css/bulma.css';\n import '@fortawesome/fontawesome-free/css/all.css';\n \n import { TodoList } from './components/TodoList/index';\n@@ -8,9 +8,10 @@\n import { TodoModal } from './components/TodoModal/index';\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<Todo[] | null>(null)\n+  const [todos, setTodos] = useState<Todo[] | null>(null);\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051239649,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n-  \n+  const [selectedTodo]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051244874,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n-  const [selectedTodo]\n+  const [selectedTodoId, setSelectedTodoId] \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051252667,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n-  const [selectedTodoId, setSelectedTodoId] \n+  const [selectedTodoId, setSelectedTodoId] = useState<number \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051258681,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,10 @@\n import { Loader } from './components/Loader/index';\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n-  const [selectedTodoId, setSelectedTodoId] = useState<number \n+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051266738,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  \n+  const [statusFilter, setStatusFilter]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051274634,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  const [statusFilter, setStatusFilter]\n+  const [statusFilter, setStatusFilter] = useState<S\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051280613,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  const [statusFilter, setStatusFilter] = useState<S\n+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051288189,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,10 @@\n \n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')\n+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n+  const [query, setQuery]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051296847,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n-  const [query, setQuery]\n+  const [query, setQuery] = useState<string | null> \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051303491,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n-  const [query, setQuery] = useState<string | null> \n+  const [query, setQuery] = useState<string | null>()\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051310699,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,10 @@\n export const App: React.FC = () => {\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n-  const [query, setQuery] = useState<string | null>()\n+  const [query, setQuery] = useState<string | null>('');\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051316633,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n   const [query, setQuery] = useState<string | null>('');\n-  \n+  const [isErro]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051322316,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n   const [query, setQuery] = useState<string | null>('');\n-  const [isErro]\n+  const [error, setError]\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051331326,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,39 @@\n+/* eslint-disable max-len */\n+import React, { useState } from 'react';\n+import 'bulma/css/bulma.css';\n+import '@fortawesome/fontawesome-free/css/all.css';\n+\n+import { TodoList } from './components/TodoList/index';\n+import { TodoFilter } from './components/TodoFilter/index';\n+import { TodoModal } from './components/TodoModal/index';\n+import { Loader } from './components/Loader/index';\n+\n+export const App: React.FC = () => {\n+  const [todos, setTodos] = useState<Todo[] | null>(null);\n+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n+  const [query, setQuery] = useState<string | null>('');\n+  const [error, setError] = useState<boolean>()\n+  return (\n+    <>\n+      <div className=\"section\">\n+        <div className=\"container\">\n+          <div className=\"box\">\n+            <h1 className=\"title\">Todos:</h1>\n+\n+            <div className=\"block\">\n+              <TodoFilter />\n+            </div>\n+\n+            <div className=\"block\">\n+              <Loader />\n+              <TodoList />\n+            </div>\n+          </div>\n+        </div>\n+      </div>\n+\n+      <TodoModal />\n+    </>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714051340746,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,48 +12,11 @@\n   const [todos, setTodos] = useState<Todo[] | null>(null);\n   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n   const [query, setQuery] = useState<string | null>('');\n-  const [error, setError] = useState<boolean>()\n-  return (\n-    <>\n-      <div className=\"section\">\n-        <div className=\"container\">\n-          <div className=\"box\">\n-            <h1 className=\"title\">Todos:</h1>\n+  const [error, setError] = useState<boolean>(false);\n \n-            <div className=\"block\">\n-              <TodoFilter />\n-            </div>\n-\n-            <div className=\"block\">\n-              <Loader />\n-              <TodoList />\n-            </div>\n-          </div>\n-        </div>\n-      </div>\n-\n-      <TodoModal />\n-    </>\n-  );\n-};\n-/* eslint-disable max-len */\n-import React, { useState } from 'react';\n-import 'bulma/css/bulma.css';\n-import '@fortawesome/fontawesome-free/css/all.css';\n-\n-import { TodoList } from './components/TodoList/index';\n-import { TodoFilter } from './components/TodoFilter/index';\n-import { TodoModal } from './components/TodoModal/index';\n-import { Loader } from './components/Loader/index';\n-\n-export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<Todo[] | null>(null);\n-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n-  const [query, setQuery] = useState<string | null>('');\n-  const [error, setError]\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051346514,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n /* eslint-disable max-len */\n-import React, { useState } from 'react';\n+import React, { useEffect, useState } from 'react';\n import 'bulma/css/bulma.css';\n import '@fortawesome/fontawesome-free/css/all.css';\n \n import { TodoList } from './components/TodoList/index';\n@@ -14,9 +14,9 @@\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n   const [query, setQuery] = useState<string | null>('');\n   const [error, setError] = useState<boolean>(false);\n \n-  \n+  useEffect(())\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051351929,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,11 @@\n   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n   const [query, setQuery] = useState<string | null>('');\n   const [error, setError] = useState<boolean>(false);\n \n-  useEffect(())\n+  useEffect(() => {\n+    get\n+  })\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051357060,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,10 @@\n   const [query, setQuery] = useState<string | null>('');\n   const [error, setError] = useState<boolean>(false);\n \n   useEffect(() => {\n-    get\n+    getTodos()\n+    \n   })\n   return (\n     <>\n       <div className=\"section\">\n"
+                },
+                {
+                    "date": 1714051364344,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,45 @@\n+/* eslint-disable max-len */\n+import React, { useEffect, useState } from 'react';\n+import 'bulma/css/bulma.css';\n+import '@fortawesome/fontawesome-free/css/all.css';\n+\n+import { TodoList } from './components/TodoList/index';\n+import { TodoFilter } from './components/TodoFilter/index';\n+import { TodoModal } from './components/TodoModal/index';\n+import { Loader } from './components/Loader/index';\n+\n+export const App: React.FC = () => {\n+  const [todos, setTodos] = useState<Todo[] | null>(null);\n+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n+  const [query, setQuery] = useState<string | null>('');\n+  const [error, setError] = useState<boolean>(false);\n+\n+  useEffect(() => {\n+    getTodos()\n+      .then(setTodos)\n+      .catch()\n+  })\n+  return (\n+    <>\n+      <div className=\"section\">\n+        <div className=\"container\">\n+          <div className=\"box\">\n+            <h1 className=\"title\">Todos:</h1>\n+\n+            <div className=\"block\">\n+              <TodoFilter />\n+            </div>\n+\n+            <div className=\"block\">\n+              <Loader />\n+              <TodoList />\n+            </div>\n+          </div>\n+        </div>\n+      </div>\n+\n+      <TodoModal />\n+    </>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714051370052,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n \n   useEffect(() => {\n     getTodos()\n       .then(setTodos)\n-      .catch()\n+      .catch(() =>)\n   })\n   return (\n     <>\n       <div className=\"section\">\n@@ -42,48 +42,4 @@\n       <TodoModal />\n     </>\n   );\n };\n-/* eslint-disable max-len */\n-import React, { useEffect, useState } from 'react';\n-import 'bulma/css/bulma.css';\n-import '@fortawesome/fontawesome-free/css/all.css';\n-\n-import { TodoList } from './components/TodoList/index';\n-import { TodoFilter } from './components/TodoFilter/index';\n-import { TodoModal } from './components/TodoModal/index';\n-import { Loader } from './components/Loader/index';\n-\n-export const App: React.FC = () => {\n-  const [todos, setTodos] = useState<Todo[] | null>(null);\n-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);\n-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');\n-  const [query, setQuery] = useState<string | null>('');\n-  const [error, setError] = useState<boolean>(false);\n-\n-  useEffect(() => {\n-    getTodos()\n-    \n-  })\n-  return (\n-    <>\n-      <div className=\"section\">\n-        <div className=\"container\">\n-          <div className=\"box\">\n-            <h1 className=\"title\">Todos:</h1>\n-\n-            <div className=\"block\">\n-              <TodoFilter />\n-            </div>\n-\n-            <div className=\"block\">\n-              <Loader />\n-              <TodoList />\n-            </div>\n-          </div>\n-        </div>\n-      </div>\n-\n-      <TodoModal />\n-    </>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714051375346,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n \n   useEffect(() => {\n     getTodos()\n       .then(setTodos)\n-      .catch(() =>)\n+      .catch(() => setError(true));\n   })\n   return (\n     <>\n       <div className=\"section\">\n"
+                },
+                {
+                    "date": 1714051389066,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,9 +18,11 @@\n   useEffect(() => {\n     getTodos()\n       .then(setTodos)\n       .catch(() => setError(true));\n-  })\n+  }, []);\n+\n+  \n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051396365,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       .then(setTodos)\n       .catch(() => setError(true));\n   }, []);\n \n-  \n+  const filteredTodos\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051464591,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,9 @@\n       .then(setTodos)\n       .catch(() => setError(true));\n   }, []);\n \n-  const filteredTodos\n+  const filteredTodos = use\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051470579,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,9 +20,11 @@\n       .then(setTodos)\n       .catch(() => setError(true));\n   }, []);\n \n-  const filteredTodos = use\n+  const filteredTodos = useMemo(() => {\n+    if (!todos)\n+  })\n   return (\n     <>\n       <div className=\"section\">\n         <div className=\"container\">\n"
+                },
+                {
+                    "date": 1714051476665,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,12 @@\n       .catch(() => setError(true));\n   }, []);\n \n   const filteredTodos = useMemo(() => {\n-    if (!todos)\n+    if (!todos) {\n+      return null\n+    }\n+    \n   })\n   return (\n     <>\n       <div className=\"section\">\n"
+                },
+                {
+                    "date": 1714051482578,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n     if (!todos) {\n       return null\n     }\n \n-    re\n+    let\n   })\n   return (\n     <>\n       <div className=\"section\">\n"
+                },
+                {
+                    "date": 1714051512276,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n     if (!todos) {\n       return null\n     }\n \n-    let newFiltered\n+    let newFilteredTodos = \n   })\n   return (\n     <>\n       <div className=\"section\">\n"
+                }
+            ],
+            "date": 1714050672930,
+            "name": "Commit-0",
+            "content": "/* eslint-disable max-len */\nimport React from 'react';\nimport 'bulma/css/bulma.css';\nimport '@fortawesome/fontawesome-free/css/all.css';\n\nimport { TodoList } from './components/TodoList';\nimport { TodoFilter } from './components/TodoFilter/';\nimport { TodoModal } from './components/TodoModal';\nimport { Loader } from './components/Loader';\n\nexport const App: React.FC = () => {\n  return (\n    <>\n      <div className=\"section\">\n        <div className=\"container\">\n          <div className=\"box\">\n            <h1 className=\"title\">Todos:</h1>\n\n            <div className=\"block\">\n              <TodoFilter />\n            </div>\n\n            <div className=\"block\">\n              <Loader />\n              <TodoList />\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <TodoModal />\n    </>\n  );\n};\n"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/types/StatusFilter.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1714051875468,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714051880816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,3 @@\n-export type \n\\ No newline at end of file\n+export type StatusFilter = {\n+  status\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1714051886033,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,3 @@\n export type StatusFilter = {\n-  status\n+  statusFilter: string;\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1714051875468,
+            "name": "Commit-0",
+            "content": "export type "
+        }
+    ]
+}
