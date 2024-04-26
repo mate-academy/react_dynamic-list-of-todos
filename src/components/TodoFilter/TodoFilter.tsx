@@ -7,6 +7,7 @@ type Props = {
   setFilterTitle: (title: string) => void;
   setFilterStatus: (status: Status) => void;
   filterTitle: string;
+  filterStatus: Status;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,12 +16,16 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterStatus,
   setFilterTitle,
   filterTitle,
+  filterStatus,
 }) => {
   const handleDelete = () => {
     setFilterTitle('');
     setFilterStatus('all');
     onChange('all');
   };
+
+  const isInputIsEmpty = filterTitle === '';
+  const areFiltersInWork = filterTitle !== '' || filterStatus !== 'all';
 
   return (
     <form className="field has-addons">
@@ -52,16 +57,17 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            onClick={handleDelete}
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {(!isInputIsEmpty || areFiltersInWork) && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              onClick={handleDelete}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+            />
+          </span>
+        )}
       </p>
     </form>
   );

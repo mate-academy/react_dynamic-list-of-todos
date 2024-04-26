@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 113,
+            "activePatchIndex": 114,
             "patches": [
                 {
                     "date": 1714051955960,
@@ -460,6 +460,10 @@
                 {
                     "date": 1714139709935,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n-  filterTitle: (status: Status) => void;\n+  filterTitle: (title: string) => void;\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714147508975,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,70 @@\n+import React, { useState } from 'react';\n+import { Status } from '../TodoFilter/index';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+  setFilterTitle: (title: string) => void;\n+  setFilterStatus: (status: Status) => void;\n+  filterTitle: string;\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+  setFilterStatus,\n+  setFilterTitle,\n+  filterTitle,\n+}) => {\n+  const [isModalOpen, setIsModalOpen] = useState(true);\n+  \n+  const handleDelete = () => {\n+    setFilterTitle('');\n+    setFilterStatus('all');\n+    onChange('all');\n+  };\n+\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => {\n+            setFilterTitle(event.target.value);\n+            onTitleFilterChange(event.target.value);\n+          }}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+          value={filterTitle}\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            onClick={handleDelete}\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
                 }
             ],
             "date": 1714051955960,

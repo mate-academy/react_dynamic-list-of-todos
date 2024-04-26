@@ -6,11 +6,11 @@ import { getUser } from '../../api';
 
 type Props = {
   loading: boolean;
-  closeModal: () => void;
   todo: Todo;
+  handleCloseModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
+export const TodoModal: React.FC<Props> = ({ todo, handleCloseModal }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const { id, title, completed } = todo;
@@ -24,10 +24,6 @@ export const TodoModal: React.FC<Props> = ({ closeModal, todo }) => {
         .finally(() => setLoading(false));
     }
   }, [todo.userId]);
-
-  const handleCloseModal = () => {
-    closeModal();
-  };
 
   return (
     <div className="modal is-active" data-cy="modal">

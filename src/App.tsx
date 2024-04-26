@@ -33,6 +33,7 @@ export const App: React.FC = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    setSelectedTodo(null);
   };
 
   const handleFilterChange = (status: Status) => {
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
                 setFilterTitle={setFilterTitle}
                 setFilterStatus={setFilterStatus}
                 filterTitle={filterTitle}
+                filterStatus={filterStatus}
               />
             </div>
 
@@ -70,6 +72,7 @@ export const App: React.FC = () => {
                   filterStatus={filterStatus}
                   filterTitle={filterTitle}
                   modalOpen={false}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -79,7 +82,7 @@ export const App: React.FC = () => {
 
       {modalOpen && selectedTodo && (
         <TodoModal
-          closeModal={handleCloseModal}
+          handleCloseModal={handleCloseModal}
           loading={false}
           todo={selectedTodo}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
   filterStatus: 'all' | 'active' | 'completed';
   filterTitle: string;
   modalOpen: boolean;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -14,7 +15,14 @@ export const TodoList: React.FC<Props> = ({
   handleShowModal,
   filterStatus,
   filterTitle,
+  modalOpen,
+  selectedTodo,
 }) => {
+  useEffect(() => {
+    if (!modalOpen) {
+    }
+  }, [modalOpen]);
+
   const filteredTodos = todos.filter(todo => {
     const titleFit = filterTitle
       ? todo.title.toLowerCase().includes(filterTitle.toLowerCase())
@@ -48,7 +56,9 @@ export const TodoList: React.FC<Props> = ({
           <tr
             key={todo.id}
             data-cy="todo"
-            className={todo.completed ? 'has-background-info-light' : ''}
+            className={
+              selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
+            }
           >
             <td className="is-vcentered">{index + 1}</td>
             <td className="is-vcentered">
@@ -67,13 +77,22 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="has-text-right is-vcentered">
               <button
-                onClick={() => handleShowModal(todo)}
+                onClick={() => {
+                  handleShowModal(todo);
+                  // setModuloButtonClicked(todo.id);
+                }}
                 data-cy="selectButton"
                 className="button"
                 type="button"
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={
+                      selectedTodo?.id === todo.id
+                        ? 'far fa-eye-slash'
+                        : 'far fa-eye'
+                    }
+                  />
                 </span>
               </button>
             </td>
