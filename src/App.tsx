@@ -62,9 +62,12 @@ export const App: React.FC = () => {
   }, [selectedTodoId, filteredTodos]);
 
   const handleSelectTodo = (id: number | null) => setSelectedTodoId(id);
+
   const handleCloseModal = () => setSelectedTodoId(null);
+
   const handleStatusFilterChange = (status: StatusFilter) =>
     setStatusFilter(status);
+  
   const handleSearchQueryChange = (newQuery: string) => setQuery(newQuery);
 
   return (
@@ -89,10 +92,12 @@ export const App: React.FC = () => {
                   selectedTodoId={selectedTodoId}
                   onSelect={handleSelectTodo}
                 />
-              ) : error ? (
-                <p>Something went wrong!</p>
-              ) : (
-                <Loader />
+              ) : ( error
+                ? (
+                  <p>Something went wrong!</p>
+                ) : (
+                  <Loader />
+                )
               )}
             </div>
           </div>
