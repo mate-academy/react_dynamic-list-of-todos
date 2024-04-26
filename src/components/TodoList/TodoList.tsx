@@ -30,6 +30,7 @@ export const TodoList: React.FC = () => (
           </button>
         </td>
       </tr>
+
       <tr data-cy="todo" className="has-background-info-light">
         <td className="is-vcentered">2</td>
         <td className="is-vcentered" />
