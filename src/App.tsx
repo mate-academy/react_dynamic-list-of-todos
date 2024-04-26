@@ -67,7 +67,7 @@ export const App: React.FC = () => {
 
   const handleStatusFilterChange = (status: StatusFilter) =>
     setStatusFilter(status);
-  
+
   const handleSearchQueryChange = (newQuery: string) => setQuery(newQuery);
 
   return (
@@ -86,19 +86,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {filteredTodos ? (
+              {filteredTodos && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoId}
                   onSelect={handleSelectTodo}
                 />
-              ) : ( error
-                ? (
-                  <p>Something went wrong!</p>
-                ) : (
-                  <Loader />
-                )
               )}
+              {error && <Loader />}
             </div>
           </div>
         </div>
