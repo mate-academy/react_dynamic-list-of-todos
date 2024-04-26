@@ -11,15 +11,23 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => {
+        setError('Error fetching user data:');
+      });
   }, [todo.userId]);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
       {!user ? (
         <Loader />
       ) : (

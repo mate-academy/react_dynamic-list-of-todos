@@ -15,25 +15,38 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
+        setError('Error fetching todos');
+      });
   }, []);
 
   const filteredTodos = () => {
+    if (!todos) {
+      return [];
+    }
+
     switch (filter) {
       case 'all':
         return todos;
       case 'active':
-        return todos?.filter(todo => todo.completed === false);
+        return todos.filter(todo => !todo.completed);
       case 'completed':
-        return todos?.filter(todo => todo.completed === true);
+        return todos.filter(todo => todo.completed);
       default:
         return todos;
     }
   };
 
   const queryFilter = (todoList: Todo[]) => {
+    if (!todoList) {
+      return [];
+    }
+
     return todoList?.filter(todo =>
       todo.title.toLowerCase().includes(query.toLowerCase().trim()),
     );
@@ -50,6 +63,10 @@ export const App: React.FC = () => {
   const handleDeleteQuery = () => {
     setQuery('');
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <>
