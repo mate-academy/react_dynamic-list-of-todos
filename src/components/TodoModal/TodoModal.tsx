@@ -14,9 +14,10 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ todo, close }) => {
   const [userDetails, setUserDetails] = useState<UserDetails>();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(
@@ -30,16 +31,16 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
         const userData = await response.json();
 
         setUserDetails(userData);
-        setLoading(false);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Error fetching userdetails:', error);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchUserDetails();
-  }, [todo.userId]);
+  }, [todo.userId, setLoading]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -50,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
             className="modal-card-title has-text-weight-medium"
             data-cy="modal-header"
           >
-            Todo {todo.id}
+            Todo #{todo.id}
           </div>
           <button
             type="button"
@@ -69,7 +70,10 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
               </p>
               {userDetails && (
                 <p className="block" data-cy="modal-user">
-                  <strong className="has-text-danger">Planned</strong> by{' '}
+                  <strong className="has-text-danger">
+                    {todo.completed ? 'Done' : 'Planned'}
+                  </strong>{' '}
+                  by{' '}
                   <a href={`mailto:${userDetails.email}`}>{userDetails.name}</a>
                 </p>
               )}

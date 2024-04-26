@@ -51,7 +51,7 @@ export const TodoList: React.FC<Props> = ({ todos, showModal }) => (
               onClick={() => showModal(todo)}
             >
               <span className="icon">
-                <i className="far fa-eye-slash" />
+                <i className="far fa-eye fa-eye-slash" />
               </span>
             </button>
           </td>

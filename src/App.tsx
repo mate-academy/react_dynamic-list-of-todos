@@ -12,21 +12,14 @@ import { Todo } from './types/Todo';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    const filtered = todos.filter(todo =>
-      todo.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    setFilteredTodos(filtered);
-  }, [searchTerm, todos]);
-
-  useEffect(() => {
+    setLoading(true);
     getTodos()
       .then(data => {
         setTodos(data);
@@ -39,14 +32,20 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (filter === 'all') {
-      setFilteredTodos(todos);
-    } else {
-      setFilteredTodos(todos.filter(todo => {
-        return filter === 'active' ? !todo.completed : todo.completed;
-      }));
-    }
-  }, [todos, filter]);
+    const filtered = todos.filter(todo => {
+      const searchTermMatch = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+      if (filter === 'all') {
+        return searchTermMatch;
+      } else if (filter === 'active') {
+        return searchTermMatch && !todo.completed;
+      } else {
+        return searchTermMatch && todo.completed;
+      }
+    });
+
+    setFilteredTodos(filtered);
+  }, [todos, filter, searchTerm]);
 
   const handleShowTodoModal = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -64,7 +63,7 @@ const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={filter} setFilter={setFilter} setSearchTerm={setSearchTerm} searchTerm={searchTerm}/>
+              <TodoFilter filter={filter} setFilter={(value: string) => setFilter(value as 'all' | "active" | "completed")}setSearchTerm={setSearchTerm} searchTerm={searchTerm}/>
             </div>
 
             <div className="block">
