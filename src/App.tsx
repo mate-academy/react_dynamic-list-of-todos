@@ -91,9 +91,12 @@ export const App: React.FC = () => {
                   todos={filteredTodos}
                   selectedTodoId={selectedTodoId}
                   onSelect={handleSelectTodo}
-                />
+                /> )}
+              {error ? (
+                <p>Something went wrong!</p>
+              ) : (
+                <Loader />
               )}
-              {error && <Loader />}
             </div>
           </div>
         </div>
