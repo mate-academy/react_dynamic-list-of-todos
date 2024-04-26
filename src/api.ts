@@ -23,7 +23,6 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-
 export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
