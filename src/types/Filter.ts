@@ -3,5 +3,3 @@ export enum FilterBy {
   active = 'active',
   completed = 'completed',
 }
-
-export type FilterAction = FilterBy.all | FilterBy.active | FilterBy.completed;

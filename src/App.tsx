@@ -7,11 +7,11 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { FilterAction, FilterBy } from './types/Filter';
+import { FilterBy } from './types/Filter';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
-function filter(todos: Todo[], type: FilterAction) {
+function filter(todos: Todo[], type: FilterBy) {
   switch (type) {
     case FilterBy.active:
       return todos.filter(todo => todo.completed === false);
@@ -43,9 +43,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      })
+      .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
@@ -77,8 +75,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && (
+              {loading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={filterByQuery(filter(todos, filterBy), query)}
                   selectedTodo={selectedTodo}
