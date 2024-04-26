@@ -1,0 +1,470 @@
+{
+    "sourceFile": "src/components/TodoFilter/TodoFilter.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 113,
+            "patches": [
+                {
+                    "date": 1714051955960,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714051965932,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,30 +1,36 @@\n-export const TodoFilter = () => {(\n-  <form className=\"field has-addons\">\n-    <p className=\"control\">\n-      <span className=\"select\">\n-        <select data-cy=\"statusSelect\">\n-          <option value=\"all\">All</option>\n-          <option value=\"active\">Active</option>\n-          <option value=\"completed\">Completed</option>\n-        </select>\n-      </span>\n-    </p>\n+export const TodoFilter = () => {\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select data-cy=\"statusSelect\">\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n \n-    <p className=\"control is-expanded has-icons-left has-icons-right\">\n-      <input\n-        data-cy=\"searchInput\"\n-        type=\"text\"\n-        className=\"input\"\n-        placeholder=\"Search...\"\n-      />\n-      <span className=\"icon is-left\">\n-        <i className=\"fas fa-magnifying-glass\" />\n-      </span>\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n \n-      <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-        <button data-cy=\"clearSearchButton\" type=\"button\" className=\"delete\" />\n-      </span>\n-    </p>\n-  </form>\n-);\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714051978268,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,7 @@\n export const TodoFilter = () => {\n+\n+  \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714051984648,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n export const TodoFilter = () => {\n \n-  \n+  const [filterStatus]\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714051994048,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n export const TodoFilter = () => {\n \n-  const [filterStatus]\n+  const [filterStatus, setFilterStatus]\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714051999830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n export const TodoFilter = () => {\n \n-  const [filterStatus, setFilterStatus]\n+  const [filterStatus, setFilterStatus] = useState\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052005045,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n export const TodoFilter = () => {\n \n-  const [filterStatus, setFilterStatus] = useState\n+  const [filterStatus, setFilterStatus] = useState()\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052010670,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n export const TodoFilter = () => {\n \n-  const [filterStatus, setFilterStatus] = useState()\n+  const [filterStatus, setFilterStatus] = useState('all');\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052015821,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,10 @@\n+import { useState } from \"react\";\n+\n export const TodoFilter = () => {\n \n   const [filterStatus, setFilterStatus] = useState('all');\n+\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052023213,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n-import { useState } from \"react\";\n+import { useState } from 'react';\n \n export const TodoFilter = () => {\n-\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714052161710,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,8 @@\n import { useState } from 'react';\n-\n+type TodoFilterProps = {\n+  onChange: (status: string) => void;\n+};\n export const TodoFilter = () => {\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n"
+                },
+                {
+                    "date": 1714052177973,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,11 @@\n import { useState } from 'react';\n+\n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n-export const TodoFilter = () => {\n+\n+export const TodoFilter: React = () => {\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714052184131,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n-import { useState } from 'react';\n+import React, { useState } from 'react';\n \n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n-export const TodoFilter: React = () => {\n+export const TodoFilter: React.FC<> = () => {\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714052193394,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n-export const TodoFilter: React.FC<> = () => {\n+export const TodoFilter: React.FC<TodoFilterProps> = ({on}) => {\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714052202721,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n-export const TodoFilter: React.FC<TodoFilterProps> = ({on}) => {\n+export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n   const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714052218038,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\">\n+          <select data-cy=\"statusSelect\" >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n"
+                },
+                {
+                    "date": 1714052224143,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\" >\n+          <select data-cy=\"statusSelect\" onChange={(e)}>\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n"
+                },
+                {
+                    "date": 1714052233343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\" onChange={(e)}>\n+          <select data-cy=\"statusSelect\" onChange={(e) => onChange()}>\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n"
+                },
+                {
+                    "date": 1714052238688,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\" onChange={(e) => onChange()}>\n+          <select data-cy=\"statusSelect\" onChange={(e) => onChange(e.target.valu)}>\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n"
+                },
+                {
+                    "date": 1714052246164,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\" onChange={(e) => onChange(e.target.valu)}>\n+          <select data-cy=\"statusSelect\" onChange={(event) => onChange(event.target.value)}>\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n"
+                },
+                {
+                    "date": 1714052280298,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,13 +10,13 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-          <select data-cy=\"statusSelect\" onChange={(event) => onChange(event.target.value)}>\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n+        <select data-cy=\"statusSelect\" onChange={(e) => onChange(e.target.value)}>\n+          <option value=\"all\">All</option>\n+          <option value=\"active\">Active</option>\n+          <option value=\"completed\">Completed</option>\n+        </select>\n         </span>\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n"
+                },
+                {
+                    "date": 1714052289037,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,13 +10,16 @@\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n-        <select data-cy=\"statusSelect\" onChange={(e) => onChange(e.target.value)}>\n-          <option value=\"all\">All</option>\n-          <option value=\"active\">Active</option>\n-          <option value=\"completed\">Completed</option>\n-        </select>\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(e.target.value)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n         </span>\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n"
+                },
+                {
+                    "date": 1714052414948,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,17 +4,16 @@\n   onChange: (status: string) => void;\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n-  const [filterStatus, setFilterStatus] = useState('all');\n \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => onChange(e.target.value)}\n+            onChange={event => onChange(event.target.value)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714052423904,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,10 @@\n-import React, { useState } from 'react';\n \n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n-\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714052429409,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-\n+import React from \"react\";\n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n"
+                },
+                {
+                    "date": 1714052435132,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n-import React from \"react\";\n+import React from 'react';\n+\n type TodoFilterProps = {\n   onChange: (status: string) => void;\n };\n \n"
+                },
+                {
+                    "date": 1714052544342,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from 'react';\n \n type TodoFilterProps = {\n-  onChange: (status: string) => void;\n+  onChange: (status: Status) => void;\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n   return (\n"
+                },
+                {
+                    "date": 1714052550511,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n import React from 'react';\n+import { Status } from '.';\n \n type TodoFilterProps = {\n   onChange: (status: Status) => void;\n };\n"
+                },
+                {
+                    "date": 1714052597903,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value)}\n+            onChange={event => onChange(event.target.value as Status)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714059777291,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,9 @@\n import { Status } from '.';\n \n type TodoFilterProps = {\n   onChange: (status: Status) => void;\n+  on\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n   return (\n"
+                },
+                {
+                    "date": 1714059783978,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { Status } from '.';\n \n type TodoFilterProps = {\n   onChange: (status: Status) => void;\n-  on\n+  onTitleFilterChange\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n   return (\n"
+                },
+                {
+                    "date": 1714059798316,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange\n };\n \n-export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange }) => {\n+export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange, onTitleFilterChange }) => {\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714059840632,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,15 @@\n import { Status } from '.';\n \n type TodoFilterProps = {\n   onChange: (status: Status) => void;\n-  onTitleFilterChange\n+  onTitleFilterChange: \n };\n \n-export const TodoFilter: React.FC<TodoFilterProps> = ({ onChange, onTitleFilterChange }) => {\n+export const TodoFilter: React.FC<TodoFilterProps> = ({\n+  onChange,\n+  onTitleFilterChange,\n+}) => {\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714059849337,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { Status } from '.';\n \n type TodoFilterProps = {\n   onChange: (status: Status) => void;\n-  onTitleFilterChange: \n+  onTitleFilterChange: (title: string)\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714059862077,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,10 @@\n import React from 'react';\n import { Status } from '.';\n \n-type TodoFilterProps = {\n+type Props = {\n   onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string)\n+  onTitleFilterChange: (title: string) => void;\n };\n \n export const TodoFilter: React.FC<TodoFilterProps> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714059888629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n };\n \n-export const TodoFilter: React.FC<TodoFilterProps> = ({\n+export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n }) => {\n   return (\n@@ -26,8 +26,9 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n+          on\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n"
+                },
+                {
+                    "date": 1714059894666,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n-          on\n+          onChange={(even)}\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n"
+                },
+                {
+                    "date": 1714059901457,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n-          onChange={(even)}\n+          onChange={(event => onTitleFilterChange)}\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n"
+                },
+                {
+                    "date": 1714059908585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n-          onChange={(event => onTitleFilterChange)}\n+          onChange={(event => onTitleFilterChange(event.target.))}\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n"
+                },
+                {
+                    "date": 1714059923645,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,51 @@\n+import React from 'react';\n+import { Status } from '.';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+}) => {\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => onTitleFilterChange(event.target.value)}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714114273888,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">All</option>\n+            <option value=\"all\">{All}</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n@@ -48,55 +48,4 @@\n       </p>\n     </form>\n   );\n };\n-import React from 'react';\n-import { Status } from '.';\n-\n-type Props = {\n-  onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string) => void;\n-};\n-\n-export const TodoFilter: React.FC<Props> = ({\n-  onChange,\n-  onTitleFilterChange,\n-}) => {\n-  return (\n-    <form className=\"field has-addons\">\n-      <p className=\"control\">\n-        <span className=\"select\">\n-          <select\n-            data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n-          >\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n-        </span>\n-      </p>\n-\n-      <p className=\"control is-expanded has-icons-left has-icons-right\">\n-        <input\n-          onChange={(event => onTitleFilterChange(event.target.))}\n-          data-cy=\"searchInput\"\n-          type=\"text\"\n-          className=\"input\"\n-          placeholder=\"Search...\"\n-        />\n-        <span className=\"icon is-left\">\n-          <i className=\"fas fa-magnifying-glass\" />\n-        </span>\n-\n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-          <button\n-            data-cy=\"clearSearchButton\"\n-            type=\"button\"\n-            className=\"delete\"\n-          />\n-        </span>\n-      </p>\n-    </form>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714114283822,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">{All}</option>\n+            <option value=\"all\">{Status.all}</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114352001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n+  \n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n@@ -17,9 +18,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">{Status.all}</option>\n+            <option value=\"all\">{Status.All}</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114357678,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  \n+  <Status></Status>\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714114370121,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  <Status></Status>\n+  status,\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714114375710,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  status,\n+  status: Status\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714114391975,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,8 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  status: Status\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714114441443,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '.';\n+import { Status } from '..';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n"
+                },
+                {
+                    "date": 1714114447536,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '..';\n+import { Status } from '../TodoModal/index';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n"
+                },
+                {
+                    "date": 1714114511586,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '../TodoModal/index';\n+import { Status } from '../Tod';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n"
+                },
+                {
+                    "date": 1714114550130,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '../Tod';\n+import { Status } from '../TodoFilter/';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n"
+                },
+                {
+                    "date": 1714114559609,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '../TodoFilter/';\n+import { Status } from '../TodoFilter/index';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">{Status.All}</option>\n+            <option value=\"all\"></option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114566015,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\"></option>\n+            <option value=\"\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114571777,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"\">All</option>\n+            <option value={status.}>All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114577334,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value={status.}>All</option>\n+            <option value={Status.All}>All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114592738,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value={Status.All}>All</option>\n+            <option value={}>All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714114781134,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value={}>All</option>\n+            <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n@@ -36,9 +36,9 @@\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n \n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+        {<span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n"
+                },
+                {
+                    "date": 1714114786554,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n \n-        {<span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+        {onChange && <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n"
+                },
+                {
+                    "date": 1714114799484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,9 @@\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n \n-        {onChange && <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+        {onChange && (<span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n"
+                },
+                {
+                    "date": 1714114813456,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,16 +36,18 @@\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n \n-        {onChange && (<span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+        {onChange && (\n+          <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n-        </span>\n+          </span>\n+          \n       </p>\n     </form>\n   );\n };\n"
+                },
+                {
+                    "date": 1714128728573,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">All</option>\n+            <option value=\"all\">Al</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n@@ -36,18 +36,16 @@\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n \n-        {onChange && (\n-          <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n-          </span>\n-          \n+        </span>\n       </p>\n     </form>\n   );\n };\n"
+                },
+                {
+                    "date": 1714128735448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '../TodoFilter/index';\n+import { Status } from '../TodoFilter/';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">Al</option>\n+            <option value=\"all\">{Status.All}</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714128745435,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\n-import { Status } from '../TodoFilter/';\n+import { Status } from '../TodoFilter/index';\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n@@ -17,9 +17,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => onChange(event.target.value as Status)}\n           >\n-            <option value=\"all\">{Status.All}</option>\n+            <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n           </select>\n         </span>\n"
+                },
+                {
+                    "date": 1714138706261,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,8 +39,9 @@\n \n         <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n+            \n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n"
+                },
+                {
+                    "date": 1714138712136,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n \n         <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n-            \n+            onClick={}\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n"
+                },
+                {
+                    "date": 1714138729017,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,9 +39,9 @@\n \n         <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n-            onClick={}\n+            onClick={handle}\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n"
+                },
+                {
+                    "date": 1714138934494,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,9 @@\n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n }) => {\n+  \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n@@ -39,9 +40,9 @@\n \n         <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n           <button\n-            onClick={handle}\n+            onClick={handleDelete}\n             data-cy=\"clearSearchButton\"\n             type=\"button\"\n             className=\"delete\"\n           />\n"
+                },
+                {
+                    "date": 1714138960440,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n }) => {\n-  \n+  const \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714138965553,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,53 @@\n+import React from 'react';\n+import { Status } from '../TodoFilter/index';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+}) => {\n+  const handleDelete = \n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => onTitleFilterChange(event.target.value)}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            onClick={handleDelete}\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714138974856,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,11 @@\n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n }) => {\n-  const handleDelete = \n+  const handleDelete = () => {\n+    set\n+  }\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n@@ -50,57 +52,4 @@\n       </p>\n     </form>\n   );\n };\n-import React from 'react';\n-import { Status } from '../TodoFilter/index';\n-\n-type Props = {\n-  onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string) => void;\n-};\n-\n-export const TodoFilter: React.FC<Props> = ({\n-  onChange,\n-  onTitleFilterChange,\n-}) => {\n-  const \n-  return (\n-    <form className=\"field has-addons\">\n-      <p className=\"control\">\n-        <span className=\"select\">\n-          <select\n-            data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n-          >\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n-        </span>\n-      </p>\n-\n-      <p className=\"control is-expanded has-icons-left has-icons-right\">\n-        <input\n-          onChange={event => onTitleFilterChange(event.target.value)}\n-          data-cy=\"searchInput\"\n-          type=\"text\"\n-          className=\"input\"\n-          placeholder=\"Search...\"\n-        />\n-        <span className=\"icon is-left\">\n-          <i className=\"fas fa-magnifying-glass\" />\n-        </span>\n-\n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-          <button\n-            onClick={handleDelete}\n-            data-cy=\"clearSearchButton\"\n-            type=\"button\"\n-            className=\"delete\"\n-          />\n-        </span>\n-      </p>\n-    </form>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714138986280,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   onChange,\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n-    set\n+    setFilter\n   }\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n"
+                },
+                {
+                    "date": 1714138991644,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,10 +10,11 @@\n   onChange,\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n-    setFilter\n+    setFilterTitle\n   }\n+  \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714138998240,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,11 +10,11 @@\n   onChange,\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n-    setFilterTitle\n+    setFilterTitle()\n   }\n-  \n+\n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n"
+                },
+                {
+                    "date": 1714139004700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,57 @@\n+import React from 'react';\n+import { Status } from '../TodoFilter/index';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+}) => {\n+  const handleDelete = () => {\n+    setFilterTitle('');\n+    set\n+  }\n+\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => onTitleFilterChange(event.target.value)}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            onClick={handleDelete}\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714139017935,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n-    set\n+    setFilter\n   }\n \n   return (\n     <form className=\"field has-addons\">\n@@ -54,60 +54,4 @@\n       </p>\n     </form>\n   );\n };\n-import React from 'react';\n-import { Status } from '../TodoFilter/index';\n-\n-type Props = {\n-  onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string) => void;\n-};\n-\n-export const TodoFilter: React.FC<Props> = ({\n-  onChange,\n-  onTitleFilterChange,\n-}) => {\n-  const handleDelete = () => {\n-    setFilterTitle()\n-  }\n-\n-  return (\n-    <form className=\"field has-addons\">\n-      <p className=\"control\">\n-        <span className=\"select\">\n-          <select\n-            data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n-          >\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n-        </span>\n-      </p>\n-\n-      <p className=\"control is-expanded has-icons-left has-icons-right\">\n-        <input\n-          onChange={event => onTitleFilterChange(event.target.value)}\n-          data-cy=\"searchInput\"\n-          type=\"text\"\n-          className=\"input\"\n-          placeholder=\"Search...\"\n-        />\n-        <span className=\"icon is-left\">\n-          <i className=\"fas fa-magnifying-glass\" />\n-        </span>\n-\n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-          <button\n-            onClick={handleDelete}\n-            data-cy=\"clearSearchButton\"\n-            type=\"button\"\n-            className=\"delete\"\n-          />\n-        </span>\n-      </p>\n-    </form>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714139023762,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n-    setFilter\n+    setFilterStatus('all')\n   }\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714139029680,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,10 @@\n   onTitleFilterChange,\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n-    setFilterStatus('all')\n+    setFilterStatus('all');\n+    onChange\n   }\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714139035605,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n-    onChange\n+    onChange('all');\n   }\n \n   return (\n     <form className=\"field has-addons\">\n"
+                },
+                {
+                    "date": 1714139046400,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n+  \n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139052772,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  \n+  setFilterTitle\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139065548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  setFilterTitle\n+  setFilterTitle: string\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139073920,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,60 @@\n+import React from 'react';\n+import { Status } from '../TodoFilter/index';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+  setFilterTitle: string;\n+  setFilterStatus\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+}) => {\n+  const handleDelete = () => {\n+    setFilterTitle('');\n+    setFilterStatus('all');\n+    onChange('all');\n+  }\n+\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => onTitleFilterChange(event.target.value)}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            onClick={handleDelete}\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714139083780,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: string;\n-  setFilterStatus\n+  setFilterStatus: Statu\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n@@ -57,63 +57,4 @@\n       </p>\n     </form>\n   );\n };\n-import React from 'react';\n-import { Status } from '../TodoFilter/index';\n-\n-type Props = {\n-  onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string) => void;\n-  setFilterTitle: string\n-};\n-\n-export const TodoFilter: React.FC<Props> = ({\n-  onChange,\n-  onTitleFilterChange,\n-}) => {\n-  const handleDelete = () => {\n-    setFilterTitle('');\n-    setFilterStatus('all');\n-    onChange('all');\n-  }\n-\n-  return (\n-    <form className=\"field has-addons\">\n-      <p className=\"control\">\n-        <span className=\"select\">\n-          <select\n-            data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n-          >\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n-        </span>\n-      </p>\n-\n-      <p className=\"control is-expanded has-icons-left has-icons-right\">\n-        <input\n-          onChange={event => onTitleFilterChange(event.target.value)}\n-          data-cy=\"searchInput\"\n-          type=\"text\"\n-          className=\"input\"\n-          placeholder=\"Search...\"\n-        />\n-        <span className=\"icon is-left\">\n-          <i className=\"fas fa-magnifying-glass\" />\n-        </span>\n-\n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-          <button\n-            onClick={handleDelete}\n-            data-cy=\"clearSearchButton\"\n-            type=\"button\"\n-            className=\"delete\"\n-          />\n-        </span>\n-      </p>\n-    </form>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714139089416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,14 +4,15 @@\n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: string;\n-  setFilterStatus: Statu\n+  setFilterStatus: Status;\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n+  se\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n"
+                },
+                {
+                    "date": 1714139094680,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n-  se\n+  setFilterStatus, setFilterTitle\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n"
+                },
+                {
+                    "date": 1714139133673,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,23 +10,25 @@\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n   onTitleFilterChange,\n-  setFilterStatus, setFilterTitle\n+  setFilterStatus,\n+  setFilterTitle,\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n     onChange('all');\n-  }\n+  };\n \n   return (\n     <form className=\"field has-addons\">\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n+            onChange={event => setTitleFilter(event.target.value);\n+              onTitleFilterChange(event.target.value);}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139140901,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,10 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setTitleFilter(event.target.value);\n-              onTitleFilterChange(event.target.value);}\n+            onChange={event => onChange(event.target.value as Status)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139149899,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n+            onChange={event => setti}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139158320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setti}\n+            onChange={event => setFilterTitle(event)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139163806,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setFilterTitle(event)}\n+            onChange={event => setFilterTitle(event.target.val)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139171005,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setFilterTitle(event.target.val)}\n+            onChange={event => setFilterTitle(event.target.value);}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139198991,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,11 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setFilterTitle(event.target.value);}\n+            onChange={event => setFilterTitle(event.target.value);\n+          onTitle\n+            }\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139215002,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => setFilterTitle(event.target.value);\n-          onTitle\n+          onTitleFilterChange(event.targe)\n             }\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n"
+                },
+                {
+                    "date": 1714139221068,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,9 @@\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => setFilterTitle(event.target.value);\n-          onTitleFilterChange(event.targe)\n+          onTitleFilterChange(event.target.value);\n             }\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n"
+                },
+                {
+                    "date": 1714139245544,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n           <select\n             data-cy=\"statusSelect\"\n             onChange={event => setFilterTitle(event.target.value);\n           onTitleFilterChange(event.target.value);\n-            }\n+            }}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139258413,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,11 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setFilterTitle(event.target.value);\n-          onTitleFilterChange(event.target.value);\n-            }}\n+            onChange={event => setFilterTitle}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n"
+                },
+                {
+                    "date": 1714139278611,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       <p className=\"control\">\n         <span className=\"select\">\n           <select\n             data-cy=\"statusSelect\"\n-            onChange={event => setFilterTitle}\n+            onChange={event => onChange(event.target.value as Status)}\n           >\n             <option value=\"all\">All</option>\n             <option value=\"active\">Active</option>\n             <option value=\"completed\">Completed</option>\n@@ -36,9 +36,12 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n-          onChange={event => onTitleFilterChange(event.target.value)}\n+           onChange={(event) => {\n+            setTitleFilter(event.target.value);\n+            onTitleFilterChange(event.target.value);\n+          }}\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n"
+                },
+                {
+                    "date": 1714139287584,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,10 +36,10 @@\n       </p>\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n-           onChange={(event) => {\n-            setTitleFilter(event.target.value);\n+          onChange={event => {\n+            setFilter(event.target.value);\n             onTitleFilterChange(event.target.value);\n           }}\n           data-cy=\"searchInput\"\n           type=\"text\"\n"
+                },
+                {
+                    "date": 1714139311136,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,15 +37,16 @@\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n           onChange={event => {\n-            setFilter(event.target.value);\n+            setFilterTitle(event.target.value);\n             onTitleFilterChange(event.target.value);\n           }}\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n+          value\n         />\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n"
+                },
+                {
+                    "date": 1714139316405,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n-          value\n+          value={titlefi}\n         />\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n"
+                },
+                {
+                    "date": 1714139326279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n-          value={titlefi}\n+          value={fil}\n         />\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n"
+                },
+                {
+                    "date": 1714139363792,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n           data-cy=\"searchInput\"\n           type=\"text\"\n           className=\"input\"\n           placeholder=\"Search...\"\n-          value={fil}\n+          value={filterTitle}\n         />\n         <span className=\"icon is-left\">\n           <i className=\"fas fa-magnifying-glass\" />\n         </span>\n"
+                },
+                {
+                    "date": 1714139373885,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,8 +12,9 @@\n   onChange,\n   onTitleFilterChange,\n   setFilterStatus,\n   setFilterTitle,\n+  \n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n"
+                },
+                {
+                    "date": 1714139379553,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n   onChange,\n   onTitleFilterChange,\n   setFilterStatus,\n   setFilterTitle,\n-  \n+  filterTitle,\n }) => {\n   const handleDelete = () => {\n     setFilterTitle('');\n     setFilterStatus('all');\n"
+                },
+                {
+                    "date": 1714139431016,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n           onChange={event => {\n-            setFilterTitle(event.target.value);\n+            setFilterTitle(event.target.value),\n             onTitleFilterChange(event.target.value);\n           }}\n           data-cy=\"searchInput\"\n           type=\"text\"\n"
+                },
+                {
+                    "date": 1714139456805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: string;\n   setFilterStatus: Status;\n+  \n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n@@ -38,9 +39,9 @@\n \n       <p className=\"control is-expanded has-icons-left has-icons-right\">\n         <input\n           onChange={event => {\n-            setFilterTitle(event.target.value),\n+            setFilterTitle(event.target.value);\n             onTitleFilterChange(event.target.value);\n           }}\n           data-cy=\"searchInput\"\n           type=\"text\"\n"
+                },
+                {
+                    "date": 1714139462755,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: string;\n   setFilterStatus: Status;\n-  \n+  filterTitle: \n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139471435,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,68 @@\n+import React from 'react';\n+import { Status } from '../TodoFilter/index';\n+\n+type Props = {\n+  onChange: (status: Status) => void;\n+  onTitleFilterChange: (title: string) => void;\n+  setFilterTitle: string;\n+  setFilterStatus: Status;\n+  filterTitle: string\n+};\n+\n+export const TodoFilter: React.FC<Props> = ({\n+  onChange,\n+  onTitleFilterChange,\n+  setFilterStatus,\n+  setFilterTitle,\n+  filterTitle,\n+}) => {\n+  const handleDelete = () => {\n+    setFilterTitle('');\n+    setFilterStatus('all');\n+    onChange('all');\n+  };\n+\n+  return (\n+    <form className=\"field has-addons\">\n+      <p className=\"control\">\n+        <span className=\"select\">\n+          <select\n+            data-cy=\"statusSelect\"\n+            onChange={event => onChange(event.target.value as Status)}\n+          >\n+            <option value=\"all\">All</option>\n+            <option value=\"active\">Active</option>\n+            <option value=\"completed\">Completed</option>\n+          </select>\n+        </span>\n+      </p>\n+\n+      <p className=\"control is-expanded has-icons-left has-icons-right\">\n+        <input\n+          onChange={event => {\n+            setFilterTitle(event.target.value);\n+            onTitleFilterChange(event.target.value);\n+          }}\n+          data-cy=\"searchInput\"\n+          type=\"text\"\n+          className=\"input\"\n+          placeholder=\"Search...\"\n+          value={filterTitle}\n+        />\n+        <span className=\"icon is-left\">\n+          <i className=\"fas fa-magnifying-glass\" />\n+        </span>\n+\n+        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n+          <button\n+            onClick={handleDelete}\n+            data-cy=\"clearSearchButton\"\n+            type=\"button\"\n+            className=\"delete\"\n+          />\n+        </span>\n+      </p>\n+    </form>\n+  );\n+};\n"
+                },
+                {
+                    "date": 1714139650343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,11 +3,11 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  setFilterTitle: string;\n+  setFilterTitle: (string);\n   setFilterStatus: Status;\n-  filterTitle: string\n+  filterTitle: string;\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n@@ -65,72 +65,4 @@\n       </p>\n     </form>\n   );\n };\n-import React from 'react';\n-import { Status } from '../TodoFilter/index';\n-\n-type Props = {\n-  onChange: (status: Status) => void;\n-  onTitleFilterChange: (title: string) => void;\n-  setFilterTitle: string;\n-  setFilterStatus: Status;\n-  filterTitle: \n-};\n-\n-export const TodoFilter: React.FC<Props> = ({\n-  onChange,\n-  onTitleFilterChange,\n-  setFilterStatus,\n-  setFilterTitle,\n-  filterTitle,\n-}) => {\n-  const handleDelete = () => {\n-    setFilterTitle('');\n-    setFilterStatus('all');\n-    onChange('all');\n-  };\n-\n-  return (\n-    <form className=\"field has-addons\">\n-      <p className=\"control\">\n-        <span className=\"select\">\n-          <select\n-            data-cy=\"statusSelect\"\n-            onChange={event => onChange(event.target.value as Status)}\n-          >\n-            <option value=\"all\">All</option>\n-            <option value=\"active\">Active</option>\n-            <option value=\"completed\">Completed</option>\n-          </select>\n-        </span>\n-      </p>\n-\n-      <p className=\"control is-expanded has-icons-left has-icons-right\">\n-        <input\n-          onChange={event => {\n-            setFilterTitle(event.target.value);\n-            onTitleFilterChange(event.target.value);\n-          }}\n-          data-cy=\"searchInput\"\n-          type=\"text\"\n-          className=\"input\"\n-          placeholder=\"Search...\"\n-          value={filterTitle}\n-        />\n-        <span className=\"icon is-left\">\n-          <i className=\"fas fa-magnifying-glass\" />\n-        </span>\n-\n-        <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n-          <button\n-            onClick={handleDelete}\n-            data-cy=\"clearSearchButton\"\n-            type=\"button\"\n-            className=\"delete\"\n-          />\n-        </span>\n-      </p>\n-    </form>\n-  );\n-};\n"
+                },
+                {
+                    "date": 1714139657592,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n type Props = {\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n-  setFilterTitle: (string);\n+  setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n   filterTitle: string;\n };\n \n"
+                },
+                {
+                    "date": 1714139664419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n-  filterTitle: string;\n+  filterTitle: (stat);\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139670357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n-  filterTitle: (stat);\n+  filterTitle: (status: );\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139675604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n-  filterTitle: (status: );\n+  filterTitle: (status: Status) ;\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                },
+                {
+                    "date": 1714139709935,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n   onChange: (status: Status) => void;\n   onTitleFilterChange: (title: string) => void;\n   setFilterTitle: (title: string) => void;\n   setFilterStatus: Status;\n-  filterTitle: (status: Status) => void;\n+  filterTitle: (title: string) => void;\n };\n \n export const TodoFilter: React.FC<Props> = ({\n   onChange,\n"
+                }
+            ],
+            "date": 1714051955960,
+            "name": "Commit-0",
+            "content": "export const TodoFilter = () => {(\n  <form className=\"field has-addons\">\n    <p className=\"control\">\n      <span className=\"select\">\n        <select data-cy=\"statusSelect\">\n          <option value=\"all\">All</option>\n          <option value=\"active\">Active</option>\n          <option value=\"completed\">Completed</option>\n        </select>\n      </span>\n    </p>\n\n    <p className=\"control is-expanded has-icons-left has-icons-right\">\n      <input\n        data-cy=\"searchInput\"\n        type=\"text\"\n        className=\"input\"\n        placeholder=\"Search...\"\n      />\n      <span className=\"icon is-left\">\n        <i className=\"fas fa-magnifying-glass\" />\n      </span>\n\n      <span className=\"icon is-right\" style={{ pointerEvents: 'all' }}>\n        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}\n        <button data-cy=\"clearSearchButton\" type=\"button\" className=\"delete\" />\n      </span>\n    </p>\n  </form>\n);\n"
+        }
+    ]
+}

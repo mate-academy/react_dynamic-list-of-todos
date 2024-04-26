@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/api.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1714142315871,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714142586343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { User } from './types/User';\n \n // eslint-disable-next-line operator-linebreak\n const BASE_URL =\n-  'https://mate-academy.github.io/react_dynamic-list-of-todos/apih';\n+  'https://mate-academy.github.io/react_dynamic-list-of-todos/api';\n \n // This function creates a promise\n // that is resolved after a given delay\n function wait(delay: number): Promise<void> {\n"
+                }
+            ],
+            "date": 1714142315871,
+            "name": "Commit-0",
+            "content": "import { Todo } from './types/Todo';\nimport { User } from './types/User';\n\n// eslint-disable-next-line operator-linebreak\nconst BASE_URL =\n  'https://mate-academy.github.io/react_dynamic-list-of-todos/apih';\n\n// This function creates a promise\n// that is resolved after a given delay\nfunction wait(delay: number): Promise<void> {\n  return new Promise(resolve => {\n    setTimeout(resolve, delay);\n  });\n}\n\nfunction get<T>(url: string): Promise<T> {\n  // eslint-disable-next-line prefer-template\n  const fullURL = BASE_URL + url + '.json';\n\n  // we add some delay to see how the loader works\n  return wait(300)\n    .then(() => fetch(fullURL))\n    .then(res => res.json());\n}\n\nexport const getTodos = () => get<Todo[]>('/todos');\n\nexport const getUser = (userId: number) => get<User>(`/users/${userId}`);\n"
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "sourceFile": "src/components/Loader/Loader.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1714035080744,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714035089297,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,12 @@\n import React from 'react';\n import './Loader.scss';\n \n-export const Loader: React.FC = () => {(\n-  <div className=\"Loader\" data-cy=\"loader\">\n-    <div className=\"Loader__content\" />\n-  </div>\n-);\n+export const Loader: React.FC = () => {\n+\n+  \n+  return (\n+    <div className=\"Loader\" data-cy=\"loader\">\n+      <div className=\"Loader__content\" />\n+    </div>\n+  );\n+}\n"
+                },
+                {
+                    "date": 1714035098362,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,16 @@\n import React from 'react';\n import './Loader.scss';\n \n export const Loader: React.FC = () => {\n+  const [loading, setLoading] = useState(false);\n+  const fetchData = () => {\n+    setLoading(true);\n+    setTimeout(() => {\n+      setLoading(false);\n+    }, 1000);\n+  };\n \n-  \n   return (\n     <div className=\"Loader\" data-cy=\"loader\">\n       <div className=\"Loader__content\" />\n     </div>\n"
+                },
+                {
+                    "date": 1714035104887,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,10 @@\n-import React from 'react';\n+import React, { useState } from 'react';\n import './Loader.scss';\n \n export const Loader: React.FC = () => {\n   const [loading, setLoading] = useState(false);\n+  \n   const fetchData = () => {\n     setLoading(true);\n     setTimeout(() => {\n       setLoading(false);\n"
+                },
+                {
+                    "date": 1714035122683,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,15 @@\n import './Loader.scss';\n \n export const Loader: React.FC = () => {\n   const [loading, setLoading] = useState(false);\n-  \n+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);\n+\n+\n+  const handleShowModal = (todo: Todo) => {\n+    setSelectedTodo(todo);\n+    fetchData();\n+  };\n   const fetchData = () => {\n     setLoading(true);\n     setTimeout(() => {\n       setLoading(false);\n"
+                },
+                {
+                    "date": 1714035165603,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,8 @@\n export const Loader: React.FC = () => {\n   const [loading, setLoading] = useState(false);\n   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);\n \n-\n   const handleShowModal = (todo: Todo) => {\n     setSelectedTodo(todo);\n     fetchData();\n   };\n@@ -17,9 +16,9 @@\n     }, 1000);\n   };\n \n   return (\n-    <div className=\"Loader\" data-cy=\"loader\">\n+    <div className=\"Loader\" data-cy=\"loader\" o>\n       <div className=\"Loader__content\" />\n     </div>\n   );\n-}\n+};\n"
+                },
+                {
+                    "date": 1714035171303,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     }, 1000);\n   };\n \n   return (\n-    <div className=\"Loader\" data-cy=\"loader\" o>\n+    <div className=\"Loader\" data-cy=\"loader\" onBlur={}>\n       <div className=\"Loader__content\" />\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714035176996,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     }, 1000);\n   };\n \n   return (\n-    <div className=\"Loader\" data-cy=\"loader\" onBlur={}>\n+    <div className=\"Loader\" data-cy=\"loader\" onBlur={handleShowModal}>\n       <div className=\"Loader__content\" />\n     </div>\n   );\n };\n"
+                },
+                {
+                    "date": 1714035186574,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     }, 1000);\n   };\n \n   return (\n-    <div className=\"Loader\" data-cy=\"loader\" onBlur={handleShowModal}>\n+    <div className=\"Loader\" data-cy=\"loader\" onBlur={hand}>\n       <div className=\"Loader__content\" />\n     </div>\n   );\n };\n"
+                }
+            ],
+            "date": 1714035080744,
+            "name": "Commit-0",
+            "content": "import React from 'react';\nimport './Loader.scss';\n\nexport const Loader: React.FC = () => {(\n  <div className=\"Loader\" data-cy=\"loader\">\n    <div className=\"Loader__content\" />\n  </div>\n);\n"
+        }
+    ]
+}

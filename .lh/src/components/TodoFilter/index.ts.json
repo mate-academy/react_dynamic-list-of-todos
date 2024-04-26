@@ -1,0 +1,58 @@
+{
+    "sourceFile": "src/components/TodoFilter/index.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1714051583190,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1714051590155,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,3 @@\n export * from './TodoFilter';\n-export \n+export\n+interface\n"
+                },
+                {
+                    "date": 1714051596872,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,4 @@\n export * from './TodoFilter';\n-export\n-interface\n+export interface {\n+  \n+}\n"
+                },
+                {
+                    "date": 1714051602147,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n export interface {\n-  \n+  status\n }\n"
+                },
+                {
+                    "date": 1714051609465,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n-export interface {\n-  status\n+export interface Status{\n+\n }\n"
+                },
+                {
+                    "date": 1714051615422,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n-export interface Status{\n-\n+export interface Status {\n+statu\n }\n"
+                },
+                {
+                    "date": 1714051635789,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n export interface Status {\n-statu\n+status: 'all' | 'active' | 'completed'\n }\n"
+                },
+                {
+                    "date": 1714051641484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n export interface Status {\n-status: 'all' | 'active' | 'completed'\n+  status: 'all' | 'active' | 'completed';\n }\n"
+                },
+                {
+                    "date": 1714051810102,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n-export interface Status {\n+export type Status {\n   status: 'all' | 'active' | 'completed';\n }\n"
+                },
+                {
+                    "date": 1714051817170,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,4 @@\n export * from './TodoFilter';\n-export type Status {\n+export type Status =\n   status: 'all' | 'active' | 'completed';\n }\n"
+                },
+                {
+                    "date": 1714051822706,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,3 @@\n export * from './TodoFilter';\n-export type Status =\n-  status: 'all' | 'active' | 'completed';\n+export type Status = 'all' | 'active' | 'completed';\n }\n"
+                }
+            ],
+            "date": 1714051583190,
+            "name": "Commit-0",
+            "content": "export * from './TodoFilter';\nexport \n"
+        }
+    ]
+}

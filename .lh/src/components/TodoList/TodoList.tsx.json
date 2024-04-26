@@ -1,0 +1,58 @@
+{
+    "sourceFile": "src/components/TodoList/TodoList.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1713973012630,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1713973018099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      \n+      {TodoList.map}\n       <tr data-cy=\"todo\" className=\"\">\n         <td className=\"is-vcentered\">1</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973023439,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,11 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {TodoList.map}\n+      {TodoList.map(() => {\n+        \n+      })}\n       <tr data-cy=\"todo\" className=\"\">\n         <td className=\"is-vcentered\">1</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973028950,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,24 +16,11 @@\n     </thead>\n \n     <tbody>\n       {TodoList.map(() => {\n-        \n+\n       })}\n-      <tr data-cy=\"todo\" className=\"\">\n-        <td className=\"is-vcentered\">1</td>\n-        <td className=\"is-vcentered\" />\n-        <td className=\"is-vcentered is-expanded\">\n-          <p className=\"has-text-danger\">delectus aut autem</p>\n-        </td>\n-        <td className=\"has-text-right is-vcentered\">\n-          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n-            <span className=\"icon\">\n-              <i className=\"far fa-eye\" />\n-            </span>\n-          </button>\n-        </td>\n-      </tr>\n+     \n       <tr data-cy=\"todo\" className=\"has-background-info-light\">\n         <td className=\"is-vcentered\">2</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973034543,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,11 +16,24 @@\n     </thead>\n \n     <tbody>\n       {TodoList.map(() => {\n+        <tr data-cy=\"todo\" className=\"\">\n+          <td className=\"is-vcentered\">1</td>\n+          <td className=\"is-vcentered\" />\n+          <td className=\"is-vcentered is-expanded\">\n+            <p className=\"has-text-danger\">delectus aut autem</p>\n+          </td>\n+          <td className=\"has-text-right is-vcentered\">\n+            <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n+              <span className=\"icon\">\n+                <i className=\"far fa-eye\" />\n+              </span>\n+            </button>\n+          </td>\n+        </tr>;\n+      })}\n \n-      })}\n-     \n       <tr data-cy=\"todo\" className=\"has-background-info-light\">\n         <td className=\"is-vcentered\">2</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973046946,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {TodoList.map(() => {\n+      {todo.map(() => {\n         <tr data-cy=\"todo\" className=\"\">\n           <td className=\"is-vcentered\">1</td>\n           <td className=\"is-vcentered\" />\n           <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973054858,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {todo.map(() => {\n+      {.map(() => {\n         <tr data-cy=\"todo\" className=\"\">\n           <td className=\"is-vcentered\">1</td>\n           <td className=\"is-vcentered\" />\n           <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973146446,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {.map(() => {\n+      {TodoList.map(() => {\n         <tr data-cy=\"todo\" className=\"\">\n           <td className=\"is-vcentered\">1</td>\n           <td className=\"is-vcentered\" />\n           <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713973153436,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,25 +15,22 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {TodoList.map(() => {\n-        <tr data-cy=\"todo\" className=\"\">\n-          <td className=\"is-vcentered\">1</td>\n-          <td className=\"is-vcentered\" />\n-          <td className=\"is-vcentered is-expanded\">\n-            <p className=\"has-text-danger\">delectus aut autem</p>\n-          </td>\n-          <td className=\"has-text-right is-vcentered\">\n-            <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n-              <span className=\"icon\">\n-                <i className=\"far fa-eye\" />\n-              </span>\n-            </button>\n-          </td>\n-        </tr>;\n-      })}\n-\n+      <tr data-cy=\"todo\" className=\"\">\n+        <td className=\"is-vcentered\">1</td>\n+        <td className=\"is-vcentered\" />\n+        <td className=\"is-vcentered is-expanded\">\n+          <p className=\"has-text-danger\">delectus aut autem</p>\n+        </td>\n+        <td className=\"has-text-right is-vcentered\">\n+          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n+            <span className=\"icon\">\n+              <i className=\"far fa-eye\" />\n+            </span>\n+          </button>\n+        </td>\n+      </tr>\n       <tr data-cy=\"todo\" className=\"has-background-info-light\">\n         <td className=\"is-vcentered\">2</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713974082645,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n         <th> </th>\n       </tr>\n     </thead>\n \n-    <tbody>\\\n+    <tbody>\\{}\n       <tr data-cy=\"todo\" className=\"\">\n         <td className=\"is-vcentered\">1</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                },
+                {
+                    "date": 1713974100961,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n       </tr>\n     </thead>\n \n     <tbody>\n-      {getTodos.map(()=> )}\n+      {getTodos.map(()=> {})}\n       <tr data-cy=\"todo\" className=\"\">\n         <td className=\"is-vcentered\">1</td>\n         <td className=\"is-vcentered\" />\n         <td className=\"is-vcentered is-expanded\">\n"
+                }
+            ],
+            "date": 1713973012630,
+            "name": "Commit-0",
+            "content": "import React from 'react';\n\nexport const TodoList: React.FC = () => (\n  <table className=\"table is-narrow is-fullwidth\">\n    <thead>\n      <tr>\n        <th>#</th>\n        <th>\n          <span className=\"icon\">\n            <i className=\"fas fa-check\" />\n          </span>\n        </th>\n        <th>Title</th>\n        <th> </th>\n      </tr>\n    </thead>\n\n    <tbody>\n      \n      <tr data-cy=\"todo\" className=\"\">\n        <td className=\"is-vcentered\">1</td>\n        <td className=\"is-vcentered\" />\n        <td className=\"is-vcentered is-expanded\">\n          <p className=\"has-text-danger\">delectus aut autem</p>\n        </td>\n        <td className=\"has-text-right is-vcentered\">\n          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n            <span className=\"icon\">\n              <i className=\"far fa-eye\" />\n            </span>\n          </button>\n        </td>\n      </tr>\n      <tr data-cy=\"todo\" className=\"has-background-info-light\">\n        <td className=\"is-vcentered\">2</td>\n        <td className=\"is-vcentered\" />\n        <td className=\"is-vcentered is-expanded\">\n          <p className=\"has-text-danger\">quis ut nam facilis et officia qui</p>\n        </td>\n        <td className=\"has-text-right is-vcentered\">\n          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n            <span className=\"icon\">\n              <i className=\"far fa-eye-slash\" />\n            </span>\n          </button>\n        </td>\n      </tr>\n\n      <tr data-cy=\"todo\" className=\"\">\n        <td className=\"is-vcentered\">1</td>\n        <td className=\"is-vcentered\" />\n        <td className=\"is-vcentered is-expanded\">\n          <p className=\"has-text-danger\">delectus aut autem</p>\n        </td>\n        <td className=\"has-text-right is-vcentered\">\n          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n            <span className=\"icon\">\n              <i className=\"far fa-eye\" />\n            </span>\n          </button>\n        </td>\n      </tr>\n\n      <tr data-cy=\"todo\" className=\"\">\n        <td className=\"is-vcentered\">6</td>\n        <td className=\"is-vcentered\" />\n        <td className=\"is-vcentered is-expanded\">\n          <p className=\"has-text-danger\">\n            qui ullam ratione quibusdam voluptatem quia omnis\n          </p>\n        </td>\n        <td className=\"has-text-right is-vcentered\">\n          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n            <span className=\"icon\">\n              <i className=\"far fa-eye\" />\n            </span>\n          </button>\n        </td>\n      </tr>\n\n      <tr data-cy=\"todo\" className=\"\">\n        <td className=\"is-vcentered\">8</td>\n        <td className=\"is-vcentered\">\n          <span className=\"icon\" data-cy=\"iconCompleted\">\n            <i className=\"fas fa-check\" />\n          </span>\n        </td>\n        <td className=\"is-vcentered is-expanded\">\n          <p className=\"has-text-success\">quo adipisci enim quam ut ab</p>\n        </td>\n        <td className=\"has-text-right is-vcentered\">\n          <button data-cy=\"selectButton\" className=\"button\" type=\"button\">\n            <span className=\"icon\">\n              <i className=\"far fa-eye\" />\n            </span>\n          </button>\n        </td>\n      </tr>\n    </tbody>\n  </table>\n);\n"
+        }
+    ]
+}
