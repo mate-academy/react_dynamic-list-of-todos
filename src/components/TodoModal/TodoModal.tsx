@@ -1,11 +1,9 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-
-interface UserDetails {
-  name: string;
-  email: string;
-}
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
@@ -13,34 +11,16 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, close }) => {
-  const [userDetails, setUserDetails] = useState<UserDetails>();
+  const [userDetails, setUserDetails] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    const fetchUserDetails = async () => {
-      try {
-        const response = await fetch(
-          `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${todo.userId}.json`,
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user details');
-        }
-
-        const userData = await response.json();
-
-        setUserDetails(userData);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error fetching userdetails:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserDetails();
-  }, [todo.userId, setLoading]);
+    getUser(todo.userId)
+      .then(setUserDetails)
+      .catch(error => console.error('Error fetching userdetails:', error))
+      .finally(() => setLoading(false));
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
