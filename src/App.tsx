@@ -13,7 +13,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loadTodos, setLoadTodos] = useState(false);
   const [filterStatus, setFilterStatus] = useState<Status>('all');
-  const [modalOpen, setModalOpen] = useState(false);
   const [filterTitle, setFilterTitle] = useState<string>('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [, setErrorMessage] = useState('');
@@ -28,11 +27,9 @@ export const App: React.FC = () => {
 
   const handleShowModal = (todo: Todo) => {
     setSelectedTodo(todo);
-    setModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false);
     setSelectedTodo(null);
   };
 
@@ -67,12 +64,11 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
                   handleShowModal={handleShowModal}
                   filterStatus={filterStatus}
                   filterTitle={filterTitle}
-                  modalOpen={false}
                   selectedTodo={selectedTodo}
+                  todos={todos}
                 />
               )}
             </div>
@@ -80,12 +76,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalOpen && selectedTodo && (
-        <TodoModal
-          handleCloseModal={handleCloseModal}
-          loading={false}
-          todo={selectedTodo}
-        />
+      {selectedTodo && (
+        <TodoModal handleCloseModal={handleCloseModal} todo={selectedTodo} />
       )}
     </>
   );

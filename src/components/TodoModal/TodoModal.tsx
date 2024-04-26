@@ -5,7 +5,6 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  loading: boolean;
   todo: Todo;
   handleCloseModal: () => void;
 };

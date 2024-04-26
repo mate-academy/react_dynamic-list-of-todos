@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -6,7 +6,6 @@ type Props = {
   handleShowModal: (todo: Todo) => void;
   filterStatus: 'all' | 'active' | 'completed';
   filterTitle: string;
-  modalOpen: boolean;
   selectedTodo: Todo | null;
 };
 
@@ -15,26 +14,26 @@ export const TodoList: React.FC<Props> = ({
   handleShowModal,
   filterStatus,
   filterTitle,
-  modalOpen,
   selectedTodo,
 }) => {
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
+
   useEffect(() => {
-    if (!modalOpen) {
-    }
-  }, [modalOpen]);
+    setFilteredTodos(prev =>
+      prev.filter((todo: Todo) => {
+        const titleFit = filterTitle
+          ? todo.title.toLowerCase().includes(filterTitle.toLowerCase())
+          : true;
 
-  const filteredTodos = todos.filter(todo => {
-    const titleFit = filterTitle
-      ? todo.title.toLowerCase().includes(filterTitle.toLowerCase())
-      : true;
-
-    return (
-      (filterStatus === 'all' ||
-        (filterStatus === 'completed' && todo.completed) ||
-        (filterStatus === 'active' && !todo.completed)) &&
-      titleFit
+        return (
+          (filterStatus === 'all' ||
+            (filterStatus === 'completed' && todo.completed) ||
+            (filterStatus === 'active' && !todo.completed)) &&
+          titleFit
+        );
+      }),
     );
-  });
+  }, [filterTitle, filterStatus]);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -52,7 +51,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {filteredTodos.map((todo, index) => (
+        {filteredTodos.map((todo: Todo, index: number) => (
           <tr
             key={todo.id}
             data-cy="todo"
@@ -62,9 +61,12 @@ export const TodoList: React.FC<Props> = ({
           >
             <td className="is-vcentered">{index + 1}</td>
             <td className="is-vcentered">
-              <span className="icon" data-cy="iconCompleted">
-                {todo.completed && <i className="fas fa-check" />}
-              </span>
+              {/* <span className="icon" data-cy="iconCompleted"> */}
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
             </td>
             <td className="is-vcentered is-expanded">
               <p
