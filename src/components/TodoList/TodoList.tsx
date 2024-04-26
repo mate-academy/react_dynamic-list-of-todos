@@ -51,7 +51,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {filteredTodos.map((todo: Todo, index: number) => (
+        {filteredTodos.map((todo: Todo) => (
           <tr
             key={todo.id}
             data-cy="todo"
@@ -59,7 +59,7 @@ export const TodoList: React.FC<Props> = ({
               selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
             }
           >
-            <td className="is-vcentered">{index + 1}</td>
+            <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {/* <span className="icon" data-cy="iconCompleted"> */}
               {todo.completed && (
