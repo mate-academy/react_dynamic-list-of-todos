@@ -10,7 +10,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ setResults }) => {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // Добавляем состояние для хранения выбранного фильтра
 
-  const fetchData = (value: any) => {
+  const fetchData = (value: string) => {
     getTodos().then(data => {
       let filteredTodos = data;
 
@@ -28,11 +28,15 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ setResults }) => {
         );
       }
 
+      if (statusFilter === 'all') {
+        filteredTodos = data;
+      }
+
       setResults(filteredTodos); // Установка отфильтрованных результатов
     });
   };
 
-  const handleInputChange = (value: any) => {
+  const handleInputChange = (value: string) => {
     setQuery(value);
     fetchData(value);
   };
