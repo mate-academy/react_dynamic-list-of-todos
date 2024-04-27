@@ -11,7 +11,7 @@ import { TodoModal } from './components/TodoModal';
 import { Filters } from './types/Filters';
 
 function getVisibleTodos(
-  allToDos: Todo[],
+  allTodos: Todo[],
   {
     query,
     filter,
@@ -20,7 +20,7 @@ function getVisibleTodos(
     filter: Filters;
   },
 ) {
-  let handledTodos = [...allToDos];
+  let handledTodos = allTodos;
 
   if (query) {
     handledTodos = handledTodos.filter(todo =>
@@ -73,12 +73,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                filterBy={filterQuery => {
-                  setFilter(filterQuery);
-                }}
-                sortBy={newQuery => {
-                  setQuery(newQuery);
-                }}
+                filterBy={setFilter}
+                sortBy={setQuery}
                 onReset={resetQuery}
               />
             </div>
