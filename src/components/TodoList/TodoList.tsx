@@ -1,13 +1,18 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 interface Props {
   visibleTodos: Todo[];
+  onSelect?: (selectedTodo: Todo) => void;
+  selectedTodo?: Todo | null;
 }
 
-const selectedTodo = false;
-
-export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
+export const TodoList: React.FC<Props> = ({
+  visibleTodos,
+  onSelect = () => {},
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -37,15 +42,28 @@ export const TodoList: React.FC<Props> = ({ visibleTodos }) => (
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={completed ? 'has-text-success' : 'has-text-danger'}>
+              <p
+                className={classNames(
+                  completed ? 'has-text-success' : 'has-text-danger',
+                )}
+              >
                 {title}
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => onSelect(todo)}
+              >
                 <span className="icon">
                   <i
-                    className={selectedTodo ? 'far fa-eye-slash' : 'far fa-eye'}
+                    className={classNames(
+                      selectedTodo?.id === todo.id
+                        ? 'far fa-eye-slash'
+                        : 'far fa-eye',
+                    )}
                   />
                 </span>
               </button>

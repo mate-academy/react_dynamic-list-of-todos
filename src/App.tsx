@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -8,60 +7,61 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
-// import { TodoModal } from './components/TodoModal';
-
-const initialTodo: Todo = {
-  userId: 0,
-  id: 0,
-  title: '',
-  completed: false,
-};
+import { TodoModal } from './components/TodoModal';
+import { Filters } from './types/Filters';
 
 function getVisibleTodos(
-  todos: Todo[],
+  allToDos: Todo[],
   {
-    queryBy,
-    filterBy,
+    query,
+    filter,
   }: {
-    queryBy: string;
-    filterBy: string;
+    query: string;
+    filter: Filters;
   },
 ) {
-  const handledTodos = [...todos];
+  let handledTodos = [...allToDos];
 
-  if (queryBy) {
-    handledTodos.filter(todo => todo.title.includes(queryBy));
+  if (query) {
+    handledTodos = handledTodos.filter(todo =>
+      todo.title.toLowerCase().includes(query),
+    );
   }
 
-  if (filterBy === 'active') {
-    handledTodos.filter(todo => todo.completed);
-  }
-
-  if (filterBy === 'completed') {
-    handledTodos.filter(todo => !todo.completed);
+  switch (filter) {
+    case Filters.Active:
+      handledTodos = handledTodos.filter(todo => !todo.completed);
+      break;
+    case Filters.Completed:
+      handledTodos = handledTodos.filter(todo => todo.completed);
+      break;
+    default:
+      return handledTodos;
   }
 
   return handledTodos;
 }
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([initialTodo]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
-  // const [selectedTodo, setSelectedTodo] = useState();
+  const [filter, setFilter] = useState(Filters.All);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
 
     getTodos()
       .then(setTodos)
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(() => {
+        throw new Error('Could not fetch todos');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodos = getVisibleTodos(todos, { query, filter });
+  const resetQuery = () => setQuery('');
+  const resetSelectedTodo = () => setSelectedTodo(null);
 
   return (
     <>
@@ -79,18 +79,27 @@ export const App: React.FC = () => {
                 sortBy={newQuery => {
                   setQuery(newQuery);
                 }}
+                onReset={resetQuery}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && <TodoList visibleTodos={visibleTodos} />}
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  visibleTodos={getVisibleTodos(todos, { query, filter })}
+                  onSelect={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onReset={resetSelectedTodo} />
+      )}
     </>
   );
 };
