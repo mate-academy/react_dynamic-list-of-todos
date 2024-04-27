@@ -1,14 +1,68 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
+import { Filters } from './types/Filters';
+
+function getVisibleTodos(
+  allTodos: Todo[],
+  {
+    query,
+    filter,
+  }: {
+    query: string;
+    filter: Filters;
+  },
+) {
+  let handledTodos = allTodos;
+
+  if (query) {
+    handledTodos = handledTodos.filter(todo =>
+      todo.title.toLowerCase().includes(query),
+    );
+  }
+
+  switch (filter) {
+    case Filters.Active:
+      handledTodos = handledTodos.filter(todo => !todo.completed);
+      break;
+    case Filters.Completed:
+      handledTodos = handledTodos.filter(todo => todo.completed);
+      break;
+    default:
+      return handledTodos;
+  }
+
+  return handledTodos;
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState(Filters.All);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
+        throw new Error('Could not fetch todos');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const resetQuery = () => setQuery('');
+  const resetSelectedTodo = () => setSelectedTodo(null);
+
   return (
     <>
       <div className="section">
@@ -17,18 +71,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                filterBy={setFilter}
+                sortBy={setQuery}
+                onReset={resetQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  visibleTodos={getVisibleTodos(todos, { query, filter })}
+                  onSelect={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onReset={resetSelectedTodo} />
+      )}
     </>
   );
 };
