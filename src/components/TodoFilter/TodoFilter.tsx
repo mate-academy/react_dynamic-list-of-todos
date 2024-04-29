@@ -18,6 +18,7 @@ export const TodoFilter: FC<Props> = ({
     onFilterChange(selectedFilter);
   };
 
+  //prettier-ignore
   const handleInputChange: React.ChangeEventHandler<
   HTMLInputElement
   > = event => {

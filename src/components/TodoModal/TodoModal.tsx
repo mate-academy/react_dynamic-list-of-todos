@@ -11,7 +11,7 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ todo, handleClose }) => {
   const [user, setUser] = useState<User>({} as User);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [, setError] = useState(null);
 
   useEffect(() => {
@@ -19,18 +19,18 @@ export const TodoModal: React.FC<Props> = ({ todo, handleClose }) => {
       return;
     }
 
-    setLoading(true);
+    setIsLoading(true);
     getUser(todo.userId)
       .then(setUser)
       .catch(setError)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading || !todo ? (
+      {isLoading || !todo ? (
         <Loader />
       ) : (
         <div className="modal-card">
