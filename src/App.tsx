@@ -37,6 +37,9 @@ export const App: React.FC = () => {
     setTodoLoading(true);
     getTodos()
       .then(setTodos)
+      .catch(() => {
+        throw new Error('Failed to fetch todos');
+      })
       .finally(() => setTodoLoading(false));
   }, []);
 

@@ -20,6 +20,9 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
 
     getUser(activeTodo.userId)
       .then(setUser)
+      .catch(() => {
+        throw new Error('Failed to fetch user');
+      })
       .finally(() => setUserLoading(false));
   }, [activeTodo]);
 
@@ -27,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {userLoading || !user ? (
+      {!user || userLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
