@@ -19,7 +19,7 @@ export const TodoFilter: FC<Props> = ({
   };
 
   const handleInputChange: React.ChangeEventHandler<
-    HTMLInputElement
+  HTMLInputElement
   > = event => {
     onQueryChange(event.target.value);
   };
