@@ -5,7 +5,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
@@ -33,10 +32,12 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  // eslint-disable-next-line prettier/prettier
   const filteredTodos = useMemo(
     () =>
       todos
         .filter(todo => {
+          // eslint-disable-next-line prettier/prettier
           switch (filter) {
             case Filters.all:
               return todo;
