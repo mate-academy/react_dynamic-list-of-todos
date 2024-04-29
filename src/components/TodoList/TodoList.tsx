@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
 interface Props {
   todos: Todo[];
   showModal: (value: Todo) => void;
+  selectedTodo: Todo | null;
+  showIcon: number | undefined;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, showModal }) => {
-  const [showIcon, setShowIcon] = useState(true);
-
-  const toggleIcon = () => {
-    setShowIcon(!showIcon);
-  };
-
+export const TodoList: React.FC<Props> = ({
+  todos,
+  showModal,
+  selectedTodo,
+  showIcon,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -33,7 +34,10 @@ export const TodoList: React.FC<Props> = ({ todos, showModal }) => {
           <tr
             key={todo.id}
             data-cy="todo"
-            className="has-background-info-light"
+            className={classNames({
+              'has-background-info-light':
+                selectedTodo && selectedTodo.id === todo.id,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -59,7 +63,6 @@ export const TodoList: React.FC<Props> = ({ todos, showModal }) => {
                 className="button"
                 type="button"
                 onClick={() => {
-                  toggleIcon();
                   showModal(todo);
                 }}
               >
@@ -67,7 +70,7 @@ export const TodoList: React.FC<Props> = ({ todos, showModal }) => {
                   <i
                     className={classNames(
                       'far',
-                      showIcon ? 'fa-eye' : 'fa-eye-slash',
+                      showIcon !== todo.id ? 'fa-eye' : 'fa-eye-slash',
                     )}
                   />
                 </span>

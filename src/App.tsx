@@ -68,7 +68,7 @@ const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              <TodoList todos={filteredTodos} showModal={handleShowTodoModal} />
+              <TodoList todos={filteredTodos} showModal={handleShowTodoModal} selectedTodo={selectedTodo} showIcon={selectedTodo?.id}/>
             </div>
           </div>
         </div>
