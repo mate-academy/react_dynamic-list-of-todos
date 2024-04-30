@@ -5,9 +5,14 @@ import cn from 'classnames';
 type TodoListProps = {
   data: Todo[];
   onSelectedTodo: (todo: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ data, onSelectedTodo }) => {
+export const TodoList: React.FC<TodoListProps> = ({
+  data,
+  onSelectedTodo,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -52,7 +57,12 @@ export const TodoList: React.FC<TodoListProps> = ({ data, onSelectedTodo }) => {
                 type="button"
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={cn('far', {
+                      'fa-eye': !selectedTodo,
+                      'fa-eye-slash': selectedTodo,
+                    })}
+                  />
                 </span>
               </button>
             </td>

@@ -96,6 +96,7 @@ export const App: React.FC = () => {
                 <TodoList
                   data={normalizeTodos}
                   onSelectedTodo={handlerSelectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
