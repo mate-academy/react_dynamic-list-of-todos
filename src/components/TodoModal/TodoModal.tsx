@@ -25,7 +25,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {selectedUser ? (
+      {selectedUser && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -62,7 +62,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
           </div>
         </div>
-      ) : error ? (
+      )}
+
+      {error && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -79,9 +81,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             />
           </header>
         </div>
-      ) : (
-        <Loader />
       )}
+
+      {!selectedUser && !error && <Loader />}
     </div>
   );
 };

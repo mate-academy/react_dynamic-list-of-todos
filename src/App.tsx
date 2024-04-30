@@ -52,8 +52,11 @@ export const App: React.FC = () => {
   }, [selectedTodoId, filteredTodos]);
 
   const handleSelectTodo = (id: number | null) => setSelecetedTodoId(id);
+
   const handleModalClose = () => setSelecetedTodoId(null);
+
   const handleQuery = (input: string) => setQuery(input);
+
   const handleFilterType = (type: FilterType) => setFilterType(type);
 
   return (
