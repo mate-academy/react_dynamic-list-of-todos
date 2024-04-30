@@ -22,9 +22,9 @@ export const App: React.FC = () => {
     getTodos()
       .then(data => {
         setTodos(data);
-        setIsLoading(false);
       })
-      .catch(() => setIsError(true));
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -32,26 +32,23 @@ export const App: React.FC = () => {
       return null;
     }
 
-    let newFilteredTodos;
-
-    const includesQuery = (todo: Todo) =>
-      query
-        ? todo.title.toLowerCase().includes(query.trim().toLowerCase())
+    const filtered = todos.filter(t => {
+      const includesQuery = query
+        ? t.title.toLowerCase().includes(query.trim().toLowerCase())
         : true;
 
-    switch (statusFilter) {
-      case 'active':
-        newFilteredTodos = todos.filter(t => !t.completed && includesQuery(t));
-        break;
-      case 'completed':
-        newFilteredTodos = todos.filter(t => t.completed && includesQuery(t));
-        break;
-      case 'all':
-      default:
-        newFilteredTodos = todos.filter(t => includesQuery(t));
-    }
+      switch (statusFilter) {
+        case 'active':
+          return !t.completed && includesQuery;
+        case 'completed':
+          return t.completed && includesQuery;
+        case 'all':
+        default:
+          return includesQuery;
+      }
+    });
 
-    return newFilteredTodos;
+    return filtered;
   }, [todos, statusFilter, query]);
 
   const selectedTodo = useMemo(() => {
@@ -63,9 +60,12 @@ export const App: React.FC = () => {
   }, [selectedTodoId, filteredTodos]);
 
   const handleSelectTodo = (id: number | null) => setSelectedTodoId(id);
+
   const handleCloseModal = () => setSelectedTodoId(null);
+
   const handleStatusFilterChange = (status: StatusFilter) =>
     setStatusFilter(status);
+
   const handleSearchQueryChange = (newQuery: string) => setQuery(newQuery);
 
   return (

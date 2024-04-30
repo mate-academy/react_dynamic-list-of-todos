@@ -12,11 +12,14 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, close }) => {
   const [user, setUser] = useState<User | null>();
   const [isError, setIsError] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   useEffect(() => {
+    setIsLoadingUser(true);
     getUser(todo.userId)
       .then(setUser)
-      .catch(() => setIsError(true));
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoadingUser(false));
   }, [todo.userId]);
 
   return (
@@ -49,7 +52,13 @@ export const TodoModal: React.FC<Props> = ({ todo, close }) => {
                 <strong className="has-text-danger">Planned</strong>
               )}
               {' by '}
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              {isLoadingUser ? (
+                <span>Loading user...</span>
+              ) : isError ? (
+                <span>Error loading user</span>
+              ) : (
+                <a href={`mailto:${user.email}`}>{user.name}</a>
+              )}
             </p>
           </div>
         </div>
