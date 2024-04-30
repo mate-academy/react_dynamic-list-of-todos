@@ -16,13 +16,20 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
+
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
+        setLoading(false);
       })
-      .catch(() => setError(true));
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
   }, []);
 
   const filteredTodos = useMemo(() => {
@@ -80,7 +87,7 @@ export const App: React.FC = () => {
                 selectedTodoId={selectedTodoId}
                 onSelect={handleSelectTodo}
               />
-              {filteredTodos && <Loader />}
+              {loading && <Loader />}
               {error && <p>Error!</p>}
             </div>
           </div>
