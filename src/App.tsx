@@ -9,7 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos, getUser } from './api';
-import { sortTodos } from './helpers/sortTodos';
+import { getSortedTodos } from './helpers/getSortedTodos';
 
 export const App: React.FC = () => {
   const initialTodo = {
@@ -29,7 +29,7 @@ export const App: React.FC = () => {
   const [sortStatus, setSortStatus] = useState('all');
   const [querry, setQuerry] = useState('');
 
-  const sortedTodos = sortTodos(todoList, { sortStatus, querry });
+  const sortedTodos = getSortedTodos(todoList, { sortStatus, querry });
 
   useEffect(() => {
     setLoading(true);

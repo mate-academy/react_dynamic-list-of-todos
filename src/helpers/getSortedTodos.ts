@@ -1,3 +1,4 @@
+/* pretie-disable */
 import { Todo } from '../types/Todo';
 
 type SearchParams = {
@@ -5,7 +6,7 @@ type SearchParams = {
   querry: string;
 };
 
-export const sortTodos = (
+export const getSortedTodos = (
   todos: Todo[],
   { sortStatus, querry }: SearchParams,
 ) => {

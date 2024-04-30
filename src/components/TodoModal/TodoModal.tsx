@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
             <Loader />
           ) : (
             <>
-              {user.hasOwnProperty('name') && (
+              {(user as User) && (
                 <div className="modal-card">
                   <header className="modal-card-head">
                     <div
