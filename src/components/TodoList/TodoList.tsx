@@ -45,7 +45,12 @@ export const TodoList: React.FC<TodoListProps> = ({ data, onSelectedTodo }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button onClick={() => onSelectedTodo(todo)} data-cy="selectButton" className="button" type="button">
+              <button
+                onClick={() => onSelectedTodo(todo)}
+                data-cy="selectButton"
+                className="button"
+                type="button"
+              >
                 <span className="icon">
                   <i className="far fa-eye" />
                 </span>

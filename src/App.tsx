@@ -9,28 +9,37 @@ import { TodoFilter } from './components/TodoFilter/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
-import { User } from './types/User';
 
 enum StatusesSelect {
+  All = 'all',
   Active = 'active',
   Completed = 'completed',
 }
 
+function getFilteredTodos(initialTodos: Todo[], statusSelect: string): Todo[] {
+  if (statusSelect === StatusesSelect.Active) {
+    return initialTodos.filter(item => !item.completed);
+  } else if (statusSelect === StatusesSelect.Completed) {
+    return initialTodos.filter(item => item.completed);
+  } else {
+    return initialTodos;
+  }
+}
+
 export const App: React.FC = () => {
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [statusSelect, setStatusSelect] = useState('All');
-
+  const [statusSelect, setStatusSelect] = useState<string>(StatusesSelect.All);
   const [loadingTodos, setLoadingTodos] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(false);
 
-  const normalizeTodos = todos.filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+  const filteredTodos = getFilteredTodos(todos, statusSelect);
+  const normalizeTodos = filteredTodos.filter((todo: Todo) =>
+    todo.title.toLowerCase().includes(query.toLowerCase()),
+  );
 
   useEffect(() => {
     setLoadingTodos(true);
@@ -38,36 +47,11 @@ export const App: React.FC = () => {
     getTodos()
       .then(data => {
         setTodos(data);
-        setInitialTodos(data);
       })
       .finally(() => {
         setLoadingTodos(false);
       });
   }, []);
-
-  useEffect(() => {
-    if (selectedTodo) {
-      setLoadingUser(true);
-
-      getUser(selectedTodo?.userId)
-        .then(data => {
-          setUser(data);
-        })
-        .finally(() => {
-          setLoadingUser(false);
-        });
-    }
-  }, [selectedTodo]);
-
-  useEffect(() => {
-    if (statusSelect === StatusesSelect.Active) {
-      setTodos(initialTodos.filter(item => !item.completed));
-    } else if (statusSelect === StatusesSelect.Completed) {
-      setTodos(initialTodos.filter(item => item.completed));
-    } else {
-      setTodos(initialTodos);
-    }
-  }, [statusSelect, initialTodos]);
 
   const handlerSelectedTodo = (todo: Todo) => {
     setSelectedTodo(todo);
@@ -121,8 +105,6 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          isLoading={loadingUser}
-          user={user}
           selectedTodo={selectedTodo}
           onCloseModal={handlerCloseModal}
         />
