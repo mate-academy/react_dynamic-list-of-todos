@@ -18,10 +18,10 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(selectedTodo.id)
+    getUser(selectedTodo.userId)
       .then(setCurrentUser)
       .finally(() => setIsLoading(false));
-  }, [selectedTodo.id]);
+  }, [selectedTodo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -54,12 +54,15 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={`has-text-${selectedTodo.completed ? 'success' : 'danger'}`}
+              >
+                {selectedTodo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{currentUser?.name}</a>
+              <a href={`mailto:${currentUser?.email}`}>{currentUser?.name}</a>
             </p>
           </div>
         </div>
