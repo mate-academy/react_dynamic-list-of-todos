@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -10,8 +9,12 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-function getPrepareTodos(filter: string, todos1: Todo[], appliedQuery: string) {
-  const prepearedTodos = [...todos1].filter(todo =>
+function getPreparedTodos(
+  filter: string,
+  todosArray: Todo[],
+  appliedQuery: string,
+) {
+  const prepearedTodos = [...todosArray].filter(todo =>
     todo.title.toLowerCase().includes(appliedQuery.toLowerCase()),
   );
 
@@ -21,9 +24,9 @@ function getPrepareTodos(filter: string, todos1: Todo[], appliedQuery: string) {
         case 'all':
           return todo;
         case 'active':
-          return todo.completed !== true;
+          return !todo.completed;
         case 'completed':
-          return todo.completed === true;
+          return todo.completed;
         default:
           return todo;
       }
@@ -37,20 +40,22 @@ function getPrepareTodos(filter: string, todos1: Todo[], appliedQuery: string) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [appliedQuery, setAppliedQuery] = useState('');
   const [filterField, setFilterField] = useState('all');
-  const [modalIcon, setModalIcon] = useState(false);
+  const [isModalOpen, setIsModalIcon] = useState(false);
   const [userTodo, setUserTodo] = useState<Todo | null>(null);
 
   const visibleTodos = useMemo<Todo[]>(
-    () => getPrepareTodos(filterField, todos, appliedQuery),
+    () => getPreparedTodos(filterField, todos, appliedQuery),
     [appliedQuery, filterField, todos],
   );
 
-  getTodos()
-    .then(setTodos)
-    .finally(() => setLoading(false));
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
     <>
@@ -68,20 +73,21 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList
                 todos={visibleTodos}
-                setModalIcon={setModalIcon}
+                setIsModalIcon={setIsModalIcon}
                 setUserTodo={setUserTodo}
                 userTodo={userTodo}
+                isModalOpen={isModalOpen}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {modalIcon && (
-        <TodoModal userTodo={userTodo} setModalIcon={setModalIcon} />
+      {isModalOpen && (
+        <TodoModal userTodo={userTodo} setIsModalIcon={setIsModalIcon} />
       )}
     </>
   );

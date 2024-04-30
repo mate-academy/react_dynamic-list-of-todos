@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -6,18 +6,20 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   userTodo?: Todo | null;
-  setModalIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalIcon: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const TodoModal: React.FC<Props> = ({ userTodo, setModalIcon }) => {
+export const TodoModal: React.FC<Props> = ({ userTodo, setIsModalIcon }) => {
   const [loadingModalIcon, setLoadingModalIcon] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  if (userTodo) {
-    getUser(userTodo.userId)
-      .then(setUser)
-      .finally(() => setLoadingModalIcon(false));
-  }
+  useEffect(() => {
+    if (userTodo) {
+      getUser(userTodo.userId)
+        .then(setUser)
+        .finally(() => setLoadingModalIcon(false));
+    }
+  }, [userTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -35,12 +37,11 @@ export const TodoModal: React.FC<Props> = ({ userTodo, setModalIcon }) => {
               {`Todo #${userTodo?.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setModalIcon(false)}
+              onClick={() => setIsModalIcon(false)}
             />
           </header>
 

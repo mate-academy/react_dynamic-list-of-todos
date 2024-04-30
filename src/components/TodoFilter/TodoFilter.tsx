@@ -1,10 +1,9 @@
-// import { debounce } from 'cypress/types/lodash';
 import React, { useCallback } from 'react';
 
 type Props = {
   appliedQuery: string;
-  setAppliedQuery: React.Dispatch<React.SetStateAction<string>>;
-  setFilterField: React.Dispatch<React.SetStateAction<string>>;
+  setAppliedQuery: (v: string) => void;
+  setFilterField: (v: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -13,22 +12,27 @@ export const TodoFilter: React.FC<Props> = ({
   setFilterField,
 }) => {
   const applyQuery = useCallback(
-    (qwery: React.SetStateAction<string>) => setAppliedQuery(qwery),
+    (qwery: string) => setAppliedQuery(qwery),
     [setAppliedQuery],
   );
 
-  function handleQweryChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     applyQuery(event?.target.value);
+  }
+
+  function handleFilterField(evennt: React.ChangeEvent<HTMLSelectElement>) {
+    setFilterField(evennt.target.value);
+  }
+
+  function handleApplyQuery() {
+    applyQuery('');
   }
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select
-            data-cy="statusSelect"
-            onChange={evennt => setFilterField(evennt.target.value)}
-          >
+          <select data-cy="statusSelect" onChange={handleFilterField}>
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -43,20 +47,19 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={appliedQuery}
-          onChange={handleQweryChange}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {appliedQuery && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => applyQuery('')}
+              onClick={handleApplyQuery}
             />
           )}
         </span>
