@@ -21,9 +21,26 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     getTodos()
+      .then(tasks =>
+        tasks.filter(task => {
+          switch (filterOption) {
+            case 'all':
+              return true;
+
+            case 'active':
+              return !task.completed;
+
+            case 'completed':
+              return task.completed;
+          }
+        }),
+      )
+      .then(tasks =>
+        tasks.filter(task => task.title.includes(query.toLowerCase())),
+      )
       .then(setTodos)
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [filterOption, query]);
 
   return (
     <>
@@ -47,8 +64,6 @@ export const App: React.FC = () => {
                   todos={todos}
                   onSelect={setSelectedTodo}
                   selectedTodo={selectedTodo}
-                  query={query}
-                  filterOption={filterOption}
                 />
               )}
             </div>
