@@ -36,7 +36,9 @@ export const App: React.FC = () => {
         }),
       )
       .then(tasks =>
-        tasks.filter(task => task.title.includes(query.toLowerCase())),
+        tasks.filter(task =>
+          task.title.toLowerCase().includes(query.toLowerCase()),
+        ),
       )
       .then(setTodos)
       .finally(() => setIsLoading(false));
