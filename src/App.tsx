@@ -11,6 +11,29 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterOptions } from './types/FilterOptions';
 
+function getFilteredTodos(
+  todos: Todo[],
+  query: string,
+  filterOption: FilterOptions,
+) {
+  const filteredTodos = todos
+    .filter(todo => {
+      switch (filterOption) {
+        case 'all':
+          return true;
+
+        case 'active':
+          return !todo.completed;
+
+        case 'completed':
+          return todo.completed;
+      }
+    })
+    .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+
+  return filteredTodos;
+}
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -21,28 +44,11 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then(tasks =>
-        tasks.filter(task => {
-          switch (filterOption) {
-            case 'all':
-              return true;
-
-            case 'active':
-              return !task.completed;
-
-            case 'completed':
-              return task.completed;
-          }
-        }),
-      )
-      .then(tasks =>
-        tasks.filter(task =>
-          task.title.toLowerCase().includes(query.toLowerCase()),
-        ),
-      )
       .then(setTodos)
       .finally(() => setIsLoading(false));
-  }, [filterOption, query]);
+  }, []);
+
+  const filteredTodos = getFilteredTodos(todos, query, filterOption);
 
   return (
     <>
@@ -63,7 +69,7 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               {!isLoading && (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   onSelect={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
