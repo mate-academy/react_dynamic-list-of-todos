@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -15,19 +14,44 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [results, setResults] = useState<Todo[] | string>([]);
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    // Получение данных Todo из API
     getTodos().then(data => {
-      setTodos(data); // Сохранение полученных данных в состоянии
+      setTodos(data);
       setResults(data);
       setIsLoading(false);
     });
   }, []);
 
-  const handleSetResults = (filteredTodos: Todo[] | string) => {
+  const fetchData = () => {
+    // Filter todos based on query and statusFilter
+    let filteredTodos: Todo[] | string = todos;
+
+    if (query) {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    if (statusFilter !== 'all') {
+      filteredTodos = filteredTodos.filter(todo => {
+        if (statusFilter === 'active') {
+          return !todo.completed;
+        } else {
+          return todo.completed;
+        }
+      });
+    }
+
     setResults(filteredTodos);
   };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, statusFilter]);
 
   return (
     <>
@@ -37,7 +61,13 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setResults={handleSetResults} />
+              <TodoFilter
+                query={query}
+                statusFilter={statusFilter}
+                setQuery={setQuery}
+                setStatusFilter={setStatusFilter}
+                setResults={setResults}
+              />
             </div>
 
             <div className="block">

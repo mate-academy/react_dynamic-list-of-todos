@@ -51,8 +51,10 @@ export const TodoModal: React.FC<TodoModalProps> = ({
             {/* Если есть данные пользователя, используем их для отображения информации */}
             {user && (
               <p className="block" data-cy="modal-user">
-                <strong className="has-text-danger">Planned</strong> by
-                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+                <strong style={{ color: todo.completed ? 'green' : 'red' }}>
+                  Planned
+                </strong>{' '}
+                by <a href={`mailto:${user?.email}`}>{user?.name}</a>
               </p>
             )}
           </div>

@@ -54,11 +54,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo }) => {
             <td className="has-text-right is-vcentered">
               <button data-cy="selectButton" className="button" type="button">
                 <span className="icon">
-                  <i
-                    className={
-                      todo.completed ? 'far fa-eye-slash' : 'far fa-eye'
-                    }
-                  />
+                  <i className="far fa-eye" />
                 </span>
               </button>
             </td>
