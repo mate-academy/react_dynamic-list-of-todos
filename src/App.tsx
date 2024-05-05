@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,22 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { getTodos } from './api';
+import { ButtonContextProvider } from './context/ButtonContext';
+import { TodoContextProvider } from './context/TodoContext';
+import { Todo } from './types/Todo';
+
 export const App: React.FC = () => {
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const [copyTodoList, setCopyTodoList] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    getTodos().then(todo => {
+      setTodoList(todo);
+      setCopyTodoList(todo);
+    });
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +32,24 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter setFilteredList={setTodoList} list={copyTodoList} />
             </div>
 
-            <div className="block">
-              <Loader />
-              <TodoList />
-            </div>
+            <ButtonContextProvider>
+              <TodoContextProvider>
+                <div className="block">
+                  {copyTodoList.length === 0 ? (
+                    <Loader />
+                  ) : (
+                    <TodoList todoList={todoList} />
+                  )}
+                </div>
+                <TodoModal />
+              </TodoContextProvider>
+            </ButtonContextProvider>
           </div>
         </div>
       </div>
-
-      <TodoModal />
     </>
   );
 };
