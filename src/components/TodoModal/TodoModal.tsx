@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react';
 import { Loader } from '../Loader';
 import { DispatchContext, StateContext } from '../../context/TodoContext';
-import classNames from 'classnames';
 
 export const TodoModal: React.FC = () => {
   const { todo, modalLoading } = useContext(StateContext);
@@ -13,15 +12,10 @@ export const TodoModal: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className={
-      classNames('modal', {
-        'is-active': modalLoading,
-      }
-      )} data-cy="modal"
-    >
+    <div className='modal is-active' data-cy="modal">
       <div className="modal-background" />
 
-      {!modalLoading ? (
+      {modalLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

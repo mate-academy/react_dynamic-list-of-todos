@@ -5,7 +5,7 @@ import { debounce } from '../../services/debounce';
 
 export const TodoFilter: React.FC = () => {
   const [query, setQuery] = useState('');
-  const { filterType, setFilter } = useContext(StateContext);
+  const { filterType, filter, setFilter } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -15,7 +15,7 @@ export const TodoFilter: React.FC = () => {
   };
 
   const debouncedSetFilter = useCallback(
-    debounce((filter: string) => setFilter(filter), 500),
+    debounce((filt: string) => setFilter(filt), 500),
     [setFilter]
   );
 
@@ -64,12 +64,14 @@ export const TodoFilter: React.FC = () => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={handleClear}
-          />
+          {filter && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClear}
+            />
+          )}
         </span>
       </p>
     </form>

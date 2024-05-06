@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Todo } from '../../types/Todo';
-import { DispatchContext } from '../../context/TodoContext';
+import { DispatchContext, StateContext } from '../../context/TodoContext';
 import { getUser } from '../../api';
 import classNames from 'classnames';
 
@@ -10,12 +10,14 @@ interface Props {
 
 export const TodoElement: React.FC<Props> = ({ theTodo }) => {
   const { title, id, completed } = theTodo;
+  const { todo, isModal } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
 
   const handleModal = async () => {
     try {
-      dispatch({ type: 'showModal', isModal: true });
       dispatch({ type: 'modalLoading', modalLoading: true });
+      dispatch({ type: 'showModal', isModal: true });
+
       const user = await getUser(theTodo.userId);
 
       dispatch({
@@ -24,11 +26,13 @@ export const TodoElement: React.FC<Props> = ({ theTodo }) => {
       });
     } catch (error) {
       alert(error);
+    } finally {
+      dispatch({ type: 'modalLoading', modalLoading: false });
     }
   };
 
   return (
-    <tr data-cy="todo" className="">
+    <tr data-cy="todo">
       <td className="is-vcentered">{id}</td>
       <td className="is-vcentered">
         {completed && (
@@ -53,7 +57,10 @@ export const TodoElement: React.FC<Props> = ({ theTodo }) => {
           onClick={handleModal}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            {isModal && todo?.id === id
+              ? <i className="far fa-eye-slash" />
+              : <i className="far fa-eye" />
+            }
           </span>
         </button>
       </td>
