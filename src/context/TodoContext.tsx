@@ -10,8 +10,8 @@ type Action =
   | { type: 'toggleLoading'; isLoading: boolean }
   | { type: 'modalLoading'; modalLoading: boolean }
   | { type: 'filterTodos'; query: string }
-  | { type: 'changeFilterValue'; filterType: Filter }
-  | { type: 'SET_FILTER'; filter: string }
+  | { type: 'setFilterType'; filterType: Filter }
+  | { type: 'setFilter'; filter: string }
   | { type: 'showModal'; isModal: boolean };
 
 type FilterFunction = (arg: string) => void;
@@ -32,19 +32,25 @@ function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'setTodos':
       return {...state, todos: action.todos };
+
     case 'todoModal':
       return {...state, todo: action.todo };
+
     case 'toggleLoading':
       return {...state, isLoading: action.isLoading };
+
     case 'modalLoading':
       return {...state, modalLoading: action.modalLoading };
+
     case 'showModal':
       return {
         ...state,
         isModal: action.isModal,
       };
+
     case 'setFiltered':
       return {...state, filtered: action.filtered };
+
     case 'filterTodos':
       return {
         ...state,
@@ -54,10 +60,13 @@ function reducer(state: State, action: Action): State {
             )
         )
       };
-    case 'changeFilterValue':
+
+    case 'setFilterType':
       return {...state, filterType: action.filterType };
-    case 'SET_FILTER':
+
+    case 'setFilter':
       return {...state, filter: action.filter };
+
     default:
       return state;
   }
@@ -99,7 +108,7 @@ export const GlobalTodoProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   const setFilter = (filter: string) => {
-    dispatch({ type: 'SET_FILTER', filter });
+    dispatch({ type: 'setFilter', filter });
   };
 
   return (

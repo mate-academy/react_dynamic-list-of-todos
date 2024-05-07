@@ -11,7 +11,7 @@ export const TodoFilter: React.FC = () => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFilter = event.target.value as Filter;
 
-    dispatch({ type: 'changeFilterValue', filterType: selectedFilter });
+    dispatch({ type: 'setFilterType', filterType: selectedFilter });
   };
 
   const debouncedSetFilter = useCallback(
