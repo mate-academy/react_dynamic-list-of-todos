@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
@@ -6,12 +6,8 @@ import { Loader } from '../Loader';
 
 import { TodoContext } from '../../Contexts/TodoContext';
 
-type TodoListProps = {
-  loader: boolean;
-  setLoader: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const TodoList: React.FC<TodoListProps> = ({ loader, setLoader }) => {
+export const TodoList = () => {
+  const [loader, setLoader] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const { filterBy } = useContext(TodoContext);
   const { searchQuery } = useContext(TodoContext);

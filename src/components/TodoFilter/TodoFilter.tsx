@@ -27,7 +27,7 @@ export const TodoFilter = () => {
           type="text"
           className="input"
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value.trimStart())}
           placeholder="Search..."
         />
         <span className="icon is-left">

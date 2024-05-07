@@ -10,7 +10,6 @@ import { TodoContext } from './Contexts/TodoContext';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [loader, setLoader] = useState(true);
   const [filterBy, setFilterBy] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList loader={loader} setLoader={setLoader} />
+              <TodoList />
             </div>
           </div>
         </div>
