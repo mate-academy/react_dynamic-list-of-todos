@@ -1,43 +1,79 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import classNames from 'classnames';
+
+import { TodoContext } from '../../Contexts/TodoContext';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 export const TodoModal: React.FC = () => {
+  const { currentTodo, setCurrentTodo } = useContext(TodoContext);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (currentTodo) {
+      getUser(currentTodo.userId).then(setCurrentUser);
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    }
+  }, [currentTodo]);
+
   return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+    currentTodo && (
+      <div className="modal is-active" data-cy="modal">
+        <div className="modal-background" />
 
-      {true ? (
-        <Loader />
-      ) : (
         <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <header className="modal-card-head">
+                <div
+                  className="modal-card-title has-text-weight-medium"
+                  data-cy="modal-header"
+                >
+                  Todo #{currentTodo?.id}
+                </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <button
+                  type="button"
+                  className="delete"
+                  data-cy="modal-close"
+                  onClick={() => setCurrentTodo(null)}
+                />
+              </header>
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {currentTodo?.title}
+                </p>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+                <p className="block" data-cy="modal-user">
+                  {/* <strong className="has-text-success">Done</strong> */}
+                  <strong
+                    className={classNames({
+                      'has-text-success': currentTodo.completed,
+                      'has-text-danger': !currentTodo.completed,
+                    })}
+                  >
+                    {currentTodo.completed ? 'Done' : 'Planned'}
+                  </strong>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+                  {' by '}
 
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
+                  <a href={`mailto:${currentUser?.email}`}>
+                    {currentUser?.name}
+                  </a>
+                </p>
+              </div>
+            </>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    )
   );
 };
