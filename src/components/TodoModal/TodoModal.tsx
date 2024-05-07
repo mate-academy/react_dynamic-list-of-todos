@@ -13,11 +13,12 @@ export const TodoModal: React.FC = () => {
 
   useEffect(() => {
     if (currentTodo) {
-      getUser(currentTodo.userId).then(setCurrentUser);
       setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
+      getUser(currentTodo.userId)
+        .then(setCurrentUser)
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [currentTodo]);
 

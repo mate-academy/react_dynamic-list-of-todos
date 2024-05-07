@@ -38,11 +38,12 @@ export const TodoList = () => {
   }
 
   useEffect(() => {
-    getTodos().then(setTodos);
-
-    setTimeout(() => {
-      setLoader(false);
-    }, 300);
+    setLoader(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => {
+        setLoader(false);
+      });
   }, []);
 
   return loader ? (
