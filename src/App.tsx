@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,18 +7,34 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
 import { Todo } from './types/Todo';
+import { SortField } from './types/filter';
+import { getFilterFunc } from './components/FilterFunc/FilterFunc';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [sortField, setSortField] = useState(SortField.All);
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const filteredTodos: Todo[] = todos.filter(todo => {
-    const normTitle = todo.title.trim().toLowerCase();
-    const normQuery = query.trim().toLowerCase();
+  const onCloseModal = () => {
+    setSelectedTodo(null);
+  };
 
-    return normTitle.includes(normQuery);
-  });
+  useEffect(() => {
+    setLoading(true);
+
+    getTodos()
+      .then(initialTodos => {
+        setTodos(initialTodos);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredTodos = getFilterFunc(todos, { sortField, query });
 
   return (
     <>
@@ -29,21 +45,30 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setTodos={setTodos}
-                setQuery={setQuery}
+                sortField={sortField}
+                setSortField={setSortField}
                 query={query}
+                setQuery={setQuery}
               />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList todos={filteredTodos} />
+              {loading && <Loader />}
+              {!loading && (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onCloseModal={onCloseModal} />
+      )}
     </>
   );
 };

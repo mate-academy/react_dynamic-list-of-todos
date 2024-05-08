@@ -23,20 +23,6 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodosAll = () => {
-  return get<Todo[]>('/todos');
-};
-
-export const getFalseComplite = () => {
-  return getTodosAll().then(todos =>
-    todos.filter(todo => todo.completed === false),
-  );
-};
-
-export const getTrueComplite = () => {
-  return getTodosAll().then(todos =>
-    todos.filter(todo => todo.completed === true),
-  );
-};
+export const getTodos = () => get<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
