@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
