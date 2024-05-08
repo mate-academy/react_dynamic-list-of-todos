@@ -1,27 +1,17 @@
-import React from 'react';
-import { FilterType } from '../../types/FilterTypes';
+import React, { useContext } from 'react';
+import { TodoContext } from '../../contexts/TodoContext';
 
-interface Props {
-  view: FilterType;
-  setView: (type: FilterType) => void;
-  query: string;
-  setQuery: (value: string) => void;
-}
+export const TodoFilter = () => {
+  const { setFilterBy } = useContext(TodoContext);
+  const { searchQuery, setSearchQuery } = useContext(TodoContext);
 
-export const TodoFilter: React.FC<Props> = ({
-  view,
-  setView,
-  query,
-  setQuery,
-}) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={view}
-            onChange={e => setView(e.target.value as FilterType)}
+            onChange={e => setFilterBy(e.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -35,25 +25,25 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="searchInput"
           type="text"
           className="input"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value.trimStart())}
           placeholder="Search..."
-          value={query}
-          onChange={e => setQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          {searchQuery.length > 0 && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => setSearchQuery('')}
             />
-          </span>
-        )}
+          )}
+        </span>
       </p>
     </form>
   );
