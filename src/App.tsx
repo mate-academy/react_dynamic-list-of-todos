@@ -24,6 +24,7 @@ export const App: React.FC = () => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        // eslint-disable-next-line no-console
         console.log('Error fetching data: ', error);
       }
     };
@@ -48,8 +49,6 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
     </>
   );
 };

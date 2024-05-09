@@ -1,10 +1,9 @@
 export const TodoFilter = () => {
-
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onClick={}>
+          <select data-cy="statusSelect">
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
