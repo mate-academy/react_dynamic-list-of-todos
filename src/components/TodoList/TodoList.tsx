@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
@@ -6,12 +6,6 @@ type TodoListProps = {
 };
 
 export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -48,12 +42,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button
-                onClick={toggleModal}
-                data-cy="selectButton"
-                className="button"
-                type="button"
-              >
+              <button data-cy="selectButton" className="button" type="button">
                 <span className="icon">
                   <i className="far fa-eye" />
                 </span>

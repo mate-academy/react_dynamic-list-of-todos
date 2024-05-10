@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import { TodoFilter, SelectOptions } from './components/TodoFilter';
 // import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
@@ -13,6 +13,8 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedOption, setSelectedOption] = useState(SelectOptions.All);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +42,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                selectedOption={selectedOption}
+                onSelect={setSelectedOption}
+                onQueryChange={setQuery}
+                query={query}
+              />
             </div>
 
             <div className="block">

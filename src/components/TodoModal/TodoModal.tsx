@@ -6,7 +6,7 @@ export const TodoModal: React.FC = () => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {false ? (
         <Loader />
       ) : (
         <div className="modal-card">
