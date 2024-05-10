@@ -3,6 +3,7 @@ import { User } from '../../types/User';
 import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
+import classNames from 'classnames';
 
 type Props = {
   currentModal: Todo;
@@ -61,14 +62,15 @@ export const TodoModal: React.FC<Props> = ({
               </p>
 
               <p className="block" data-cy="modal-user">
-                {currentModal.completed ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
-
+                <strong
+                  className={classNames({
+                    'has-text-danger': !currentModal.completed,
+                    'has-text-success': currentModal.completed,
+                  })}
+                >
+                  {currentModal.completed ? 'Done' : 'Planned'}
+                </strong>
                 {' by '}
-
                 <a href={user?.email}>{user?.name}</a>
               </p>
             </div>

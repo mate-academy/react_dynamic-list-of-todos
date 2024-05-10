@@ -8,11 +8,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState(Filter.all);
   const [search, setSearch] = useState('');
   const [currentModal, setCurrentModal] = useState({
     userId: 0,
@@ -31,9 +32,9 @@ export const App: React.FC = () => {
         );
       })
       .then(todosBySearch => {
-        if (filter === 'active') {
+        if (filter === Filter.active) {
           return todosBySearch.filter(todo => !todo.completed);
-        } else if (filter === 'completed') {
+        } else if (filter === Filter.completed) {
           return todosBySearch.filter(todo => todo.completed);
         } else {
           return todosBySearch;
@@ -57,7 +58,7 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
                   todos={todos as Todo[]}
                   setCurrentModal={setCurrentModal}
@@ -65,7 +66,7 @@ export const App: React.FC = () => {
                 />
               )}
 
-              {!loading && todos.length === 0 && (
+              {!loading && !todos.length && (
                 <p className="title is-5">There are no todos</p>
               )}
 

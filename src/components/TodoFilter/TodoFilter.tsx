@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Filter } from '../../types/Filter';
 
 type Props = {
-  filter: React.Dispatch<string>;
+  filter: React.Dispatch<Filter>;
   search: React.Dispatch<string>;
 };
 
@@ -17,10 +18,13 @@ export const TodoFilter: React.FC<Props> = ({ filter, search }) => {
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={e => filter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+          <select
+            data-cy="statusSelect"
+            onChange={e => filter(e.target.value as Filter)}
+          >
+            <option value={Filter.all}>All</option>
+            <option value={Filter.active}>Active</option>
+            <option value={Filter.completed}>Completed</option>
           </select>
         </span>
       </p>
