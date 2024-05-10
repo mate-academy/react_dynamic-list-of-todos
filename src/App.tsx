@@ -10,6 +10,16 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+const FILTER_MAP = {
+  [SelectOptions.All]: () => true,
+  [SelectOptions.Active]: (todo: Todo) => !todo.completed,
+  [SelectOptions.Completed]: (todo: Todo) => todo.completed,
+};
+
+function applyFilter(arr: Todo[], selectedOption: SelectOptions): Todo[] {
+  return arr.filter(FILTER_MAP[selectedOption]);
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +44,10 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
+  const filteredTodos = applyFilter(todos, selectedOption).filter(todo =>
+    todo.title.includes(query),
+  );
+
   return (
     <>
       <div className="section">
@@ -51,7 +65,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? <Loader /> : <TodoList todos={todos} />}
+              {isLoading ? <Loader /> : <TodoList todos={filteredTodos} />}
             </div>
           </div>
         </div>
