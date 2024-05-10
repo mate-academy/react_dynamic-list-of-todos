@@ -3,9 +3,10 @@ import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
   todos: Todo[];
+  onOpen: (batata: Todo | null) => void;
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+export const TodoList: React.FC<TodoListProps> = ({ todos, onOpen }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -42,7 +43,12 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
               </p>
             </td>
             <td className="has-text-right is-vcentered">
-              <button data-cy="selectButton" className="button" type="button">
+              <button
+                onClick={() => onOpen(todo)}
+                data-cy="selectButton"
+                className="button"
+                type="button"
+              >
                 <span className="icon">
                   <i className="far fa-eye" />
                 </span>

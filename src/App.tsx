@@ -5,7 +5,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter, SelectOptions } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
@@ -25,6 +25,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState(SelectOptions.All);
   const [query, setQuery] = useState('');
+  const [targetTodoModal, setTargetTodoModal] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,9 +66,19 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? <Loader /> : <TodoList todos={filteredTodos} />}
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList todos={filteredTodos} onOpen={setTargetTodoModal} />
+              )}
             </div>
           </div>
+          {targetTodoModal && (
+            <TodoModal
+              targetTodo={targetTodoModal}
+              onClose={setTargetTodoModal}
+            />
+          )}
         </div>
       </div>
     </>
