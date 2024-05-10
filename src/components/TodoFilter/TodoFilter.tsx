@@ -2,8 +2,7 @@ import { useContext } from 'react';
 import { TodoContext } from '../../contexts/TodoContext';
 
 export const TodoFilter = () => {
-  const { setFilterBy } = useContext(TodoContext);
-  const { searchQuery, setSearchQuery } = useContext(TodoContext);
+  const { setFilterBy, searchQuery, setSearchQuery } = useContext(TodoContext);
 
   return (
     <form className="field has-addons">

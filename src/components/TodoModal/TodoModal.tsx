@@ -18,6 +18,8 @@ export const TodoModal: React.FC = () => {
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      setIsLoading(true);
     }
   }, [currentTodo]);
 
