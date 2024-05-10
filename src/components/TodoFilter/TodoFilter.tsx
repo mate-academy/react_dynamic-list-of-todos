@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from 'react';
 
 export enum SelectOptions {
-  All = 'All',
-  Active = 'Active',
-  Completed = 'Completed',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 type TodoFilterProps = {
@@ -41,7 +41,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             data-cy="statusSelect"
           >
             {Object.keys(SelectOptions).map(opt => (
-              <option key={opt} value={opt}>
+              <option key={opt} value={opt.toLowerCase()}>
                 {opt}
               </option>
             ))}
@@ -64,12 +64,14 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            onClick={clearQuery}
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {query && (
+            <button
+              onClick={clearQuery}
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+            />
+          )}
         </span>
       </p>
     </form>

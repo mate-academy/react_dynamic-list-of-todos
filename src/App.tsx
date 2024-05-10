@@ -46,7 +46,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = applyFilter(todos, selectedOption).filter(todo =>
-    todo.title.includes(query),
+    todo.title.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -69,7 +69,11 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={filteredTodos} onOpen={setTargetTodoModal} />
+                <TodoList
+                  todos={filteredTodos}
+                  onOpen={setTargetTodoModal}
+                  targetTodo={targetTodoModal}
+                />
               )}
             </div>
           </div>

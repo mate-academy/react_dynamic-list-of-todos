@@ -2,11 +2,16 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
+  targetTodo: Todo | null;
   todos: Todo[];
   onOpen: (batata: Todo | null) => void;
 };
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, onOpen }) => {
+export const TodoList: React.FC<TodoListProps> = ({
+  targetTodo,
+  todos,
+  onOpen,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -28,7 +33,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onOpen }) => {
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered is-expanded">
               {todo.completed && (
-                <span className="icon">
+                <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               )}
@@ -50,7 +55,13 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onOpen }) => {
                 type="button"
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={
+                      targetTodo?.id === todo.id
+                        ? 'fa fa-eye-slash'
+                        : 'fa fa-eye'
+                    }
+                  />
                 </span>
               </button>
             </td>
