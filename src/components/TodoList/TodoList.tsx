@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-key */
 import React from 'react';
-import { Todo } from '../../types/Todo';
-import classNames from 'classnames';
+import { TodoType } from '../../types/TodoType';
+import { Todo } from '../Todo/Todo';
 
 type Props = {
-  todos: Todo[];
-  setCurrentModal: React.Dispatch<Todo>;
-  currentModal: Todo;
+  todos: TodoType[];
+  setCurrentModal: React.Dispatch<TodoType>;
+  currentModal: TodoType;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -31,44 +31,11 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" key={todo.id}>
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames({
-                  'has-text-danger': !todo.completed,
-                  'has-text-success': todo.completed,
-                })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => setCurrentModal(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={classNames({
-                      'far fa-eye-slash': currentModal.id === todo.id,
-                      'far fa-eye': currentModal.id !== todo.id,
-                    })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+          <Todo
+            todo={todo as TodoType}
+            setCurrentModal={setCurrentModal}
+            currentModal={currentModal}
+          />
         ))}
       </tbody>
     </table>

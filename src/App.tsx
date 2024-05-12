@@ -7,14 +7,14 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { Todo } from './types/Todo';
+import { TodoType } from './types/TodoType';
 import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(Filter.all);
-  const [search, setSearch] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [currentModal, setCurrentModal] = useState({
     userId: 0,
     id: 0,
@@ -23,12 +23,12 @@ export const App: React.FC = () => {
   });
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(todosFromServer => {
         return todosFromServer.filter(todo =>
-          todo.title.toLowerCase().includes(search.toLowerCase()),
+          todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
         );
       })
       .then(todosBySearch => {
@@ -41,8 +41,8 @@ export const App: React.FC = () => {
         }
       })
       .then(setTodos)
-      .finally(() => setLoading(false));
-  }, [filter, search]);
+      .finally(() => setIsLoading(false));
+  }, [filter, searchQuery]);
 
   return (
     <>
@@ -52,27 +52,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={setFilter} search={setSearch} />
+              <TodoFilter
+                changeFilter={setFilter}
+                changeSearchQuery={setSearchQuery}
+                searchQuery={searchQuery}
+              />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
+              {isLoading && <Loader />}
 
-              {!loading && !!todos.length && (
+              {!isLoading && !!todos.length && (
                 <TodoList
-                  todos={todos as Todo[]}
+                  todos={todos as TodoType[]}
                   setCurrentModal={setCurrentModal}
                   currentModal={currentModal}
                 />
               )}
 
-              {!loading && !todos.length && (
+              {!isLoading && !todos.length && (
                 <p className="title is-5">There are no todos</p>
               )}
 
-              {!loading && currentModal.userId !== 0 && (
+              {!isLoading && currentModal.userId !== 0 && (
                 <TodoModal
-                  currentModal={currentModal as Todo}
+                  currentModal={currentModal as TodoType}
                   setCurrentModal={setCurrentModal}
                 />
               )}
