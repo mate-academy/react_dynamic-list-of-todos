@@ -6,25 +6,27 @@ export const prepareTodos = (
   title: string,
   filterField: string,
 ) => {
-  const filteredTodos = readyTodos.filter((todo: Todo) =>
-    todo.title.toLowerCase().includes(title.toLowerCase()),
-  );
+  return readyTodos.filter((todo: Todo) => {
+    const titleCondition = todo.title
+      .toLowerCase()
+      .includes(title.toLowerCase());
 
-  if (filterField) {
-    switch (filterField) {
-      case FilterField.ALL:
-        return filteredTodos;
+    if (filterField) {
+      switch (filterField) {
+        case FilterField.ALL:
+          return titleCondition;
 
-      case FilterField.ACTIVE:
-        return filteredTodos.filter(todo => !todo.completed);
+        case FilterField.ACTIVE:
+          return titleCondition && !todo.completed;
 
-      case FilterField.COMPLETED:
-        return filteredTodos.filter(todo => todo.completed);
+        case FilterField.COMPLETED:
+          return titleCondition && todo.completed;
 
-      default:
-        return filteredTodos;
+        default:
+          return titleCondition;
+      }
     }
-  }
 
-  return filteredTodos;
+    return titleCondition;
+  });
 };
