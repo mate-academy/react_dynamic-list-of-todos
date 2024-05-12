@@ -1,4 +1,4 @@
-import { TodoType } from '../../types/TodoType';
+import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
@@ -6,8 +6,8 @@ import { getUser } from '../../api';
 import classNames from 'classnames';
 
 type Props = {
-  currentModal: TodoType;
-  setCurrentModal: React.Dispatch<TodoType>;
+  currentModal: Todo;
+  setCurrentModal: React.Dispatch<Todo>;
 };
 
 export const TodoModal: React.FC<Props> = ({

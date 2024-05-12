@@ -1,13 +1,13 @@
-import { TodoType } from '../../types/TodoType';
+import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
 type Props = {
-  todo: TodoType;
-  setCurrentModal: React.Dispatch<TodoType>;
-  currentModal: TodoType;
+  todo: Todo;
+  setCurrentModal: React.Dispatch<Todo>;
+  currentModal: Todo;
 };
 
-export const Todo: React.FC<Props> = ({
+export const TodoItem: React.FC<Props> = ({
   todo,
   setCurrentModal,
   currentModal,

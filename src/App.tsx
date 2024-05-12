@@ -7,11 +7,11 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
-import { TodoType } from './types/TodoType';
+import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(Filter.all);
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,7 +64,7 @@ export const App: React.FC = () => {
 
               {!isLoading && !!todos.length && (
                 <TodoList
-                  todos={todos as TodoType[]}
+                  todos={todos as Todo[]}
                   setCurrentModal={setCurrentModal}
                   currentModal={currentModal}
                 />
@@ -76,7 +76,7 @@ export const App: React.FC = () => {
 
               {!isLoading && currentModal.userId !== 0 && (
                 <TodoModal
-                  currentModal={currentModal as TodoType}
+                  currentModal={currentModal as Todo}
                   setCurrentModal={setCurrentModal}
                 />
               )}

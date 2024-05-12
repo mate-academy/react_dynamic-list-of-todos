@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-key */
 import React from 'react';
-import { TodoType } from '../../types/TodoType';
-import { Todo } from '../Todo/Todo';
+import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
-  todos: TodoType[];
-  setCurrentModal: React.Dispatch<TodoType>;
-  currentModal: TodoType;
+  todos: Todo[];
+  setCurrentModal: React.Dispatch<Todo>;
+  currentModal: Todo;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -31,8 +31,8 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          <Todo
-            todo={todo as TodoType}
+          <TodoItem
+            todo={todo}
             setCurrentModal={setCurrentModal}
             currentModal={currentModal}
           />
