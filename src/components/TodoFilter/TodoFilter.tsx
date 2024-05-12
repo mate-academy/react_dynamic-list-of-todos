@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  FILTER_FIELD_ACTIVE,
-  FILTER_FIELD_ALL,
-  FILTER_FIELD_COMPLETED,
-} from '../../tools/constants';
+import { FilterField } from '../../tools/constants';
 
 type Props = {
   title: string;
@@ -23,9 +19,11 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           onChange={event => setFilterField(event.target.value)}
         >
-          <option value={FILTER_FIELD_ALL}>All</option>
-          <option value={FILTER_FIELD_ACTIVE}>Active</option>
-          <option value={FILTER_FIELD_COMPLETED}>Completed</option>
+          {Object.values(FilterField).map((field: FilterField) => (
+            <option key={field} value={field}>
+              {field[0].toUpperCase() + field.slice(1).toLowerCase()}
+            </option>
+          ))}
         </select>
       </span>
     </p>
