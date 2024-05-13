@@ -40,8 +40,8 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             onChange={handleSelectChange}
             data-cy="statusSelect"
           >
-            {Object.keys(SelectOptions).map(opt => (
-              <option key={opt} value={opt.toLowerCase()}>
+            {Object.entries(SelectOptions).map(([opt, value]) => (
+              <option key={opt} value={value}>
                 {opt}
               </option>
             ))}
