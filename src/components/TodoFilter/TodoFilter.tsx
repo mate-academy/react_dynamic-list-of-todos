@@ -1,30 +1,71 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React, { FC, useState } from 'react';
+import { IQuery } from '../../App';
+import { StatusSelect } from '../../types/Todo';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface ITodoFilter {
+  setQuery: React.Dispatch<React.SetStateAction<IQuery>>;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+export const TodoFilter: FC<ITodoFilter> = ({ setQuery }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const status = event.target.value as StatusSelect;
+
+    setQuery(prevQuery => {
+      return { ...prevQuery, status };
+    });
+  };
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+
+    setQuery(prevQuery => {
+      return { ...prevQuery, query: event.target.value };
+    });
+  };
+
+  const handleDeleteButton = () => {
+    setQuery({ status: 'all', query: '' });
+    setInputValue('');
+  };
+
+  return (
+    <form className="field has-addons" onSubmit={e => e.preventDefault()}>
+      <p className="control">
+        <span className="select">
+          <select data-cy="statusSelect" onChange={handleSelect}>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          value={inputValue}
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          onChange={handleInput}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-search" />
+        </span>
+
+        <span className="icon is-right">
+          {inputValue && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleDeleteButton}
+            />
+          )}
+        </span>
+      </p>
+    </form>
+  );
+};
