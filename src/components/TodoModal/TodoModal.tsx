@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Loader } from '../Loader';
+import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { Loader } from '../Loader';
 
 interface Props {
   selectedTodo: Todo;
@@ -39,7 +39,6 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               onClick={() => setSelectedTodo(null)}
               type="button"
@@ -54,7 +53,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={`has-text-${selectedTodo.completed ? 'success' : 'danger'}`}
               >

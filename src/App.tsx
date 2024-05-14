@@ -3,49 +3,19 @@ import 'bulma/css/bulma.css';
 
 import React, { useEffect, useState } from 'react';
 
+import { getTodos } from './api';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
-import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export enum FilterBy {
   All = 'all',
   Active = 'active',
   Completed = 'completed',
 }
-
-const filterTodos = (todos: Todo[], filterBy: FilterBy) => {
-  if (filterBy) {
-    switch (filterBy) {
-      case FilterBy.All:
-        return todos;
-      case FilterBy.Active:
-        return todos.filter(todo => !todo.completed);
-      case FilterBy.Completed:
-        return todos.filter(todo => todo.completed);
-      default:
-        return todos;
-    }
-  }
-
-  return todos;
-};
-
-const getFilteredTodos = (todos: Todo[], filterBy: FilterBy, query: string) => {
-  const filteredTodo = filterTodos(todos, filterBy);
-
-  const trimmedQuery = query.trim().toLowerCase();
-
-  if (trimmedQuery) {
-    return filteredTodo.filter(todo =>
-      todo.title.toLowerCase().includes(trimmedQuery),
-    );
-  }
-
-  return filteredTodo;
-};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -78,8 +48,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={filteredTodos}
                   onSelected={setSelectedTodo}

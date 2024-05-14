@@ -36,7 +36,6 @@ export const TodoFilter: FC<Props> = ({ onFilter, onQuery, query }) => (
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {query && (
           <button
             onClick={() => onQuery('')}
