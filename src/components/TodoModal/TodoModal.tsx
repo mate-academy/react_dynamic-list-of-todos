@@ -57,5 +57,5 @@ export const TodoModal: React.FC<Props> = ({ todo, user, onClose }) => {
         </div>
       )}
     </div>
-  )
+  );
 };

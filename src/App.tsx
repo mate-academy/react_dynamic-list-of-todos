@@ -23,9 +23,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const loadTodos = () => {
-      getTodos().then((res) => {
-        setTodos(res)
-        setIsLoading(false)
+      getTodos().then(res => {
+        setTodos(res);
+        setIsLoading(false);
       });
     };
 
@@ -35,7 +35,7 @@ export const App: React.FC = () => {
   const handleShowTodo = (todo: Todo) => {
     setIsLoading(true);
     setSelectedTodo(todo);
-    getUser(todo.userId).then((res) => setUser(res));
+    getUser(todo.userId).then(res => setUser(res));
 
     setIsLoading(false);
   };
