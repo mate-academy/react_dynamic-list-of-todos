@@ -11,58 +11,41 @@ import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filteredStatus, setFilteredStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const loadTodos = async () => {
-      const fetchedTodos = await getTodos();
-
-      setTodos(fetchedTodos);
-      setIsLoading(false);
+    const loadTodos = () => {
+      getTodos().then((res) => {
+        setTodos(res)
+        setIsLoading(false)
+      });
     };
 
     loadTodos();
   }, []);
 
-  const handleShowTodo = async (todo: Todo) => {
+  const handleShowTodo = (todo: Todo) => {
     setIsLoading(true);
-    setSelectedTodoId(todo.id);
     setSelectedTodo(todo);
-    const fetchedUser = await getUser(todo.userId);
+    getUser(todo.userId).then((res) => setUser(res));
 
-    setUser(fetchedUser);
     setIsLoading(false);
   };
 
   const handleHideTodo = () => {
-    setSelectedTodoId(null);
     setSelectedTodo(null);
     setUser(null);
   };
 
-  const filteredTodos = todos
-    .filter(todo => {
-      if (filteredStatus === 'completed') {
-        return todo.completed;
-      }
-
-      if (filteredStatus === 'active') {
-        return !todo.completed;
-      }
-
-      return true;
-    })
-    .filter(todo =>
-      todo.title.toLowerCase().includes(searchQuery.toLowerCase().trimStart()),
-    );
+  const filteredTodos = getFilteredTodos(todos, filteredStatus, searchQuery);
 
   return (
     <>
@@ -81,13 +64,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={filteredTodos}
-                selectedTodoId={selectedTodoId}
-                onShowTodo={handleShowTodo}
-                onHideTodo={handleHideTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodoId={selectedTodo ? selectedTodo.id : null}
+                  onShowTodo={handleShowTodo}
+                  onHideTodo={handleHideTodo}
+                />
+              )}
             </div>
           </div>
         </div>
