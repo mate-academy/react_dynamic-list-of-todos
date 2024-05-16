@@ -17,7 +17,7 @@ export function getFilteredTodos(
     return filteredTodosCopy.filter(todo => {
       const normTodo = todo.title.trim().toLowerCase();
 
-      normTodo.includes(normQuery);
+      return normTodo.includes(normQuery);
     });
   }
 
