@@ -10,11 +10,11 @@ export function getFilteredTodos(
   todos: Todo[],
   { sortField, query }: Filters,
 ): Todo[] {
-  const filteredTodosCopy = [...todos];
+  let copy = [...todos];
   const normQuery = query.trim().toLowerCase();
 
   if (query) {
-    return filteredTodosCopy.filter(todo => {
+    copy = copy.filter(todo => {
       const normTodo = todo.title.trim().toLowerCase();
 
       return normTodo.includes(normQuery);
@@ -24,13 +24,15 @@ export function getFilteredTodos(
   if (sortField) {
     switch (sortField) {
       case SortField.active:
-        return filteredTodosCopy.filter(todo => !todo.completed);
+        copy = copy.filter(todo => !todo.completed);
+        break;
       case SortField.completed:
-        return filteredTodosCopy.filter(todo => todo.completed);
+        copy = copy.filter(todo => todo.completed);
+        break;
       default:
         break;
     }
   }
 
-  return filteredTodosCopy;
+  return copy;
 }
