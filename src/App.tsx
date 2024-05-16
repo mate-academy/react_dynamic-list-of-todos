@@ -13,32 +13,28 @@ import { SelectOptions, StateContext } from './context/TodoContext';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { openModal, filter, query } = useContext(StateContext);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const preparedTodos = useMemo(() => {
     return todos.filter(todo => {
-      if (filter === SelectOptions.Active) {
-        return (
-          !todo.completed &&
-          todo.title.toLowerCase().includes(query.toLowerCase())
-        );
-      } else if (filter === SelectOptions.Completed) {
-        return (
-          todo.completed &&
-          todo.title.toLowerCase().includes(query.toLowerCase())
-        );
+      switch (filter) {
+        case SelectOptions.Active:
+          return !todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        case SelectOptions.Completed:
+          return todo.completed && todo.title.toLowerCase().includes(query.toLowerCase());
+        case SelectOptions.All:
+        default:
+          return todo.title.toLowerCase().includes(query.toLowerCase());
       }
-
-      return todo.title.toLowerCase().includes(query.toLowerCase());
     });
   }, [todos, filter, query]);
 
@@ -54,7 +50,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? <Loader /> : <TodoList todos={preparedTodos} />}
+              {isLoading ? <Loader /> : <TodoList todos={preparedTodos} />}
             </div>
           </div>
         </div>
