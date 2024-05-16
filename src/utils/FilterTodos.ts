@@ -10,28 +10,21 @@ export function getFilteredTodos(
   todos: Todo[],
   { sortField, query }: Filters,
 ): Todo[] {
-  let todosCopy = [...todos];
-
-  if (query) {
-    const normalizedQuery = query.trim().toLowerCase();
-
-    todosCopy = todosCopy.filter(todo => {
+  return [...todos]
+    .filter(todo => {
+      const normalizedQuery = query.trim().toLowerCase();
       const normalizedTitle = todo.title.trim().toLowerCase();
 
       return normalizedTitle.includes(normalizedQuery);
+    })
+    .filter(todo => {
+      switch (sortField) {
+        case SortField.ACTIVE:
+          return !todo.completed;
+        case SortField.COMPLETED:
+          return todo.completed;
+        default:
+          return true;
+      }
     });
-  }
-
-  if (sortField) {
-    switch (sortField) {
-      case SortField.ACTIVE:
-        return (todosCopy = todosCopy.filter(todo => todo.completed === false));
-      case SortField.COMPLETED:
-        return (todosCopy = todosCopy.filter(todo => todo.completed === true));
-      default:
-        break;
-    }
-  }
-
-  return todosCopy;
 }
