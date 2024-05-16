@@ -1,20 +1,20 @@
-import React, {useState} from "react";
-import {IQuery, SortField} from "../../types/Filter";
+import React, { useState } from 'react';
+import { IQuery, SortField } from '../../types/Filter';
 
 interface ITodoFilter {
   setQuery: React.Dispatch<React.SetStateAction<IQuery>>;
 }
 
-export const TodoFilter: React.FC<ITodoFilter> = ({setQuery}) => {
-  const [inputValue, setInputValue] = useState('')
+export const TodoFilter: React.FC<ITodoFilter> = ({ setQuery }) => {
+  const [inputValue, setInputValue] = useState('');
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const status = event.target.value as SortField
+    const status = event.target.value as SortField;
 
     setQuery(prev => {
-      return {...prev, status}
-    })
-  }
+      return { ...prev, status };
+    });
+  };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -32,16 +32,13 @@ export const TodoFilter: React.FC<ITodoFilter> = ({setQuery}) => {
   return (
     <form className="field has-addons">
       <p className="control">
-      <span className="select">
-        <select
-          onChange={handleSelect}
-          data-cy="statusSelect"
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
+        <span className="select">
+          <select onChange={handleSelect} data-cy="statusSelect">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </span>
       </p>
 
       <p className="control is-expanded has-icons-left has-icons-right">
@@ -69,7 +66,5 @@ export const TodoFilter: React.FC<ITodoFilter> = ({setQuery}) => {
         </span>
       </p>
     </form>
-  )
-}
-
-
+  );
+};

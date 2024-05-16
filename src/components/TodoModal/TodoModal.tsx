@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import {Todo} from "../../types/Todo";
-import {User} from "../../types/User";
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import {getUser} from "../../api";
+
 
 interface ITodoModal {
   setModal: (value: boolean) => void;
@@ -10,54 +11,27 @@ interface ITodoModal {
   todo: Omit<Todo, 'userId'>;
 }
 
-export const TodoModal: React.FC<ITodoModal> = ({todo, setModal, userId }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const {id, title, completed} = todo;
+const useUser = (userId: number) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const handleCloseModal = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setModal(false);
-      }
-    };
+    getUser(userId)
+      .then(setUser)
+      .catch((e) => alert(e))
+      .finally(() => setIsLoading(false))
+  }, []);
 
-    document.addEventListener('keydown', handleCloseModal);
+  return {user, isLoading}
+}
 
-    return () => {
-      document.removeEventListener('keydown', handleCloseModal);
-    };
-  }, [setModal]);
-
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        setIsLoading(true);
-
-        const res = await getUser(userId);
-
-        setUser(res);
-      } catch (err) {
-        if (err instanceof Error) {
-          window.console.log(err.message);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getUserInfo();
-  }, [userId]);
-
-  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      setModal(false);
-    }
-  };
+export const TodoModal: React.FC<ITodoModal> = ({ todo, setModal, userId }) => {
+  const {user, isLoading} = useUser(userId)
+  const { id, title, completed } = todo;
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" onClick={handleBackdropClick} />
+      <div className="modal-background" />
 
       {isLoading ? (
         <Loader />
@@ -87,7 +61,9 @@ export const TodoModal: React.FC<ITodoModal> = ({todo, setModal, userId }) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={`has-text-${completed ? 'success' : 'danger'}`}>
+              <strong
+                className={`has-text-${completed ? 'success' : 'danger'}`}
+              >
                 {completed ? 'Done' : 'Planned'}
               </strong>
 

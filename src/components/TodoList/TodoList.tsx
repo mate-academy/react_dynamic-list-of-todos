@@ -1,12 +1,12 @@
 import React from 'react';
-import {Todo} from "../../types/Todo";
-import {TodoItem} from "../TodoItem/TodoItem";
+import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-}
+};
 
-export const TodoList: React.FC<Props> = ({todos}) => (
+export const TodoList: React.FC<Props> = ({ todos }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -23,7 +23,7 @@ export const TodoList: React.FC<Props> = ({todos}) => (
 
     <tbody>
       {todos?.map(todo => {
-        return <TodoItem {...todo} key={todo.id}/>
+        return <TodoItem {...todo} key={todo.id} />;
       })}
     </tbody>
   </table>
