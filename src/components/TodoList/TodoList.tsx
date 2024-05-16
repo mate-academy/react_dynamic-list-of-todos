@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoModal } from '../TodoModal';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -41,9 +42,10 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={
-                    todo.completed ? `has-text-success` : 'has-text-danger'
-                  }
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
                 >
                   {todo.title}
                 </p>

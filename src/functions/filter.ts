@@ -1,19 +1,25 @@
 import { Todo } from '../types/Todo';
 
+export enum Filter {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+
 export const filterTodos = (
-  filter: string,
+  filter: Filter,
   todos: Todo[],
   query: string,
 ): Todo[] => {
   let filteredTodos = todos;
 
   switch (filter) {
-    case 'all':
+    case Filter.ALL:
       break;
-    case 'active':
+    case Filter.ACTIVE:
       filteredTodos = filteredTodos.filter(todo => !todo.completed);
       break;
-    case 'completed':
+    case Filter.COMPLETED:
       filteredTodos = filteredTodos.filter(todo => todo.completed);
       break;
     default:

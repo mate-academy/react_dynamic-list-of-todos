@@ -1,7 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
+import { Filter } from '../../functions/filter';
+
 type TodoFilterProps = {
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  setFilter: Dispatch<SetStateAction<Filter>>;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
@@ -14,7 +17,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
   };
 
   const filterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
+    const selectedFilter = event.target.value as Filter;
+
+    setFilter(selectedFilter);
   };
 
   const deleteQuery = () => {

@@ -9,12 +9,12 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { filterTodos } from './functions/filter';
+import { Filter, filterTodos } from './functions/filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
