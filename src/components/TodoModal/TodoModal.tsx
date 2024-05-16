@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo | undefined;
   handleToggleModal: (toggle: boolean) => void;
-  user: User | undefined;
 };
 
 export const TodoModal: React.FC<Props> = ({
   handleToggleModal,
-  user,
   selectedTodo,
 }) => {
+  const [user, setUser] = useState<User>();
+
+  const onModalClose = () => {
+    setUser(undefined);
+    handleToggleModal(false);
+  };
+
+  useEffect(() => {
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(response => setUser(response));
+    }
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -35,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => handleToggleModal(false)}
+              onClick={() => onModalClose()}
             />
           </header>
 

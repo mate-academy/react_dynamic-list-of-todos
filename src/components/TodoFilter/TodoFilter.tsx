@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { InitialStates } from '../../types/Todo';
+import { TodoFilterOptions } from '../../types/Todo';
 
 type Props = {
-  handleFilterTodos: (filter: InitialStates) => void;
-  filterTodos: InitialStates;
+  handleFilterTodos: (filter: TodoFilterOptions) => void;
+  filterTodos: TodoFilterOptions;
 };
 export const TodoFilter: React.FC<Props> = ({
   handleFilterTodos,

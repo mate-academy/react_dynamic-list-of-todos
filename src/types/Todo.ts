@@ -5,7 +5,7 @@ export interface Todo {
   userId: number;
 }
 
-export type InitialStates = {
+export type TodoFilterOptions = {
   query: string;
   select: string;
 };
