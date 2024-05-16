@@ -1,4 +1,4 @@
-import { FilterTodoBy } from '../App';
+import { FilterTodoBy } from '../components/TodoFilter';
 import { Todo } from '../types/Todo';
 
 export const FilteredTodos = (

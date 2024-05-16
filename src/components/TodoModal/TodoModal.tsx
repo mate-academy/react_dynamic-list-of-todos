@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { useUser } from '../../Hooks/useUser';
 
 interface Props {
   selectedTodo: Todo;
@@ -13,14 +12,7 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    getUser(selectedTodo.userId)
-      .then(setUser)
-      .finally(() => setIsLoading(false));
-  }, [selectedTodo]);
+  const { user, isLoading } = useUser(selectedTodo.userId);
 
   return (
     <div className="modal is-active" data-cy="modal">

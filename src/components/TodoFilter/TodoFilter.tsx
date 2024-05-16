@@ -1,6 +1,5 @@
 import React from 'react';
-import { FilterTodoBy } from '../../App';
-
+export type FilterTodoBy = 'all' | 'active' | 'completed';
 interface Props {
   onFilter: (value: FilterTodoBy) => void;
   onQueryChange: (value: string) => void;
