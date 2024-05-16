@@ -1,7 +1,7 @@
 import React from 'react';
-import {User} from "../../types/User";
-import {Todo} from "../../types/Todo";
-import {Loader} from "../Loader";
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo | undefined;
@@ -10,14 +10,19 @@ type Props = {
   isLoading: boolean;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, user, onSetActive, isLoading}) => {
-    return (
-      <div className="modal is-active" data-cy="modal">
-        <div className="modal-background" />
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  onSetActive,
+  isLoading,
+}) => {
+  return (
+    <div className="modal is-active" data-cy="modal">
+      <div className="modal-background" />
 
-        {isLoading ? (
-          <Loader />
-        ) : (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -54,7 +59,7 @@ export const TodoModal: React.FC<Props> = ({ todo, user, onSetActive, isLoading}
             </p>
           </div>
         </div>
-        )}
-      </div>
-    );
+      )}
+    </div>
+  );
 };
