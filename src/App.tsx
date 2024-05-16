@@ -27,6 +27,8 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const filterTodos = getFilteredTodos(todos, { sortField, query });
+
   return (
     <>
       <div className="section">
@@ -48,7 +50,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={getFilteredTodos(todos, { sortField, query })}
+                  todos={filterTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
