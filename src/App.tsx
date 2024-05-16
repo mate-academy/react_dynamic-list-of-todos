@@ -10,30 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { FilteredOptions } from './types/FilteredOption';
 import { getTodos } from './api';
-
-function handleFilteredTodos(
-  todos: Todo[],
-  selectedOption: FilteredOptions,
-  query: string,
-) {
-  let filteredTodos = [...todos];
-
-  if (query) {
-    filteredTodos = filteredTodos.filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase().trim()),
-    );
-  }
-
-  switch (selectedOption) {
-    case FilteredOptions.active:
-      return filteredTodos.filter(todo => !todo.completed);
-    case FilteredOptions.completed:
-      return filteredTodos.filter(todo => todo.completed);
-
-    default:
-      return filteredTodos;
-  }
-}
+import { handleFilteredTodos } from './services/handleFilteredTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
