@@ -10,24 +10,27 @@ export function getFilteredTodos(
   todos: Todo[],
   { sortField, query }: Filters,
 ): Todo[] {
-  // const copyTodos = [...todos];
+  const filteredTodosCopy = [...todos];
+  const normQuery = query.trim().toLowerCase();
 
   if (query) {
-    return todos.filter(todo => {
-      todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
+    return filteredTodosCopy.filter(todo => {
+      const normTodo = todo.title.trim().toLowerCase();
+
+      normTodo.includes(normQuery);
     });
   }
 
   if (sortField) {
     switch (sortField) {
       case SortField.active:
-        return todos.filter(todo => !todo.completed);
+        return filteredTodosCopy.filter(todo => !todo.completed);
       case SortField.completed:
-        return todos.filter(todo => todo.completed);
+        return filteredTodosCopy.filter(todo => todo.completed);
       default:
         break;
     }
   }
 
-  return todos;
+  return filteredTodosCopy;
 }

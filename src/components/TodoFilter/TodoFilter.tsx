@@ -35,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => setQuery(event.target.value)}
+        onChange={event => setQuery(event.target.value.trimStart())}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
