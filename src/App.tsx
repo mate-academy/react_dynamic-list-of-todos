@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   }, []);
 
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(originalTodos);
-  const [todosQuery, setTodosQuery] = useState<Todo[]>(filteredTodos);
+  const [todosQuery, setTodosQuery] = useState<Todo[]>();
 
   const handleFilter = () => {
     if (filter === Filter.All) {
@@ -35,10 +35,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     handleFilter();
     setTodosQuery(filteredTodos);
-  }, [filter]);
+  }, [filter, query]);
 
   useEffect(() => {
-    setTodosQuery(filteredTodos.filter(todo => todo.title.includes(query)));
+    setTodosQuery(
+      filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLocaleLowerCase()),
+      ),
+    );
   }, [query, filteredTodos]);
 
   //originaltodos is array with original todos,
@@ -60,7 +64,7 @@ export const App: React.FC = () => {
               <Loader />
             ) : (
               <TodoList
-                todos={todosQuery.length > 0 ? todosQuery : originalTodos}
+                todos={Array.isArray(todosQuery) ? todosQuery : originalTodos}
               />
             )}
           </div>

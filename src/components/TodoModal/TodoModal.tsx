@@ -51,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({ closeFunction, todo }) => {
                   todo.completed ? 'has-text-success' : 'has-text-danger'
                 }
               >
-                {todo.completed ? 'Done' : 'Planed'}
+                {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
