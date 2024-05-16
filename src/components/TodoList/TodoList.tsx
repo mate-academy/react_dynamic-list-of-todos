@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
-import classNames from 'classnames';
 import { TodoModal } from '../TodoModal';
 
 type Props = {
@@ -8,10 +7,10 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const openModal = () => {
-    setModalOpen(true);
+  const openModal = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
   return (
@@ -33,11 +32,17 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           {todos.map(todo => (
             <tr key={todo.id} data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered" />
+              <td className="is-vcentered">
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
               <td className="is-vcentered is-expanded">
                 <p
                   className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
+                    todo.completed ? `has-text-success` : 'has-text-danger'
                   }
                 >
                   {todo.title}
@@ -48,13 +53,15 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={openModal}
+                  onClick={() => openModal(todo)}
                 >
                   <span className="icon">
                     <i
-                      className={classNames('far', 'fa-eye', {
-                        'fa-eye-slash': modalOpen,
-                      })}
+                      className={
+                        selectedTodo?.id === todo.id
+                          ? 'far fa-eye-slash'
+                          : 'far fa-eye'
+                      }
                     />
                   </span>
                 </button>
@@ -63,7 +70,12 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
           ))}
         </tbody>
       </table>
-      {modalOpen && <TodoModal id={0} title="" completed={false} userId={0} />}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          closeModal={() => setSelectedTodo(null)}
+        />
+      )}
     </div>
   );
 };
