@@ -28,23 +28,11 @@ export enum ActionTypes {
   SET_QUERY = 'SET_QUERY',
 }
 
-type Action =
-  | {
-      type: ActionTypes.CURRENT_TODO;
-      payload: Todo | null;
-    }
-  | {
-      type: ActionTypes.OPEN_MODAL;
-      payload: boolean;
-    }
-  | {
-      type: ActionTypes.SET_SELECT;
-      payload: SelectOptions;
-    }
-  | {
-      type: ActionTypes.SET_QUERY;
-      payload: string;
-    };
+export type Action =
+  | { type: ActionTypes.CURRENT_TODO; payload: Todo | null }
+  | { type: ActionTypes.OPEN_MODAL; payload: boolean }
+  | { type: ActionTypes.SET_SELECT; payload: SelectOptions }
+  | { type: ActionTypes.SET_QUERY; payload: string };
 
 const reducer = (state: RootState, action: Action): RootState => {
   switch (action.type) {
