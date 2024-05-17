@@ -17,7 +17,7 @@ export const App: React.FC = () => {
     query: '',
     select: 'all',
   });
-  const [todos, isLoading] = useTodos(todosFilter);
+  const [todos, isLoaded] = useTodos(todosFilter);
 
   const handleFilterTodos = (filter: TodoFilterOptions): void => {
     setTodosFilter(filter);
@@ -49,7 +49,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (
+              {isLoaded ? (
                 <TodoList
                   todos={todos}
                   handleToggleModal={handleToggleModal}

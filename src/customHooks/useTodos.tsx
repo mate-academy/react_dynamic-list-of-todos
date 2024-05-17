@@ -6,7 +6,7 @@ type TodosHookTypes = (todosFilter: TodoFilterOptions) => [Todo[], boolean];
 
 export const useTodos: TodosHookTypes = todosFilter => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isloading, setIsloading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const filterResponse = useCallback(
     (responseTodos: Todo[]) => {
@@ -35,8 +35,8 @@ export const useTodos: TodosHookTypes = todosFilter => {
   useEffect(() => {
     getTodos()
       .then(response => filterResponse(response))
-      .finally(() => setIsloading(true));
+      .finally(() => setIsLoaded(true));
   }, [filterResponse]);
 
-  return [todos, isloading];
+  return [todos, isLoaded];
 };
