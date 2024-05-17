@@ -19,8 +19,8 @@ export const App: React.FC = () => {
     getTodos().then(todosFromServer => setOriginalTodos(todosFromServer));
   }, []);
 
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(originalTodos);
-  const [todosQuery, setTodosQuery] = useState<Todo[]>();
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [todosQuery, setTodosQuery] = useState<Todo[]>([]);
 
   const handleFilter = () => {
     if (filter === Filter.All) {
@@ -56,7 +56,11 @@ export const App: React.FC = () => {
           <h1 className="title">Todos:</h1>
 
           <div className="block">
-            <TodoFilter setFilter={setFilter} setQuery={setQuery} />
+            <TodoFilter
+              setFilter={setFilter}
+              setQuery={setQuery}
+              query={query}
+            />
           </div>
 
           <div className="block">
@@ -64,7 +68,9 @@ export const App: React.FC = () => {
               <Loader />
             ) : (
               <TodoList
-                todos={Array.isArray(todosQuery) ? todosQuery : originalTodos}
+                todos={
+                  todosQuery.length > 0 || query ? todosQuery : originalTodos
+                }
               />
             )}
           </div>

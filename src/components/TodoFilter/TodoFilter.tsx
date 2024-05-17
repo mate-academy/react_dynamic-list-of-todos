@@ -3,9 +3,10 @@ import { Filter } from '../../types/Filter';
 type Props = {
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
 };
 
-export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery }) => {
+export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, query }) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     switch (event.target.value) {
       case 'All':
@@ -19,6 +20,10 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery }) => {
       default:
         setFilter(Filter.Completed);
     }
+  };
+
+  const handleClearQuery = () => {
+    setQuery('');
   };
 
   return (
@@ -39,6 +44,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery }) => {
           type="text"
           className="input"
           placeholder="Search..."
+          value={query}
           onChange={event => setQuery(event.target.value)}
         />
         <span className="icon is-left">
@@ -47,11 +53,14 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery }) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
+          {query && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClearQuery}
+            />
+          )}
         </span>
       </p>
     </form>
