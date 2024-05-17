@@ -4,3 +4,8 @@ export interface Todo {
   completed: boolean;
   userId: number;
 }
+
+export type TodoFilterOptions = {
+  query: string;
+  select: string;
+};
