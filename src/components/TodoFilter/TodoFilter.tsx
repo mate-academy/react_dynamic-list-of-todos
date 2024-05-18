@@ -3,9 +3,9 @@ import { createdContext } from '../TodoContext';
 import React from 'react';
 
 export enum FilteringType {
-  All = 'All',
-  Completed = 'Completed',
-  Active = 'Active',
+  All = 'all',
+  Completed = 'completed',
+  Active = 'active',
 }
 
 export const TodoFilter = () => {
@@ -46,17 +46,18 @@ export const TodoFilter = () => {
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            title="clear"
-            onClick={() => setSearchedText('')}
-          />
-        </span>
+        {searchedText !== '' && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              title="clear"
+              onClick={() => setSearchedText('')}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

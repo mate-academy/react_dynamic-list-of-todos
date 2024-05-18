@@ -1,32 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
+import classNames from 'classnames';
 
 type Props = {
-  closeButton: (todo: Todo | null) => void;
-  loading: boolean;
   modalState: Todo | null;
-  setLoading: (loading: boolean) => void;
-  setUserData: (user: User) => void;
-  userData: User;
+  modalButton: boolean;
+  handleClose: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  closeButton,
-  loading,
+  modalButton,
   modalState,
-  setLoading,
-  setUserData,
-  userData,
+  handleClose,
 }: Props) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>({} as User);
+
   useEffect(() => {
-    setLoading(true);
-    getUser(modalState?.id)
-      .then(user => setUserData(user))
-      .finally(() => setLoading(false));
-  }, [modalState?.id]);
+    if (modalState) {
+      setLoading(true);
+      getUser(modalState?.userId)
+        .then(setUser)
+        .finally(() => setLoading(false));
+    }
+  }, [modalState, modalState?.id]);
+
+  if (!modalButton) {
+    return null;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -48,26 +52,26 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => closeButton(null)}
+              onClick={handleClose}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {modalState.title}
+              {modalState?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  modalState.completed ? 'has-text-danger' : 'has-text-success'
-                }
+                className={classNames('has-text-success', {
+                  'has-text-danger': !modalState?.completed,
+                })}
               >
-                {modalState.completed ? 'Planned' : 'Done'}
+                {modalState?.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
-              <a href={`mailto:${userData.email}`}>{userData.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

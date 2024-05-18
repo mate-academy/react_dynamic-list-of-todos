@@ -1,47 +1,41 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { createdContext } from '../TodoContext';
-import { getTodos } from '../../api';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
-  modalButton: (todo: Todo | null) => void;
-  modal: Todo | null;
+  modalButton: (value: boolean) => void;
+  modalState: (todo: Todo | null) => void;
   todos: Todo[];
-  setTodos: (todos: Todo[]) => void;
-  setLoading: (loader: boolean) => void;
+  resultClick: boolean;
 };
 
 export const TodoList: React.FC<Props> = ({
   modalButton,
-  modal,
+  modalState,
   todos,
-  setTodos,
-  setLoading,
+  resultClick,
 }: Props) => {
   const { filterButton, searchedText } = useContext(createdContext);
-
-  useEffect(() => {
-    setLoading(true);
-    getTodos()
-      .then(allTodos => setTodos(allTodos))
-      .finally(() => setLoading(false));
-  }, []);
 
   const filteredTodos = todos
     .filter(todo => {
       switch (filterButton) {
-        case 'All':
+        case 'all':
           return todo;
-        case 'Completed':
+        case 'completed':
           return todo.completed;
-        case 'Active':
+        case 'active':
           return !todo.completed;
         default:
           return todo;
       }
     })
     .filter(todo =>
-      todo.title.toLowerCase().includes(searchedText.toLowerCase()),
+      todo.title
+        .toLowerCase()
+        .trim()
+        .includes(searchedText.toLowerCase().trim()),
     );
 
   return (
@@ -64,7 +58,7 @@ export const TodoList: React.FC<Props> = ({
           <tr data-cy="todo" className="" key={filtrTodo.id}>
             <td className="is-vcentered">
               {filtrTodo.id}{' '}
-              {!filtrTodo.completed && (
+              {filtrTodo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
@@ -73,9 +67,9 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered" />
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  filtrTodo.completed ? 'has-text-danger' : 'has-text-success'
-                }
+                className={classNames('has-text-success', {
+                  'has-text-danger': !filtrTodo.completed,
+                })}
               >
                 {filtrTodo.title}
               </p>
@@ -85,10 +79,13 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => modalButton(filtrTodo)}
+                onClick={() => {
+                  modalState(filtrTodo);
+                  modalButton(true);
+                }}
               >
                 <span className="icon">
-                  {modal?.id === filtrTodo.id ? (
+                  {resultClick ? (
                     <i className="far fa-eye-slash" />
                   ) : (
                     <i className="far fa-eye" />

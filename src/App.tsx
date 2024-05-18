@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,17 +8,21 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { ToDoContext } from './components/TodoContext';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { Loader } from './components/Loader';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [modalState, setModalState] = useState<Todo | null>(null);
-  const [loader, setLoader] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({} as User);
+  const [loader, setLoader] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [modalButton, setModalButton] = useState<boolean>(false);
 
-  const handleModalButton = (todo: Todo | null) => {
-    setModalState(todo);
-  };
+  useEffect(() => {
+    setLoader(true);
+    getTodos()
+      .then(allTodos => setTodos(allTodos))
+      .finally(() => setLoader(false));
+  }, []);
 
   return (
     <>
@@ -33,28 +37,26 @@ export const App: React.FC = () => {
               </div>
 
               <div className="block">
-                <TodoList
-                  modalButton={handleModalButton}
-                  modal={modalState}
-                  setLoading={setLoader}
-                  todos={todos}
-                  setTodos={setTodos}
-                />
+                {loader ? (
+                  <Loader />
+                ) : (
+                  <TodoList
+                    modalState={value => setModalState(value)}
+                    modalButton={value => setModalButton(value)}
+                    todos={todos}
+                    resultClick={modalButton}
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {modalState && (
-          <TodoModal
-            closeButton={handleModalButton}
-            loading={loader}
-            setLoading={setLoader}
-            modalState={modalState}
-            setUserData={setUser}
-            userData={user}
-          />
-        )}
+        <TodoModal
+          modalState={modalState}
+          modalButton={modalButton}
+          handleClose={() => setModalButton(false)}
+        />
       </ToDoContext>
     </>
   );
