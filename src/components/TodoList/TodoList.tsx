@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { createdContext } from '../TodoContext';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
@@ -16,28 +15,6 @@ export const TodoList: React.FC<Props> = ({
   todos,
   resultClick,
 }: Props) => {
-  const { filterButton, searchedText } = useContext(createdContext);
-
-  const filteredTodos = todos
-    .filter(todo => {
-      switch (filterButton) {
-        case 'all':
-          return todo;
-        case 'completed':
-          return todo.completed;
-        case 'active':
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    })
-    .filter(todo =>
-      todo.title
-        .toLowerCase()
-        .trim()
-        .includes(searchedText.toLowerCase().trim()),
-    );
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -54,10 +31,10 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {filteredTodos.map(filtrTodo => (
+        {todos.map(filtrTodo => (
           <tr data-cy="todo" className="" key={filtrTodo.id}>
             <td className="is-vcentered">
-              {filtrTodo.id}{' '}
+              {filtrTodo.id}
               {filtrTodo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />

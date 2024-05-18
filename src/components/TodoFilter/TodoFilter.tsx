@@ -1,21 +1,26 @@
-import { useContext } from 'react';
-import { createdContext } from '../TodoContext';
 import React from 'react';
 
 export enum FilteringType {
-  All = 'all',
-  Completed = 'completed',
-  Active = 'active',
+  all = 'all',
+  completed = 'completed',
+  active = 'active',
 }
 
-export const TodoFilter = () => {
-  const { searchedText, setSearchedText, setFilterButton } =
-    useContext(createdContext);
+type Props = {
+  searchedText: string;
+  handleSearchedText: (text: string) => void;
+  handleFilterButton: (filter: FilteringType) => void;
+};
 
+export const TodoFilter = ({
+  searchedText,
+  handleSearchedText,
+  handleFilterButton,
+}: Props) => {
   const handleFilterButtons = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFilter = event.target.value as FilteringType;
 
-    setFilterButton(selectedFilter);
+    handleFilterButton(selectedFilter);
   };
 
   return (
@@ -27,9 +32,9 @@ export const TodoFilter = () => {
             title="option"
             onChange={handleFilterButtons}
           >
-            <option>All</option>
-            <option>Active</option>
-            <option>Completed</option>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>
@@ -41,7 +46,7 @@ export const TodoFilter = () => {
           className="input"
           placeholder="Search..."
           value={searchedText}
-          onChange={event => setSearchedText(event.target.value)}
+          onChange={event => handleSearchedText(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -54,7 +59,7 @@ export const TodoFilter = () => {
               type="button"
               className="delete"
               title="clear"
-              onClick={() => setSearchedText('')}
+              onClick={() => handleSearchedText('')}
             />
           </span>
         )}
