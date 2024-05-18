@@ -9,7 +9,8 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { IQuery } from './types/Filter';
-import { getFilteredTodos } from './components/Filter/Filter';
+import {getFilteredTodos} from "./utils/todoFilter";
+
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -43,7 +44,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setQuery={setQuery} />
+              <TodoFilter setQuery={setQuery}  query={query}/>
             </div>
 
             {isLoading ? (

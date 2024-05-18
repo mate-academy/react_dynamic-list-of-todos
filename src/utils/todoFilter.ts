@@ -1,5 +1,6 @@
-import { Todo } from '../../types/Todo';
-import { IQuery, SortField } from '../../types/Filter';
+import {Todo} from "../types/Todo";
+import {IQuery, SortField} from "../types/Filter";
+
 
 export const getFilteredTodos = (initialTodos: Todo[], query: IQuery) => {
   const { status, query: searchQuery } = query;

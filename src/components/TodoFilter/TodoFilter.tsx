@@ -1,39 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IQuery, SortField } from '../../types/Filter';
 
 interface ITodoFilter {
-  setQuery: React.Dispatch<React.SetStateAction<IQuery>>;
+  query: IQuery;
+  setQuery: (query: IQuery) => void;
 }
 
-export const TodoFilter: React.FC<ITodoFilter> = ({ setQuery }) => {
-  const [inputValue, setInputValue] = useState('');
-
+export const TodoFilter: React.FC<ITodoFilter> = ({ query, setQuery }) => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const status = event.target.value as SortField;
-
-    setQuery(prev => {
-      return { ...prev, status };
-    });
+    setQuery({ ...query, status });
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-
-    setQuery(prevQuery => {
-      return { ...prevQuery, query: event.target.value };
-    });
+    const newQuery = event.target.value;
+    setQuery({ ...query, query: newQuery });
   };
 
   const handleDeleteButton = () => {
     setQuery({ status: 'all', query: '' });
-    setInputValue('');
   };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select onChange={handleSelect} data-cy="statusSelect">
+          <select value={query.status} onChange={handleSelect} data-cy="statusSelect">
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -43,7 +35,7 @@ export const TodoFilter: React.FC<ITodoFilter> = ({ setQuery }) => {
 
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
-          value={inputValue}
+          value={query.query}
           onChange={handleInput}
           data-cy="searchInput"
           type="text"
@@ -55,7 +47,7 @@ export const TodoFilter: React.FC<ITodoFilter> = ({ setQuery }) => {
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {inputValue && (
+          {query.query && (
             <button
               data-cy="clearSearchButton"
               type="button"

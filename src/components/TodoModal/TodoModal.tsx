@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import {getUser} from "../../api";
-
+import { getUser } from '../../api';
 
 interface ITodoModal {
   setModal: (value: boolean) => void;
@@ -18,15 +17,15 @@ const useUser = (userId: number) => {
   useEffect(() => {
     getUser(userId)
       .then(setUser)
-      .catch((e) => alert(e))
-      .finally(() => setIsLoading(false))
+      .catch(e => alert(e))
+      .finally(() => setIsLoading(false));
   }, []);
 
-  return {user, isLoading}
-}
+  return { user, isLoading };
+};
 
 export const TodoModal: React.FC<ITodoModal> = ({ todo, setModal, userId }) => {
-  const {user, isLoading} = useUser(userId)
+  const { user, isLoading } = useUser(userId);
   const { id, title, completed } = todo;
 
   return (
