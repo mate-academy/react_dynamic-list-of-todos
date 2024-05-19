@@ -1,4 +1,5 @@
 import { Todo } from '../../types/Todo';
+
 import { Status } from '../TodoFilter';
 
 interface Filter {

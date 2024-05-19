@@ -7,8 +7,10 @@ import { TodoList } from './components/TodoList';
 import { Status, TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
+
 import { Todo } from './types/Todo';
+
+import { getTodos } from './api';
 import { getFilteredTodos } from './components/Utils/getFilteredTodos';
 
 const useTodos = () => {
