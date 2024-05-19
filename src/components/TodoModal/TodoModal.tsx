@@ -16,7 +16,7 @@ const useUser = (userId: number) => {
   useEffect(() => {
     getUser(userId)
       .then(setUser)
-      .catch(() => alert('Could not load the todos'))
+      .catch(() => alert('Could not load user'))
       .finally(() => setIsLoadingUser(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
