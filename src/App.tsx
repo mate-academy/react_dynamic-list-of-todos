@@ -39,6 +39,7 @@ export const App: React.FC = () => {
           return matchesFilterText;
       }
     });
+
     setFilteredList(selectedTable);
   }, [selectedList, todoList, filterText]);
 

@@ -17,11 +17,13 @@ export const TodoModal: React.FC<ModalProps> = ({ onClose, todo }) => {
     if (!todo) {
       return;
     }
-    getUser(todo.userId).then(user => {
-      setUser(user);
+
+    getUser(todo.userId).then(userResponse => {
+      setUser(userResponse);
       setIsLoading(false);
     });
   }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
