@@ -4,18 +4,17 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
+import {SortField, TodoFilter} from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { IQuery } from './types/Filter';
-import {getFilteredTodos} from "./utils/todoFilter";
-
+import { getFilteredTodos } from './utils/todoFilter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [query, setQuery] = useState<IQuery>({ status: 'all', query: '' });
+  const [query, setQuery] = useState<IQuery>({ status: SortField.All, query: '' });
 
   useEffect(() => {
     const getTodo = async () => {
@@ -44,7 +43,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setQuery={setQuery}  query={query}/>
+              <TodoFilter setQuery={setQuery} query={query} />
             </div>
 
             {isLoading ? (

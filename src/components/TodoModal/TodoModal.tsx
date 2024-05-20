@@ -17,7 +17,7 @@ const useUser = (userId: number) => {
   useEffect(() => {
     getUser(userId)
       .then(setUser)
-      .catch(e => alert(e))
+      .catch(e => window.console.log(e))
       .finally(() => setIsLoading(false));
   }, []);
 

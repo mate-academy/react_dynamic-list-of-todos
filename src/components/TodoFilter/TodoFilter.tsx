@@ -1,9 +1,15 @@
 import React from 'react';
-import { IQuery, SortField } from '../../types/Filter';
+import { IQuery } from '../../types/Filter';
 
 interface ITodoFilter {
   query: IQuery;
   setQuery: (query: IQuery) => void;
+}
+
+export enum SortField {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
 
 export const TodoFilter: React.FC<ITodoFilter> = ({ query, setQuery }) => {
@@ -18,17 +24,21 @@ export const TodoFilter: React.FC<ITodoFilter> = ({ query, setQuery }) => {
   };
 
   const handleDeleteButton = () => {
-    setQuery({ status: 'all', query: '' });
+    setQuery({ status: SortField.All, query: '' });
   };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select value={query.status} onChange={handleSelect} data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+          <select
+            value={query.status}
+            onChange={handleSelect}
+            data-cy="statusSelect"
+          >
+            <option value={SortField.All}>All</option>
+            <option value={SortField.Active}>Active</option>
+            <option value={SortField.Completed}>Completed</option>
           </select>
         </span>
       </p>
