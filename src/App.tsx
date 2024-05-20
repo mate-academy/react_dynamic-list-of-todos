@@ -8,27 +8,34 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { Filter } from './types/Filter';
+import { FilterType } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [filter, setFilter] = useState<FilterType>(FilterType.All);
   const [query, setQuery] = useState<string>('');
   const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => setOriginalTodos(todosFromServer));
+    getTodos().then(setOriginalTodos);
   }, []);
 
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [todosQuery, setTodosQuery] = useState<Todo[]>([]);
 
   const handleFilter = () => {
-    if (filter === Filter.All) {
-      setFilteredTodos(originalTodos);
-    } else if (filter === Filter.Active) {
-      setFilteredTodos(originalTodos.filter(todo => !todo.completed));
-    } else {
-      setFilteredTodos(originalTodos.filter(todo => todo.completed));
+    switch (filter) {
+      case FilterType.Completed:
+        setFilteredTodos(originalTodos.filter(todo => todo.completed));
+
+        break;
+      case FilterType.Active:
+        setFilteredTodos(originalTodos.filter(todo => !todo.completed));
+
+        break;
+      default:
+        setFilteredTodos(originalTodos);
+
+        break;
     }
   };
 
@@ -44,10 +51,6 @@ export const App: React.FC = () => {
       ),
     );
   }, [query, filteredTodos]);
-
-  //originaltodos is array with original todos,
-  //filteredTodo is responsible for filter,
-  //queryTodos is array with query filtered => finalArray
 
   return (
     <div className="section">
