@@ -4,18 +4,6 @@ import { Search, TypeFilter } from '../../contexts/SearchProvider';
 export const TodoFilter = () => {
   const { value, setValue } = useContext(Search);
 
-  const setStatus = (status: string) => {
-    if (status === 'active') {
-      return TypeFilter.PLANNED;
-    }
-
-    if (status === 'completed') {
-      return TypeFilter.DONE;
-    }
-
-    return TypeFilter.ALL;
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -23,13 +11,13 @@ export const TodoFilter = () => {
           <select
             data-cy="statusSelect"
             onChange={e =>
-              setValue({ ...value, status: setStatus(e.target.value) })
+              setValue({ ...value, status: e.target.value as TypeFilter })
             }
             defaultValue={value.status}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TypeFilter.ALL}>All</option>
+            <option value={TypeFilter.PLANNED}>Active</option>
+            <option value={TypeFilter.DONE}>Completed</option>
           </select>
         </span>
       </p>

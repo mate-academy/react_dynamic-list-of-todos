@@ -14,7 +14,7 @@ export const TodoModal: React.FC = () => {
       getUser(todo.userId).then(response => {
         setUser(response);
 
-        setTimeout(() => setLoader(false), 1000);
+        setLoader(false);
       });
     }
   }, [todo]);

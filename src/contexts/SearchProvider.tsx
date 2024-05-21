@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 export enum TypeFilter {
-  ALL,
-  DONE,
-  PLANNED,
+  ALL = 'all',
+  DONE = 'active',
+  PLANNED = 'completed',
 }
 
 interface SearchManager {
