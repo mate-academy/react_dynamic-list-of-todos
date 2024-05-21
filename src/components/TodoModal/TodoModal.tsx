@@ -5,14 +5,12 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 export const TodoModal: React.FC = () => {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const { todo, setTodo } = useContext(CurrentTodo);
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
     if (todo) {
-      setLoader(true);
-
       getUser(todo.userId).then(response => {
         setUser(response);
 
