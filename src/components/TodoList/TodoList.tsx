@@ -1,18 +1,16 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
-import { getTodos } from '../../api';
 import { CurrentTodo } from '../../contexts/CurrentTodoProvider';
 import { Search, TypeFilter } from '../../contexts/SearchProvider';
 
-export const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+interface TodoManager {
+  todos: Todo[];
+}
+
+export const TodoList: React.FC<TodoManager> = ({ todos }) => {
   const { todo, setTodo } = useContext(CurrentTodo);
   const { value } = useContext(Search);
-
-  useEffect(() => {
-    getTodos().then(setTodos);
-  }, []);
 
   const getModifiedPosts = useCallback(() => {
     let resTodos = [...todos];
@@ -56,52 +54,50 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {getModifiedPosts().map(t => {
-          return (
-            <tr key={t.id} data-cy="todo" className="">
-              <td className="is-vcentered">{t.id}</td>
-              <td className="is-vcentered">
-                {t.completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check"></i>
-                  </span>
+        {getModifiedPosts().map(t => (
+          <tr key={t.id} data-cy="todo" className="">
+            <td className="is-vcentered">{t.id}</td>
+            <td className="is-vcentered">
+              {t.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check"></i>
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                className={classNames(
+                  { 'has-text-success': t.completed },
+                  { 'has-text-danger': !t.completed },
                 )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={classNames(
-                    { 'has-text-success': t.completed },
-                    { 'has-text-danger': !t.completed },
-                  )}
-                >
-                  {t.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => setTodo(t)}
-                >
-                  <span className="icon">
-                    <i
-                      className={classNames(
-                        'far',
-                        {
-                          'fa-eye': !todo || todo.id !== t.id,
-                        },
-                        {
-                          'fa-eye-slash': todo && todo.id === t.id,
-                        },
-                      )}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          );
-        })}
+              >
+                {t.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => setTodo(t)}
+              >
+                <span className="icon">
+                  <i
+                    className={classNames(
+                      'far',
+                      {
+                        'fa-eye': !todo || todo.id !== t.id,
+                      },
+                      {
+                        'fa-eye-slash': todo && todo.id === t.id,
+                      },
+                    )}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
