@@ -28,10 +28,7 @@ export const App: React.FC = () => {
               <TodoFilter />
             </div>
 
-            <div className="block">
-              {loader && <Loader />}
-              {!loader && <TodoList />}
-            </div>
+            <div className="block">{loader ? <Loader /> : <TodoList />}</div>
           </div>
         </div>
       </div>
