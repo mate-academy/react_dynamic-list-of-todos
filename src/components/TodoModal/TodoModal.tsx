@@ -22,7 +22,7 @@ export const TodoModal: React.FC<ModalProps> = ({ onClose, todo }) => {
       setUser(userResponse);
       setIsLoading(false);
     });
-  }, []);
+  });
 
   return (
     <div className="modal is-active" data-cy="modal">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FilterStatus } from '../../types/FilterStatus';
 
 interface TodoFilterProps {
   onFilterChange: (value: string) => void;
@@ -30,9 +31,11 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             defaultValue={'All'}
             onChange={event => onSelectedChange(event.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterStatus.All}>{FilterStatus.All}</option>
+            <option value={FilterStatus.Active}>{FilterStatus.Active}</option>
+            <option value={FilterStatus.Completed}>
+              {FilterStatus.Completed}
+            </option>
           </select>
         </span>
       </p>

@@ -8,10 +8,13 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const [selectedList, setSelectedList] = useState<string>('all');
+  const [selectedList, setSelectedList] = useState<FilterStatus>(
+    FilterStatus.All,
+  );
   const [filterText, setFilterText] = useState('');
   const [filteredList, setFilteredList] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,9 +34,9 @@ export const App: React.FC = () => {
         .includes(filterText.toLowerCase());
 
       switch (selectedList) {
-        case 'active':
+        case FilterStatus.Active:
           return !todo.completed && matchesFilterText;
-        case 'completed':
+        case FilterStatus.Completed:
           return todo.completed && matchesFilterText;
         default:
           return matchesFilterText;
