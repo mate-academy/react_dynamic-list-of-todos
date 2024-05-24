@@ -20,19 +20,32 @@ export const App: React.FC = () => {
   );
   const [searchedText, setSearchedText] = useState<string>('');
 
-  const filteredTodos = todos.filter(todo => {
-    todo.title.toLowerCase().trim().includes(searchedText.toLowerCase().trim());
-    switch (filterButton) {
-      case 'all':
-        return todo;
-      case 'completed':
-        return todo.completed;
-      case 'active':
-        return !todo.completed;
+  const filteredTodos = (
+    filtrTodos: Todo[],
+    text: string,
+    filterStatus: FilteringType,
+  ) => {
+    let filterTodos = [...filtrTodos];
+
+    switch (filterStatus) {
+      case FilteringType.completed:
+        filterTodos = filtrTodos.filter(todo => todo.completed);
+        break;
+      case FilteringType.active:
+        filterTodos = filtrTodos.filter(todo => !todo.completed);
+        break;
       default:
-        return todo;
+        break;
     }
-  });
+
+    if (text) {
+      return filterTodos.filter(todo =>
+        todo.title.toLowerCase().includes(text.toLowerCase().trim()),
+      );
+    }
+
+    return filterTodos;
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -63,7 +76,7 @@ export const App: React.FC = () => {
                 <TodoList
                   modalState={value => setModalState(value)}
                   modalButton={value => setModalButton(value)}
-                  todos={filteredTodos}
+                  todos={filteredTodos(todos, searchedText, filterButton)}
                   resultClick={modalButton}
                 />
               )}
