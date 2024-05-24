@@ -12,7 +12,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [modalState, setModalState] = useState<Todo | null>(null);
-  const [loader, setLoader] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [modalButton, setModalButton] = useState<boolean>(false);
   const [filterButton, setFilterButton] = useState<FilteringType>(
@@ -20,31 +20,25 @@ export const App: React.FC = () => {
   );
   const [searchedText, setSearchedText] = useState<string>('');
 
-  const filteredTodos = todos
-    .filter(todo => {
-      switch (filterButton) {
-        case 'all':
-          return todo;
-        case 'completed':
-          return todo.completed;
-        case 'active':
-          return !todo.completed;
-        default:
-          return todo;
-      }
-    })
-    .filter(todo =>
-      todo.title
-        .toLowerCase()
-        .trim()
-        .includes(searchedText.toLowerCase().trim()),
-    );
+  const filteredTodos = todos.filter(todo => {
+    todo.title.toLowerCase().trim().includes(searchedText.toLowerCase().trim());
+    switch (filterButton) {
+      case 'all':
+        return todo;
+      case 'completed':
+        return todo.completed;
+      case 'active':
+        return !todo.completed;
+      default:
+        return todo;
+    }
+  });
 
   useEffect(() => {
-    setLoader(true);
+    setIsLoading(true);
     getTodos()
       .then(allTodos => setTodos(allTodos))
-      .finally(() => setLoader(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -63,7 +57,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loader ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
