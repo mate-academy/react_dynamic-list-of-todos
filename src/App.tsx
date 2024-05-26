@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -9,16 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-const FILTER_MAP = {
-  [SelectOptions.All]: () => true,
-  [SelectOptions.Active]: (todo: Todo) => !todo.completed,
-  [SelectOptions.Completed]: (todo: Todo) => todo.completed,
-};
-
-function applyFilter(arr: Todo[], selectedOption: SelectOptions): Todo[] {
-  return arr.filter(FILTER_MAP[selectedOption]);
-}
+import { applyFilter } from './utils/todoUtils';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -45,9 +35,7 @@ export const App: React.FC = () => {
     fetchData();
   }, []);
 
-  const filteredTodos = applyFilter(todos, selectedOption).filter(todo =>
-    todo.title.toLowerCase().includes(query.toLowerCase()),
-  );
+  const filteredTodos = applyFilter(todos, selectedOption, query);
 
   return (
     <>
@@ -80,7 +68,7 @@ export const App: React.FC = () => {
           {targetTodoModal && (
             <TodoModal
               targetTodo={targetTodoModal}
-              onClose={setTargetTodoModal}
+              onClose={() => setTargetTodoModal(null)}
             />
           )}
         </div>
