@@ -9,40 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-
-interface Filters {
-  query: string;
-  status: Status;
-}
-
-const getFilteredTodos = (todos: Todo[], { query, status }: Filters) => {
-  let filteredTodos = [...todos];
-
-  const normalizedQuery = query.trim().toLowerCase();
-
-  if (normalizedQuery) {
-    filteredTodos = filteredTodos.filter(todo => {
-      const normalizedTodoTitle = todo.title.trim().toLowerCase();
-
-      return normalizedTodoTitle.includes(normalizedQuery);
-    });
-  }
-
-  if (status !== 'all') {
-    filteredTodos = filteredTodos.filter(todo => {
-      return status === 'completed' ? todo.completed : !todo.completed;
-    });
-  }
-
-  return filteredTodos;
-};
+import { getFilteredTodos } from './helpers';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoadingTodos, setIsLoadingTodos] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<Status>('all');
+  const [status, setStatus] = useState<Status>(Status.ALL);
 
   const filteredTodos = getFilteredTodos(todos, { query, status });
 

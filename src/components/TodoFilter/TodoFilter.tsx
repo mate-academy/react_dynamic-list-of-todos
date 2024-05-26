@@ -7,7 +7,11 @@ interface Props {
   setStatus: Dispatch<SetStateAction<Status>>;
 }
 
-export type Status = 'all' | 'active' | 'completed';
+export enum Status {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
 
 export const TodoFilter: React.FC<Props> = ({
   query,
