@@ -2,10 +2,17 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
-export const TodoList: React.FC<{
+type Props = {
+  selectedTodo: Todo | null;
   todos: Todo[];
-  handleModalClick: (id: number) => void;
-}> = ({ todos, handleModalClick }) => {
+  handleModalClick: (id: Todo) => void;
+};
+
+export const TodoList: React.FC<Props> = ({
+  todos,
+  handleModalClick,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -23,7 +30,7 @@ export const TodoList: React.FC<{
 
       <tbody>
         {todos.map(todo => (
-          <tr key={todo.id} data-cy="todo" className="">
+          <tr key={todo.id} data-cy="todo">
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -47,10 +54,15 @@ export const TodoList: React.FC<{
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleModalClick(todo.id)}
+                onClick={() => handleModalClick(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={classNames({
+                      'far fa-eye': !selectedTodo,
+                      'far fa-eye-slash': selectedTodo,
+                    })}
+                  />
                 </span>
               </button>
             </td>
@@ -60,3 +72,5 @@ export const TodoList: React.FC<{
     </table>
   );
 };
+
+//far fa-eye far fa-eye-slash

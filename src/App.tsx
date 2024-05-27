@@ -8,7 +8,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import debounce from 'lodash.debounce';
@@ -16,41 +16,39 @@ import debounce from 'lodash.debounce';
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [modifiedTodos, setModifiedTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [modalId, setModalId] = useState<number | null>(null);
-  const [loadingModal, setLoadingModal] = useState(false);
-  const [modalUser, setModalUser] = useState<any>({});
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      getTodos()
-        .then(setTodos)
-        .finally(() => setLoading(false));
-    }, 300);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    setModifiedTodos(todos);
-  }, [todos]);
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const getVisibleTodos = (todos: Todo[], filter: string, query: string) => {
+    let filteredTodos = todos;
 
-  const handleFilterChange = (filter: string) => {
-    switch (filter) {
-      case 'active':
-        setModifiedTodos(todos.filter(todo => !todo.completed));
-        break;
-      case 'completed':
-        setModifiedTodos(todos.filter(todo => todo.completed));
-        break;
-      default:
-        setModifiedTodos(todos);
+    // Apply filter based on status
+    if (filter === 'active') {
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    } else if (filter === 'completed') {
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
-  };
 
-  //////////////input/////////////////
+    // Apply search query filter
+    if (query) {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    return filteredTodos;
+  };
 
   const applyQuery = useCallback(debounce(setAppliedQuery, 300), []);
 
@@ -66,32 +64,21 @@ const App: React.FC = () => {
     setAppliedQuery('');
   };
 
-  const filteredPeople = useMemo(() => {
-    return modifiedTodos.filter(todo =>
-      todo.title.toLowerCase().includes(appliedQuery.toLowerCase()),
-    );
-  }, [appliedQuery, modifiedTodos]);
-
-  /////////////////openModal////////////////
-
-  const handleModalClick = (id: number) => {
-    setModalId(id);
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const handleFilterChange = (filter: string) => {
+    setFilter(filter);
   };
 
-  useEffect(() => {
-    if (modalId !== null) {
-      setLoadingModal(true);
+  const visibleTodos = useMemo(() => {
+    return getVisibleTodos(todos, filter, appliedQuery);
+  }, [todos, filter, appliedQuery]);
 
-      setTimeout(() => {
-        getUser(modalId)
-          .then(setModalUser)
-          .finally(() => setLoadingModal(false));
-      }, 300);
-    }
-  }, [modalId]);
+  const handleModalClick = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
 
   const handleCloseModal = () => {
-    setModalId(null);
+    setSelectedTodo(null);
   };
 
   return (
@@ -112,25 +99,27 @@ const App: React.FC = () => {
 
             {loading && <Loader />}
 
-            {!loading && todos.length > 0 && (
+            {!loading && visibleTodos.length > 0 && (
               <div className="block">
                 <TodoList
-                  todos={filteredPeople}
+                  todos={visibleTodos}
                   handleModalClick={handleModalClick}
+                  selectedTodo={selectedTodo}
                 />
               </div>
             )}
 
-            {!loading && todos.length === 0 && <div className="block"></div>}
+            {!loading && visibleTodos.length === 0 && (
+              <div className="block">No todos found</div>
+            )}
           </div>
         </div>
       </div>
 
-      {modalId && (
+      {selectedTodo && (
         <TodoModal
-          loadingModal={loadingModal}
-          modalUser={modalUser}
-          handleClose={handleCloseModal}
+          selectedTodo={selectedTodo}
+          handleCloseModal={handleCloseModal}
         />
       )}
     </>
