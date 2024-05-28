@@ -1,50 +1,39 @@
-import React, { useState } from "react";
-// import { Todo } from "../../types/Todo";
+import React, { useState } from 'react';
 
-// interface Props {
-//   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-// };
+interface Props {
+  setFilter: (filter: string) => void;
+  setStatus: (status: string) => void;
+}
 
-export const TodoFilter: React.FC = () => {
+export const TodoFilter: React.FC<Props> = ({ setFilter, setStatus }) => {
   const [value, setValue] = useState('');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setValue(e.target.value);
-    // setTodos(currentTodos => currentTodos.filter(todo => todo.title === value));
-  };
+    const newValue = e.target.value;
+
+    setValue(newValue);
+    setFilter(newValue);
+  }
 
   function handleClick() {
     setValue('');
-  };
+    setFilter('');
+  }
 
-  // function handleFilter() {
-  // };
+  function handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setStatus(e.target.value); // Оновлюємо фільтр за статусом
+  }
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
-            <option 
-              value="all"
-              // onClick={}
-            >
-              All
-            </option>
+          <select data-cy="statusSelect" onChange={handleStatusChange}>
+            <option value="all">All</option>
 
-            <option 
-              value="active"
-              // onClick={}
-            >
-              Active
-            </option>
+            <option value="active">Active</option>
 
-            <option 
-              value="completed"
-              // onChange={handleFilter}
-            >
-              Completed
-            </option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>
@@ -65,7 +54,7 @@ export const TodoFilter: React.FC = () => {
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {value && (
-            <button 
+            <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
@@ -75,5 +64,5 @@ export const TodoFilter: React.FC = () => {
         </span>
       </p>
     </form>
-  )
+  );
 };

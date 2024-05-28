@@ -13,17 +13,32 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  // const [todo, setTodo] = useState<Todo>();
+  const [chooseTodo, setChooseTodo] = useState<Todo | null>(null);
 
   const [loader, setLoader] = useState(false);
 
+  const [filter, setFilter] = useState('');
+  const [status, setStatus] = useState('all');
+
   useEffect(() => {
-    setLoader(true)
+    setLoader(true);
 
     getTodos()
       .then(setTodos)
       .finally(() => setLoader(false));
-  }, [])
+  }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    const matchesStatus =
+      status === 'all' ||
+      (status === 'active' && !todo.completed) ||
+      (status === 'completed' && todo.completed);
+    const matchesFilter = todo.title
+      .toLowerCase()
+      .includes(filter.toLowerCase());
+
+    return matchesStatus && matchesFilter;
+  });
 
   return (
     <>
@@ -33,23 +48,25 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter setFilter={setFilter} setStatus={setStatus} />
             </div>
 
             <div className="block">
               {loader ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} />
+                <TodoList
+                  todos={filteredTodos}
+                  setTodo={setChooseTodo}
+                  chooseTodo={chooseTodo}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {false && (
-        <TodoModal />
-      )}
+      {chooseTodo && <TodoModal todo={chooseTodo} setTodo={setChooseTodo} />}
     </>
   );
 };

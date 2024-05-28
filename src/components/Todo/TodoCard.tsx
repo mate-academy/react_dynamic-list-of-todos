@@ -1,17 +1,16 @@
-import classNames from "classnames";
-import { Todo } from "../../types/Todo";
-import { useState } from "react";
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface Props {
   todo: Todo;
+  setTodo: (todo: Todo) => void;
+  chooseTodo: Todo | null;
 }
 
-export const TodoCard: React.FC<Props> = ({ todo }) => {
-  const [eyeActive, setEyeActive] = useState(false);
-
+export const TodoCard: React.FC<Props> = ({ todo, setTodo, chooseTodo }) => {
   function handleEye() {
-    setEyeActive(true);
-  };
+    setTodo(todo);
+  }
 
   return (
     <tr data-cy="todo" className="">
@@ -26,10 +25,12 @@ export const TodoCard: React.FC<Props> = ({ todo }) => {
         <td className="is-vcentered" />
       )}
       <td className="is-vcentered is-expanded">
-        <p className={classNames({
-          'has-text-success': todo.completed,
-          'has-text-danger': !todo.completed
-        })}>
+        <p
+          className={classNames({
+            'has-text-success': todo.completed,
+            'has-text-danger': !todo.completed,
+          })}
+        >
           {todo.title}
         </p>
       </td>
@@ -41,13 +42,15 @@ export const TodoCard: React.FC<Props> = ({ todo }) => {
           onClick={handleEye}
         >
           <span className="icon">
-            <i className={classNames({
-              'far fa-eye-slash': eyeActive,
-              'far fa-eye': !eyeActive
-            })} />
+            <i
+              className={classNames({
+                'far fa-eye': chooseTodo !== todo,
+                'far fa-eye-slash': chooseTodo && chooseTodo.id === todo.id,
+              })}
+            />
           </span>
         </button>
       </td>
     </tr>
-  )
+  );
 };
