@@ -2,8 +2,8 @@ import React from 'react';
 
 type Props = {
   query: string;
-  onQueryChange?: (query: string) => void;
-  onStatusChange?: (status: string) => void;
+  onQueryChange: (query: string) => void;
+  onStatusChange: (status: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
