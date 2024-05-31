@@ -8,8 +8,8 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQueryChange = () => {},
-  onStatusChange = () => {},
+  onQueryChange,
+  onStatusChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
