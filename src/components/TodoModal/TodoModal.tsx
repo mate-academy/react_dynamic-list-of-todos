@@ -1,12 +1,16 @@
 import React from 'react';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type TodoModalProps = {
+  handleHideModal: (e: boolean) => void;
+};
+
+export const TodoModal: React.FC<TodoModalProps> = ({ handleHideModal }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {false ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -19,7 +23,12 @@ export const TodoModal: React.FC = () => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => handleHideModal(false)}
+            />
           </header>
 
           <div className="modal-card-body">
