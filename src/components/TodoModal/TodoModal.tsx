@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getToUsers } from '../../utils/users';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  item: Todo;
+  onClose: (item: null) => void;
+};
+
+export const TodoModal: React.FC<Props> = ({ item, onClose }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    setLoader(true);
+    setTimeout(() => {
+      getToUsers(item.userId)
+        .then(setUser)
+        .finally(() => setLoader(false));
+    }, 1000);
+  }, [item.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loader ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +35,33 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{item.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => onClose(null)}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {item.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={`${item.completed ? 'has-text-success' : 'has-text-danger'}`}
+              >
+                {item.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>
