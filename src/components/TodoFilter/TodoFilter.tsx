@@ -15,6 +15,10 @@ export const TodoFilter: React.FC<Props> = ({
     onSelect(event.target.value);
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
   const handleSearchDelete = () => {
     setQuery('');
     onSelect('all');
@@ -43,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => setQuery(event.target.value)}
+          onChange={handleInputChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

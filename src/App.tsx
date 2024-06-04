@@ -70,12 +70,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todoList={todoList}
-                modalTodoId={modalTodoId}
-                setModalTodoId={setModalTodoId}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todoList={todoList}
+                  modalTodoId={modalTodoId}
+                  setModalTodoId={setModalTodoId}
+                />
+              )}
             </div>
           </div>
         </div>

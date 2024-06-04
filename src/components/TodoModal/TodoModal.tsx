@@ -27,6 +27,9 @@ export const TodoModal: React.FC<Props> = ({ modalTodoId, setModalTodoId }) => {
       .finally(() => setIsLoading(false));
   }, [modalTodoId]);
 
+  const { email, name } = choosedTodoUser || {};
+  const { id, title, completed } = choosedTodo || {};
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -40,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ modalTodoId, setModalTodoId }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{choosedTodo?.id}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -54,20 +57,18 @@ export const TodoModal: React.FC<Props> = ({ modalTodoId, setModalTodoId }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {choosedTodo?.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {choosedTodo?.completed ? (
+              {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
               {' by '}
 
-              <a href={`mailto:${choosedTodoUser?.email}`}>
-                {choosedTodoUser?.name}
-              </a>
+              <a href={`mailto:${email}`}>{name}</a>
             </p>
           </div>
         </div>
