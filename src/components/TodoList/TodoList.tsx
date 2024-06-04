@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 type Props = {
   todoList: Todo[];
-  modalTodoId: number;
+  modalTodoId: number | null;
   setModalTodoId: (id: number) => void;
 };
 
@@ -30,14 +30,16 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todoList.map(todo => {
+          const { id, completed, title } = todo;
+
           return (
             <tr
               data-cy="todo"
               className={cn({ 'has-background-info-light': modalTodoId })}
-              key={todo.id}
+              key={id}
             >
-              <td className="is-vcentered">{todo.id}</td>
-              {todo.completed ? (
+              <td className="is-vcentered">{id}</td>
+              {completed ? (
                 <td className="is-vcentered">
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
@@ -49,11 +51,11 @@ export const TodoList: React.FC<Props> = ({
               <td className="is-vcentered is-expanded">
                 <p
                   className={cn({
-                    'has-text-danger': !todo.completed,
-                    'has-text-success': todo.completed,
+                    'has-text-danger': !completed,
+                    'has-text-success': completed,
                   })}
                 >
-                  {todo.title}
+                  {title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
@@ -61,7 +63,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setModalTodoId(todo.id)}
+                  onClick={() => setModalTodoId(id)}
                 >
                   <span className="icon">
                     <i

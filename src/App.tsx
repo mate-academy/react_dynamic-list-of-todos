@@ -9,18 +9,16 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Select } from './types/Enum';
 
 function prepareTodos(todosFromApi: Todo[], select: string, query: string) {
   let todos;
 
   switch (select) {
-    case 'all':
-      todos = todosFromApi;
-      break;
-    case 'active':
+    case Select.active:
       todos = todosFromApi.filter(todo => !todo.completed);
       break;
-    case 'completed':
+    case Select.completed:
       todos = todosFromApi.filter(todo => todo.completed);
       break;
     default:
@@ -42,7 +40,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [select, setSelect] = useState('all');
   const [query, setQuery] = useState('');
-  const [modalTodoId, setModalTodoId] = useState<number>(0);
+  const [modalTodoId, setModalTodoId] = useState<number | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
