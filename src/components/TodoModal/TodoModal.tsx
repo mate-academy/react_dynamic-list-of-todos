@@ -13,13 +13,17 @@ export const TodoModal: React.FC<Props> = ({ todo, setselectedtodo }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | undefined>(undefined);
 
+  const { id, title, completed, userId } = todo;
+
   useEffect(() => {
     setLoading(true);
 
-    getUser(todo.userId)
+    getUser(userId)
       .then(setUser)
       .finally(() => setLoading(false));
-  }, [todo.userId]);
+  }, [userId]);
+
+  const deleteButtonHandler = () => setselectedtodo(null);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -34,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setselectedtodo }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo?.id}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -42,18 +46,18 @@ export const TodoModal: React.FC<Props> = ({ todo, setselectedtodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setselectedtodo(null)}
+              onClick={deleteButtonHandler}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              {todo?.completed ? (
+              {completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

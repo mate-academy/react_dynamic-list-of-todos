@@ -64,6 +64,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
+
               {!loading && todos.length > 0 && (
                 <TodoList
                   filteredTodos={getFilteringTodos}
@@ -75,7 +76,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedtodo !== null && (
+      {!!selectedtodo && (
         <TodoModal setselectedtodo={setselectedtodo} todo={selectedtodo} />
       )}
     </>
