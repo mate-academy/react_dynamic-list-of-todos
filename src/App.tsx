@@ -24,6 +24,9 @@ export const App: React.FC = () => {
 
   const handleClear = () => {
     setHasQuery('');
+  };
+
+  const modalClear = () => {
     setSelectedTodo(null);
   };
 
@@ -87,7 +90,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal onClear={handleClear} todo={selectedTodo} />}
+      {selectedTodo && <TodoModal onClear={modalClear} todo={selectedTodo} />}
     </>
   );
 };
