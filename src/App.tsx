@@ -9,10 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
-  // const [users, setUsers] = useState<User[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedtodo, setselectedtodo] = useState<Todo | null>(null);
