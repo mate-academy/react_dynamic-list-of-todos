@@ -14,6 +14,7 @@ import { useTodoFilter } from './components/TodoFilter/useTodoFilter';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isTodosLoading, setIsTodoLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
   const [modalVisible, setModalVisible] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const {
@@ -26,10 +27,15 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const todosData = await getTodos();
+      try {
+        const todosData = await getTodos();
 
-      setTodos(todosData);
-      setIsTodoLoading(false);
+        setTodos(todosData);
+        setIsTodoLoading(false);
+      } catch (errorMessage) {
+        setIsTodoLoading(false);
+        setError('Unable to fetch todos. Please try again later.');
+      }
     };
 
     fetchTodos();
@@ -79,6 +85,7 @@ export const App: React.FC = () => {
       {modalVisible && selectedTodo && (
         <TodoModal todo={selectedTodo} handleHideModal={handleHideModal} />
       )}
+      {error && <div className="error">{error}</div>}
     </>
   );
 };
