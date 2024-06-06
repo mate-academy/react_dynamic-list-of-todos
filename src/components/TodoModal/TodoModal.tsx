@@ -41,9 +41,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onSelect }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                onSelect(null);
-              }}
+              onClick={() => onSelect(null)}
             />
           </header>
 

@@ -16,9 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={event => {
-            onOption(event.target.value);
-          }}
+          onChange={event => onOption(event.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -42,9 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           <button
-            onClick={() => {
-              OnQuery('');
-            }}
+            onClick={() => OnQuery('')}
             data-cy="clearSearchButton"
             type="button"
             className="delete"

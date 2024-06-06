@@ -32,8 +32,6 @@ export function debounce(
   return (arg: string) => {
     window.clearTimeout(timerId);
 
-    timerId = window.setTimeout(() => {
-      callback(arg);
-    }, delay);
+    timerId = window.setTimeout(() => callback(arg), delay);
   };
 }
