@@ -12,7 +12,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   todo,
   handleHideModal,
 }) => {
-  const { user, isLoading } = useTodoModal(todo.userId);
+  const { user, isLoading, error } = useTodoModal(todo.userId);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -20,6 +20,28 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
       {isLoading ? (
         <Loader />
+      ) : error ? (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              Error
+            </div>
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleHideModal}
+            />
+          </header>
+          <div className="modal-card-body">
+            <p className="block" data-cy="modal-error">
+              {error}
+            </p>
+          </div>
+        </div>
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
