@@ -47,6 +47,11 @@ export const App: React.FC = () => {
     applyQuery(event.target.value);
   };
 
+  const handleQueryClean = () => {
+    setQuery('');
+    setAppliedQuery('');
+  };
+
   return (
     <>
       <div className="section">
@@ -58,9 +63,9 @@ export const App: React.FC = () => {
               {' '}
               <TodoFilter
                 query={query}
-                OnQuery={setQuery}
+                queryClean={handleQueryClean}
                 onOption={setOption}
-                QueryChange={handleQueryChange}
+                queryChange={handleQueryChange}
               />
             </div>
 

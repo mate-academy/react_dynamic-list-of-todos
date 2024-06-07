@@ -1,15 +1,15 @@
 interface Props {
   query: string;
-  OnQuery: (str: string) => void;
+  queryClean: () => void;
   onOption: (option: string) => void;
-  QueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  queryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  OnQuery,
+  queryClean,
   onOption,
-  QueryChange,
+  queryChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -32,7 +32,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={QueryChange}
+        onChange={queryChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
       {query && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           <button
-            onClick={() => OnQuery('')}
+            onClick={queryClean}
             data-cy="clearSearchButton"
             type="button"
             className="delete"
