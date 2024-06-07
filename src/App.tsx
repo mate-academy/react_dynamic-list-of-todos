@@ -1,14 +1,56 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { useTodoFilter } from './components/TodoFilter/useTodoFilter';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isTodosLoading, setIsTodoLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  const [modalVisible, setModalVisible] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const {
+    filter,
+    search,
+    filteredTodos,
+    handleFilterChange,
+    handleSearchChange,
+  } = useTodoFilter(todos);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const todosData = await getTodos();
+
+        setTodos(todosData);
+        setIsTodoLoading(false);
+      } catch (errorMessage) {
+        setIsTodoLoading(false);
+        setError('Unable to fetch todos. Please try again later.');
+      }
+    };
+
+    fetchTodos();
+  }, []);
+
+  const handleShowModal = (todo: Todo) => {
+    setSelectedTodo(todo);
+    setModalVisible(todo.id);
+  };
+
+  const handleHideModal = () => {
+    setModalVisible(null);
+    setSelectedTodo(null);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filter={filter}
+                search={search}
+                onFilterChange={handleFilterChange}
+                onSearchChange={handleSearchChange}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isTodosLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  modalVisible={modalVisible}
+                  handleShowModal={handleShowModal}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {modalVisible && selectedTodo && (
+        <TodoModal todo={selectedTodo} handleHideModal={handleHideModal} />
+      )}
+      {error && <div className="error">{error}</div>}
     </>
   );
 };
