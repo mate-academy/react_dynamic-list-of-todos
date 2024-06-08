@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { TodoFilterStatus } from './types/TodoList';
 
 export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
@@ -17,28 +18,25 @@ export const App: React.FC = () => {
   const [filterPost, setFilterPost] = useState('');
   const [textFilter, setTextFilter] = useState('');
 
-  const [loading, setLoading] = useState(true);
-  const [filterLoading, serFilterLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   useEffect(() => {
-    getTodos().then(todos => {
-      setLoadedTodos(todos);
-      setLoading(false);
-    });
+    setIsLoading(true);
+    getTodos()
+      .then(setLoadedTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  function setIsLoadings(isLoadings: boolean): void {
-    setLoading(isLoadings);
-    serFilterLoading(false);
-  }
-
-  function selectTodo(todo: Todo) {
-    if (todo) {
-      setPostetTodoId(todo);
-    }
+  function setIsLoadings(todo?: Todo): void {
+    setPostetTodoId(todo);
+    setFilterLoading(false);
+    setIsLoading(true);
   }
 
   function unSelectTodo() {
+    setIsLoading(false);
+    setFilterLoading(false);
     setPostetTodoId(undefined);
   }
 
@@ -58,13 +56,13 @@ export const App: React.FC = () => {
     );
 
     switch (filterPost) {
-      case 'all':
+      case TodoFilterStatus.all:
         return filteredByText;
 
-      case 'active':
+      case TodoFilterStatus.active:
         return filteredByText.filter(todo => !todo.completed);
 
-      case 'completed':
+      case TodoFilterStatus.completed:
         return filteredByText.filter(todo => todo.completed);
 
       default:
@@ -101,9 +99,8 @@ export const App: React.FC = () => {
             <div className="block">
               {filterLoading && <Loader />}
               <TodoList
-                todo={loadedTodos}
-                loading={setIsLoadings}
-                setPost={selectTodo}
+                todos={loadedTodos}
+                handleClick={setIsLoadings}
                 filterPost={filterByPost}
                 selectedPost={postetTodoId}
               />
@@ -111,12 +108,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {loading && (
-        <TodoModal
-          todos={postetTodoId}
-          loading={setIsLoadings}
-          unSelectTodo={unSelectTodo}
-        />
+      {isLoading && (
+        <TodoModal todos={postetTodoId} unSelectTodo={unSelectTodo} />
       )}
     </>
   );

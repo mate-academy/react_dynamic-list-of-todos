@@ -1,4 +1,4 @@
-import { PropsFilter } from '../../types/TodoList';
+import { PropsFilter, TodoFilterStatus } from '../../types/TodoList';
 
 export const TodoFilter: React.FC<PropsFilter> = ({
   filterPosts,
@@ -10,9 +10,9 @@ export const TodoFilter: React.FC<PropsFilter> = ({
     <p className="control">
       <span className="select">
         <select data-cy="statusSelect" onChange={filterPosts}>
-          <option value={'all'}>All</option>
-          <option value={'active'}>Active</option>
-          <option value={'completed'}>Completed</option>
+          <option value={TodoFilterStatus.all}>All</option>
+          <option value={TodoFilterStatus.active}>Active</option>
+          <option value={TodoFilterStatus.completed}>Completed</option>
         </select>
       </span>
     </p>

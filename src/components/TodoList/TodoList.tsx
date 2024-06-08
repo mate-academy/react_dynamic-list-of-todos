@@ -3,13 +3,12 @@ import { TodoListProps } from '../../types/TodoList';
 import cn from 'classnames';
 
 export const TodoList: React.FC<TodoListProps> = ({
-  todo,
-  loading,
-  setPost,
+  todos,
+  handleClick,
   filterPost,
   selectedPost,
 }) => {
-  const filteredPosts = filterPost(todo);
+  const filteredPosts = filterPost(todos);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -27,17 +26,17 @@ export const TodoList: React.FC<TodoListProps> = ({
       </thead>
 
       <tbody>
-        {filteredPosts.map(todos => (
+        {filteredPosts.map(todo => (
           <tr
-            key={todos.id}
+            key={todo.id}
             data-cy="todo"
             className={cn({
-              '': selectedPost?.id !== todos.id,
-              'has-background-info-light': selectedPost?.id === todos.id,
+              '': selectedPost?.id !== todo.id,
+              'has-background-info-light': selectedPost?.id === todo.id,
             })}
           >
-            <td className="is-vcentered">{todos.id}</td>
-            {todos.completed === false ? (
+            <td className="is-vcentered">{todo.id}</td>
+            {!todo.completed ? (
               <td className="is-vcentered" />
             ) : (
               <td className="is-vcentered">
@@ -49,11 +48,12 @@ export const TodoList: React.FC<TodoListProps> = ({
 
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todos.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
-                {todos.title}
+                {todo.title}
               </p>
             </td>
 
@@ -62,16 +62,13 @@ export const TodoList: React.FC<TodoListProps> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  loading(true);
-                  setPost(todos);
-                }}
+                onClick={() => handleClick(todo)}
               >
                 <span className="icon">
                   <i
                     className={cn('far', {
-                      'fa-eye': selectedPost?.id !== todos.id,
-                      'fa-eye-slash': selectedPost?.id === todos.id,
+                      'fa-eye': selectedPost?.id !== todo.id,
+                      'fa-eye-slash': selectedPost?.id === todo.id,
                     })}
                   />
                 </span>

@@ -6,7 +6,6 @@ import { TodoModalProps } from '../../types/TodoList';
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   todos,
-  loading,
   unSelectTodo,
 }) => {
   const [loadedUsers, setLoadedUsers] = useState<User>();
@@ -40,10 +39,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                loading(false);
-                unSelectTodo();
-              }}
+              onClick={unSelectTodo}
             />
           </header>
 
@@ -54,7 +50,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              {todos?.completed === false ? (
+              {!todos?.completed ? (
                 <strong className="has-text-danger">Planned</strong>
               ) : (
                 <strong className="has-text-success">Done</strong>
