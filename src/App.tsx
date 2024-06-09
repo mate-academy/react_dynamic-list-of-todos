@@ -13,31 +13,28 @@ import { TodoFilterStatus } from './types/TodoList';
 
 export const App: React.FC = () => {
   const [loadedTodos, setLoadedTodos] = useState<Todo[]>([]);
-  const [postetTodoId, setPostetTodoId] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
   const [filterPost, setFilterPost] = useState('');
   const [textFilter, setTextFilter] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    setFilterLoading(true);
     getTodos()
       .then(setLoadedTodos)
-      .finally(() => setIsLoading(false));
+      .finally(() => setFilterLoading(false));
   }, []);
 
   function setIsLoadings(todo?: Todo): void {
-    setPostetTodoId(todo);
+    setSelectedTodo(todo);
     setFilterLoading(false);
-    setIsLoading(true);
   }
 
   function unSelectTodo() {
-    setIsLoading(false);
     setFilterLoading(false);
-    setPostetTodoId(undefined);
+    setSelectedTodo(undefined);
   }
 
   function handleChangeFilter(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -66,13 +63,7 @@ export const App: React.FC = () => {
         return filteredByText.filter(todo => todo.completed);
 
       default:
-        if (textFilter) {
-          return filteredByText.filter(todo =>
-            todo.title.toLowerCase().includes(lowerCaseTextFilter),
-          );
-        } else {
-          return filteredByText;
-        }
+        return filteredByText;
     }
   }
 
@@ -102,14 +93,14 @@ export const App: React.FC = () => {
                 todos={loadedTodos}
                 handleClick={setIsLoadings}
                 filterPost={filterByPost}
-                selectedPost={postetTodoId}
+                selectedPost={selectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
-      {isLoading && (
-        <TodoModal todos={postetTodoId} unSelectTodo={unSelectTodo} />
+      {!!selectedTodo && (
+        <TodoModal todos={selectedTodo} unSelectTodo={unSelectTodo} />
       )}
     </>
   );
