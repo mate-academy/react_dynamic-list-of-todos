@@ -22,28 +22,28 @@ export const App: React.FC = () => {
   const visiableTodos = () => {
     const filteredTodos = todos;
 
+    const filterByTitle = (array: Todo[]) =>
+      array.filter(item => {
+        return item.title.toLowerCase().includes(query.toLowerCase().trim());
+      });
+
     if (selectValue !== 'all') {
-      return filteredTodos
-        .filter(todo => {
+      return filterByTitle(
+        filteredTodos.filter(todo => {
           switch (selectValue) {
             case 'active':
-              return todo.completed !== true;
-
+              return !todo.completed;
             case 'completed':
-              return todo.completed === true;
+              return todo.completed;
           }
-        })
-        .filter(todo => {
-          return todo.title.toLowerCase().includes(query.toLowerCase().trim());
-        });
+        }),
+      );
     }
 
-    return filteredTodos.filter(todo => {
-      return todo.title.toLowerCase().includes(query.toLowerCase().trim());
-    });
+    return filterByTitle(filteredTodos);
   };
 
-  const handleInput = (value: string) => {
+  const handleInputChange = (value: string) => {
     setQuery(value);
   };
 
@@ -69,19 +69,20 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onChange={handleInput}
+                onChange={handleInputChange}
                 select={selectValue}
-                onSelect={value => setSelectValue(value)}
+                onSelect={setSelectValue}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              <TodoList
-                todos={visiableTodos()}
-                onClick={selectTodo}
-                selected={selectedTodo}
-              />
+              {(loading && <Loader />) || (
+                <TodoList
+                  todos={visiableTodos()}
+                  onClick={selectTodo}
+                  selected={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
