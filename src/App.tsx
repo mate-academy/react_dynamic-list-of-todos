@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,58 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+
+export type Select = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [selectValue, setSelectValue] = useState<Select>('all');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const visiableTodos = () => {
+    const filteredTodos = todos;
+
+    const filterByTitle = (array: Todo[]) =>
+      array.filter(item => {
+        return item.title.toLowerCase().includes(query.toLowerCase().trim());
+      });
+
+    if (selectValue !== 'all') {
+      return filterByTitle(
+        filteredTodos.filter(todo => {
+          switch (selectValue) {
+            case 'active':
+              return !todo.completed;
+            case 'completed':
+              return todo.completed;
+          }
+        }),
+      );
+    }
+
+    return filterByTitle(filteredTodos);
+  };
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+  };
+
+  const selectTodo = (todo: Todo | null) => {
+    setSelectedTodo(todo);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +67,28 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onChange={handleInputChange}
+                select={selectValue}
+                onSelect={setSelectValue}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {(loading && <Loader />) || (
+                <TodoList
+                  todos={visiableTodos()}
+                  onClick={selectTodo}
+                  selected={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={selectTodo} />}
     </>
   );
 };
