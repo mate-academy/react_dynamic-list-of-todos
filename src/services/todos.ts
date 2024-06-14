@@ -1,23 +1,20 @@
 import { Todo } from '../types/Todo';
 
-interface Options {
-  COMPLETED: string;
-  ACTIVE: string;
+export enum TodoFilterOptions {
+  COMPLETED = 'completed',
+  ACTIVE = 'active',
+  ALL = 'all',
 }
 
-const OPTIONS_TODOS: Options = {
-  COMPLETED: 'completed',
-  ACTIVE: 'active',
-};
-
-export function getOptionTodos(option: string, todos: Todo[]) {
+export function getOptionTodos(option: TodoFilterOptions, todos: Todo[]) {
   switch (option) {
-    case OPTIONS_TODOS.COMPLETED:
+    case TodoFilterOptions.COMPLETED:
       return todos.filter(todo => todo.completed);
 
-    case OPTIONS_TODOS.ACTIVE:
+    case TodoFilterOptions.ACTIVE:
       return todos.filter(todo => !todo.completed);
 
+    case TodoFilterOptions.ALL:
     default:
       return todos;
   }

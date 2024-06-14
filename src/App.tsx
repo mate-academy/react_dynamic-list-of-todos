@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { debounce, getOptionTodos } from './services/todos';
+import { debounce, getOptionTodos, TodoFilterOptions } from './services/todos';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [option, setOption] = useState('');
+  const [option, setOption] = useState<TodoFilterOptions>(TodoFilterOptions.ALL);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,9 +31,7 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, [option]);
 
-  const applyQuery = useCallback(debounce(setAppliedQuery, DELAY), [
-    setAppliedQuery,
-  ]);
+  const applyQuery = useCallback(debounce(setAppliedQuery, DELAY), [setAppliedQuery]);
 
   const filteredTodos = useMemo(() => {
     const normalizeQuery = appliedQuery.toLowerCase();
