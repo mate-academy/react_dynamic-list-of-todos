@@ -10,6 +10,11 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './services/todo';
 
+enum TodoStatus {
+  active = 'active',
+  completed = 'completed',
+}
+
 type Params = {
   query: string;
   filter: string;
@@ -26,11 +31,11 @@ function getPreparedTodos(allTodos: Todo[], { query, filter }: Params) {
 
   if (filter) {
     switch (filter) {
-      case 'active':
+      case TodoStatus.active:
         filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
+      case TodoStatus.completed:
         filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
     }
@@ -80,9 +85,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={preparedTodos}
                 selected={selectedTodo}
-                handleShowCliCk={todo => {
-                  setSelectedTodo(todo);
-                }}
+                handleShowCliCk={setSelectedTodo}
               />
             </div>
           </div>
