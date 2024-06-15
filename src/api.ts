@@ -1,5 +1,4 @@
-import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { Todo, User } from './types/Types';
 
 // eslint-disable-next-line operator-linebreak
 const BASE_URL =
@@ -25,4 +24,4 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: string) => get<User>(`/users/${userId}`);
