@@ -9,7 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo, ActiveSelector } from './types/Types';
-import { QueryContext, UserIdContext } from './util/Store';
+import { QueryContext, ActiveModalContext } from './util/Store';
 import { filteredTodos } from './util/utils';
 
 export const App: React.FC = () => {
@@ -19,7 +19,7 @@ export const App: React.FC = () => {
     ActiveSelector.All,
   );
   const { query } = useContext(QueryContext);
-  const { activeUser } = useContext(UserIdContext);
+  const { isActive } = useContext(ActiveModalContext);
 
   useEffect(() => {
     getTodos()
@@ -54,7 +54,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {activeUser && <TodoModal />}
+      {isActive && <TodoModal />}
     </>
   );
 };

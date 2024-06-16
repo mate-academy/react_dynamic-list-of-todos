@@ -22,32 +22,32 @@ export const QueryProvider: React.FC<Children> = ({ children }) => {
   );
 };
 
-interface UserId {
-  activeUser: number | undefined;
-  setActiveUser: (arg: number) => void;
+interface ActiveModal {
+  isActive: boolean;
+  setIsActive: (arg: boolean) => void;
 }
 
-export const UserIdContext = createContext<UserId>({} as UserId);
+export const ActiveModalContext = createContext<ActiveModal>({} as ActiveModal);
 
-export const UserIdProvider: React.FC<Children> = ({ children }) => {
-  const [activeUser, setActiveUser] = useState<number | undefined>();
+export const ActiveModalProvider: React.FC<Children> = ({ children }) => {
+  const [isActive, setIsActive] = useState(false);
 
   return (
-    <UserIdContext.Provider value={{ activeUser, setActiveUser }}>
+    <ActiveModalContext.Provider value={{ isActive, setIsActive }}>
       {children}
-    </UserIdContext.Provider>
+    </ActiveModalContext.Provider>
   );
 };
 
 interface TodoContext {
-  todo: Todo;
-  setTodo: (arg: Todo) => void;
+  todo: Todo | null;
+  setTodo: (arg: Todo | null) => void;
 }
 
 export const ActiveTodoContext = createContext<TodoContext>({} as TodoContext);
 
 export const ActiveTodoProvider: React.FC<Children> = ({ children }) => {
-  const [todo, setTodo] = useState<Todo>({} as Todo);
+  const [todo, setTodo] = useState<Todo | null>(null);
 
   return (
     <ActiveTodoContext.Provider value={{ todo, setTodo }}>

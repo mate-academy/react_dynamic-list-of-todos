@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { TodoItemProp } from '../../types/Types';
 import classNames from 'classnames';
-import { UserIdContext, ActiveTodoContext } from '../../util/Store';
+import { ActiveModalContext, ActiveTodoContext } from '../../util/Store';
 
 export const TodoItem: React.FC<TodoItemProp> = ({ todoItem }) => {
-  const { setActiveUser } = useContext(UserIdContext);
+  const { setIsActive } = useContext(ActiveModalContext);
   const { todo, setTodo } = useContext(ActiveTodoContext);
 
   function handleClick() {
-    setActiveUser(todoItem.userId);
+    setIsActive(true);
     setTodo(todoItem);
   }
 

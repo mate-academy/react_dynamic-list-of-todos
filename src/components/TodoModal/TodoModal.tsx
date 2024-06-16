@@ -1,22 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { UserIdContext, ActiveTodoContext } from '../../util/Store';
+import { ActiveModalContext, ActiveTodoContext } from '../../util/Store';
 import { getUser } from '../../api';
-import { Todo, User } from '../../types/Types';
+import { User } from '../../types/Types';
 
 export const TodoModal: React.FC = () => {
-  const { activeUser, setActiveUser } = useContext(UserIdContext);
+  const { setIsActive } = useContext(ActiveModalContext);
   const { todo, setTodo } = useContext(ActiveTodoContext);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUser(activeUser as number)
+    getUser(todo?.userId as number)
       .then(setUser)
       .finally(() => {
         setLoading(false);
       });
-  }, [activeUser]);
+  }, [todo?.userId]);
+
+  function handleClick() {
+    setIsActive(false);
+    setTodo(null);
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -31,7 +36,7 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${todo?.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -39,20 +44,17 @@ export const TodoModal: React.FC = () => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setActiveUser(0);
-                setTodo({} as Todo);
-              }}
+              onClick={() => handleClick()}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
+              {todo?.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>

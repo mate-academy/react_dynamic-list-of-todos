@@ -4,16 +4,16 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import {
   QueryProvider,
-  UserIdProvider,
+  ActiveModalProvider,
   ActiveTodoProvider,
 } from './util/Store';
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <QueryProvider>
-    <UserIdProvider>
+    <ActiveModalProvider>
       <ActiveTodoProvider>
         <App />
       </ActiveTodoProvider>
-    </UserIdProvider>
+    </ActiveModalProvider>
   </QueryProvider>,
 );
