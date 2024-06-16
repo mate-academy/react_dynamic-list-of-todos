@@ -11,7 +11,7 @@ export const TodoModal: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUser(activeUser)
+    getUser(activeUser as number)
       .then(setUser)
       .finally(() => {
         setLoading(false);
@@ -40,7 +40,7 @@ export const TodoModal: React.FC = () => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setActiveUser('');
+                setActiveUser(0);
                 setTodo({} as Todo);
               }}
             />

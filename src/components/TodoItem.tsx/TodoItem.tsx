@@ -7,6 +7,11 @@ export const TodoItem: React.FC<TodoItemProp> = ({ todoItem }) => {
   const { setActiveUser } = useContext(UserIdContext);
   const { todo, setTodo } = useContext(ActiveTodoContext);
 
+  function handleClick() {
+    setActiveUser(todoItem.userId);
+    setTodo(todoItem);
+  }
+
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todoItem.id}</td>
@@ -19,9 +24,10 @@ export const TodoItem: React.FC<TodoItemProp> = ({ todoItem }) => {
       </td>
       <td className="is-vcentered is-expanded">
         <p
-          className={classNames(
-            todoItem.completed ? 'has-text-success' : 'has-text-danger',
-          )}
+          className={classNames({
+            'has-text-success': todoItem.completed,
+            'has-text-danger': !todoItem.completed,
+          })}
         >
           {todoItem.title}
         </p>
@@ -31,10 +37,7 @@ export const TodoItem: React.FC<TodoItemProp> = ({ todoItem }) => {
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => {
-            setActiveUser(`${todoItem.userId}`);
-            setTodo(todoItem);
-          }}
+          onClick={() => handleClick()}
         >
           <span className="icon">
             {todo === todoItem ? (

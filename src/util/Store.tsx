@@ -22,14 +22,15 @@ export const QueryProvider: React.FC<Children> = ({ children }) => {
   );
 };
 
-export const UserIdContext = createContext({
-  activeUser: '',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setActiveUser: (_arg: string) => {},
-});
+interface UserId {
+  activeUser: number | undefined;
+  setActiveUser: (arg: number) => void;
+}
+
+export const UserIdContext = createContext<UserId>({} as UserId);
 
 export const UserIdProvider: React.FC<Children> = ({ children }) => {
-  const [activeUser, setActiveUser] = useState('');
+  const [activeUser, setActiveUser] = useState<number | undefined>();
 
   return (
     <UserIdContext.Provider value={{ activeUser, setActiveUser }}>

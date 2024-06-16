@@ -24,4 +24,4 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: string) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number) => get<User>(`/users/${userId}`);
