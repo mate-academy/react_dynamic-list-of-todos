@@ -13,7 +13,7 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-function get<T>(url: string): Promise<T> {
+ function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
@@ -25,4 +25,12 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
+export const getActiveTodos = () =>
+  get<Todo[]>('/todos').then(todos => todos.filter(todo => !todo.completed));
+
+export const getComplitedTodos = () => get<Todo[]>('/todos');
+
+
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+
+
