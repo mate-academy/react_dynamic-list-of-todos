@@ -41,7 +41,7 @@ function getFilteredTodos(todos: Todo[], { filterBy, query }: FilterParams) {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filterBy, setFilterBy] = useState('all');
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
   const filteredTodos = getFilteredTodos(todos, { filterBy, query });
 
   useEffect(() => {
-    setLoading(true);
+
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
