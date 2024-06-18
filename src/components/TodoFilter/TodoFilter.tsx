@@ -8,8 +8,6 @@ type Props = {
   setQuery: (query: string) => void;
 };
 
-const options = ['All', 'Active', 'Completed'];
-
 export const TodoFilter: React.FC<Props> = ({
   filterStatus,
   setFilterStatus,
@@ -25,18 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value as FilterStatus)}
           >
-            {options.map(option => (
-              <option
-                key={option}
-                value={
-                  option === 'Completed'
-                    ? FilterStatus.completed
-                    : option === 'Active'
-                      ? FilterStatus.active
-                      : FilterStatus.all
-                }
-              >
-                {option}
+            {Object.values(FilterStatus).map(value => (
+              <option key={value} value={value}>
+                {value}
               </option>
             ))}
           </select>
