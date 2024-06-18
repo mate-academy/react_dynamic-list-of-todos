@@ -13,7 +13,7 @@ function wait(delay: number): Promise<void> {
   });
 }
 
- function get<T>(url: string): Promise<T> {
+function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
@@ -30,7 +30,4 @@ export const getActiveTodos = () =>
 
 export const getComplitedTodos = () => get<Todo[]>('/todos');
 
-
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
-
-

@@ -41,7 +41,8 @@ export const App: React.FC = () => {
   }, [status]);
 
   const filterdTodos = todos.filter(todo =>
-    todo.title.toLowerCase().includes(apliedQuery.toLowerCase()));
+    todo.title.toLowerCase().includes(apliedQuery.toLowerCase()),
+  );
 
   return (
     <>
