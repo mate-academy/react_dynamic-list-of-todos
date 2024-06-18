@@ -14,6 +14,14 @@ export const TodoFilter: React.FC<Props> = ({
   query,
   setQuery,
 }) => {
+  function handleFilterStatus(event: React.ChangeEvent<HTMLSelectElement>) {
+    setFilterStatus(event.target.value as FilterStatus);
+  }
+
+  function handleQuery(event: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(event.target.value);
+  }
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -21,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterStatus}
-            onChange={e => setFilterStatus(e.target.value as FilterStatus)}
+            onChange={handleFilterStatus}
           >
             {Object.values(FilterStatus).map(value => (
               <option key={value} value={value}>
@@ -39,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={handleQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
