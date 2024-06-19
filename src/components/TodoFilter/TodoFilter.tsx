@@ -1,7 +1,8 @@
 import React from 'react';
+import { FilterStatus } from '../../types/FilterStatus';
 interface Props {
-  statusFilter: string;
-  onFilterChange: (status: string) => void;
+  statusFilter: FilterStatus;
+  onFilterChange: (status: FilterStatus) => void;
   query: string;
   onSearchChange: (query: string) => void;
 }
@@ -18,11 +19,11 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={statusFilter}
-          onChange={e => onFilterChange(e.target.value)}
+          onChange={e => onFilterChange(e.target.value as FilterStatus)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterStatus.All}>All</option>
+          <option value={FilterStatus.Active}>Active</option>
+          <option value={FilterStatus.Completed}>Completed</option>
         </select>
       </span>
     </p>

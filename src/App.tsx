@@ -7,16 +7,17 @@ import { Loader } from './components/Loader';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
 import { TodoModal } from './components/TodoModal';
+import { FilterStatus } from './types/FilterStatus';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [query, setQuery] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<FilterStatus>(
+    FilterStatus.All,
+  );
 
   const loadTodos = async () => {
     setIsLoading(true);
@@ -25,8 +26,11 @@ export const App: React.FC = () => {
     setTodos(loadedTodos);
     setIsLoading(false);
   };
+  useEffect(() => {
+    loadTodos();
+  }, []);
 
-  const filterTodos = () => {
+  const getFilteredTodos = () => {
     let filtered = todos;
 
     if (query) {
@@ -35,23 +39,16 @@ export const App: React.FC = () => {
       );
     }
 
-    if (statusFilter !== 'all') {
-      const isCompleted = statusFilter === 'completed';
+    if (statusFilter !== FilterStatus.All) {
+      const isCompleted = statusFilter === FilterStatus.Completed;
 
       filtered = filtered.filter(todo => todo.completed === isCompleted);
     }
 
-    setFilteredTodos(filtered);
+    return filtered;
   };
-  useEffect(() => {
-    loadTodos();
-  }, []);
 
-  useEffect(() => {
-    filterTodos();
-  }, [todos, query, statusFilter]);
-
-  const handleFilterChange = (status: string) => {
+  const handleFilterChange = (status: FilterStatus) => {
     setStatusFilter(status);
   };
 
@@ -60,12 +57,10 @@ export const App: React.FC = () => {
   };
 
   const handleSelectTodo = (todo: Todo) => {
-    setSelectedTodoId(todo.id);
     setSelectedTodo(todo);
   };
 
   const handleCloseModal = () => {
-    setSelectedTodoId(null);
     setSelectedTodo(null);
   };
 
@@ -89,9 +84,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={getFilteredTodos()}
                   onSelectTodo={handleSelectTodo}
-                  selectedTodoId={selectedTodoId} // Передаємо новий стан
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
