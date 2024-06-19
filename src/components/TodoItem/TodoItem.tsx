@@ -1,23 +1,22 @@
-import classNames from "classnames"
-import { Todo } from "../../types/Todo"
-
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
+import { useState } from 'react';
 
 type Props = {
   todo: Todo;
-  setModalOpen: (isOpen: boolean) => void;
   selectTodo: (todo: Todo) => void;
-  isOpen: boolean;
+  selectedTodo: Todo | null;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  setModalOpen,
   selectTodo,
-  isOpen,
+  selectedTodo,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const handleSelectButton = () => {
-    setModalOpen(true);
     selectTodo(todo);
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -48,7 +47,10 @@ export const TodoItem: React.FC<Props> = ({
         >
           <span className="icon">
             <i
-              className={classNames('far', isOpen ? 'fa-eye-slash' : 'fa-eye')}
+              className={classNames(
+                'far',
+                selectedTodo === todo ? 'fa-eye-slash' : 'fa-eye',
+              )}
             />
           </span>
         </button>

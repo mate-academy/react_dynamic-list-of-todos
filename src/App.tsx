@@ -15,23 +15,22 @@ import { TodoModal } from './components/TodoModal';
 const getTodosByStatus = (status: string, todos: Todo[]) => {
   const preperedTodos = [...todos];
 
-  if (status === 'active') {
-    return preperedTodos.filter(todo => todo.completed === false);
+  switch (status) {
+    case 'active':
+      return preperedTodos.filter(todo => todo.completed === false);
+    case 'completed':
+      return preperedTodos.filter(todo => todo.completed === true);
+    default:
+      return preperedTodos;
   }
-
-  if (status === 'completed') {
-    return preperedTodos.filter(todo => todo.completed === true);
-  }
-
-  return preperedTodos;
 };
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('all');
   const [apliedQuery, setApliedQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState(todos[0]);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const applyQuery = useCallback(debounce(setApliedQuery, 300), []);
 
@@ -62,9 +61,8 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  setModalOpen={setIsModalOpen}
                   selectTodo={setSelectedTodo}
-                  isOpen={isModalOpen}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -72,8 +70,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <TodoModal todo={selectedTodo} setIsOpen={setIsModalOpen} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} selectTodo={setSelectedTodo} />
       )}
     </>
   );

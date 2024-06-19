@@ -6,10 +6,10 @@ import { Loader } from '../Loader';
 
 type Props = {
   todo: Todo;
-  setIsOpen: (isOpen: boolean) => void;
+  selectTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, setIsOpen }) => {
+export const TodoModal: React.FC<Props> = ({ todo, selectTodo }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setIsOpen }) => {
   }, [todo.userId]);
 
   const handleModalClose = () => {
-    setIsOpen(false);
+    selectTodo(null);
   };
 
   return (
@@ -64,7 +64,6 @@ export const TodoModal: React.FC<Props> = ({ todo, setIsOpen }) => {
             </p>
           </div>
         </div>
-        // </div>
       )}
     </div>
   );
