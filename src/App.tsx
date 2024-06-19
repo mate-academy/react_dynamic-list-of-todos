@@ -13,16 +13,16 @@ import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [statusSelect, setStatusSelect] = useState(Status.all);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filterTodos = () => {
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
