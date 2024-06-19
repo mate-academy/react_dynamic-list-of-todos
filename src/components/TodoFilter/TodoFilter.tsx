@@ -7,11 +7,11 @@ type Props = {
   query: string;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter: React.FC<Props> = React.memo(function TodoFilter({
   setStatusSelect,
   setQuery,
   query,
-}) => {
+}) {
   const handleStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatusSelect(e.target.value as Status);
   };
@@ -59,4 +59,4 @@ export const TodoFilter: React.FC<Props> = ({
       </p>
     </form>
   );
-};
+});

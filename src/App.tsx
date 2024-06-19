@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filterTodos = () => {
+  const filteredTodos = useMemo(() => {
     let filtered = todos;
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -42,9 +42,7 @@ export const App: React.FC = () => {
     }
 
     return filtered;
-  };
-
-  const filteredTodos = filterTodos();
+  }, [todos, query, statusSelect]);
 
   const closeModal = () => {
     setSelectedTodo(null);
