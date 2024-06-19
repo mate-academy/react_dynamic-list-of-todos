@@ -41,10 +41,6 @@ export const App: React.FC = () => {
     setFilter(newFilter);
   };
 
-  // const handleSelectTodo = (todo: Todo) => {
-  //   setSelectedTodo(todo);
-  // };
-
   const handleModalChange = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
