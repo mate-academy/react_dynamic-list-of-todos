@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
+import { TodoModal } from './components/TodoModal/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
@@ -36,14 +36,27 @@ export const App: React.FC = () => {
 
   const handleShowTodo = (todo: Todo) => {
     setLoadingUser(true);
-    getUser(todo.userId)
-      .then(user => {
-        setSelectedTodoWithUser({
-          ...todo,
-          user,
+    setSelectedTodoWithUser(null);
+
+    try {
+      getUser(todo.userId)
+        .then(user => {
+          setSelectedTodoWithUser({
+            ...todo,
+            user,
+          });
+        })
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.error('Error', error);
+        })
+        .finally(() => {
+          setLoadingUser(false);
         });
-      })
-      .finally(() => setLoadingUser(false));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error', error);
+    }
   };
 
   const handleCloseModal = () => {
@@ -99,7 +112,6 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
       {selectedTodoWithUser && (
         <TodoModal
           todoWithUser={selectedTodoWithUser}

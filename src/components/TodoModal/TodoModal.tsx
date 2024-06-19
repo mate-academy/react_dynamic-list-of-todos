@@ -18,10 +18,6 @@ export const TodoModal: React.FC<Props> = ({
   loadingUser,
   onClose,
 }) => {
-  if (!todoWithUser && !loadingUser) {
-    return null;
-  }
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" onClick={onClose} />
@@ -32,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
             className="modal-card-title has-text-weight-medium"
             data-cy="modal-header"
           >
-            Todo {todoWithUser ? `#${todoWithUser.id}` : ''}
+            {loadingUser ? 'Loading...' : `Todo #${todoWithUser?.id}`}
           </div>
 
           <button
