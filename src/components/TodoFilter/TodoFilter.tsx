@@ -5,6 +5,12 @@ type Props = {
   onQueryChange: (query: string) => void;
 };
 
+enum Status {
+  all = 'All',
+  active = 'Active',
+  completed = 'Completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({ onSelect, onQueryChange }) => {
   const [query, setQuery] = useState('');
 
@@ -28,9 +34,11 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onQueryChange }) => {
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleTodoStatus}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.entries(Status).map(([key, value]) => (
+              <option value={key} key={key}>
+                {value}
+              </option>
+            ))}
           </select>
         </span>
       </p>

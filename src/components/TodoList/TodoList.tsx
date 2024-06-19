@@ -1,25 +1,20 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import classNames from 'classnames';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
-  onSelect: (isOpen: boolean) => void;
-  selectTodo?: (todo: Todo) => void;
+  setModalOpen: (isOpen: boolean) => void;
   isOpen: boolean;
+  selectTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSelect,
-  selectTodo = () => {},
+  setModalOpen,
   isOpen,
+  selectTodo,
 }) => {
-  const handleSelectButton = (todo: Todo) => {
-    onSelect(true);
-    selectTodo(todo);
-  };
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -37,42 +32,13 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames(
-                  todo.completed ? 'has-text-success' : 'has-text-danger',
-                )}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => handleSelectButton(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={classNames(
-                      'far',
-                      isOpen ? 'fa-eye-slash' : 'fa-eye',
-                    )}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+          <TodoItem
+            todo={todo}
+            key={todo.id}
+            setModalOpen={setModalOpen}
+            isOpen={isOpen}
+            selectTodo={selectTodo}
+          />
         ))}
       </tbody>
     </table>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -12,7 +12,11 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, setIsOpen }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  getUser(todo.userId).then(setUser);
+  useEffect(() => {
+    if (todo.userId) {
+      getUser(todo.userId).then(setUser);
+    }
+  }, [todo.userId]);
 
   const handleModalClose = () => {
     setIsOpen(false);

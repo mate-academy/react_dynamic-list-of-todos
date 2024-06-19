@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
@@ -11,6 +12,20 @@ import { Todo } from './types/Todo';
 import debounce from 'lodash.debounce';
 import { TodoModal } from './components/TodoModal';
 
+const getTodosByStatus = (status: string, todos: Todo[]) => {
+  const preperedTodos = [...todos];
+
+  if (status === 'active') {
+    return preperedTodos.filter(todo => todo.completed === false);
+  }
+
+  if (status === 'completed') {
+    return preperedTodos.filter(todo => todo.completed === true);
+  }
+
+  return preperedTodos;
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState('all');
@@ -21,26 +36,12 @@ export const App: React.FC = () => {
   const applyQuery = useCallback(debounce(setApliedQuery, 300), []);
 
   useEffect(() => {
-    // setLoading(true);
+    getTodos().then(setTodos);
+  }, []);
 
-    if (status === 'active') {
-      getTodos()
-        .then(prevTodos => prevTodos.filter(todo => todo.completed === false))
-        .then(setTodos);
-    }
+  const statusTodos = getTodosByStatus(status, todos);
 
-    if (status === 'completed') {
-      getTodos()
-        .then(prevTodos => prevTodos.filter(todo => todo.completed === true))
-        .then(setTodos);
-    }
-
-    if (status === 'all') {
-      getTodos().then(setTodos);
-    }
-  }, [status]);
-
-  const filterdTodos = todos.filter(todo =>
+  const filteredTodos = statusTodos.filter(todo =>
     todo.title.toLowerCase().includes(apliedQuery.toLowerCase()),
   );
 
@@ -60,8 +61,8 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filterdTodos}
-                  onSelect={setIsModalOpen}
+                  todos={filteredTodos}
+                  setModalOpen={setIsModalOpen}
                   selectTodo={setSelectedTodo}
                   isOpen={isModalOpen}
                 />
