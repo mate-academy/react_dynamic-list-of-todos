@@ -15,21 +15,24 @@ import { TodoModal } from './components/TodoModal';
 const getTodosByStatus = (status: string, todos: Todo[]) => {
   const preperedTodos = [...todos];
 
-  switch (status) {
-    case 'active':
-      return preperedTodos.filter(todo => todo.completed === false);
-    case 'completed':
-      return preperedTodos.filter(todo => todo.completed === true);
-    default:
-      return preperedTodos;
+  if (status) {
+    switch (status) {
+      case 'active':
+        return preperedTodos.filter(todo => todo.completed === false);
+      case 'completed':
+        return preperedTodos.filter(todo => todo.completed === true);
+      default:
+        return preperedTodos;
+    }
   }
+
+  return preperedTodos;
 };
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState('');
   const [apliedQuery, setApliedQuery] = useState('');
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const applyQuery = useCallback(debounce(setApliedQuery, 300), []);

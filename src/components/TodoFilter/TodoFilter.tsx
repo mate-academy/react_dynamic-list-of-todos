@@ -25,7 +25,6 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onQueryChange }) => {
 
   const handleClearButton = () => {
     onQueryChange('');
-    onSelect('');
     setQuery('');
   };
 
