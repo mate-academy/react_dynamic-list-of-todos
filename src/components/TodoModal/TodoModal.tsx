@@ -6,10 +6,10 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo;
-  onCloswModal: () => void;
+  onCloseModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloswModal }) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseModal }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloswModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onCloswModal}
+              onClick={onCloseModal}
             />
           </header>
 

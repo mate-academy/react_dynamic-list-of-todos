@@ -16,7 +16,7 @@ type Props = {
   status: TodoStatus;
 };
 
-const filteredTodos = (todos: Todo[], { query, status }: Props) => {
+const getFilteredTodos = (todos: Todo[], { query, status }: Props) => {
   let filterTodos = todos;
 
   if (query.trim()) {
@@ -52,15 +52,15 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filterTodos = filteredTodos(todos, { query, status });
+  const filterTodos = getFilteredTodos(todos, { query, status });
 
-  const handleSelect = (todo: Todo | null) => {
-    setSelectedTodo(todo);
-  };
+  // const handleSelect = (todo: Todo | null) => {
+  //   setSelectedTodo(todo);
+  // };
 
-  const handleClose = () => {
-    setSelectedTodo(null);
-  };
+  // const handleClose = () => {
+  //   setSelectedTodo(null);
+  // };
 
   return (
     <>
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filterTodos}
                   selectedTodo={selectedTodo}
-                  onSelectedTodo={handleSelect}
+                  onSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -93,7 +93,10 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onCloswModal={handleClose} />
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onCloseModal={() => setSelectedTodo(null)}
+        />
       )}
     </>
   );
