@@ -1,7 +1,7 @@
-/* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './App.scss';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -9,35 +9,53 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { TodoStatus } from './types/TodoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [appliedQuery, setAppliedQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState(TodoStatus.all);
+  const [selectedOption, setSelectedOption] = useState('all');
+  const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     getTodos()
-      .then(setTodos)
+      .then(todo => {
+        setTodos(todo);
+      })
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredList = useMemo(() => {
-    const filteredByQuery = todos.filter(todo =>
-      todo.title.toLocaleLowerCase().includes(appliedQuery.toLocaleLowerCase()),
-    );
+  const filterTodos = (option: string, titl: string): Todo[] => {
+    let filteredTodos = todos;
 
-    switch (selectedStatus) {
-      case TodoStatus.active:
-        return filteredByQuery.filter(todo => !todo.completed);
-      case TodoStatus.completed:
-        return filteredByQuery.filter(todo => todo.completed);
+    switch (option) {
+      case 'active':
+        filteredTodos = todos.filter(todo => !todo.completed);
+        break;
+
+      case 'completed':
+        filteredTodos = todos.filter(todo => todo.completed);
+        break;
+
       default:
-        return filteredByQuery;
+        filteredTodos = todos;
+        break;
     }
-  }, [appliedQuery, todos, selectedStatus]);
+
+    if (titl.trim() !== '') {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(titl.toLowerCase()),
+      );
+    }
+
+    return filteredTodos;
+  };
+
+  const vissibleTodos = useMemo(() => {
+    return filterTodos(selectedOption, title);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOption, title, todos]);
 
   return (
     <>
@@ -48,32 +66,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setAppliedQuery={setAppliedQuery}
-                appliedQuery={appliedQuery}
-                selectedStatus={selectedStatus}
-                setSelectedStatus={setSelectedStatus}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+                setTitle={setTitle}
+                title={title}
               />
             </div>
 
             <div className="block">
-              {loading ? (
-                <Loader />
-              ) : (
-                todos.length > 0 && (
-                  <TodoList
-                    selectTodo={setSelectedTodo}
-                    selectedTodoId={selectedTodo?.id}
-                    filteredList={filteredList}
-                  />
-                )
+              {loading && <Loader />}
+              {!loading && (
+                <TodoList
+                  todos={vissibleTodos}
+                  setCurrentTodo={setCurrentTodo}
+                  currentTodo={currentTodo}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
-
-      {selectedTodo && (
-        <TodoModal todo={selectedTodo} close={() => setSelectedTodo(null)} />
+      {currentTodo && (
+        <TodoModal todo={currentTodo} setCurrentTodo={setCurrentTodo} />
       )}
     </>
   );
