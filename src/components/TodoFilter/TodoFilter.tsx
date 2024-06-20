@@ -1,5 +1,19 @@
 import { Dispatch, SetStateAction } from 'react';
 
+// Define an enum for the statuses
+enum TodoStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
+// Create an array of options based on the enum values
+const todoStatusOptions = [
+  { value: TodoStatus.All, label: 'All' },
+  { value: TodoStatus.Active, label: 'Active' },
+  { value: TodoStatus.Completed, label: 'Completed' },
+];
+
 interface Props {
   selectedOption: string;
   setSelectedOption: Dispatch<SetStateAction<string>>;
@@ -34,9 +48,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleValueChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {todoStatusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </span>
       </p>

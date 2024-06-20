@@ -22,6 +22,12 @@ export const TodoModal: React.FC<Props> = ({ todo, setCurrentTodo }) => {
       .finally(() => setLoading(false));
   }, [todo.userId]);
 
+  // Function definition
+  const handleClick = () => {
+    setCurrentTodo(null);
+    setLoading(false);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -41,10 +47,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setCurrentTodo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setCurrentTodo(null);
-                setLoading(false);
-              }}
+              onClick={() => handleClick()}
             />
           </header>
 
