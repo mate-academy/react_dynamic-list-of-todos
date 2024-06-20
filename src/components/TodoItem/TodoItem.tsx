@@ -2,18 +2,18 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 import { SelectedId } from '../../types/variables';
-import { OnTodoSelect } from '../../types/functions';
+import { OnTodoClick } from '../../types/functions';
 
 type Props = {
   todo: Todo;
   selectedTodoId: SelectedId;
-  onTodoSelect: OnTodoSelect;
+  onTodoClick: OnTodoClick;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   selectedTodoId,
-  onTodoSelect,
+  onTodoClick,
 }) => {
   const isSelected = todo.id === selectedTodoId;
 
@@ -45,7 +45,7 @@ export const TodoItem: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => onTodoSelect(todo.id)}
+          onClick={() => onTodoClick(todo.id)}
         >
           <span className="icon">
             <i className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`} />

@@ -34,7 +34,7 @@ const getFilterOptionCallback = (
 const getTodoById = (todos: Todo[], id: number): Todo | null => {
   const foundTodo = todos?.find(todo => todo.id === id);
 
-  return foundTodo ? foundTodo : null;
+  return foundTodo || null;
 };
 
 export const App: React.FC = () => {
@@ -44,25 +44,26 @@ export const App: React.FC = () => {
     FilterOption.All,
   );
   const [filterQuery, setFilterQuery] = useState('');
+  const [loadingTodosError, setLoadingTodosError] = useState('');
 
   useEffect(() => {
-    getTodos().then(loadedTodos => setTodos(loadedTodos));
+    getTodos()
+      .then(loadedTodos => setTodos(loadedTodos))
+      .catch(error => setLoadingTodosError(error));
   }, []);
 
-  const onTodoSelect = (id: SelectedId) => {
+  const handleTodoClick = (id: SelectedId) => {
     setSelectedTodoId(id);
   };
 
-  const onFilterSelect = (option: FilterOption) => {
+  const handleOptionChange = (option: FilterOption) => {
     if (option !== filterOption) {
       setFilterOption(option);
     }
   };
 
-  const onFilterChange = (query: string) => {
-    if (query !== filterQuery) {
-      setFilterQuery(query);
-    }
+  const handleQueryChange = (query: string) => {
+    setFilterQuery(query);
   };
 
   const selectedTodo = useMemo(
@@ -85,28 +86,30 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterOption={filterOption}
-                onFilterSelect={onFilterSelect}
-                onFilterChange={onFilterChange}
+                filterQuery={filterQuery}
+                onOptionChange={handleOptionChange}
+                onQueryChange={handleQueryChange}
               />
             </div>
 
             <div className="block">
-              {filteredTodos ? (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodoId={selectedTodoId}
-                  onTodoSelect={onTodoSelect}
-                />
-              ) : (
-                <Loader />
-              )}
+              {loadingTodosError.toString() ||
+                (filteredTodos ? (
+                  <TodoList
+                    todos={filteredTodos}
+                    selectedTodoId={selectedTodoId}
+                    onTodoClick={handleTodoClick}
+                  />
+                ) : (
+                  <Loader />
+                ))}
             </div>
           </div>
         </div>
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onTodoSelect={onTodoSelect} />
+        <TodoModal selectedTodo={selectedTodo} onTodoClick={handleTodoClick} />
       )}
     </>
   );

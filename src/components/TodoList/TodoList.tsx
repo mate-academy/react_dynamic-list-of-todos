@@ -2,18 +2,18 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoItem } from '../TodoItem';
 import { SelectedId } from '../../types/variables';
-import { OnTodoSelect } from '../../types/functions';
+import { OnTodoClick } from '../../types/functions';
 
 type Props = {
   todos: Todo[];
   selectedTodoId: SelectedId;
-  onTodoSelect: OnTodoSelect;
+  onTodoClick: OnTodoClick;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodoId,
-  onTodoSelect,
+  onTodoClick,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -37,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
           key={todo.id}
           todo={todo}
           selectedTodoId={selectedTodoId}
-          onTodoSelect={onTodoSelect}
+          onTodoClick={onTodoClick}
         />
       ))}
     </tbody>

@@ -1,34 +1,29 @@
-import { useState } from 'react';
-import { OnFilterChange, OnFilterSelect } from '../../types/functions';
+import { OnQueryChange, OnOptionChange } from '../../types/functions';
 import { FilterOption } from '../../types/variables';
 
 type Props = {
   filterOption: FilterOption;
-  onFilterSelect: OnFilterSelect;
-  onFilterChange: OnFilterChange;
+  filterQuery: string;
+  onOptionChange: OnOptionChange;
+  onQueryChange: OnQueryChange;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterOption,
-  onFilterSelect,
-  onFilterChange,
+  filterQuery,
+  onOptionChange,
+  onQueryChange,
 }) => {
-  const [query, setQuery] = useState('');
-
-  const handleFilterSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterSelect(event.currentTarget.value as FilterOption);
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onOptionChange(event.currentTarget.value as FilterOption);
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = event.currentTarget.value;
-
-    setQuery(newQuery);
-    onFilterChange(newQuery);
+    onQueryChange(event.currentTarget.value);
   };
 
-  const handleCancel = () => {
-    setQuery('');
-    onFilterChange('');
+  const handleCancelClick = () => {
+    onQueryChange('');
   };
 
   return (
@@ -38,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filterOption}
-            onChange={handleFilterSelect}
+            onChange={handleOptionChange}
           >
             <option value={FilterOption.All}>All</option>
             <option value={FilterOption.Active}>Active</option>
@@ -53,20 +48,20 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={filterQuery}
           onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
+        {filterQuery && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handleCancel}
+              onClick={handleCancelClick}
             />
           </span>
         )}
