@@ -45,11 +45,13 @@ export const App: React.FC = () => {
   );
   const [filterQuery, setFilterQuery] = useState('');
   const [loadingTodosError, setLoadingTodosError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos()
       .then(loadedTodos => setTodos(loadedTodos))
-      .catch(error => setLoadingTodosError(error));
+      .catch(error => setLoadingTodosError(error))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleTodoClick = (id: SelectedId) => {
@@ -93,16 +95,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodosError.toString() ||
-                (filteredTodos ? (
-                  <TodoList
-                    todos={filteredTodos}
-                    selectedTodoId={selectedTodoId}
-                    onTodoClick={handleTodoClick}
-                  />
-                ) : (
-                  <Loader />
-                ))}
+              {filteredTodos ? (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodoId={selectedTodoId}
+                  onTodoClick={handleTodoClick}
+                />
+              ) : isLoading ? (
+                <Loader />
+              ) : (
+                loadingTodosError.toString()
+              )}
             </div>
           </div>
         </div>
