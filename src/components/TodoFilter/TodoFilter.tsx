@@ -13,6 +13,12 @@ export const TodoFilter: React.FC<Props> = ({
   searchValue,
   setSearchValue,
 }) => {
+  const filterOptions = [
+    { value: Filter.ALL },
+    { value: Filter.ACTIVE },
+    { value: Filter.COMPLETED },
+  ];
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -22,9 +28,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             onChange={e => setFilter(e.target.value as Filter)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {filterOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.value}
+              </option>
+            ))}
           </select>
         </span>
       </p>
