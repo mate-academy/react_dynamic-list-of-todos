@@ -14,9 +14,9 @@ export const TodoFilter: React.FC<Props> = ({
   setSearchValue,
 }) => {
   const filterOptions = [
-    { value: Filter.ALL },
-    { value: Filter.ACTIVE },
-    { value: Filter.COMPLETED },
+    { value: Filter.ALL, label: 'All' },
+    { value: Filter.ACTIVE, label: 'Active' },
+    { value: Filter.COMPLETED, label: 'Completed' },
   ];
 
   return (
@@ -30,7 +30,7 @@ export const TodoFilter: React.FC<Props> = ({
           >
             {filterOptions.map(option => (
               <option key={option.value} value={option.value}>
-                {option.value}
+                {option.label}
               </option>
             ))}
           </select>
