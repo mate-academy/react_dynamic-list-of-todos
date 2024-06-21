@@ -1,6 +1,8 @@
+import { Filter } from '../../types/FIlter';
+
 type Props = {
-  filter: string;
-  setFilter: (value: string) => void;
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
   searchValue: string;
   setSearchValue: (value: string) => void;
 };
@@ -18,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={filter}
-            onChange={e => setFilter(e.target.value)}
+            onChange={e => setFilter(e.target.value as Filter)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

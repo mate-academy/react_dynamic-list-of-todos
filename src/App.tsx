@@ -9,16 +9,15 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
+import { Filter } from './types/FIlter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState<Filter>(Filter.ALL);
   const [searchValue, setSearchValue] = useState('');
-
-  // console.log(selectedTodo)
 
   useEffect(() => {
     setLoading(true);
@@ -31,9 +30,9 @@ export const App: React.FC = () => {
   const filteredTodos = todos
     .filter(todo => {
       switch (filter) {
-        case 'active':
+        case Filter.ACTIVE:
           return !todo.completed;
-        case 'completed':
+        case Filter.COMPLETED:
           return todo.completed;
         default:
           return true;
