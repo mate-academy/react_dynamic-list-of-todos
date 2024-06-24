@@ -28,9 +28,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedFilter}
             onChange={handleSelectChange}
           >
-            {Object.values(SelectFilter).map(elem => (
-              <option value={elem} key={elem}>
-                {elem}
+            {Object.values(SelectFilter).map(filter => (
+              <option value={filter} key={filter}>
+                {filter}
               </option>
             ))}
           </select>
@@ -50,16 +50,16 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {query && (
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={resetQuery}
             />
-          )}
-        </span>
+          </span>
+        )}
       </p>
     </form>
   );

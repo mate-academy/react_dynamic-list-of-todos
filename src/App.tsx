@@ -20,12 +20,15 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState<SelectFilter>(SelectFilter.ALL);
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
 
     getTodos()
       .then(setTodos)
+      .catch(() => setError('Failed to fetch todos.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -46,9 +49,9 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter(
-    e =>
-      e.title.toLowerCase().includes(query.toLowerCase().trim()) ||
-      String(e.id).includes(query.toLowerCase().trim()),
+    todo =>
+      todo.title.toLowerCase().includes(query.toLowerCase().trim()) ||
+      String(todo.id).includes(query.toLowerCase().trim()),
   );
 
   const getFilteredTodos = () => {
@@ -83,8 +86,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
+              {error && <p className="title is-5 has-text-danger">{error}</p>}
 
-              {!loading && filteredTodos.length > 0 && (
+              {!loading && !error && filteredTodos.length > 0 && (
                 <TodoList
                   todos={getFilteredTodos()}
                   selectedTodo={selectedTodo}
@@ -92,7 +96,7 @@ export const App: React.FC = () => {
                 />
               )}
 
-              {!loading && filteredTodos.length === 0 && (
+              {!loading && !error && filteredTodos.length === 0 && (
                 <p className="title is-5">There are no users</p>
               )}
             </div>
