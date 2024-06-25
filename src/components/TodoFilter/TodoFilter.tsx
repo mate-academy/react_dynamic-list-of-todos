@@ -39,6 +39,8 @@ export const TodoFilter: React.FC<Props> = ({
     setTitle(value);
   };
 
+  const reset = () => setTitle('');
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -48,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleValueChange}
           >
-            {todoStatusOptions.map((option) => (
+            {todoStatusOptions.map(option => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -76,7 +78,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setTitle('')}
+              onClick={reset}
             />
           </span>
         )}

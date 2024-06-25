@@ -41,7 +41,7 @@ export const App: React.FC = () => {
         break;
     }
 
-    if (titl.trim() !== '') {
+    if (titl.trim()) {
       filteredTodos = filteredTodos.filter(todo =>
         todo.title.toLowerCase().includes(titl.toLowerCase()),
       );
@@ -52,7 +52,6 @@ export const App: React.FC = () => {
 
   const vissibleTodos = useMemo(() => {
     return filterTodos(selectedOption, title);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOption, title, todos]);
 
   return (
