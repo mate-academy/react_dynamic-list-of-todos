@@ -9,6 +9,7 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getTodos, getUser } from './api';
+import { FilterTypes } from './types/filterTypes';
 
 export interface TodoWithUser extends Todo {
   user: User;
@@ -20,7 +21,7 @@ export const App: React.FC = () => {
   const [loadingUser, setLoadingUser] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<FilterTypes>(FilterTypes.All);
   const [selectedTodoWithUser, setSelectedTodoWithUser] =
     useState<TodoWithUser | null>(null);
 
@@ -67,9 +68,9 @@ export const App: React.FC = () => {
       );
     }
 
-    if (filter === 'active') {
+    if (filter === FilterTypes.Active) {
       filtered = filtered.filter(todo => !todo.completed);
-    } else if (filter === 'completed') {
+    } else if (filter === FilterTypes.Completed) {
       filtered = filtered.filter(todo => todo.completed);
     }
 

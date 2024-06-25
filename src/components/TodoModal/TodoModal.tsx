@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
@@ -22,54 +23,54 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" onClick={onClose} />
 
-      {loadingUser ? (
-        <div className="modal-card">
-          <div className="modal-card-body">
-            <Loader />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <div
+            className="modal-card-title has-text-weight-medium"
+            data-cy="modal-header"
+          >
+            {loadingUser ? 'Loading...' : `Todo #${todoWithUser?.id}`}
           </div>
-        </div>
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              {`Todo #${todoWithUser?.id}`}
-            </div>
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-              onClick={onClose}
-            />
-          </header>
-          <div className="modal-card-body">
-            {todoWithUser && (
+
+          <button
+            type="button"
+            className="delete"
+            data-cy="modal-close"
+            onClick={onClose}
+          />
+        </header>
+
+        <div className="modal-card-body">
+          {loadingUser ? (
+            <Loader />
+          ) : (
+            todoWithUser && (
               <>
                 <p className="block" data-cy="modal-title">
                   {todoWithUser.title}
                 </p>
+
                 <p className="block" data-cy="modal-user">
                   <strong
-                    className={
-                      todoWithUser.completed
-                        ? 'has-text-success'
-                        : 'has-text-danger'
-                    }
+                    className={classNames({
+                      'has-text-success': todoWithUser.completed,
+                      'has-text-danger': !todoWithUser.completed,
+                    })}
                   >
                     {todoWithUser.completed ? 'Done' : 'Planned'}
                   </strong>
+
                   {' by '}
+
                   <a href={`mailto:${todoWithUser.user.email}`}>
                     {todoWithUser.user.name}
                   </a>
                 </p>
               </>
-            )}
-          </div>
+            )
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

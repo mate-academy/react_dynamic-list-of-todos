@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onShowTodo: (todo: Todo) => void;
-  selectedTodoId: number | null; // Добавлено для отслеживания выбранной задачи
+  selectedTodoId: number | null;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -27,23 +27,19 @@ export const TodoList: React.FC<Props> = ({
     </thead>
 
     <tbody>
-      {todos.map(todo => (
-        <tr key={todo.id} data-cy="todo" className="">
-          <td className="is-vcentered">{todo.id}</td>
+      {todos.map(({ id, completed, title }) => (
+        <tr key={id} data-cy="todo" className="">
+          <td className="is-vcentered">{id}</td>
           <td className="is-vcentered">
-            {todo.completed && (
+            {completed && (
               <span className="icon" data-cy="iconCompleted">
                 <i className="fas fa-check" />
               </span>
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
-            >
-              {todo.title}
+            <p className={completed ? 'has-text-success' : 'has-text-danger'}>
+              {title}
             </p>
           </td>
           <td className="has-text-right is-vcentered">
@@ -56,9 +52,7 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 <i
                   className={
-                    selectedTodoId === todo.id
-                      ? 'fas fa-eye-slash'
-                      : 'far fa-eye'
+                    selectedTodoId === id ? 'fas fa-eye-slash' : 'far fa-eye'
                   }
                 />
               </span>
