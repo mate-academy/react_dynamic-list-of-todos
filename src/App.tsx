@@ -38,25 +38,20 @@ export const App: React.FC = () => {
     setLoadingUser(true);
     setSelectedTodoWithUser(null);
 
-    try {
-      getUser(todo.userId)
-        .then(user => {
-          setSelectedTodoWithUser({
-            ...todo,
-            user,
-          });
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.error('Error', error);
-        })
-        .finally(() => {
-          setLoadingUser(false);
+    getUser(todo.userId)
+      .then(user => {
+        setSelectedTodoWithUser({
+          ...todo,
+          user,
         });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error', error);
-    }
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Error', error);
+      })
+      .finally(() => {
+        setLoadingUser(false);
+      });
   };
 
   const handleCloseModal = () => {
@@ -112,13 +107,13 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectedTodoWithUser && (
+      {selectedTodoWithUser || loadingUser ? (
         <TodoModal
           todoWithUser={selectedTodoWithUser}
           loadingUser={loadingUser}
           onClose={handleCloseModal}
         />
-      )}
+      ) : null}
     </>
   );
 };
