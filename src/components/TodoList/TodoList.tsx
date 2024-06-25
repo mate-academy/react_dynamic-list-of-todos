@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  setCurrentTodo: (todo: Todo) => void;
+  setCurrentTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
   currentTodo: Todo | null;
 }
 export const TodoList: React.FC<Props> = ({
@@ -29,12 +29,10 @@ export const TodoList: React.FC<Props> = ({
           <tr key={todo.id} data-cy="todo" className="">
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
-              {todo.completed ? (
+              {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
-              ) : (
-                ''
               )}
             </td>
             <td className="is-vcentered is-expanded">

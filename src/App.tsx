@@ -8,11 +8,14 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedOption, setSelectedOption] = useState('all');
+  const [selectedOption, setSelectedOption] = useState<TodoStatus>(
+    TodoStatus.All,
+  );
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
@@ -24,33 +27,33 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filterTodos = (option: string, titl: string): Todo[] => {
-    let filteredTodos = todos;
-
-    switch (option) {
-      case 'active':
-        filteredTodos = todos.filter(todo => !todo.completed);
-        break;
-
-      case 'completed':
-        filteredTodos = todos.filter(todo => todo.completed);
-        break;
-
-      default:
-        filteredTodos = todos;
-        break;
-    }
-
-    if (titl.trim()) {
-      filteredTodos = filteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(titl.toLowerCase()),
-      );
-    }
-
-    return filteredTodos;
-  };
-
   const vissibleTodos = useMemo(() => {
+    const filterTodos = (option: TodoStatus, titl: string): Todo[] => {
+      let filteredTodos = todos;
+
+      switch (option) {
+        case TodoStatus.Active:
+          filteredTodos = todos.filter(todo => !todo.completed);
+          break;
+
+        case TodoStatus.Completed:
+          filteredTodos = todos.filter(todo => todo.completed);
+          break;
+
+        default:
+          filteredTodos = todos;
+          break;
+      }
+
+      if (titl.trim()) {
+        filteredTodos = filteredTodos.filter(todo =>
+          todo.title.toLowerCase().includes(titl.toLowerCase()),
+        );
+      }
+
+      return filteredTodos;
+    };
+
     return filterTodos(selectedOption, title);
   }, [selectedOption, title, todos]);
 

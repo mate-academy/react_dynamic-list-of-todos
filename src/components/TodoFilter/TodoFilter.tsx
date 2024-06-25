@@ -1,22 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
-
-// Define an enum for the statuses
-enum TodoStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-// Create an array of options based on the enum values
-const todoStatusOptions = [
-  { value: TodoStatus.All, label: 'All' },
-  { value: TodoStatus.Active, label: 'Active' },
-  { value: TodoStatus.Completed, label: 'Completed' },
-];
+import React, { Dispatch, SetStateAction } from 'react';
+import { TodoStatus } from '../../types/TodoStatus'; // Import the TodoStatus enum
 
 interface Props {
-  selectedOption: string;
-  setSelectedOption: Dispatch<SetStateAction<string>>;
+  selectedOption: TodoStatus;
+  setSelectedOption: Dispatch<SetStateAction<TodoStatus>>;
   setTitle: Dispatch<SetStateAction<string>>;
   title: string;
 }
@@ -30,7 +17,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
-    setSelectedOption(value);
+    setSelectedOption(value as TodoStatus);
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +25,6 @@ export const TodoFilter: React.FC<Props> = ({
 
     setTitle(value);
   };
-
-  const reset = () => setTitle('');
 
   return (
     <form className="field has-addons">
@@ -50,11 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={selectedOption}
             onChange={handleValueChange}
           >
-            {todoStatusOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -78,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={reset}
+              onClick={() => setTitle('')}
             />
           </span>
         )}
