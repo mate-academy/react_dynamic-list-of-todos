@@ -56,7 +56,10 @@ export const App: React.FC = () => {
   };
 
   const handleCloseModal = () => {
+    setLoadingUser(true);
     setSelectedTodoWithUser(null);
+
+    setLoadingUser(false);
   };
 
   useEffect(() => {
