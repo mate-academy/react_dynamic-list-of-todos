@@ -8,7 +8,7 @@ import { TodoModal } from './components/TodoModal/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { FilterTypes } from './types/filterTypes';
 import { filterTodos } from './components/TodoFilter/filteredTodos';
 
@@ -34,24 +34,9 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleShowTodo = (todo: Todo) => {
+  const handleShowTodo = () => {
     setLoadingUser(true);
     setSelectedTodoWithUser(null);
-
-    getUser(todo.userId)
-      .then(user => {
-        setSelectedTodoWithUser({
-          ...todo,
-          user,
-        });
-      })
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error('Error', error);
-      })
-      .finally(() => {
-        setLoadingUser(false);
-      });
   };
 
   const handleCloseModal = () => {
@@ -97,7 +82,6 @@ export const App: React.FC = () => {
       {selectedTodoWithUser || loadingUser ? (
         <TodoModal
           todoWithUser={selectedTodoWithUser}
-          loadingUser={loadingUser}
           onClose={handleCloseModal}
         />
       ) : null}
