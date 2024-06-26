@@ -5,18 +5,13 @@ import { User } from '../../types/User';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 
-interface TodoWithUser extends Todo {
-  user: User;
-  todo: Todo;
-}
-
 type Props = {
-  todoWithUser: TodoWithUser;
+  selectedTodo: Todo;
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todoWithUser, onClose }) => {
-  const { id, title, completed, userId } = todoWithUser || {};
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
+  const { id, title, completed, userId } = selectedTodo;
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 

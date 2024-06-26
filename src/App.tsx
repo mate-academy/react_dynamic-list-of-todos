@@ -19,11 +19,9 @@ export interface TodoWithUser extends Todo {
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<FilterTypes>(FilterTypes.All);
-  const [selectedTodoWithUser, setSelectedTodoWithUser] =
-    useState<TodoWithUser | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -34,16 +32,12 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleShowTodo = () => {
-    setLoadingUser(true);
-    setSelectedTodoWithUser(null);
+  const handleShowTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
   };
 
   const handleCloseModal = () => {
-    setLoadingUser(true);
-    setSelectedTodoWithUser(null);
-
-    setLoadingUser(false);
+    setSelectedTodo(null);
   };
 
   const visibleTodos = filterTodos(query, filter, todos);
@@ -70,21 +64,16 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   onShowTodo={handleShowTodo}
-                  selectedTodoId={
-                    selectedTodoWithUser ? selectedTodoWithUser.id : null
-                  }
+                  selectedTodoId={selectedTodo ? selectedTodo.id : null}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {selectedTodoWithUser || loadingUser ? (
-        <TodoModal
-          todoWithUser={selectedTodoWithUser}
-          onClose={handleCloseModal}
-        />
-      ) : null}
+      {selectedTodo && (
+        <TodoModal selectedTodo={selectedTodo} onClose={handleCloseModal} />
+      )}
     </>
   );
 };
