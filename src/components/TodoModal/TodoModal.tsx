@@ -19,6 +19,9 @@ export const TodoModal: React.FC<Props> = ({
   loadingUser,
   onClose,
 }) => {
+  const { id, title, completed, user } = todoWithUser || {};
+  const { name, email } = user || {};
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" onClick={onClose} />
@@ -29,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({
             className="modal-card-title has-text-weight-medium"
             data-cy="modal-header"
           >
-            {loadingUser ? 'Loading...' : `Todo #${todoWithUser?.id}`}
+            {loadingUser ? 'Loading...' : `Todo #${id}`}
           </div>
 
           <button
@@ -47,24 +50,22 @@ export const TodoModal: React.FC<Props> = ({
             todoWithUser && (
               <>
                 <p className="block" data-cy="modal-title">
-                  {todoWithUser.title}
+                  {title}
                 </p>
 
                 <p className="block" data-cy="modal-user">
                   <strong
                     className={classNames({
-                      'has-text-success': todoWithUser.completed,
-                      'has-text-danger': !todoWithUser.completed,
+                      'has-text-success': completed,
+                      'has-text-danger': !completed,
                     })}
                   >
-                    {todoWithUser.completed ? 'Done' : 'Planned'}
+                    {completed ? 'Done' : 'Planned'}
                   </strong>
 
                   {' by '}
 
-                  <a href={`mailto:${todoWithUser.user.email}`}>
-                    {todoWithUser.user.name}
-                  </a>
+                  <a href={`mailto:${email}`}>{name}</a>
                 </p>
               </>
             )
