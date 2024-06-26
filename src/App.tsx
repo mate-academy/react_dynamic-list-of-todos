@@ -10,6 +10,7 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getTodos, getUser } from './api';
 import { FilterTypes } from './types/filterTypes';
+import { filterTodos } from './components/TodoFilter/filteredTodos';
 
 export interface TodoWithUser extends Todo {
   user: User;
@@ -19,7 +20,6 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<FilterTypes>(FilterTypes.All);
   const [selectedTodoWithUser, setSelectedTodoWithUser] =
@@ -30,7 +30,6 @@ export const App: React.FC = () => {
     getTodos()
       .then(loadedTodos => {
         setTodos(loadedTodos);
-        setFilteredTodos(loadedTodos);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -62,23 +61,7 @@ export const App: React.FC = () => {
     setLoadingUser(false);
   };
 
-  useEffect(() => {
-    let filtered = todos;
-
-    if (query) {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    if (filter === FilterTypes.Active) {
-      filtered = filtered.filter(todo => !todo.completed);
-    } else if (filter === FilterTypes.Completed) {
-      filtered = filtered.filter(todo => todo.completed);
-    }
-
-    setFilteredTodos(filtered);
-  }, [query, filter, todos]);
+  const visibleTodos = filterTodos(query, filter, todos);
 
   return (
     <>
@@ -100,7 +83,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={visibleTodos}
                   onShowTodo={handleShowTodo}
                   selectedTodoId={
                     selectedTodoWithUser ? selectedTodoWithUser.id : null
