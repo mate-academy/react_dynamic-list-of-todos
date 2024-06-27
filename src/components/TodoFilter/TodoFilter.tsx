@@ -54,7 +54,7 @@ export const TodoFilter: React.FC = () => {
     setCurrentList(
       reducer({ query: searchUserInput, criteria: filterCriteria }),
     );
-  }, [searchUserInput, filterCriteria, allTodos]);
+  }, [searchUserInput, filterCriteria, allTodos, reducer]);
 
   return (
     <>
