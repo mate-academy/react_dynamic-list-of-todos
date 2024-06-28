@@ -83,10 +83,8 @@ export const App: React.FC = () => {
   }
 
   const handleClearSearchBtn = () => {
-    if (appliedQuery && query) {
-      setQuery('');
-      setAppliedQuery('');
-    }
+    setQuery('');
+    setAppliedQuery('');
   };
 
   return (
