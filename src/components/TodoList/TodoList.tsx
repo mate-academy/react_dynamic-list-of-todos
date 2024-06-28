@@ -28,8 +28,7 @@ export const TodoList: React.FC<TodoListProps> = ({
             key={todo.id}
             data-cy="todo"
             className={classNames({
-              'has-background-info-light':
-                activeTodo && activeTodo.id === todo.id,
+              'has-background-info-light': activeTodo?.id === todo.id,
             })}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -61,7 +60,7 @@ export const TodoList: React.FC<TodoListProps> = ({
                   <i
                     className={classNames('far', {
                       'fa-eye': activeTodo?.id !== todo.id,
-                      'fa-eye-slash': activeTodo && activeTodo.id === todo.id,
+                      'fa-eye-slash': activeTodo?.id === todo.id,
                     })}
                   />
                 </span>

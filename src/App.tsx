@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -14,56 +14,38 @@ import { Filter } from './types/Filter';
 export const App: React.FC = () => {
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [isLoadingTodos, setIsLoadingTodos] = useState(true);
 
-  const cachedTodos = useMemo(() => getTodos(), []);
-
   useEffect(() => {
     setIsLoadingTodos(true);
+    getTodos()
+      .then(setTodosFromServer)
+      .finally(() => setIsLoadingTodos(false));
+  }, []);
+
+  useEffect(() => {
+    const filteredByQuery = todosFromServer.filter(todo =>
+      todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
 
     switch (filter) {
       case Filter.All:
-        cachedTodos
-          .then(allTodos =>
-            allTodos.filter(todo =>
-              todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          )
-          .then(setTodos)
-          .finally(() => setIsLoadingTodos(false));
+        setTodos(filteredByQuery);
         break;
       case Filter.Active:
-        cachedTodos
-          .then(allTodos =>
-            allTodos.filter(
-              todo =>
-                !todo.completed &&
-                todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          )
-          .then(setTodos)
-          .finally(() => setIsLoadingTodos(false));
+        setTodos(filteredByQuery.filter(todo => !todo.completed));
         break;
       case Filter.Completed:
-        cachedTodos
-          .then(allTodos =>
-            allTodos.filter(
-              todo =>
-                todo.completed &&
-                todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          )
-          .then(setTodos)
-          .finally(() => setIsLoadingTodos(false));
+        setTodos(filteredByQuery.filter(todo => todo.completed));
         break;
       default:
         setTodos([]);
-        setIsLoadingTodos(false);
         break;
     }
-  }, [filter, query, cachedTodos]);
+  }, [filter, query, todosFromServer]);
 
   const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(event.target.value as Filter);
