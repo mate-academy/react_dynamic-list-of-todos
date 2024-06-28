@@ -1,5 +1,6 @@
 import React from 'react';
 import { FilterProps } from '../../types/FilterProps';
+import { Filter } from '../../types/Filter';
 
 export const TodoFilter: React.FC<FilterProps> = ({
   changeFilter,
@@ -12,9 +13,9 @@ export const TodoFilter: React.FC<FilterProps> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={changeFilter}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filter.All}>All</option>
+            <option value={Filter.Active}>Active</option>
+            <option value={Filter.Completed}>Completed</option>
           </select>
         </span>
       </p>

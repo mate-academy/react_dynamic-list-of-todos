@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,30 +9,33 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [activeTodo, setActiveTodo] = useState<Todo | undefined>(undefined);
+  const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [loadingTodos, setLoadingTodos] = useState(true);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(true);
+
+  const cachedTodos = useMemo(() => getTodos(), []);
 
   useEffect(() => {
-    setLoadingTodos(true);
+    setIsLoadingTodos(true);
 
     switch (filter) {
-      case 'all':
-        getTodos()
+      case Filter.All:
+        cachedTodos
           .then(allTodos =>
             allTodos.filter(todo =>
               todo.title.toLowerCase().includes(query.toLowerCase()),
             ),
           )
           .then(setTodos)
-          .finally(() => setLoadingTodos(false));
+          .finally(() => setIsLoadingTodos(false));
         break;
-      case 'active':
-        getTodos()
+      case Filter.Active:
+        cachedTodos
           .then(allTodos =>
             allTodos.filter(
               todo =>
@@ -41,10 +44,10 @@ export const App: React.FC = () => {
             ),
           )
           .then(setTodos)
-          .finally(() => setLoadingTodos(false));
+          .finally(() => setIsLoadingTodos(false));
         break;
-      case 'completed':
-        getTodos()
+      case Filter.Completed:
+        cachedTodos
           .then(allTodos =>
             allTodos.filter(
               todo =>
@@ -53,29 +56,21 @@ export const App: React.FC = () => {
             ),
           )
           .then(setTodos)
-          .finally(() => setLoadingTodos(false));
+          .finally(() => setIsLoadingTodos(false));
         break;
       default:
         setTodos([]);
-        setLoadingTodos(false);
+        setIsLoadingTodos(false);
         break;
     }
-  }, [filter, query]);
+  }, [filter, query, cachedTodos]);
 
   const handleFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value);
-  };
-
-  const handleModalOpen = (activeTodoItem: Todo | undefined) => {
-    setActiveTodo(activeTodoItem);
+    setFilter(event.target.value as Filter);
   };
 
   const handleModalClose = () => {
-    setActiveTodo(undefined);
-  };
-
-  const handleQueryChange = (newQuery: string) => {
-    setQuery(newQuery);
+    setActiveTodo(null);
   };
 
   return (
@@ -90,16 +85,16 @@ export const App: React.FC = () => {
                 changeFilter={handleFilter}
                 query={query}
                 clearQuery={() => setQuery('')}
-                changeQuery={handleQueryChange}
+                changeQuery={setQuery}
               />
             </div>
 
             <div className="block">
-              {loadingTodos && <Loader />}
+              {isLoadingTodos && <Loader />}
               <TodoList
                 todos={todos}
                 activeTodo={activeTodo}
-                openAction={handleModalOpen}
+                openAction={setActiveTodo}
               />
             </div>
           </div>
