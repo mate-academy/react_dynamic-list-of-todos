@@ -10,6 +10,7 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { FilterStatus } from './types/filter';
+import { debounce } from './utils/debounce';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,8 +18,6 @@ export const App: React.FC = () => {
   const [filter, setFilter] = useState(FilterStatus.All);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-
-  const delay = 300;
 
   const filteredTodos = useMemo(() => {
     let filteredTodo = todos;
@@ -40,23 +39,15 @@ export const App: React.FC = () => {
     return filteredTodo;
   }, [todos, filter, appliedQuery]);
 
-  const debounce = (callback: (args: string) => void) => {
-    let timerId = 0;
-
-    return (args: string) => {
-      window.clearTimeout(timerId);
-
-      timerId = window.setTimeout(() => {
-        callback(args);
-      }, delay);
-    };
-  };
+  {
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }
 
   const applyDebounceQuery = useCallback(
     debounce((value: string) => {
       setAppliedQuery(value);
     }),
-    [debounce],
+    [],
   );
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +97,7 @@ export const App: React.FC = () => {
             <div className="block">
               {todos.length > 0 ? (
                 <TodoList
-                  filteredTodos={filteredTodos}
+                  todos={filteredTodos}
                   handleShowModal={handleShowModal}
                   selectTodos={selectTodos}
                 />
