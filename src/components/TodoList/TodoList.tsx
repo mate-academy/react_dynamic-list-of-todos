@@ -31,42 +31,49 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos &&
-          todos.map(todo => (
-            <tr key={todo.id} data-cy="todo">
-              <td className="is-vcentered">{todo.id}</td>
-              <td className="is-vcentered">
-                {todo.completed && (
-                  <span className="icon" data-cy="iconCompleted">
-                    <i className="fas fa-check" />
-                  </span>
-                )}
-              </td>
-              <td className="is-vcentered is-expanded">
-                <p
-                  className={cn({
-                    'has-text-danger': !todo.completed,
-                    'has-text-success': todo.completed,
-                  })}
-                >
-                  {todo.title}
-                </p>
-              </td>
-              <td className="has-text-right is-vcentered">
-                <button
-                  data-cy="selectButton"
-                  className="button"
-                  type="button"
-                  onClick={() => handleShowModal(todo.id)}
-                >
-                  <span className="icon">
-                    <i
-                      className={`far ${selectTodos === todo ? 'fa-eye-slash' : 'fa-eye'}`}
-                    />
-                  </span>
-                </button>
-              </td>
-            </tr>
-          ))}
+          todos.map(todo => {
+            const { title, completed, id } = todo;
+
+            return (
+              <tr key={id} data-cy="todo">
+                <td className="is-vcentered">{id}</td>
+                <td className="is-vcentered">
+                  {completed && (
+                    <span className="icon" data-cy="iconCompleted">
+                      <i className="fas fa-check" />
+                    </span>
+                  )}
+                </td>
+                <td className="is-vcentered is-expanded">
+                  <p
+                    className={cn({
+                      'has-text-danger': !completed,
+                      'has-text-success': completed,
+                    })}
+                  >
+                    {title}
+                  </p>
+                </td>
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={() => handleShowModal(id)}
+                  >
+                    <span className="icon">
+                      <i
+                        className={cn('far', {
+                          'fa-eye-slash': selectTodos === todo,
+                          'fa-eye': selectTodos !== todo,
+                        })}
+                      />
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
       </tbody>
     </table>
   );

@@ -5,10 +5,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 import { FilterStatus } from './types/filter';
 import { debounce } from './utils/debounce';
 
@@ -19,24 +20,24 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  const filteredTodos = useMemo(() => {
-    let filteredTodo = todos;
+  const filteredTodo = useMemo(() => {
+    let filteredTodos = todos;
 
     if (filter === FilterStatus.Active) {
-      filteredTodo = filteredTodo.filter(todo => !todo.completed);
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
     }
 
     if (filter === FilterStatus.Completed) {
-      filteredTodo = filteredTodo.filter(todo => todo.completed);
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
     }
 
     if (appliedQuery) {
-      filteredTodo = filteredTodo.filter(todo =>
+      filteredTodos = filteredTodos.filter(todo =>
         todo.title.toLowerCase().includes(appliedQuery.toLowerCase().trim()),
       );
     }
 
-    return filteredTodo;
+    return filteredTodos;
   }, [todos, filter, appliedQuery]);
 
   {
@@ -69,9 +70,9 @@ export const App: React.FC = () => {
     }
   };
 
-  function changeStatusOfTodos(value: FilterStatus) {
+  const changeStatusOfTodos = (value: FilterStatus) => {
     setFilter(value);
-  }
+  };
 
   const handleClearSearchBtn = () => {
     setQuery('');
@@ -95,9 +96,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
+              {!!todos.length ? (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={filteredTodo}
                   handleShowModal={handleShowModal}
                   selectTodos={selectTodos}
                 />
