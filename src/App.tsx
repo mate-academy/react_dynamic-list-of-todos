@@ -32,6 +32,7 @@ export const App: React.FC = () => {
         switch (selectValue) {
           case SelectField.Active:
             return !todo.completed;
+
           case SelectField.Completed:
             return todo.completed;
         }
