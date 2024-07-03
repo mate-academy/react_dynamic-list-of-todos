@@ -9,12 +9,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   setSelectedTodo,
 }) => {
   const [userName, setUserName] = useState('');
-  const [userIsLoading, setUserIsLoading] = useState(false);
+  const [userIsLoading, setUserIsLoading] = useState(true);
   const targetUserId = selectedTodo?.userId;
 
   useEffect(() => {
     if (targetUserId) {
-      setUserIsLoading(true);
       getUser(targetUserId)
         .then(user => {
           setUserName(user.name);
@@ -23,7 +22,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
           setUserIsLoading(false);
         });
     }
-  }, []);
+  }, [targetUserId]);
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
