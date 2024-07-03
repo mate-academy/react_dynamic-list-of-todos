@@ -15,17 +15,15 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   useEffect(() => {
     if (targetUserId) {
       setUserIsLoading(true);
-      setTimeout(() => {
-        getUser(targetUserId)
-          .then(user => {
-            setUserName(user.name);
-          })
-          .finally(() => {
-            setUserIsLoading(false);
-          });
-      }, 1000);
+      getUser(targetUserId)
+        .then(user => {
+          setUserName(user.name);
+        })
+        .finally(() => {
+          setUserIsLoading(false);
+        });
     }
-  }, [targetUserId]);
+  }, []);
 
   const handleCloseModal = () => {
     setSelectedTodo(null);

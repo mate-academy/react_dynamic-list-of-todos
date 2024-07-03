@@ -9,19 +9,16 @@ export const TodoList: React.FC<TodoListProps> = ({
   filterCategory,
 }) => {
   const preparedTodos = todos.filter(todo => {
-    if (filterCategory === 'all') {
-      return true;
+    switch (filterCategory) {
+      case 'all':
+        return true;
+      case 'completed':
+        return todo.completed;
+      case 'active':
+        return !todo.completed;
+      default:
+        return true;
     }
-
-    if (filterCategory === 'completed') {
-      return todo.completed;
-    }
-
-    if (filterCategory === 'active') {
-      return !todo.completed;
-    }
-
-    return true;
   });
 
   const filteredTodos = preparedTodos.filter(todo =>
