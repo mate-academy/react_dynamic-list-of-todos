@@ -3,6 +3,7 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -10,20 +11,20 @@ type Props = {
 };
 export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getUser(todo.userId)
       .then(userSelected => setUser(userSelected))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -51,9 +52,10 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>

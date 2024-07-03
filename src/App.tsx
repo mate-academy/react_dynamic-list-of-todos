@@ -14,11 +14,11 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const selectTodo = (todo: Todo) => {
+  const selectTodo = (todo: Todo | null) => {
     setSelectedTodo(todo);
   };
 
@@ -27,14 +27,14 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
-      .then(tod => {
-        setTodos(tod);
-        setFilteredTodos(tod);
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
       })
 
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -45,18 +45,16 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filteredTodos={setFilteredTodos} todos={todos} />
+              <TodoFilter filterTodos={setFilteredTodos} todos={todos} />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todos.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
-                  selectTodo={(todo: Todo | null) =>
-                    todo ? selectTodo(todo) : null
-                  }
+                  selectTodo={todo => selectTodo(todo)}
                 />
               )}
             </div>

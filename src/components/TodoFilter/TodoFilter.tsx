@@ -1,36 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { flterByTypes } from '../../utils/FilterTypes';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   todos: Todo[];
-  filteredTodos: (filterTodos: Todo[]) => void;
+  filterTodos: (filterTodos: Todo[]) => void;
 };
-export const TodoFilter: React.FC<Props> = ({ todos, filteredTodos }) => {
-  const [filteredType, setFilteredType] = useState('All');
+
+export const TodoFilter: React.FC<Props> = ({ todos, filterTodos }) => {
+  const [filteredType, setFilteredType] = useState(FilterType.all);
   const [query, setQuery] = useState('');
 
-  // console.log(filteredType);
-
   useEffect(() => {
-    let filtered = todos;
-
-    if (filteredType === 'active') {
-      filtered = todos.filter(todo => !todo.completed);
-    } else if (filteredType === 'completed') {
-      filtered = todos.filter(todo => todo.completed);
-    }
-
-    if (query) {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    filteredTodos(filtered);
-  }, [todos, filteredType, query, filteredTodos]);
+    filterTodos(flterByTypes(filteredType, todos, query));
+  }, [todos, filteredType, query, filterTodos]);
 
   const handleChangeOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilteredType(event.target.value);
+    setFilteredType(event.target.value as unknown as FilterType);
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +31,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, filteredTodos }) => {
           <select data-cy="statusSelect" onChange={handleChangeOption}>
             <option value="all">All</option>
             <option value="active">Active</option>
+
             <option value="completed">Completed</option>
           </select>
         </span>
