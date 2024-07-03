@@ -6,10 +6,10 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  onReset: () => void;
+  handleResetModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onReset }) => {
+export const TodoModal: React.FC<Props> = ({ todo, handleResetModal }) => {
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onReset }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onReset()}
+              onClick={handleResetModal}
             />
           </header>
 

@@ -1,23 +1,28 @@
 import { FC } from 'react';
 import { FilterBy } from '../../types/FilterBy';
 type Props = {
-  SetQuery: React.Dispatch<React.SetStateAction<string>>;
-  SetFilterBy: React.Dispatch<React.SetStateAction<FilterBy>>;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setFilterBy: React.Dispatch<React.SetStateAction<FilterBy>>;
   value: string;
 };
 
-export const TodoFilter: FC<Props> = ({ SetQuery, SetFilterBy, value }) => {
+export const TodoFilter: FC<Props> = ({ setQuery, setFilterBy, value }) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={e => SetFilterBy(e.target.value as FilterBy)}
+            onChange={e => setFilterBy(e.target.value as FilterBy)}
           >
-            <option value={FilterBy.All}>All</option>
-            <option value={FilterBy.Active}>Active</option>
-            <option value={FilterBy.Completed}>Completed</option>
+            {Object.keys(FilterBy).map(option => (
+              <option
+                value={FilterBy[option as keyof typeof FilterBy]}
+                key={option}
+              >
+                {option}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -29,7 +34,7 @@ export const TodoFilter: FC<Props> = ({ SetQuery, SetFilterBy, value }) => {
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={e => SetQuery(e.target.value)}
+          onChange={e => setQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -42,7 +47,7 @@ export const TodoFilter: FC<Props> = ({ SetQuery, SetFilterBy, value }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => SetQuery('')}
+              onClick={() => setQuery('')}
             />
           )}
         </span>

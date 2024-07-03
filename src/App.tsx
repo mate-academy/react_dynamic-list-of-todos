@@ -9,6 +9,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
+import { todoMatchesQuery } from './api';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
 
@@ -21,7 +22,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(data => setTodos(data))
+      .then(setTodos)
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -36,15 +37,13 @@ export const App: React.FC = () => {
           return true;
       }
     })
-    .filter(todo =>
-      todo.title.toLowerCase().includes(query.trim().toLowerCase()),
-    );
+    .filter(todoMatchesQuery(query));
 
-  function onSelectTodo(todo: Todo) {
+  function handleSelectTodo(todo: Todo) {
     setSelectedTodo(todo);
   }
 
-  function onResetModal() {
+  function handleResetModal() {
     setSelectedTodo(null);
   }
 
@@ -57,8 +56,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                SetQuery={setQuery}
-                SetFilterBy={setFilterBy}
+                setQuery={setQuery}
+                setFilterBy={setFilterBy}
                 value={query}
               />
             </div>
@@ -69,7 +68,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  onSelectTodo={onSelectTodo}
+                  handleSelectTodo={handleSelectTodo}
                   selectedTodoId={selectedTodo?.id || null}
                 />
               )}
@@ -78,7 +77,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal todo={selectedTodo} onReset={onResetModal} />}
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} handleResetModal={handleResetModal} />
+      )}
     </>
   );
 };
