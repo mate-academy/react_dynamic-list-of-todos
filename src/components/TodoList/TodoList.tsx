@@ -32,8 +32,8 @@ export const TodoList: FC<Props> = ({ todos, onOpen, selectedTodoId }) => {
           return (
             <tr
               data-cy="todo"
-              className={cn({ 'has-background-info-light' : isSelected })}
-              key ={id}
+              className={cn({ 'has-background-info-light': isSelected })}
+              key={id}
             >
               <td className="is-vcentered">{id}</td>
               <td className="is-vcentered">
