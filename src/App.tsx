@@ -11,10 +11,16 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
+export enum Filters {
+  'all',
+  'active',
+  'completed',
+}
+
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todosFilter, setTodosFilter] = useState('all');
+  const [todosFilter, setTodosFilter] = useState<Filters>(Filters.all);
   const [query, setQuery] = useState('');
   const [selectedTodoId, setSelectedTodoId] = useState(0);
 
@@ -28,23 +34,39 @@ export const App: React.FC = () => {
     return todos.find(todo => todo.id === selectedTodoId) || todos[0];
   }
 
+  const isFilter = (value: any): value is Filters => {
+    return Object.values(Filters).includes(value);
+  };
+
   const handlerFilterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
 
-    return setTodosFilter(event.target.value);
+    const selectedValue = event.target.value;
+
+    if (isFilter(selectedValue)) {
+      return setTodosFilter(selectedValue);
+    } else {
+      return;
+    }
   };
 
-  const handlerInputValue = (str: string) => setQuery(str);
+  const handlerInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+    return setQuery(event.target.value);
+  };
+
+  const clearQuery = () => setQuery('');
 
   const handleSelectTodo = (id: number) => setSelectedTodoId(id);
 
   const filteredTodos = todos
     .filter(todo => {
-      if (todosFilter === 'active') {
+      if (todosFilter === Filters.active) {
         return !todo.completed;
       }
 
-      if (todosFilter === 'completed') {
+      if (todosFilter === Filters.completed) {
         return todo.completed;
       }
 
@@ -65,6 +87,7 @@ export const App: React.FC = () => {
                 setQuery={handlerInputValue}
                 filter={todosFilter}
                 setTodosFilter={handlerFilterTodos}
+                clearQuery={clearQuery}
               />
             </div>
 

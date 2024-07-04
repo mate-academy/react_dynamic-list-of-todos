@@ -1,8 +1,11 @@
+import { Filters } from '../../App';
+
 type Props = {
   query: string;
-  setQuery: (str: string) => void;
-  filter: string;
+  setQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  filter: Filters;
   setTodosFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  clearQuery: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -10,6 +13,7 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   filter,
   setTodosFilter,
+  clearQuery,
 }) => (
   <form className="field has-addons">
     <p className="control">
@@ -18,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
           data-cy="statusSelect"
           name="select"
           value={filter}
-          onChange={event => setTodosFilter(event)}
+          onChange={setTodosFilter}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -34,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={event => setQuery(event.target.value)}
+        onChange={setQuery}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -47,7 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setQuery('')}
+            onClick={clearQuery}
           />
         )}
       </span>
