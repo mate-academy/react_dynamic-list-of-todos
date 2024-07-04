@@ -47,7 +47,7 @@ export const TodoList: FC<Props> = ({ todos, onOpen, selectedTodoId }) => {
                 <p
                   className={cn({
                     'has-text-danger': !completed,
-                    'has-text=success': completed,
+                    'has-text-success': completed,
                   })}
                 >
                   {title}
