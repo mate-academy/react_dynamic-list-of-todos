@@ -1,5 +1,5 @@
 import React from 'react';
-import { AllOptions } from '../../types/AllOptions';
+import { AllOptions } from '../../types';
 
 interface Props {
   value: string;

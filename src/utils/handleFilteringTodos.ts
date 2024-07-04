@@ -1,5 +1,4 @@
-import { AllOptions } from '../types/AllOptions';
-import { Todo } from '../types/Todo';
+import { AllOptions, Todo } from '../types';
 
 export function handleFilteringTodos(
   todosList: Todo[],
