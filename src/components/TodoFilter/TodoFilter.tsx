@@ -22,12 +22,13 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            style={{ textTransform: 'capitalize' }}
             value={selectOption}
             onChange={e => onSelectChange(e.target.value as AllOptions)}
           >
             {options.map(option => (
               <option key={option} value={option}>
-                {option[0].toUpperCase() + option.slice(1)}
+                {option}
               </option>
             ))}
           </select>
