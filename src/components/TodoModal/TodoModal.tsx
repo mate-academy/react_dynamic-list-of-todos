@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo, User } from '../../types';
+import { getUser } from '../../api';
 
 interface Props {
   todo: Todo | null;
-  user: User | null;
-  loading: boolean;
   onToggleModal: (todo: Todo | null, isShow: boolean) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
-  todo,
-  user,
-  loading,
-  onToggleModal,
-}) => {
+export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
+  const [pressedTodoUser, setPressedTodoUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    if (todo !== null) {
+      getUser(todo.userId)
+        .then(setPressedTodoUser)
+        // eslint-disable-next-line no-console
+        .catch(console.error)
+        .finally(() => setLoadingUser(false));
+    }
+
+    return () => {
+      setLoadingUser(true);
+    };
+  }, [todo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {loadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -57,7 +68,9 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              <a href={`mailto:${pressedTodoUser?.email}`}>
+                {pressedTodoUser?.name}
+              </a>
             </p>
           </div>
         </div>

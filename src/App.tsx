@@ -7,19 +7,16 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { handleFilteringTodos } from './utils/handleFilteringTodos';
-import { AllOptions, Todo, User } from './types';
+import { AllOptions, Todo } from './types';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isModal, setIsModal] = useState(false);
 
   const [loadingTodo, setLoadingTodo] = useState(true);
-  const [loadingUser, setLoadingUser] = useState(true);
-
   const [pressedTodo, setPressedTodo] = useState<Todo | null>(null);
-  const [pressedTodoUser, setPressedTodoUser] = useState<User | null>(null);
 
   const [value, setValue] = useState('');
   const [selectOption, setSelectOption] = useState(AllOptions.All);
@@ -38,20 +35,6 @@ export const App: React.FC = () => {
       .catch(console.error)
       .finally(() => setLoadingTodo(false));
   }, []);
-
-  useEffect(() => {
-    if (pressedTodo !== null) {
-      getUser(pressedTodo.userId)
-        .then(setPressedTodoUser)
-        // eslint-disable-next-line no-console
-        .catch(console.error)
-        .finally(() => setLoadingUser(false));
-    }
-
-    return () => {
-      setLoadingUser(true);
-    };
-  }, [pressedTodo]);
 
   return (
     <>
@@ -84,12 +67,7 @@ export const App: React.FC = () => {
       </div>
 
       {isModal && (
-        <TodoModal
-          todo={pressedTodo}
-          user={pressedTodoUser}
-          loading={loadingUser}
-          onToggleModal={handleShowDetails}
-        />
+        <TodoModal todo={pressedTodo} onToggleModal={handleShowDetails} />
       )}
     </>
   );
