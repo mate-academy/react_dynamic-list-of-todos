@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FilterType } from '../../types/FilterType';
 
 type Props = {
   setFilter: (filter: string) => void;
@@ -21,7 +22,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setSearchInput }) => {
 
   const resetFilter = () => {
     setInputValue('');
-    setFilter('all');
+    setFilter(FilterType.All);
     setSearchInput('');
   };
 
