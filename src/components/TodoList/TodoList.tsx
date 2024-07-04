@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   selectedTodo: number;
-  setSelectedTodo: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedTodo: (id: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -56,9 +56,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => {
-                  setSelectedTodo(id);
-                }}
+                onClick={() => setSelectedTodo(id)}
               >
                 <span className="icon">
                   <i

@@ -12,7 +12,7 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosFilter, setTodosFilter] = useState('all');
   const [query, setQuery] = useState('');
@@ -21,12 +21,22 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   function getSelectedTodoById() {
     return todos.find(todo => todo.id === selectedTodoId) || todos[0];
   }
+
+  const handlerFilterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    event.preventDefault();
+
+    return setTodosFilter(event.target.value);
+  };
+
+  const handlerInputValue = (str: string) => setQuery(str);
+
+  const handleSelectTodo = (id: number) => setSelectedTodoId(id);
 
   const filteredTodos = todos
     .filter(todo => {
@@ -52,20 +62,20 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQuery}
+                setQuery={handlerInputValue}
                 filter={todosFilter}
-                setTodosFilter={setTodosFilter}
+                setTodosFilter={handlerFilterTodos}
               />
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodoId}
-                  setSelectedTodo={setSelectedTodoId}
+                  setSelectedTodo={handleSelectTodo}
                 />
               )}
             </div>
@@ -76,7 +86,7 @@ export const App: React.FC = () => {
       {selectedTodoId !== 0 && (
         <TodoModal
           selectedTodo={getSelectedTodoById()}
-          setSelectedTodo={setSelectedTodoId}
+          setSelectedTodo={handleSelectTodo}
         />
       )}
     </>

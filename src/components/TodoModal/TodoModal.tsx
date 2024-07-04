@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setSelectedTodo: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedTodo: (id: number) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
@@ -20,13 +20,13 @@ export const TodoModal: React.FC<Props> = ({
     phone: '',
   };
 
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>(defoltUser);
 
   useEffect(() => {
     getUser(selectedTodo.userId)
       .then(userFromServer => setUser(userFromServer))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   });
 
   const { name, email } = user;
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

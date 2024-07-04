@@ -1,8 +1,8 @@
 type Props = {
   query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setQuery: (str: string) => void;
   filter: string;
-  setTodosFilter: React.Dispatch<React.SetStateAction<string>>;
+  setTodosFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -16,8 +16,9 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
+          name="select"
           value={filter}
-          onChange={event => setTodosFilter(event.target.value)}
+          onChange={event => setTodosFilter(event)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
