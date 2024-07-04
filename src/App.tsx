@@ -12,9 +12,9 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 
 export enum Filters {
-  'all',
-  'active',
-  'completed',
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
 }
 
 export const App: React.FC = () => {
@@ -34,20 +34,12 @@ export const App: React.FC = () => {
     return todos.find(todo => todo.id === selectedTodoId) || todos[0];
   }
 
-  const isFilter = (value: any): value is Filters => {
-    return Object.values(Filters).includes(value);
-  };
-
   const handlerFilterTodos = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
 
-    const selectedValue = event.target.value;
+    const newFilter = event.target.value as unknown as Filters;
 
-    if (isFilter(selectedValue)) {
-      return setTodosFilter(selectedValue);
-    } else {
-      return;
-    }
+    return setTodosFilter(newFilter);
   };
 
   const handlerInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
