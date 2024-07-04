@@ -53,8 +53,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodo && <Loader />}
-              {!loadingTodo && (
+              {loadingTodo ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   pressedTodo={pressedTodo}
