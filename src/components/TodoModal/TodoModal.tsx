@@ -11,14 +11,6 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ selectTodo, setselectTodo }) => {
-  // const [user, setUser] = useState<User | undefined>();
-
-  // useEffect(() => {
-  //   getUser(selectTodo.userId).then(userFromServer => {
-  //     setUser(userFromServer);
-  //   });
-  // }, [selectTodo.userId]);
-
   const handleDeleteBtn = () => {
     setselectTodo(null);
   };
