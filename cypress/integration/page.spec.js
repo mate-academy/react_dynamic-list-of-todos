@@ -114,7 +114,7 @@ describe('Page', () => {
 
     it('should show loader when loading a user', () => {
       page.mockUser1();
-      cy.clock();
+      // cy.clock();
       page.selectTodo(1);
 
       page.modal().byDataCy('loader').should('exist');

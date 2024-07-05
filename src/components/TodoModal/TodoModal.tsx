@@ -10,26 +10,19 @@ type TodoModalProps = {
 };
 
 export const TodoModal: React.FC<TodoModalProps> = ({ todo, onHideModal }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const delayTimer = setTimeout(() => setIsLoading(true), 300);
-
     getUser(todo.userId)
       .then(setUser)
-      .catch(error => new Error(error.message))
-      .finally(() => {
-        clearTimeout(delayTimer);
-        setTimeout(() => setIsLoading(false), 500);
-      });
-  }, [todo]);
+      .catch(error => new Error(error.message));
+  }, []);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">

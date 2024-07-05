@@ -62,12 +62,9 @@ export const App: React.FC = () => {
       setShowModal(true);
     }
   };
-  // const handelShowModal = (todo: Todo) => {
-  //   setSelectedTodo(todo);
-  //   setShowModal(true);
-  // };
 
   const handleHideModal = () => {
+    setSelectedTodoId(null);
     setSelectedTodo(null);
     setShowModal(false);
   };
@@ -81,6 +78,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                /* eslint-disable @typescript-eslint/no-shadow */
                 onQuery={query => setQuery(query)}
                 onSelectBy={selectedBy => setSelectedBy(selectedBy)}
               />
@@ -93,7 +91,6 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={todosFilteredBy}
                   onShowModal={handelShowModal}
-                  // selectedTodoId={selectedTodo?.id}
                   selectedTodoId={selectedTodoId}
                 />
               )}
@@ -105,9 +102,6 @@ export const App: React.FC = () => {
       {showModal && selectedTodo !== null && (
         <TodoModal todo={selectedTodo} onHideModal={handleHideModal} />
       )}
-      {/* {showModal && selectedTodo !== null && (
-        <TodoModal todo={selectedTodo} onHideModal={handleHideModal} />
-      )} */}
     </>
   );
 };

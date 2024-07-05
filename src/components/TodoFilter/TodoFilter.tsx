@@ -12,6 +12,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
 }) => {
   const [query, setQuery] = useState('');
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   const applyQuery = useCallback(
     debounce(q => onQuery(q), 300),
     [],

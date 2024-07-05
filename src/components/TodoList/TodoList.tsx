@@ -4,7 +4,6 @@ import { Todo } from '../../types/Todo';
 type TodoListProps = {
   todos: Todo[];
   selectedTodoId?: number | null;
-  // onShowModal: (todo: Todo) => void;
   onShowModal: (todoId: number) => void;
 };
 
@@ -53,7 +52,6 @@ export const TodoList: React.FC<TodoListProps> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                // onClick={() => onShowModal(todo)}
                 onClick={() => onShowModal(todo.id)}
               >
                 {todo.id === selectedTodoId ? (
