@@ -15,7 +15,7 @@ import { debounce } from './utils/debounce';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectTodos, setSelectTodos] = useState<Todo | null>(null);
+  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState(FilterStatus.All);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
     const foundTodo = todos.find(todo => todo.id === userId);
 
     if (foundTodo) {
-      setSelectTodos(foundTodo);
+      setSelectTodo(foundTodo);
     }
   };
 
@@ -100,7 +100,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodo}
                   handleShowModal={handleShowModal}
-                  selectTodos={selectTodos}
+                  selectTodo={selectTodo}
                 />
               ) : (
                 <Loader />
@@ -109,8 +109,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {selectTodos && (
-        <TodoModal selectTodos={selectTodos} setSelectTodos={setSelectTodos} />
+      {selectTodo && (
+        <TodoModal selectTodo={selectTodo} setselectTodo={setSelectTodo} />
       )}
     </>
   );

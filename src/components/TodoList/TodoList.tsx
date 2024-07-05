@@ -6,13 +6,13 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[] | undefined;
   handleShowModal: (userId: number) => void;
-  selectTodos: Todo | null;
+  selectTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   handleShowModal,
-  selectTodos,
+  selectTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -64,8 +64,8 @@ export const TodoList: React.FC<Props> = ({
                     <span className="icon">
                       <i
                         className={cn('far', {
-                          'fa-eye-slash': selectTodos === todo,
-                          'fa-eye': selectTodos !== todo,
+                          'fa-eye-slash': selectTodo === todo,
+                          'fa-eye': selectTodo !== todo,
                         })}
                       />
                     </span>

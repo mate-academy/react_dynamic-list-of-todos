@@ -6,34 +6,40 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  selectTodos: Todo;
-  setSelectTodos: (todo: Todo | null) => void;
+  selectTodo: Todo;
+  setselectTodo: (todo: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectTodos, setSelectTodos }) => {
-  const [users, setUsers] = useState<User | undefined>();
-  const [isClosed, setIsClosed] = useState(true);
+export const TodoModal: React.FC<Props> = ({ selectTodo, setselectTodo }) => {
+  // const [user, setUser] = useState<User | undefined>();
 
-  useEffect(() => {
-    getUser(selectTodos.userId).then(usersFromServer => {
-      setUsers(usersFromServer);
-    });
-  }, [selectTodos.userId]);
-
-  useEffect(() => {
-    setIsClosed(false);
-  }, [selectTodos]);
+  // useEffect(() => {
+  //   getUser(selectTodo.userId).then(userFromServer => {
+  //     setUser(userFromServer);
+  //   });
+  // }, [selectTodo.userId]);
 
   const handleDeleteBtn = () => {
-    setIsClosed(true);
-    setSelectTodos(null);
+    setselectTodo(null);
   };
 
-  return !isClosed ? (
+  const [user, setUser] = useState<User | undefined>();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    getUser(selectTodo.userId)
+      .then(usersFromServer => {
+        setUser(usersFromServer);
+      })
+      .finally(() => setLoading(false));
+  }, [selectTodo.userId]);
+
+  return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!users ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -42,7 +48,7 @@ export const TodoModal: React.FC<Props> = ({ selectTodos, setSelectTodos }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectTodos.id}
+              Todo #{selectTodo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -56,11 +62,11 @@ export const TodoModal: React.FC<Props> = ({ selectTodos, setSelectTodos }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {selectTodos.title}
+              {selectTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {selectTodos.completed ? (
+              {selectTodo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
@@ -68,13 +74,11 @@ export const TodoModal: React.FC<Props> = ({ selectTodos, setSelectTodos }) => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{users && users.name}</a>
+              <a href="mailto:Sincere@april.biz">{user && user.name}</a>
             </p>
           </div>
         </div>
       )}
     </div>
-  ) : (
-    <></>
   );
 };
