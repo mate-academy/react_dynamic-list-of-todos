@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { SelectedStatus } from './types/SelectedStatus';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectedBy, setSelectedBy] = useState('all');
+  const [selectedBy, setSelectedBy] = useState(SelectedStatus.all);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
@@ -41,10 +42,10 @@ export const App: React.FC = () => {
     }
 
     switch (selectedBy) {
-      case 'active':
+      case SelectedStatus.active:
         filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
-      case 'completed':
+      case SelectedStatus.complited:
         filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
       default:
@@ -80,7 +81,9 @@ export const App: React.FC = () => {
               <TodoFilter
                 /* eslint-disable @typescript-eslint/no-shadow */
                 onQuery={query => setQuery(query)}
-                onSelectBy={selectedBy => setSelectedBy(selectedBy)}
+                onSelectBy={selectedBy =>
+                  setSelectedBy(selectedBy as SelectedStatus)
+                }
               />
             </div>
 
@@ -99,7 +102,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && selectedTodo !== null && (
+      {showModal && selectedTodo && (
         <TodoModal todo={selectedTodo} onHideModal={handleHideModal} />
       )}
     </>

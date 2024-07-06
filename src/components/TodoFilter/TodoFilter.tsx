@@ -1,5 +1,6 @@
 import debounce from 'lodash.debounce';
 import { useCallback, useState } from 'react';
+import { SelectedStatus } from '../../types/SelectedStatus';
 
 type TodoFilterProps = {
   onQuery: (query: string) => void;
@@ -36,9 +37,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             data-cy="statusSelect"
             onChange={e => onSelectBy(e.target.value)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SelectedStatus.all}>All</option>
+            <option value={SelectedStatus.active}>Active</option>
+            <option value={SelectedStatus.complited}>Completed</option>
           </select>
         </span>
       </p>
