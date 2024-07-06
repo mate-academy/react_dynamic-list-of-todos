@@ -14,20 +14,20 @@ import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loadingTodos, setLoadingTodos] = useState<boolean>(false);
+  const [isLoadingTodos, setIsLoadingTodos] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState<string>('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
 
   useEffect(() => {
-    setLoadingTodos(true);
+    setIsLoadingTodos(true);
     getTodos()
       .then(data => setTodos(data))
-      .finally(() => setLoadingTodos(false));
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
-  const filteredTodos = todos
-    .filter((todo: Todo) => {
+  const filteredTodos = todos.filter((todo: Todo) => {
+    const matchesFilter = (() => {
       switch (filterBy) {
         case FilterBy.Active:
           return !todo.completed;
@@ -36,18 +36,22 @@ export const App: React.FC = () => {
         default:
           return true;
       }
-    })
-    .filter(todo =>
-      todo.title.toLowerCase().includes(query.trim().toLowerCase()),
-    );
+    })();
+
+    const matchesQuery = todo.title
+      .toLowerCase()
+      .includes(query.trim().toLowerCase());
+
+    return matchesFilter && matchesQuery;
+  });
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  function handleResetModal() {
+  const handleResetModal = () => {
     setSelectedTodo(null);
-  }
+  };
 
   return (
     <>
@@ -65,7 +69,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodos ? (
+              {isLoadingTodos ? (
                 <Loader />
               ) : (
                 <TodoList
