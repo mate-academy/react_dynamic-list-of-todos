@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Loader } from '../Loader';
+import {
+  DispatchContext,
+  StatesContext,
+  TodosContext,
+} from '../Context/GlobalStateProvider';
 
 export const TodoModal: React.FC = () => {
+  const states = useContext(StatesContext);
+  const dispatch = useContext(DispatchContext);
+  const todos = useContext(TodosContext);
+
+  const selectedTodo = todos.filter(todo => todo.id === states.selectedTodo);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {states.isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,21 +26,31 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo &#35;{selectedTodo[0].id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => {
+                dispatch({ type: 'closeModal' });
+              }}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo[0].title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {selectedTodo[0].completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 

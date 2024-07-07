@@ -1,9 +1,15 @@
 import React, { useContext } from 'react';
-import { TodosContext } from '../Context/GlobalStateProvider';
+import {
+  DispatchContext,
+  StatesContext,
+  TodosContext,
+} from '../Context/GlobalStateProvider';
 import classNames from 'classnames';
 
 export const TodoList: React.FC = () => {
   const todos = useContext(TodosContext);
+  const dispatch = useContext(DispatchContext);
+  const states = useContext(StatesContext);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -35,17 +41,33 @@ export const TodoList: React.FC = () => {
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames({
-                    ['has-text-danger']: todo.completed,
-                    ['has-text-success']: !todo.completed,
+                    ['has-text-danger']: !todo.completed,
+                    ['has-text-success']: todo.completed,
                   })}
                 >
                   {todo.title}
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                <button data-cy="selectButton" className="button" type="button">
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'openModal' });
+                    dispatch({ type: 'selectTodo', payload: todo.id });
+                  }}
+                >
                   <span className="icon">
-                    <i className="far fa-eye" />
+                    <i
+                      className={classNames('far', {
+                        ['fa-eye']:
+                          !states.isModalOpen ||
+                          states.selectedTodo !== todo.id,
+                        ['fa-eye-slash']:
+                          states.isModalOpen && states.selectedTodo === todo.id,
+                      })}
+                    />
                   </span>
                 </button>
               </td>
