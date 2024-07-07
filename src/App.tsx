@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,38 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+import { getTodos } from './api';
+import { filterByStatus, todoMatchesQuery } from './services';
+import { Todo } from './types/Todo';
+import { FilterBy } from './types/FilterBy';
+
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
+  const [query, setQuery] = useState('');
+  const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const filteredTodos = todos.filter(
+    (todo: Todo) =>
+      todoMatchesQuery(query, todo.title) &&
+      filterByStatus(todo.completed, filterBy),
+  );
+
+  function handleSelectTodo(todo: Todo) {
+    setSelectedTodo(todo);
+  }
+
+  function handleResetModal() {
+    setSelectedTodo(null);
+  }
+
   return (
     <>
       <div className="section">
@@ -17,18 +48,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setQuery={setQuery}
+                setFilterBy={setFilterBy}
+                value={query}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  handleSelectTodo={handleSelectTodo}
+                  selectedTodoId={selectedTodo?.id || null}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} handleResetModal={handleResetModal} />
+      )}
     </>
   );
 };
