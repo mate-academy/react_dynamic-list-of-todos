@@ -9,13 +9,13 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { getTodos } from './api';
-import { todoMatchesQuery } from './api';
+import { filterByStatus, todoMatchesQuery } from './services';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null);
   const [query, setQuery] = useState('');
   const [filterBy, setFilterBy] = useState<FilterBy>(FilterBy.All);
@@ -26,18 +26,11 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filteredTodos = todos
-    .filter((todo: Todo) => {
-      switch (filterBy) {
-        case FilterBy.Active:
-          return !todo.completed;
-        case FilterBy.Completed:
-          return todo.completed;
-        default:
-          return true;
-      }
-    })
-    .filter(todoMatchesQuery(query));
+  const filteredTodos = todos.filter(
+    (todo: Todo) =>
+      todoMatchesQuery(query, todo.title) &&
+      filterByStatus(todo.completed, filterBy),
+  );
 
   function handleSelectTodo(todo: Todo) {
     setSelectedTodo(todo);
