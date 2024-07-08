@@ -1,15 +1,11 @@
 import React, { useContext } from 'react';
 import { Loader } from '../Loader';
-import {
-  DispatchContext,
-  StatesContext,
-  TodosContext,
-} from '../Context/GlobalStateProvider';
+import { DispatchContext, StatesContext } from '../Context/GlobalStateProvider';
 
 export const TodoModal: React.FC = () => {
   const states = useContext(StatesContext);
   const dispatch = useContext(DispatchContext);
-  const todos = useContext(TodosContext);
+  const { todos } = useContext(StatesContext);
 
   const selectedTodo = todos.filter(todo => todo.id === states.selectedTodo);
 
@@ -54,7 +50,7 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${selectedTodo[0].user}`}>Leanne Graham</a>
             </p>
           </div>
         </div>

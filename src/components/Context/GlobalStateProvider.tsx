@@ -1,10 +1,10 @@
-import { createContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import { Todo } from '../../types/Todo';
-import { getTodos } from '../../api';
+import { getTodos, getUser } from '../../api';
 import { States } from '../../types/States';
 
-const initialTodos: Todo[] = [];
 const initialStates: States = {
+  todos: [],
   isLoading: false,
   errorMessage: '',
   updateAt: new Date(),
@@ -13,6 +13,7 @@ const initialStates: States = {
 };
 
 type Action =
+  | { type: 'loadTodos'; payload: Todo[] }
   | { type: 'showError'; payload: string }
   | { type: 'loading' }
   | { type: 'stop-loading' }
@@ -23,6 +24,8 @@ type Action =
 
 function statesReducer(states: States, action: Action) {
   switch (action.type) {
+    case 'loadTodos':
+      return { ...states, todos: action.payload };
     case 'loading':
       return { ...states, isLoading: true };
     case 'stop-loading':
@@ -44,7 +47,6 @@ type DispatchContextType = {
   (action: Action): void;
 };
 
-export const TodosContext = createContext<Todo[]>(initialTodos);
 export const StatesContext = createContext<States>(initialStates);
 export const DispatchContext = createContext<DispatchContextType>(() => {});
 
@@ -53,12 +55,19 @@ type Props = {
 };
 
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = useState(initialTodos);
   const [states, dispatch] = useReducer(statesReducer, initialStates);
 
   useEffect(() => {
     getTodos()
-      .then(setTodos)
+      .then(todosFromServer => {
+        dispatch({
+          type: 'loadTodos',
+          payload: todosFromServer.map((todo: Todo) => ({
+            ...todo,
+            user: getUser(todo.userId),
+          })),
+        });
+      })
       .catch(() => dispatch({ type: 'showError', payload: 'Try again later' }))
       .finally(() => dispatch({ type: 'stop-loading' }));
   }, [states.updateAt]);
@@ -66,7 +75,7 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   return (
     <StatesContext.Provider value={states}>
       <DispatchContext.Provider value={dispatch}>
-        <TodosContext.Provider value={todos}>{children}</TodosContext.Provider>
+        {children}
       </DispatchContext.Provider>
     </StatesContext.Provider>
   );
