@@ -10,11 +10,11 @@ export function handleFilteringTodos(
   if (selectOption) {
     switch (selectOption) {
       case AllOptions.Active:
-        filteredTodos = filteredTodos.filter(todo => todo.completed === false);
+        filteredTodos = filteredTodos.filter(todo => !todo.completed);
         break;
 
       case AllOptions.Completed:
-        filteredTodos = filteredTodos.filter(todo => todo.completed === true);
+        filteredTodos = filteredTodos.filter(todo => todo.completed);
         break;
 
       case AllOptions.All:

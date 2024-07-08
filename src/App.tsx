@@ -13,18 +13,12 @@ import { AllOptions, Todo } from './types';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isModal, setIsModal] = useState(false);
 
-  const [loadingTodo, setLoadingTodo] = useState(true);
-  const [pressedTodo, setPressedTodo] = useState<Todo | null>(null);
+  const [isLoadingTodo, setIsLoadingTodo] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [value, setValue] = useState('');
   const [selectOption, setSelectOption] = useState(AllOptions.All);
-
-  const handleShowDetails = (todo: Todo | null, isShow: boolean) => {
-    setIsModal(isShow);
-    setPressedTodo(todo);
-  };
 
   const visibleTodos = handleFilteringTodos(todos, value, selectOption);
 
@@ -33,7 +27,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       // eslint-disable-next-line no-console
       .catch(console.error)
-      .finally(() => setLoadingTodo(false));
+      .finally(() => setIsLoadingTodo(false));
   }, []);
 
   return (
@@ -53,13 +47,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loadingTodo ? (
+              {isLoadingTodo ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  pressedTodo={pressedTodo}
-                  onButtonClick={handleShowDetails}
+                  pressedTodo={selectedTodo}
+                  onButtonClick={setSelectedTodo}
                 />
               )}
             </div>
@@ -67,8 +61,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModal && (
-        <TodoModal todo={pressedTodo} onToggleModal={handleShowDetails} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onToggleModal={setSelectedTodo} />
       )}
     </>
   );

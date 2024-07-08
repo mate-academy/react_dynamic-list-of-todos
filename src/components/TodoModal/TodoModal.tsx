@@ -5,12 +5,12 @@ import { getUser } from '../../api';
 
 interface Props {
   todo: Todo | null;
-  onToggleModal: (todo: Todo | null, isShow: boolean) => void;
+  onToggleModal: (todo: Todo | null) => void;
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
   const [pressedTodoUser, setPressedTodoUser] = useState<User | null>(null);
-  const [loadingUser, setLoadingUser] = useState(true);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   useEffect(() => {
     if (todo !== null) {
@@ -18,11 +18,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
         .then(setPressedTodoUser)
         // eslint-disable-next-line no-console
         .catch(console.error)
-        .finally(() => setLoadingUser(false));
+        .finally(() => setIsLoadingUser(false));
     }
 
     return () => {
-      setLoadingUser(true);
+      setIsLoadingUser(true);
     };
   }, [todo?.id]);
 
@@ -30,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadingUser ? (
+      {isLoadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -47,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onToggleModal }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onToggleModal(null, false)}
+              onClick={() => onToggleModal(null)}
             />
           </header>
 
