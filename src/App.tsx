@@ -80,7 +80,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          onReset={() => setSelectedTodo(null)}
+          onClose={() => setSelectedTodo(null)}
         />
       )}
     </>
