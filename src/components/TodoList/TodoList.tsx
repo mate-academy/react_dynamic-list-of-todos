@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  selectedTodo?: Todo | null;
+  selectedTodo: Todo | null;
   selectTodo?: (todo: Todo | null) => void;
 };
 export const TodoList: React.FC<Props> = ({

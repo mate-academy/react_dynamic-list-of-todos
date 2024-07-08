@@ -5,10 +5,10 @@ export const flterByTypes = (type: string, todos: Todo[], query: string) => {
   let filtered = todos;
 
   switch (type) {
-    case FilterType.active:
+    case FilterType.Active:
       filtered = todos.filter(todo => !todo.completed);
       break;
-    case FilterType.completed:
+    case FilterType.Completed:
       filtered = todos.filter(todo => todo.completed);
       break;
     default:
