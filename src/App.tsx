@@ -1,45 +1,38 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import React, { useEffect, useState } from 'react';
+
+import { getTodos } from './api';
+
+import { SortType } from './types/SortType';
+import { Todo } from './types/Todo';
+
+import { filterByStatus, todoMatchesQuery } from './service';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { Todo } from './types/Todo';
-import { getTodos } from './api';
-import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selected, setSelected] = useState<Todo | undefined>();
+  const [selectedUser, setSelectedUser] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [sortQuery, setSortQuery] = useState<SortType>(SortType.ALL);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos()
-      .then(e => {
-        return e.filter(todo =>
-          todo.title.toLowerCase().includes(query.toLowerCase()),
-        );
-      })
-      .then(e => {
-        return e.filter(todo => {
-          switch (sortQuery) {
-            case SortType.ACTIVE:
-              return !todo.completed;
-            case SortType.COMPLETED:
-              return todo.completed;
-            default:
-              return todo;
-          }
-        });
-      })
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [sortQuery, query]);
+
+  const filteredTodos = todos.filter(
+    (todo: Todo) =>
+      todoMatchesQuery(query, todo.title) &&
+      filterByStatus(todo.completed, sortQuery),
+  );
 
   return (
     <>
@@ -58,19 +51,22 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              <TodoList
-                todos={todos}
-                selected={selected}
-                show={todo => setSelected(todo)}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedUser={selectedUser}
+                  openTodoModal={setSelectedUser}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {selected && (
-        <TodoModal todo={selected} onClose={() => setSelected(undefined)} />
+      {selectedUser && (
+        <TodoModal todo={selectedUser} onClose={() => setSelectedUser(null)} />
       )}
     </>
   );

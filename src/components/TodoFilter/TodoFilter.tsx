@@ -22,9 +22,9 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={event => onSelect(event.target.value as SortType)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{SortType.ALL}</option>
+            <option value="active">{SortType.ACTIVE}</option>
+            <option value="completed">{SortType.COMPLETED}</option>
           </select>
         </span>
       </p>

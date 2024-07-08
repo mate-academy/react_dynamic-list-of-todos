@@ -5,11 +5,15 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  selected: Todo | undefined;
-  show: (todo: Todo) => void;
+  selectedUser: Todo | null;
+  openTodoModal: (todo: Todo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedUser,
+  openTodoModal,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -26,7 +30,7 @@ export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
 
     {todos.map(todo => {
       const { id, title, completed } = todo;
-      const isSelected = selected && selected.id === id;
+      const isSelected = selectedUser && selectedUser.id === id;
 
       return (
         <tr
@@ -57,7 +61,7 @@ export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => show(todo)}
+              onClick={() => openTodoModal(todo)}
             >
               <span className="icon">
                 <i
