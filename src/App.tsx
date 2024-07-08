@@ -33,15 +33,15 @@ export const App: React.FC = () => {
   const filterTodos = useMemo(() => {
     let filtered = todos;
 
-    if (filters.completed !== Completed.All) {
-      switch (filters.completed) {
-        case Completed.Active:
-          filtered = filtered.filter(todo => !todo.completed);
-          break;
-        case Completed.Completed:
-          filtered = filtered.filter(todo => todo.completed);
-          break;
-      }
+    switch (filters.completed) {
+      case Completed.Active:
+        filtered = filtered.filter(todo => !todo.completed);
+        break;
+      case Completed.Completed:
+        filtered = filtered.filter(todo => todo.completed);
+        break;
+      default:
+        break;
     }
 
     if (filters.search) {

@@ -19,7 +19,7 @@ export const TodoFilter: FC<Props> = ({ onFilter, filters }) => {
           >
             {options.map(option => (
               <option value={option} key={option}>
-                {option}
+                {option[0].toUpperCase() + option.slice(1, option.length)}
               </option>
             ))}
           </select>
