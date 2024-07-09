@@ -6,18 +6,18 @@ import { User } from '../../types/User';
 
 const initialStates: States = {
   todos: [],
-  users: [],
+  query: '',
   isLoading: false,
   isModalOpened: false,
   errorMessage: '',
   updateAt: new Date(),
   selectedTodoId: 0,
   selectedTodoUser: undefined,
+  filteredTodos: [],
 };
 
 type Action =
   | { type: 'loadTodos'; payload: Todo[] }
-  | { type: 'loadUsers'; payload: User[] }
   | { type: 'showError'; payload: string }
   | { type: 'updateRender' }
   | { type: 'startLoading' }
@@ -25,14 +25,14 @@ type Action =
   | { type: 'openModal' }
   | { type: 'closeModal' }
   | { type: 'pickTodoId'; payload: number | null }
-  | { type: 'pickTodoUser'; payload: User | undefined };
+  | { type: 'pickTodoUser'; payload: User | undefined }
+  | { type: 'setQuery'; payload: string }
+  | { type: 'filterTodos'; payload: Todo[] };
 
 function statesReducer(states: States, action: Action) {
   switch (action.type) {
     case 'loadTodos':
       return { ...states, todos: action.payload };
-    case 'loadUsers':
-      return { ...states, users: action.payload };
     case 'startLoading':
       return { ...states, isLoading: true };
     case 'stopLoading':
@@ -49,6 +49,10 @@ function statesReducer(states: States, action: Action) {
       return { ...states, selectedTodoId: action.payload };
     case 'pickTodoUser':
       return { ...states, selectedTodoUser: action.payload };
+    case 'setQuery':
+      return { ...states, query: action.payload };
+    case 'filterTodos':
+      return { ...states, fiteredTodos: action.payload };
   }
 }
 
@@ -81,23 +85,6 @@ export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
       .catch(() => dispatch({ type: 'showError', payload: 'Try again later' }))
       .finally(() => dispatch({ type: 'stopLoading' }));
   }, [states.updateAt]);
-
-  // useEffect(() => {
-  //   if (states.todos.length > 0) {
-  //     dispatch({ type: 'startLoading' });
-  //     getUsers()
-  //       .then(usersFromServer => {
-  //         dispatch({
-  //           type: 'loadUsers',
-  //           payload: usersFromServer,
-  //         });
-  //       })
-  //       .catch(() =>
-  //         dispatch({ type: 'showError', payload: 'Try again later' }),
-  //       )
-  //       .finally(() => dispatch({ type: 'stopLoading' }));
-  //   }
-  // }, [states.updateAt, states.todos]);
 
   return (
     <StatesContext.Provider value={states}>

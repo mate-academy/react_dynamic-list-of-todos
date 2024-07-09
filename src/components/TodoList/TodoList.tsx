@@ -3,7 +3,7 @@ import { DispatchContext, StatesContext } from '../Context/GlobalStateProvider';
 import classNames from 'classnames';
 
 export const TodoList: React.FC = () => {
-  const { todos } = useContext(StatesContext);
+  const { filteredTodos } = useContext(StatesContext);
   const dispatch = useContext(DispatchContext);
   const { selectedTodoId, isModalOpened } = useContext(StatesContext);
 
@@ -23,7 +23,7 @@ export const TodoList: React.FC = () => {
       </thead>
 
       <tbody>
-        {todos.map(todo => {
+        {filteredTodos.map(todo => {
           return (
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
