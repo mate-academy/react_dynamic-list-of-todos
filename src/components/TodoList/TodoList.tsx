@@ -5,7 +5,7 @@ import classNames from 'classnames';
 export const TodoList: React.FC = () => {
   const { todos } = useContext(StatesContext);
   const dispatch = useContext(DispatchContext);
-  const states = useContext(StatesContext);
+  const { selectedTodoId, isModalOpened } = useContext(StatesContext);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -50,18 +50,19 @@ export const TodoList: React.FC = () => {
                   className="button"
                   type="button"
                   onClick={() => {
+                    dispatch({ type: 'pickTodoId', payload: todo.id });
                     dispatch({ type: 'openModal' });
-                    dispatch({ type: 'selectTodo', payload: todo.id });
                   }}
                 >
                   <span className="icon">
                     <i
                       className={classNames('far', {
                         ['fa-eye']:
-                          !states.isModalOpen ||
-                          states.selectedTodo !== todo.id,
+                          !isModalOpened ||
+                          (isModalOpened && selectedTodoId !== todo.id),
+
                         ['fa-eye-slash']:
-                          states.isModalOpen && states.selectedTodo === todo.id,
+                          isModalOpened && selectedTodoId === todo.id,
                       })}
                     />
                   </span>

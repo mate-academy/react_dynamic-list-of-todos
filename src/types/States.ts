@@ -1,10 +1,12 @@
 import { Todo } from './Todo';
+import { User } from './User';
 
 export interface States {
   todos: Todo[];
-  isLoading: boolean;
+  users: User[];
   errorMessage: string;
+  isLoading: boolean;
+  isModalOpened: boolean;
   updateAt: Date;
-  isModalOpen: boolean;
-  selectedTodo: number;
+  selectedTodoId: number | null;
 }

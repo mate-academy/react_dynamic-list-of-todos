@@ -10,7 +10,7 @@ import { Loader } from './components/Loader';
 import { StatesContext } from './components/Context/GlobalStateProvider';
 
 export const App: React.FC = () => {
-  const states = useContext(StatesContext);
+  const { isLoading, isModalOpened } = useContext(StatesContext);
 
   return (
     <>
@@ -24,13 +24,13 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {states.isLoading && <Loader />}
+              {isLoading && <Loader />}
               <TodoList />
             </div>
           </div>
         </div>
       </div>
-      {states.isModalOpen && <TodoModal />}
+      {isModalOpened && <TodoModal />}
     </>
   );
 };

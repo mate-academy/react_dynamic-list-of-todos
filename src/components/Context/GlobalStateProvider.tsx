@@ -1,45 +1,50 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { Todo } from '../../types/Todo';
-import { getTodos, getUser } from '../../api';
+import { getTodos, getUsers } from '../../api';
 import { States } from '../../types/States';
+import { User } from '../../types/User';
 
 const initialStates: States = {
   todos: [],
+  users: [],
   isLoading: false,
+  isModalOpened: false,
   errorMessage: '',
   updateAt: new Date(),
-  isModalOpen: false,
-  selectedTodo: 0,
+  selectedTodoId: 0,
 };
 
 type Action =
   | { type: 'loadTodos'; payload: Todo[] }
+  | { type: 'loadUsers'; payload: User[] }
   | { type: 'showError'; payload: string }
-  | { type: 'loading' }
-  | { type: 'stop-loading' }
   | { type: 'updateRender' }
+  | { type: 'startLoading' }
+  | { type: 'stopLoading' }
   | { type: 'openModal' }
   | { type: 'closeModal' }
-  | { type: 'selectTodo'; payload: number };
+  | { type: 'pickTodoId'; payload: number | null };
 
 function statesReducer(states: States, action: Action) {
   switch (action.type) {
     case 'loadTodos':
       return { ...states, todos: action.payload };
-    case 'loading':
+    case 'loadUsers':
+      return { ...states, users: action.payload };
+    case 'startLoading':
       return { ...states, isLoading: true };
-    case 'stop-loading':
+    case 'stopLoading':
       return { ...states, isLoading: false };
+    case 'openModal':
+      return { ...states, isModalOpened: true };
+    case 'closeModal':
+      return { ...states, isModalOpened: false };
     case 'showError':
       return { ...states, errorMessage: action.payload };
     case 'updateRender':
       return { ...states, updateAt: new Date() };
-    case 'openModal':
-      return { ...states, isModalOpen: true };
-    case 'closeModal':
-      return { ...states, isModalOpen: false };
-    case 'selectTodo':
-      return { ...states, selectedTodo: action.payload };
+    case 'pickTodoId':
+      return { ...states, selectedTodoId: action.payload };
   }
 }
 
@@ -57,20 +62,38 @@ type Props = {
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [states, dispatch] = useReducer(statesReducer, initialStates);
 
+  // eslint-disable-next-line no-console
+  console.log(states);
+
   useEffect(() => {
+    dispatch({ type: 'startLoading' });
     getTodos()
       .then(todosFromServer => {
         dispatch({
           type: 'loadTodos',
-          payload: todosFromServer.map((todo: Todo) => ({
-            ...todo,
-            user: getUser(todo.userId),
-          })),
+          payload: todosFromServer,
         });
       })
       .catch(() => dispatch({ type: 'showError', payload: 'Try again later' }))
-      .finally(() => dispatch({ type: 'stop-loading' }));
+      .finally(() => dispatch({ type: 'stopLoading' }));
   }, [states.updateAt]);
+
+  useEffect(() => {
+    if (states.todos.length > 0) {
+      dispatch({ type: 'startLoading' });
+      getUsers()
+        .then(usersFromServer => {
+          dispatch({
+            type: 'loadUsers',
+            payload: usersFromServer,
+          });
+        })
+        .catch(() =>
+          dispatch({ type: 'showError', payload: 'Try again later' }),
+        )
+        .finally(() => dispatch({ type: 'stopLoading' }));
+    }
+  }, [states.updateAt, states.todos]);
 
   return (
     <StatesContext.Provider value={states}>
