@@ -9,4 +9,5 @@ export interface States {
   isModalOpened: boolean;
   updateAt: Date;
   selectedTodoId: number | null;
+  selectedTodoUser: User | undefined;
 }

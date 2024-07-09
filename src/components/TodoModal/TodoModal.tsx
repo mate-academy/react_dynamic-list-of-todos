@@ -1,18 +1,25 @@
 import React, { useContext, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { DispatchContext, StatesContext } from '../Context/GlobalStateProvider';
+import { getUser } from '../../api';
 
 export const TodoModal: React.FC = () => {
-  const { selectedTodoId, todos, users, isLoading } = useContext(StatesContext);
+  const { selectedTodoId, todos, isLoading, selectedTodoUser } =
+    useContext(StatesContext);
   const dispatch = useContext(DispatchContext);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
-  const currentUser = users.find(user => user.id === selectedTodo?.userId);
 
   useEffect(() => {
     dispatch({ type: 'startLoading' });
-    dispatch({ type: 'stopLoading' });
-  }, [dispatch]);
+    if (selectedTodo) {
+      getUser(selectedTodo?.userId)
+        .then(userSelected =>
+          dispatch({ type: 'pickTodoUser', payload: userSelected }),
+        )
+        .finally(() => dispatch({ type: 'stopLoading' }));
+    }
+  }, [dispatch, selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -56,7 +63,7 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href={currentUser?.email}>{currentUser?.name}</a>
+              <a href={selectedTodoUser?.email}>{selectedTodoUser?.name}</a>
             </p>
           </div>
         </div>
