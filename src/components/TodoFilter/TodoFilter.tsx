@@ -1,10 +1,12 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
+
+type FilterStatus = 'active' | 'all' | 'completed';
 
 type Props = {
   query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setQuery: Dispatch<SetStateAction<string>>;
   status: string;
-  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setStatus: Dispatch<SetStateAction<FilterStatus>>;
 };
 
 export const TodoFilter: FC<Props> = ({
@@ -19,7 +21,7 @@ export const TodoFilter: FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={status}
-          onChange={event => setStatus(event.target.value)}
+          onChange={event => setStatus(event.target.value as FilterStatus)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

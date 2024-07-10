@@ -10,11 +10,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+type FilterStatus = 'active' | 'all' | 'completed';
+
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [query, setQuery] = useState<string>('');
 
   useEffect(() => {

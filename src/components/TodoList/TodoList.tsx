@@ -34,6 +34,7 @@ export const TodoList: FC<Props> = ({
           className={todo.completed ? 'has-background-info-light' : ''}
         >
           <td className="is-vcentered">{todo.id}</td>
+
           <td className="is-vcentered">
             {todo.completed && (
               <span className="icon" data-cy="iconCompleted">
@@ -41,6 +42,7 @@ export const TodoList: FC<Props> = ({
               </span>
             )}
           </td>
+
           <td className="is-vcentered is-expanded">
             <p
               className={
@@ -50,6 +52,7 @@ export const TodoList: FC<Props> = ({
               {todo.title}
             </p>
           </td>
+
           <td className="has-text-right is-vcentered">
             <button
               data-cy="selectButton"
