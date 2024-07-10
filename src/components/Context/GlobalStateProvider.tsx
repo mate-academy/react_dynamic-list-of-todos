@@ -6,7 +6,6 @@ import { User } from '../../types/User';
 
 const initialStates: States = {
   todos: [],
-  query: '',
   isLoading: false,
   isModalOpened: false,
   errorMessage: '',
@@ -14,6 +13,8 @@ const initialStates: States = {
   selectedTodoId: 0,
   selectedTodoUser: undefined,
   filteredTodos: [],
+  query: '',
+  filter: '',
 };
 
 type Action =
@@ -26,8 +27,9 @@ type Action =
   | { type: 'closeModal' }
   | { type: 'pickTodoId'; payload: number | null }
   | { type: 'pickTodoUser'; payload: User | undefined }
+  | { type: 'filterTodos'; payload: Todo[] }
   | { type: 'setQuery'; payload: string }
-  | { type: 'filterTodos'; payload: Todo[] };
+  | { type: 'setFilter'; payload: string };
 
 function statesReducer(states: States, action: Action) {
   switch (action.type) {
@@ -49,10 +51,12 @@ function statesReducer(states: States, action: Action) {
       return { ...states, selectedTodoId: action.payload };
     case 'pickTodoUser':
       return { ...states, selectedTodoUser: action.payload };
+    case 'filterTodos':
+      return { ...states, filteredTodos: action.payload };
     case 'setQuery':
       return { ...states, query: action.payload };
-    case 'filterTodos':
-      return { ...states, fiteredTodos: action.payload };
+    case 'setFilter':
+      return { ...states, filter: action.payload };
   }
 }
 

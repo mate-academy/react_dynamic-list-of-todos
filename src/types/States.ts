@@ -3,7 +3,6 @@ import { User } from './User';
 
 export interface States {
   todos: Todo[];
-  query: string;
   errorMessage: string;
   isLoading: boolean;
   isModalOpened: boolean;
@@ -11,4 +10,6 @@ export interface States {
   selectedTodoId: number | null;
   selectedTodoUser: User | undefined;
   filteredTodos: Todo[];
+  query: string;
+  filter: string;
 }

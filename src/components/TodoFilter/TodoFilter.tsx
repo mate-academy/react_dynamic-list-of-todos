@@ -1,25 +1,45 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { DispatchContext, StatesContext } from '../Context/GlobalStateProvider';
 
 export const TodoFilter = () => {
   const dispatch = useContext(DispatchContext);
-  const { query, todos } = useContext(StatesContext);
+  const { query, todos, filter } = useContext(StatesContext);
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'setQuery', payload: event.target.value.trim() });
+  };
+
+  useEffect(() => {
+    let visibleTodos = [...todos];
+
+    visibleTodos = visibleTodos
+      .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()))
+      .filter(t => {
+        switch (filter) {
+          case 'completed':
+            return t.completed;
+          case 'active':
+            return !t.completed;
+          case 'all':
+            return t;
+          default:
+            return t;
+        }
+      });
     dispatch({
       type: 'filterTodos',
-      payload:
-        query.length > 0
-          ? todos.filter(todo => todo.title.includes(query))
-          : todos,
+      payload: visibleTodos,
     });
+  }, [dispatch, query, todos, filter]);
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({ type: 'setFilter', payload: event.target.value });
   };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select data-cy="statusSelect" onChange={handleSelect}>
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -40,14 +60,17 @@ export const TodoFilter = () => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-          />
-        </span>
+        {query.length !== 0 && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => dispatch({ type: 'setQuery', payload: '' })}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

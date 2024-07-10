@@ -3,9 +3,9 @@ import { DispatchContext, StatesContext } from '../Context/GlobalStateProvider';
 import classNames from 'classnames';
 
 export const TodoList: React.FC = () => {
-  const { filteredTodos } = useContext(StatesContext);
+  const { selectedTodoId, isModalOpened, filteredTodos } =
+    useContext(StatesContext);
   const dispatch = useContext(DispatchContext);
-  const { selectedTodoId, isModalOpened } = useContext(StatesContext);
 
   return (
     <table className="table is-narrow is-fullwidth">
