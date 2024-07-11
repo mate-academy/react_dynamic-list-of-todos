@@ -74,9 +74,6 @@ type Props = {
 export const GlobalStateProvider: React.FC<Props> = ({ children }) => {
   const [states, dispatch] = useReducer(statesReducer, initialStates);
 
-  // eslint-disable-next-line no-console
-  console.log(states);
-
   useEffect(() => {
     dispatch({ type: 'startLoading' });
     getTodos()

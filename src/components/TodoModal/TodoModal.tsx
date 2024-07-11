@@ -37,7 +37,6 @@ export const TodoModal: React.FC = () => {
               Todo &#35;{selectedTodoId}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
