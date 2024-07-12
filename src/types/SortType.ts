@@ -1,5 +1,11 @@
 export enum SortType {
-  ACTIVE = 'Active',
-  COMPLETED = 'Completed',
-  ALL = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+  All = 'All',
 }
+
+export const optionOfSortType = [
+  SortType.All,
+  SortType.Active,
+  SortType.Completed,
+];

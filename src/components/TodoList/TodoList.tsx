@@ -1,7 +1,8 @@
 import React from 'react';
-import cn from 'classnames';
 
-import { Todo } from '../../types/Todo';
+import { Todo } from '../../types';
+
+import { TodoItem } from '../TodoItem';
 
 interface Props {
   todos: Todo[];
@@ -28,53 +29,19 @@ export const TodoList: React.FC<Props> = ({
       </tr>
     </thead>
 
-    {todos.map(todo => {
-      const { id, title, completed } = todo;
-      const isSelected = selectedUser && selectedUser.id === id;
+    <tbody>
+      {todos.map(todo => {
+        const isSelected = selectedUser && selectedUser.id === todo.id;
 
-      return (
-        <tr
-          data-cy="todo"
-          className={cn({ 'has-background-info-light': isSelected })}
-          key={id}
-        >
-          <td className="is-vcentered">{id}</td>
-          <td className="is-vcentered">
-            {completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p
-              className={cn({
-                'has-text-danger': !completed,
-                'has-text-success': completed,
-              })}
-            >
-              {title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => openTodoModal(todo)}
-            >
-              <span className="icon">
-                <i
-                  className={cn('far', {
-                    'fa-eye-slash': isSelected,
-                    'fa-eye': !isSelected,
-                  })}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
-      );
-    })}
+        return (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isSelected={isSelected}
+            openTodoModal={openTodoModal}
+          />
+        );
+      })}
+    </tbody>
   </table>
 );

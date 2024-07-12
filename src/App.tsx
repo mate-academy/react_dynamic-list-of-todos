@@ -5,28 +5,24 @@ import React, { useEffect, useState } from 'react';
 
 import { getTodos } from './api';
 
-import { SortType } from './types/SortType';
-import { Todo } from './types/Todo';
+import { SortType, Todo } from './types';
 
 import { filterByStatus, todoMatchesQuery } from './service';
 
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+import { TodoList, TodoFilter, TodoModal, Loader } from './components';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedUser, setSelectedUser] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
-  const [sortQuery, setSortQuery] = useState<SortType>(SortType.ALL);
+  const [sortQuery, setSortQuery] = useState<SortType>(SortType.All);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
       .finally(() => setIsLoading(false));
-  }, [sortQuery, query]);
+  }, []);
 
   const filteredTodos = todos.filter(
     (todo: Todo) =>

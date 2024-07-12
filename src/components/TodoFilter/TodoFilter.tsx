@@ -1,5 +1,5 @@
 import React from 'react';
-import { SortType } from '../../types/SortType';
+import { SortType, optionOfSortType } from '../../types';
 
 type Props = {
   query: string;
@@ -22,9 +22,11 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={event => onSelect(event.target.value as SortType)}
           >
-            <option value="all">{SortType.ALL}</option>
-            <option value="active">{SortType.ACTIVE}</option>
-            <option value="completed">{SortType.COMPLETED}</option>
+            {optionOfSortType.map((sortType, index) => (
+              <option key={index} value={sortType.toLowerCase()}>
+                {sortType}
+              </option>
+            ))}
           </select>
         </span>
       </p>

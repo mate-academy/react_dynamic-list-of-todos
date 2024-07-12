@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { getUser } from '../../api';
 
-import { Todo } from '../../types/Todo';
-import { User } from '../../types/User';
+import { Todo, User } from '../../types';
 
 import { Loader } from '../Loader';
 
@@ -16,7 +15,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const { id, title, completed, userId } = todo;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(userId)
