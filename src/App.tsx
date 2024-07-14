@@ -10,16 +10,38 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export enum FilterStatus {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
 }
+
+const normalizeString = (str: string): string => str.toLowerCase().trim();
+
+const filterTodos = (
+  todos: Todo[],
+  filterStatus: FilterStatus,
+  query: string,
+): Todo[] => {
+  const queryNormalized = normalizeString(query);
+  return todos
+    .filter((todo: Todo) => {
+      switch (filterStatus) {
+        case FilterStatus.Active:
+          return !todo.completed;
+        case FilterStatus.Completed:
+          return todo.completed;
+        default:
+          return true;
+      }
+    })
+    .filter(todo => normalizeString(todo.title).includes(queryNormalized));
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isloading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterStatus, setFilterStatus] = useState(FilterStatus.all);
+  const [filterStatus, setFilterStatus] = useState(FilterStatus.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -29,24 +51,10 @@ export const App: React.FC = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    return todos
-      .filter((todo: Todo) => {
-        switch (filterStatus) {
-          case FilterStatus.active:
-            return !todo.completed;
-
-          case FilterStatus.completed:
-            return todo.completed;
-
-          default:
-            return todo;
-        }
-      })
-      .filter(todo =>
-        todo.title.toLowerCase().trim().includes(query.trim().toLowerCase()),
-      );
-  }, [filterStatus, todos, query]);
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, filterStatus, query),
+    [filterStatus, todos, query],
+  );
 
   const handleClosedModal = () => {
     setSelectedTodo(null);
