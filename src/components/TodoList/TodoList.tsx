@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
+enum States {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 interface Props {
   openedTodo: Todo | null;
   setOpenedTodo: (todo: Todo) => void;
@@ -16,7 +22,7 @@ export const TodoList: React.FC<Props> = ({
   search,
   standartList,
 }) => {
-  const [list, setList] = useState<Todo[]>(standartList);
+  const [todos, setTodos] = useState<Todo[]>(standartList);
 
   const res = [...standartList].filter(el =>
     el.title.toLowerCase().includes(search.trim().toLowerCase()),
@@ -24,16 +30,16 @@ export const TodoList: React.FC<Props> = ({
 
   useEffect(() => {
     switch (filter) {
-      case 'all':
-        setList(res);
+      case States.All:
+        setTodos(res);
         break;
 
-      case 'active':
-        setList(res.filter(el => el.completed === false));
+      case States.Active:
+        setTodos(res.filter(el => !el.completed));
         break;
 
-      case 'completed':
-        setList(res.filter(el => el.completed === true));
+      case States.Completed:
+        setTodos(res.filter(el => el.completed));
         break;
     }
   }, [filter, search]);
@@ -54,8 +60,8 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {list.map(el => (
-          <tr data-cy="todo" className="" key={el.id}>
+        {todos.map(el => (
+          <tr data-cy="todo" key={el.id}>
             <td className="is-vcentered">{el.id}</td>
             <td className="is-vcentered">
               {el.completed ? (
