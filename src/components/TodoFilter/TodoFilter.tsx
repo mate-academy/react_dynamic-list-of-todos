@@ -1,11 +1,10 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-
-type FilterStatus = 'active' | 'all' | 'completed';
+import { FilterStatus } from '../../types/FilterStatus';
 
 type Props = {
   query: string;
   setQuery: Dispatch<SetStateAction<string>>;
-  status: string;
+  status: FilterStatus;
   setStatus: Dispatch<SetStateAction<FilterStatus>>;
 };
 
@@ -23,9 +22,9 @@ export const TodoFilter: FC<Props> = ({
           value={status}
           onChange={event => setStatus(event.target.value as FilterStatus)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterStatus.All}>All</option>
+          <option value={FilterStatus.Active}>Active</option>
+          <option value={FilterStatus.Completed}>Completed</option>
         </select>
       </span>
     </p>

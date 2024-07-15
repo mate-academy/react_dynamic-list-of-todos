@@ -9,14 +9,15 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
-
-type FilterStatus = 'active' | 'all' | 'completed';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>(
+    FilterStatus.All,
+  );
   const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
@@ -28,11 +29,11 @@ export const App: FC = () => {
 
   const filteredTodos = todos
     .filter(todo => {
-      if (filterStatus === 'active') {
+      if (filterStatus === FilterStatus.Active) {
         return !todo.completed;
       }
 
-      if (filterStatus === 'completed') {
+      if (filterStatus === FilterStatus.Completed) {
         return todo.completed;
       }
 
