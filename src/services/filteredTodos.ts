@@ -1,3 +1,4 @@
+import { SelectTodos } from '../types/Select';
 import { Todo } from '../types/Todo';
 
 export const filterTodos = (
@@ -8,15 +9,15 @@ export const filterTodos = (
   let filterT = todosArr;
 
   switch (querySelect) {
-    case 'all':
+    case SelectTodos.All:
       filterT = todosArr;
       break;
 
-    case 'active':
+    case SelectTodos.Active:
       filterT = filterT.filter(todo => todo.completed === false);
       break;
 
-    case 'completed':
+    case SelectTodos.Completed:
       filterT = filterT.filter(todo => todo.completed === true);
       break;
   }

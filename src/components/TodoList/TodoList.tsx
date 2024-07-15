@@ -4,11 +4,11 @@ import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  buttonSwitch: Todo | null;
+  selectedTodo: Todo | null;
   onSelect: (todo: Todo) => void;
 };
 
-const TodoList: React.FC<Props> = ({ todos, onSelect, buttonSwitch }) => {
+const TodoList: React.FC<Props> = ({ todos, onSelect, selectedTodo }) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -26,7 +26,7 @@ const TodoList: React.FC<Props> = ({ todos, onSelect, buttonSwitch }) => {
 
       <tbody>
         {todos.map(todo => {
-          const isSelected = buttonSwitch && buttonSwitch.title === todo.title;
+          const isSelected = selectedTodo && selectedTodo.title === todo.title;
 
           return (
             <tr
@@ -37,15 +37,13 @@ const TodoList: React.FC<Props> = ({ todos, onSelect, buttonSwitch }) => {
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
-              {todo.completed ? (
-                <td className="is-vcentered">
+              <td className="is-vcentered">
+                {todo.completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
-                </td>
-              ) : (
-                <td className="is-vcentered" />
-              )}
+                )}
+              </td>
               <td className="is-vcentered is-expanded">
                 <p
                   className={classNames({

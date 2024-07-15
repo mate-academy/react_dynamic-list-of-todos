@@ -11,12 +11,13 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { filterTodos } from './services/filteredTodos';
+import { SelectTodos } from './types/Select';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [userTodo, setUserTodo] = useState<Todo | null>(null);
   const [inputQuery, setInputQuery] = useState('');
-  const [selQuery, setSelQuery] = useState('all');
+  const [selectQuery, setSelectQuery] = useState(SelectTodos.All);
 
   useEffect(() => {
     getTodos().then(data => {
@@ -28,9 +29,9 @@ export const App: React.FC = () => {
     setUserTodo(null);
   };
 
-  const filter = useMemo(() => {
-    return filterTodos(todos, selQuery, inputQuery);
-  }, [todos, selQuery, inputQuery]);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, selectQuery, inputQuery);
+  }, [todos, selectQuery, inputQuery]);
 
   return (
     <>
@@ -41,8 +42,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <MemoTodoFilter
-                onSelect={query => setSelQuery(query)}
-                onInput={query => setInputQuery(query)}
+                onSelect={setSelectQuery}
+                onInput={setInputQuery}
               />
             </div>
 
@@ -51,9 +52,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <MemoTodoList
-                  todos={filter}
-                  onSelect={todo => setUserTodo(todo)}
-                  buttonSwitch={userTodo}
+                  todos={filteredTodos}
+                  onSelect={setUserTodo}
+                  selectedTodo={userTodo}
                 />
               )}
             </div>

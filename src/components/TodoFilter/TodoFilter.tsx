@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { SelectTodos } from '../../types/Select';
 
 type Props = {
-  onSelect: (query: string) => void;
+  onSelect: (query: SelectTodos) => void;
   onInput: (query: string) => void;
 };
 
@@ -9,7 +10,7 @@ const TodoFilter: React.FC<Props> = ({ onSelect, onInput }) => {
   const [inputQuery, setInputQuery] = useState('');
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onSelect(event.target.value);
+    onSelect(event.target.value as SelectTodos);
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
