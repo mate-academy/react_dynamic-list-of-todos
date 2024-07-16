@@ -6,8 +6,6 @@ The goal of this task is to teach you:
 - to understand tests and why they fail;
 - to try the working page and implement the same behaviour;
 
-> Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
-
 You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
 and `Loader` components. Load data from the API and show it using the given components.
 
@@ -29,4 +27,4 @@ loaded and show them using `TodoList` (check the code in the `api.ts`);
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+- [DEMO LINK](https://antonmolchanov18.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
