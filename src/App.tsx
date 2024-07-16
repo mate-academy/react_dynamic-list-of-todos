@@ -9,11 +9,12 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [completedStatus, setCompletedStatus] = useState('all');
+  const [completedStatus, setCompletedStatus] = useState<Status>('all');
   const [query, setQuery] = useState('');
 
   let filteredTodos = todos;

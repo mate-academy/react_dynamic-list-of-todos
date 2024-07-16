@@ -1,7 +1,9 @@
+import { Status } from '../../types/Status';
+
 type Props = {
-  completedStatus: string;
+  completedStatus: Status;
   query: string;
-  setCompletedStatus: (status: string) => void;
+  setCompletedStatus: (status: Status) => void;
   setQuery: (query: string) => void;
 };
 
@@ -18,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={completedStatus}
-            onChange={event => setCompletedStatus(event.target.value)}
+            onChange={event => setCompletedStatus(event.target.value as Status)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
