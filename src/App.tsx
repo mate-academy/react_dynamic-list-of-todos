@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -12,15 +12,15 @@ import { getTodos } from './api';
 import { Status } from './types/Status';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [completedStatus, setCompletedStatus] = useState<Status>('all');
   const [query, setQuery] = useState('');
 
   let filteredTodos = todos;
 
-  if (todos) {
-    const filterByStatus = todos.filter(todo => {
+  const filterByStatus = useMemo(() => {
+    return todos.filter(todo => {
       switch (completedStatus) {
         case 'active':
           return !todo.completed;
@@ -32,11 +32,13 @@ export const App: React.FC = () => {
           return true;
       }
     });
+  }, [todos, completedStatus]);
 
-    filteredTodos = filterByStatus.filter(todo =>
+  filteredTodos = useMemo(() => {
+    return filterByStatus.filter(todo =>
       todo.title.toLowerCase().includes(query.toLowerCase()),
     );
-  }
+  }, [filterByStatus, query]);
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -59,7 +61,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!filteredTodos ? (
+              {filteredTodos.length === 0 ? (
                 <Loader />
               ) : (
                 <TodoList
