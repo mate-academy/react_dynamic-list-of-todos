@@ -10,6 +10,12 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+const FILTERS = {
+  ALL: 'all',
+  ACTIVE: 'active',
+  COMPLETED: 'completed'
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [status, setStatus] = useState<string>('all');
@@ -47,9 +53,9 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       const matchesStatus =
-        status === 'all' ||
-        (status === 'active' && !todo.completed) ||
-        (status === 'completed' && todo.completed);
+        status === FILTERS.ALL ||
+        (status === FILTERS.ACTIVE && !todo.completed) ||
+        (status === FILTERS.COMPLETED && todo.completed)
       const matchesSearch = todo.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
