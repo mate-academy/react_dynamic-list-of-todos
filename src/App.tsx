@@ -13,7 +13,6 @@ import { getTodos, getUser } from './api';
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [status, setStatus] = useState('all');
@@ -24,32 +23,21 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos().then(data => {
       setTodos(data);
-      setFilteredTodos(data);
       setLoading(false);
     });
   }, []);
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    filterTodos();
-  }, [status, query, todos]);
-
   const filterTodos = () => {
-    let result = todos;
+    return todos.filter(todo => {
+      const matchesStatus =
+        status === 'all' ||
+        (status === 'completed' ? todo.completed : !todo.completed);
+      const matchesQuery = todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase());
 
-    if (status !== 'all') {
-      result = result.filter(todo =>
-        status === 'completed' ? todo.completed : !todo.completed,
-      );
-    }
-
-    if (query) {
-      result = result.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    setFilteredTodos(result);
+      return matchesStatus && matchesQuery;
+    });
   };
 
   const handleShow = (todo: Todo) => {
@@ -86,7 +74,7 @@ export const App: React.FC = () => {
               {loading && <Loader />}
               {!loading && (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={filterTodos()}
                   onShow={handleShow}
                   selectedTodo={selectedTodo}
                 />

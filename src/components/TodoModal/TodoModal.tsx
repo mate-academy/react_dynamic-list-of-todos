@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
 
 interface Props {
-  todo: Todo | null;
+  todo: Todo;
   user: User | null;
   onClose: () => void;
   loadingUser: boolean;
