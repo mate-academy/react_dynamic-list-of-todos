@@ -13,7 +13,7 @@ import { getTodos } from './api';
 const FILTERS = {
   ALL: 'all',
   ACTIVE: 'active',
-  COMPLETED: 'completed'
+  COMPLETED: 'completed',
 };
 
 export const App: React.FC = () => {
@@ -55,7 +55,7 @@ export const App: React.FC = () => {
       const matchesStatus =
         status === FILTERS.ALL ||
         (status === FILTERS.ACTIVE && !todo.completed) ||
-        (status === FILTERS.COMPLETED && todo.completed)
+        (status === FILTERS.COMPLETED && todo.completed);
       const matchesSearch = todo.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());

@@ -13,7 +13,6 @@ export const TodoList: React.FC<Props> = ({
   onOpen,
   selectedTodoId,
 }) => {
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -44,7 +43,7 @@ export const TodoList: React.FC<Props> = ({
               <p
                 className={cn({
                   'has-text-success': completed === true,
-                  'has-text-danger': completed === false
+                  'has-text-danger': completed === false,
                 })}
               >
                 {title}
