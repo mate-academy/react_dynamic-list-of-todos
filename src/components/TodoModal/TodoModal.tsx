@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onTodo, user, onUser }) => {
 
   useEffect(() => {
     getUser(userId).then(onUser);
-  }, [userId]);
+  }, [userId, onUser]);
 
   const handleCloseModal = () => {
     onUser(null);
