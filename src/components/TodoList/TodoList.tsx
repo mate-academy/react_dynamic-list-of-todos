@@ -41,10 +41,8 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={cn({
-                  'has-text-success': completed === true,
-                  'has-text-danger': completed === false,
-                })}
+                className={cn({'has-text-success': completed === true,
+                'has-text-danger': completed === false})}
               >
                 {title}
               </p>
@@ -54,7 +52,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onOpen({ completed, title, id, userId })}
+                onClick={() => onOpen({ completed, title, id, userId})}
               >
                 <span className="icon">
                   <i
