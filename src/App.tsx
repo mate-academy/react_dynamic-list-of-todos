@@ -1,14 +1,46 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const filteredTodos = todos
+    .filter(todo => {
+      switch (filter) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        case 'all':
+        default:
+          return true;
+      }
+    })
+    .filter(
+      todo => !query || todo.title.toLowerCase().includes(query.toLowerCase()),
+    );
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  const handleEyeClick = (userId: number, todo: Todo) => {
+    setSelectedUserId(userId);
+    setSelectedTodo(todo);
+  };
+
   return (
     <>
       <div className="section">
@@ -17,18 +49,39 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filter={filter}
+                setFilter={setFilter}
+                query={query}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length === 0 ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  onEyeClick={handleEyeClick}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedUserId && selectedTodo && (
+        <TodoModal
+          userId={selectedUserId}
+          todo={selectedTodo}
+          onClose={() => {
+            setSelectedUserId(null);
+            setSelectedTodo(null);
+          }}
+        />
+      )}
     </>
   );
 };
