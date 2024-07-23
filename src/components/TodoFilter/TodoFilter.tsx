@@ -1,8 +1,9 @@
 import React from 'react';
+import { FilterEnum } from '../../types/FilterEnum';
 
 type Props = {
-  filter: string;
-  setFilter: (filter: string) => void;
+  filter: FilterEnum;
+  setFilter: (filter: FilterEnum) => void;
   query: string;
   setQuery: (query: string) => void;
 };
@@ -19,11 +20,11 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={filter}
-          onChange={e => setFilter(e.target.value)}
+          onChange={e => setFilter(e.target.value as FilterEnum)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterEnum.All}>All</option>
+          <option value={FilterEnum.Active}>Active</option>
+          <option value={FilterEnum.Completed}>Completed</option>
         </select>
       </span>
     </p>

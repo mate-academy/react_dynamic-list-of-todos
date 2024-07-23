@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
@@ -12,6 +13,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ userId, todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const { id, title, completed } = todo;
 
   useEffect(() => {
     getUser(userId).then(setUser);
@@ -30,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo.id}
+              Todo #{id}
             </div>
             <button
               type="button"
@@ -42,16 +44,17 @@ export const TodoModal: React.FC<Props> = ({ userId, todo, onClose }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
               >
-                {todo.completed ? 'Done' : 'Planned'}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

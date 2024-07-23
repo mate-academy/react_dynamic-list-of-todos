@@ -9,32 +9,43 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Loader } from './components/Loader';
+import { FilterEnum } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<FilterEnum>(FilterEnum.All);
   const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const filteredTodos = todos
-    .filter(todo => {
+    .filter(({ completed }) => {
       switch (filter) {
-        case 'active':
-          return !todo.completed;
-        case 'completed':
-          return todo.completed;
-        case 'all':
+        case FilterEnum.Active:
+          return !completed;
+        case FilterEnum.Completed:
+          return completed;
+        case FilterEnum.All:
         default:
           return true;
       }
     })
     .filter(
-      todo => !query || todo.title.toLowerCase().includes(query.toLowerCase()),
+      ({ title }) =>
+        !query || title.toLowerCase().includes(query.toLowerCase()),
     );
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
+
+  const handleClose = () => {
+    setSelectedUserId(null);
+    setSelectedTodo(null);
+  };
 
   const handleEyeClick = (userId: number, todo: Todo) => {
     setSelectedUserId(userId);
@@ -58,12 +69,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
-                <Loader />
-              ) : (
+              {isLoading && <Loader />}
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
-                  onEyeClick={handleEyeClick}
+                  handleSelectTodo={handleEyeClick}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -76,10 +86,7 @@ export const App: React.FC = () => {
         <TodoModal
           userId={selectedUserId}
           todo={selectedTodo}
-          onClose={() => {
-            setSelectedUserId(null);
-            setSelectedTodo(null);
-          }}
+          onClose={handleClose}
         />
       )}
     </>
