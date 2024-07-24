@@ -8,6 +8,14 @@ type Props = {
   onDeleteSearchChange: () => void;
 };
 
+enum FilterOptions {
+ All = "all",
+ Active = "active",
+ Completed = "completed",
+}
+
+const optionFilter = Object.values(FilterOptions);
+
 export const TodoFilter: React.FC<Props> = ({
   status,
   searchTerm,
@@ -32,9 +40,11 @@ export const TodoFilter: React.FC<Props> = ({
             value={status}
             onChange={handleStatusChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {optionFilter.map(key => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>
