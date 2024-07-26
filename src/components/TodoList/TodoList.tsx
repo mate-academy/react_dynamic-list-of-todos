@@ -1,23 +1,18 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
 type Props = {
   todoList: Todo[];
-  onEyeClick: (todoId: number, userId: number) => void;
-  isModalOpen: boolean;
+  onEyeClick: (todo: Todo | null) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = React.memo(
-  ({ todoList, onEyeClick, isModalOpen }) => {
-    const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-
+  ({ todoList, onEyeClick, selectedTodo }) => {
     const handleEyeClick = useCallback(
-      (todoId: number, userId: number) => {
-        setSelectedTodoId(prevSelectedTodoId =>
-          prevSelectedTodoId === todoId ? null : todoId,
-        );
-        onEyeClick(todoId, userId);
+      (todo: Todo) => {
+        onEyeClick(todo);
       },
       [onEyeClick],
     );
@@ -39,9 +34,9 @@ export const TodoList: React.FC<Props> = React.memo(
           </tr>
         </thead>
 
-        {todoList.map(todo => (
-          <tbody key={todo.id}>
-            <tr data-cy="todo" className="">
+        <tbody>
+          {todoList.map(todo => (
+            <tr key={todo.id} data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
@@ -65,18 +60,18 @@ export const TodoList: React.FC<Props> = React.memo(
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => handleEyeClick(todo.id, todo.userId)}
+                  onClick={() => handleEyeClick(todo)}
                 >
                   <span className="icon">
                     <i
-                      className={`far ${selectedTodoId === todo.id && isModalOpen ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={`far ${selectedTodo && selectedTodo.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
                     />
                   </span>
                 </button>
               </td>
             </tr>
-          </tbody>
-        ))}
+          ))}
+        </tbody>
       </table>
     );
   },

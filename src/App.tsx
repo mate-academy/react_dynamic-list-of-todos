@@ -9,20 +9,11 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
-export interface SelectedTodo {
-  currentTodoId: number;
-  currentUserId: number;
-}
-
 export const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [filteredTodoList, setFilteredTodoList] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>({
-    currentTodoId: 0,
-    currentUserId: 0,
-  });
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(data => {
@@ -36,12 +27,8 @@ export const App: React.FC = () => {
     setFilteredTodoList(filteredTodos);
   }, []);
 
-  const toggleModal = useCallback((todoId: number, userId: number) => {
-    setIsModalOpen(prev => !prev);
-    setSelectedTodo(prevState => ({
-      currentTodoId: prevState.currentTodoId === todoId ? 0 : todoId,
-      currentUserId: prevState.currentUserId === userId ? 0 : userId,
-    }));
+  const toggleModal = useCallback((todo: Todo | null) => {
+    setSelectedTodo(todo);
   }, []);
 
   return (
@@ -65,7 +52,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todoList={filteredTodoList}
                   onEyeClick={toggleModal}
-                  isModalOpen={isModalOpen}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -73,11 +60,10 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalOpen && (
+      {selectedTodo && (
         <TodoModal
-          toggleModal={toggleModal}
-          todoList={todoList}
-          selectedTodo={selectedTodo}
+          todo={selectedTodo}
+          closeModal={() => setSelectedTodo(null)}
         />
       )}
     </>
