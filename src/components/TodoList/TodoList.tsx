@@ -64,7 +64,11 @@ export const TodoList: React.FC<Props> = React.memo(
                 >
                   <span className="icon">
                     <i
-                      className={`far ${selectedTodo && selectedTodo.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={classNames('far', {
+                        'fa-eye-slash':
+                          selectedTodo && selectedTodo.id === todo.id,
+                        'fa-eye': !selectedTodo || selectedTodo.id !== todo.id,
+                      })}
                     />
                   </span>
                 </button>

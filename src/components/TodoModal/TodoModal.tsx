@@ -1,4 +1,6 @@
+// src/components/TodoModal/TodoModal.tsx
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -16,10 +18,9 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
   useEffect(() => {
     if (todo.userId) {
       setIsLoading(true);
-      getUser(todo.userId).then(data => {
-        setUser(data);
-        setIsLoading(false);
-      });
+      getUser(todo.userId)
+        .then(setUser)
+        .finally(() => setIsLoading(false));
     }
   }, [todo.userId]);
 
@@ -56,9 +57,10 @@ export const TodoModal: React.FC<Props> = React.memo(({ todo, closeModal }) => {
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>

@@ -1,54 +1,29 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Todo } from '../../types/Todo';
-
+import React, { useEffect, useState } from 'react';
+import { Status } from '../../types/Status';
 type Props = {
-  todoList: Todo[];
-  onFilterChange: (filteredTodos: Todo[]) => void;
+  status: Status;
+  searchText: string;
+  onFilterChange: (status: Status, searchText: string) => void;
 };
 
-type Status = 'all' | 'completed' | 'active';
-
-export const TodoFilter: React.FC<Props> = ({ todoList, onFilterChange }) => {
-  const [status, setStatus] = useState<Status>('all');
-  const [searchText, setSearchText] = useState('');
-
-  const applyFilter = useCallback(() => {
-    let filteredTodos: Todo[];
-
-    switch (status) {
-      case 'active':
-        filteredTodos = todoList.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        filteredTodos = todoList.filter(todo => todo.completed);
-        break;
-      default:
-        filteredTodos = todoList;
-    }
-
-    if (searchText) {
-      filteredTodos = filteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(searchText.toLowerCase()),
-      );
-    }
-
-    onFilterChange(filteredTodos);
-  }, [status, searchText, todoList, onFilterChange]);
+export const TodoFilter: React.FC<Props> = ({
+  status,
+  searchText,
+  onFilterChange,
+}) => {
+  const [localStatus, setLocalStatus] = useState<Status>(status);
+  const [localSearchText, setLocalSearchText] = useState(searchText);
 
   useEffect(() => {
-    applyFilter();
-  }, [applyFilter]);
+    onFilterChange(localStatus, localSearchText);
+  }, [localStatus, localSearchText, onFilterChange]);
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = event.target.value as Status;
-
-    setStatus(newStatus);
+    setLocalStatus(event.target.value as Status);
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newText = event.target.value;
-
-    setSearchText(newText);
+    setLocalSearchText(event.target.value);
   };
 
   return (
@@ -60,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({ todoList, onFilterChange }) => {
             value={status}
             onChange={handleStatusChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.All}>All</option>
+            <option value={Status.Active}>Active</option>
+            <option value={Status.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -73,23 +48,20 @@ export const TodoFilter: React.FC<Props> = ({ todoList, onFilterChange }) => {
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchText}
+          value={localSearchText}
           onChange={handleTextChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {searchText && (
+        {localSearchText && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => {
-                setSearchText('');
-              }}
+              onClick={() => setLocalSearchText('')}
             />
           </span>
         )}
