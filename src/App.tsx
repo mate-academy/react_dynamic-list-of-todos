@@ -7,22 +7,20 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { FilterTypes } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [filterMethod, setFilterMethod] = useState<FilterTypes>(
     FilterTypes.all,
   );
   const [query, setQuery] = useState('');
+
   const onClickHandler = (currentTodo: Todo | null) => {
     setSelectedTodo(currentTodo);
-    setUser(null);
   };
 
   useEffect(() => {
@@ -30,12 +28,6 @@ export const App: React.FC = () => {
       setTodos(todosFromServer);
     });
   }, []);
-
-  useEffect(() => {
-    if (selectedTodo) {
-      getUser(selectedTodo.userId).then(setUser);
-    }
-  }, [selectedTodo]);
 
   const onChangeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -47,26 +39,26 @@ export const App: React.FC = () => {
     setFilterMethod(event.target.value as FilterTypes);
   };
 
-  const resetQuery = () => setQuery('');
+  const resetQuery = () => {
+    setQuery('');
+  };
 
-  const filtredTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     const hasQuery = todo.title
       .toLowerCase()
       .includes(query.trim().toLowerCase());
 
-    if (filterMethod === FilterTypes.active) {
-      return !todo.completed && hasQuery;
-    }
+    switch (filterMethod) {
+      case FilterTypes.active:
+        return !todo.completed && hasQuery;
 
-    if (filterMethod === FilterTypes.completed) {
-      return todo.completed && hasQuery;
-    }
+      case FilterTypes.completed:
+        return todo.completed && hasQuery;
 
-    if (filterMethod === FilterTypes.all) {
-      return true && hasQuery;
+      case FilterTypes.all:
+      default:
+        return hasQuery;
     }
-
-    return hasQuery;
   });
 
   return (
@@ -89,7 +81,7 @@ export const App: React.FC = () => {
               {todos.length === 0 && <Loader />}
               {todos.length !== 0 && (
                 <TodoList
-                  todos={filtredTodos}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   onClickHandler={onClickHandler}
                 />
@@ -102,8 +94,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           selectedTodo={selectedTodo}
-          user={user}
-          onClickHandler={onClickHandler}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>

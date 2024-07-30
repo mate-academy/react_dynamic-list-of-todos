@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo | null;
-  user: User | null;
-  onClickHandler: (todo: Todo | null) => void;
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  user,
-  onClickHandler,
+  setSelectedTodo,
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const onCloseHandler = (currentTodo: Todo | null) => {
+    setSelectedTodo(currentTodo);
+    setUser(null);
+  };
+
+  useEffect(() => {
+    if (selectedTodo) {
+      getUser(selectedTodo.userId).then(setUser);
+    }
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -35,7 +47,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClickHandler(null)}
+              onClick={() => onCloseHandler(null)}
             />
           </header>
 
