@@ -1,3 +1,5 @@
+import { FilterTypes } from '../../types/FilterTypes';
+
 type Props = {
   onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,9 +17,9 @@ export const TodoFilter: React.FC<Props> = ({
     <p className="control">
       <span className="select">
         <select data-cy="statusSelect" onChange={onFilterChange}>
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={FilterTypes.all}>All</option>
+          <option value={FilterTypes.active}>Active</option>
+          <option value={FilterTypes.completed}>Completed</option>
         </select>
       </span>
     </p>

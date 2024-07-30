@@ -10,12 +10,15 @@ import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { FilterTypes } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [filterMethod, setFilterMethod] = useState('');
+  const [filterMethod, setFilterMethod] = useState<FilterTypes>(
+    FilterTypes.all,
+  );
   const [query, setQuery] = useState('');
   const onClickHandler = (currentTodo: Todo | null) => {
     setSelectedTodo(currentTodo);
@@ -30,9 +33,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (selectedTodo) {
-      getUser(selectedTodo.userId).then(userFromServer => {
-        setUser(userFromServer);
-      });
+      getUser(selectedTodo.userId).then(setUser);
     }
   }, [selectedTodo]);
 
@@ -43,27 +44,29 @@ export const App: React.FC = () => {
   const onChangeFilterHandler = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setFilterMethod(event.target.value);
+    setFilterMethod(event.target.value as FilterTypes);
   };
 
   const resetQuery = () => setQuery('');
 
   const filtredTodos = todos.filter(todo => {
-    const hasQuery = todo.title.includes(query.trim().toLowerCase());
+    const hasQuery = todo.title
+      .toLowerCase()
+      .includes(query.trim().toLowerCase());
 
-    if (filterMethod === 'active') {
+    if (filterMethod === FilterTypes.active) {
       return !todo.completed && hasQuery;
     }
 
-    if (filterMethod === 'completed') {
+    if (filterMethod === FilterTypes.completed) {
       return todo.completed && hasQuery;
     }
 
-    if (filterMethod === 'all') {
-      return true && hasQuery;
-    } else {
+    if (filterMethod === FilterTypes.all) {
       return true && hasQuery;
     }
+
+    return hasQuery;
   });
 
   return (
