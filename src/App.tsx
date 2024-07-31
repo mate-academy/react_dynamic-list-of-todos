@@ -19,14 +19,15 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [select, setSelect] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loadingTodo, setLoadingTodo] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setLoadingTodo(false));
   }, []);
 
   function handleQueryChange(input: string) {
@@ -64,13 +65,16 @@ export const App: React.FC = () => {
   function closeModal() {
     setUser(null);
     setSelectedTodo(null);
+    setLoadingUser(true);
   }
 
   function handleShowTodo(todo: Todo) {
-    getUser(todo.userId).then(person => {
-      setUser(person);
-      setSelectedTodo(todo);
-    });
+    getUser(todo.userId)
+      .then(person => {
+        setUser(person);
+        setSelectedTodo(todo);
+      })
+      .finally(() => setLoadingUser(false));
   }
 
   const preparedTodos = getPreparedTodos(todos, select, query);
@@ -93,7 +97,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
+              {loadingTodo ? (
                 <Loader />
               ) : (
                 <TodoList
@@ -107,7 +111,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {user && <TodoModal todo={selectedTodo} onCloseModal={closeModal} />}
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          onCloseModal={closeModal}
+          user={user}
+          loadingUser={loadingUser}
+        />
+      )}
     </>
   );
 };

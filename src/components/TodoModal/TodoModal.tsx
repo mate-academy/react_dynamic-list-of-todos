@@ -1,28 +1,25 @@
 import React from 'react';
 import { User } from '../../types/User';
-import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { Loader } from '../Loader';
-import { getUser } from '../../api';
 
 type Props = {
   todo: Todo | null;
+  user: User | null;
+  loadingUser: boolean;
   onCloseModal: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    if (todo?.userId) {
-      getUser(todo.userId).then(setUser);
-    }
-  }, [todo?.userId]);
-
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  onCloseModal,
+  user,
+  loadingUser,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-      {!user ? (
+      {loadingUser ? (
         <Loader />
       ) : (
         <div className="modal-card">

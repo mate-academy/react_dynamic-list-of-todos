@@ -22,6 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
           value={select}
           onChange={e => {
             const value = e.target.value as TodoStatus;
+
             if (Object.values(TodoStatus).includes(value as TodoStatus)) {
               onSelect(value);
             }
