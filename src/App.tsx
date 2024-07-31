@@ -8,6 +8,7 @@ import { getTodos } from './api';
 
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { TodoStatus } from './types/Select';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -16,7 +17,7 @@ import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [select, setSelect] = useState('all');
+  const [select, setSelect] = useState(TodoStatus.All);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
@@ -24,7 +25,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer))
+      .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
     setQuery(input);
   }
 
-  function handleSelect(selector: string) {
+  function handleSelect(selector: TodoStatus) {
     setSelect(selector);
   }
 
@@ -47,9 +48,9 @@ export const App: React.FC = () => {
   ) {
     let preparedTodos = [...todoList];
 
-    if (statusSelect === 'active') {
+    if (statusSelect === TodoStatus.Active) {
       preparedTodos = preparedTodos.filter(todo => !todo.completed);
-    } else if (statusSelect === 'completed') {
+    } else if (statusSelect === TodoStatus.Completed) {
       preparedTodos = preparedTodos.filter(todo => todo.completed);
     }
 

@@ -1,7 +1,9 @@
+import { TodoStatus } from '../../types/Select';
+
 type Props = {
   query: string;
   select: string;
-  onSelect: (string: string) => void;
+  onSelect: (string: TodoStatus) => void;
   onQueryChange: (query: string) => void;
   clearInput: () => void;
 };
@@ -18,12 +20,17 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           value={select}
-          onChange={e => onSelect(e.target.value)}
+          onChange={e => {
+            const value = e.target.value as TodoStatus;
+            if (Object.values(TodoStatus).includes(value as TodoStatus)) {
+              onSelect(value);
+            }
+          }}
           data-cy="statusSelect"
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value="all">{TodoStatus.All}</option>
+          <option value="active">{TodoStatus.Active}</option>
+          <option value="completed">{TodoStatus.Completed}</option>
         </select>
       </span>
     </p>
@@ -45,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {query && (
           <button
-            onClick={() => clearInput()}
+            onClick={clearInput}
             data-cy="clearSearchButton"
             type="button"
             className="delete"
