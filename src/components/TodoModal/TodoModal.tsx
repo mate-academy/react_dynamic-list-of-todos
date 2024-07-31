@@ -15,18 +15,16 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
   useEffect(() => {
     setLoading(true);
-    if (!user) {
-      getUser(todo.userId)
-        .then(user => {
-          setUser({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-          });
-        })
-        .finally(() => setLoading(false));
-    }
+    getUser(todo.userId)
+      .then(userData => {
+        setUser({
+          id: userData.id,
+          name: userData.name,
+          email: userData.email,
+          phone: userData.phone,
+        });
+      })
+      .finally(() => setLoading(false));
   }, [todo.userId]);
 
   return (

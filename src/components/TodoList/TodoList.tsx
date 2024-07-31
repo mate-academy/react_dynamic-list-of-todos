@@ -8,7 +8,11 @@ type Prop = {
   showModal: boolean;
 };
 
-export const TodoList: React.FC<Prop> = ({ todos, showModal, onTodoSelect }) => {
+export const TodoList: React.FC<Prop> = ({
+  todos,
+  showModal,
+  onTodoSelect,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
