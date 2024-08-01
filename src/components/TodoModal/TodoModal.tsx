@@ -39,7 +39,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{user?.id}
+              Todo #{userId}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}

@@ -5,31 +5,44 @@ import { TodoModal } from '../TodoModal';
 type Props = {
   todos: Todo[];
   selectOption: string;
+  inputText: string;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectOption }) => {
+export const TodoList: React.FC<Props> = ({ todos, selectOption, inputText }) => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
+    // Фильтрация по статусу
+    let newFilteredTodos = todos;
+
     switch (selectOption) {
       case 'All':
-        setFilteredTodos(todos);
+        newFilteredTodos = todos;
         break;
 
       case 'Active':
-        setFilteredTodos(todos.filter(todo => !todo.completed));
+        newFilteredTodos = todos.filter(todo => !todo.completed);
         break;
 
       case 'Completed':
-        setFilteredTodos(todos.filter(todo => todo.completed));
+        newFilteredTodos = todos.filter(todo => todo.completed);
         break;
 
       default:
-        setFilteredTodos(todos);
+        newFilteredTodos = todos;
         break;
     }
-  }, [selectOption, todos]);
+
+    // Фильтрация по тексту
+    if (inputText.length > 0) {
+      newFilteredTodos = newFilteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(inputText.toLowerCase())
+      );
+    }
+
+    setFilteredTodos(newFilteredTodos);
+  }, [selectOption, todos, inputText]);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
@@ -88,7 +101,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectOption }) => {
 
       {selectedTodo && (
         <TodoModal
-          userId={selectedTodo.userId}
+          userId={selectedTodo.id}
           onClose={() => setSelectedTodoId(null)}
           text={selectedTodo.title}
           completed={selectedTodo.completed}

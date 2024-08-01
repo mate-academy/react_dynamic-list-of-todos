@@ -30,7 +30,6 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-            {selectOption}
 
             <div className="block">
               <TodoFilter setSelectOption={setSelectOption} setInputText={setInputText} inputText={inputText} />
@@ -41,8 +40,12 @@ export const App: React.FC = () => {
                 <Loader />
               )}
               {todosFromServer.length > 0 &&
-                <TodoList todos={todosFromServer} selectOption={selectOption}
-              />}
+                <TodoList
+                  todos={todosFromServer}
+                  selectOption={selectOption}
+                  inputText={inputText}
+                />
+              }
             </div>
           </div>
         </div>
