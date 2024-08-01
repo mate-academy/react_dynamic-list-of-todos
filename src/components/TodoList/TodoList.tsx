@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | null;
-  onSelect: (userId: number, todo: Todo) => void;
+  onSelect: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -53,9 +53,7 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() =>
-                  onSelect(userId, { id, completed, title, userId })
-                }
+                onClick={() => onSelect({ id, completed, title, userId })}
               >
                 <span className="icon">
                   {selectedTodo?.id === id ? (

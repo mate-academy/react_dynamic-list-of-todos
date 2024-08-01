@@ -8,27 +8,24 @@ import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
+import { Filter } from './types/FilterEnum';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Filter>(Filter.all);
   const [loader, setLoader] = useState(false);
-
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleClose = () => {
-    setSelectedUserId(null);
     setSelectedTodo(null);
   };
 
-  const handleSelectUser = (userId: number, todo: Todo) => {
-    setSelectedUserId(userId);
+  const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
   };
 
-  const handlChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
@@ -41,15 +38,15 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter(todo => {
-      if (filter === 'active') {
-        return !todo.completed;
+      if (filter === Filter.active) {
+        return !todo.completed; // Показувати тільки активні завдання
       }
 
-      if (filter === 'completed') {
-        return todo.completed;
+      if (filter === Filter.completed) {
+        return todo.completed; // Показувати тільки завершені завдання
       }
 
-      return true;
+      return true; // Показувати всі завдання, якщо вибрано "all"
     })
     .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
@@ -63,7 +60,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                onChangeTitle={handlChangeTitle}
+                onChangeTitle={handleChangeTitle}
                 setFilter={setFilter}
                 setQuery={setQuery}
               />
@@ -71,11 +68,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loader && <Loader />}
-              {!loader && todos.length > 0 && (
+              {!loader && !!todos.length && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
-                  onSelect={handleSelectUser}
+                  onSelect={handleSelectTodo}
                 />
               )}
             </div>
@@ -83,11 +80,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal
-        userId={selectedUserId}
-        todo={selectedTodo}
-        onClose={handleClose}
-      />
+      {selectedTodo && (
+        <TodoModal
+          userId={selectedTodo.userId}
+          todo={selectedTodo}
+          onClose={handleClose}
+        />
+      )}
     </>
   );
 };

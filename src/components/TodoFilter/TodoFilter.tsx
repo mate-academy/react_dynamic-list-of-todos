@@ -1,9 +1,10 @@
 import React from 'react';
+import { Filter } from '../../types/FilterEnum';
 
 type Props = {
   query: string;
   onChangeTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setFilter: (filter: string) => void;
+  setFilter: React.Dispatch<React.SetStateAction<Filter>>;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -19,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => setFilter(event.target.value)}
+            onChange={event => setFilter(event.target.value as Filter)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -43,7 +44,7 @@ export const TodoFilter: React.FC<Props> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {query.length !== 0 && (
+          {!!query.length && (
             <button
               data-cy="clearSearchButton"
               type="button"
