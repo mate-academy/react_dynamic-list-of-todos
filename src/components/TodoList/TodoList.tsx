@@ -17,7 +17,6 @@ export const TodoList: React.FC<Props> = ({
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
-    // Фильтрация по статусу
     let newFilteredTodos = todos;
 
     switch (selectOption) {
@@ -38,7 +37,6 @@ export const TodoList: React.FC<Props> = ({
         break;
     }
 
-    // Фильтрация по тексту
     if (inputText.length > 0) {
       newFilteredTodos = newFilteredTodos.filter(todo =>
         todo.title.toLowerCase().includes(inputText.toLowerCase()),
