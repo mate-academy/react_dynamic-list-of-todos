@@ -10,8 +10,8 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todosFromServer, SetTodosFromServer] = useState<Todo[]>([])
-  const [loaderBool, SetLoaderBool] = useState(true)
+  const [todosFromServer, SetTodosFromServer] = useState<Todo[]>([]);
+  const [loaderBool, SetLoaderBool] = useState(true);
 
   const [selectOption, setSelectOption] = useState('All');
 
@@ -19,10 +19,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos().then(data => {
-      SetTodosFromServer(data)
+      SetTodosFromServer(data);
       SetLoaderBool(false);
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <>
@@ -32,20 +32,22 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setSelectOption={setSelectOption} setInputText={setInputText} inputText={inputText} />
+              <TodoFilter
+                setSelectOption={setSelectOption}
+                setInputText={setInputText}
+                inputText={inputText}
+              />
             </div>
 
             <div className="block">
-              {loaderBool && (
-                <Loader />
-              )}
-              {todosFromServer.length > 0 &&
+              {loaderBool && <Loader />}
+              {todosFromServer.length > 0 && (
                 <TodoList
                   todos={todosFromServer}
                   selectOption={selectOption}
                   inputText={inputText}
                 />
-              }
+              )}
             </div>
           </div>
         </div>

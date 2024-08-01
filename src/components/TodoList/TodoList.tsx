@@ -8,7 +8,11 @@ type Props = {
   inputText: string;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selectOption, inputText }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectOption,
+  inputText,
+}) => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
@@ -37,7 +41,7 @@ export const TodoList: React.FC<Props> = ({ todos, selectOption, inputText }) =>
     // Фильтрация по тексту
     if (inputText.length > 0) {
       newFilteredTodos = newFilteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(inputText.toLowerCase())
+        todo.title.toLowerCase().includes(inputText.toLowerCase()),
       );
     }
 
