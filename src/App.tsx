@@ -39,14 +39,14 @@ export const App: React.FC = () => {
   const filteredTodos = todos
     .filter(todo => {
       if (filter === Filter.active) {
-        return !todo.completed; // Показувати тільки активні завдання
+        return !todo.completed;
       }
 
       if (filter === Filter.completed) {
-        return todo.completed; // Показувати тільки завершені завдання
+        return todo.completed;
       }
 
-      return true; // Показувати всі завдання, якщо вибрано "all"
+      return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
