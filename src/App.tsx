@@ -1,5 +1,4 @@
 // #region imports
-/* eslint-disable max-len */
 import React, { useState, useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';

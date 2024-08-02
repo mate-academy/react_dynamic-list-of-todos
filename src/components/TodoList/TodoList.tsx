@@ -13,6 +13,14 @@ export const TodoList: React.FC<Props> = ({
   selectedId,
   onSelect = () => {},
 }) => {
+  const handleSelect = (currentId: number) => {
+    if (selectedId === currentId) {
+      onSelect(null);
+    } else {
+      onSelect(currentId);
+    }
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -48,7 +56,12 @@ export const TodoList: React.FC<Props> = ({
             </td>
 
             <td className="is-vcentered is-expanded">
-              <p className={completed ? 'has-text-success' : 'has-text-danger'}>
+              <p
+                className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
+              >
                 {title}
               </p>
             </td>
@@ -59,11 +72,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  if (selectedId === id) {
-                    onSelect(null);
-                  } else {
-                    onSelect(id);
-                  }
+                  handleSelect(id);
                 }}
               >
                 <span className="icon">
