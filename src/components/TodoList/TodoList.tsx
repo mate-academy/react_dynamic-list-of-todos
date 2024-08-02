@@ -20,15 +20,15 @@ export const TodoList: React.FC<Props> = ({
     let newFilteredTodos = todos;
 
     switch (selectOption) {
-      case 'All':
+      case 'all':
         newFilteredTodos = todos;
         break;
 
-      case 'Active':
+      case 'active':
         newFilteredTodos = todos.filter(todo => !todo.completed);
         break;
 
-      case 'Completed':
+      case 'completed':
         newFilteredTodos = todos.filter(todo => todo.completed);
         break;
 
@@ -69,15 +69,16 @@ export const TodoList: React.FC<Props> = ({
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
-                <span className="icon">
-                  <i className={`fas ${todo.completed ? 'fa-check' : ''}`} />
-                </span>
+                {todo.completed && (
+                  <span className="icon" data-cy="iconCompleted">
+                    <i className={`fas ${todo.completed ? 'fa-check' : ''}`} />
+                  </span>
+                )}
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={`${
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }`}
+                  className={`${todo.completed ? 'has-text-success' : 'has-text-danger'
+                    }`}
                 >
                   {todo.title}
                 </p>
@@ -103,7 +104,8 @@ export const TodoList: React.FC<Props> = ({
 
       {selectedTodo && (
         <TodoModal
-          userId={selectedTodo.id}
+          userId={selectedTodo.userId}
+          id={selectedTodo.id}
           onClose={() => setSelectedTodoId(null)}
           text={selectedTodo.title}
           completed={selectedTodo.completed}

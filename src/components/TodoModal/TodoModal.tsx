@@ -5,6 +5,7 @@ import { getUser } from '../../api';
 
 type Props = {
   userId: number;
+  id: number;
   onClose: () => void;
   text: string;
   completed: boolean;
@@ -12,6 +13,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({
   userId,
+  id,
   onClose,
   text,
   completed,
@@ -39,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{userId}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
