@@ -11,7 +11,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [loaderBool, SetLoaderBool] = useState(true);
+  const [loaderBool, setLoaderBool] = useState(true);
 
   const [selectedOption, setSelectedOption] = useState('All');
 
@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos().then(data => {
       setTodosFromServer(data);
-      SetLoaderBool(false);
+      setLoaderBool(false);
     });
   }, []);
 

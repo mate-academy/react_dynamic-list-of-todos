@@ -13,7 +13,7 @@ export const TodoList: React.FC<Props> = ({
   selectOption,
   inputText,
 }) => {
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
 
   useEffect(() => {
@@ -45,8 +45,6 @@ export const TodoList: React.FC<Props> = ({
 
     setFilteredTodos(newFilteredTodos);
   }, [selectOption, todos, inputText]);
-
-  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
   return (
     <>
@@ -89,11 +87,11 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setSelectedTodoId(todo.id)}
+                  onClick={() => setSelectedTodo(todo)}
                 >
                   <span className="icon">
                     <i
-                      className={`far ${selectedTodoId === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={`far ${selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
                     />
                   </span>
                 </button>
@@ -107,7 +105,7 @@ export const TodoList: React.FC<Props> = ({
         <TodoModal
           userId={selectedTodo.userId}
           id={selectedTodo.id}
-          onClose={() => setSelectedTodoId(null)}
+          onClose={() => setSelectedTodo(null)}
           text={selectedTodo.title}
           completed={selectedTodo.completed}
         />
