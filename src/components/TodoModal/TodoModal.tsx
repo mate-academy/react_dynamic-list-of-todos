@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
+import cn from 'classnames'
 
 type Props = {
   userId: number;
@@ -49,7 +50,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose} // вызываем функцию закрытия
+              onClick={onClose}
             />
           </header>
 
@@ -60,7 +61,10 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={completed ? 'has-text-success' : 'has-text-danger'}
+                className={cn({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
               >
                 {completed ? 'Done' : 'Planned'}
               </strong>

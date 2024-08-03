@@ -6,6 +6,12 @@ type Props = {
   inputText: string;
 };
 
+export enum TodoStatus {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 export const TodoFilter: React.FC<Props> = ({
   setSelectOption,
   setInputText,
@@ -21,9 +27,9 @@ export const TodoFilter: React.FC<Props> = ({
               setSelectOption(event.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{TodoStatus.All}</option>
+            <option value="active">{TodoStatus.Active}</option>
+            <option value="completed">{TodoStatus.Completed}</option>
           </select>
         </span>
       </p>

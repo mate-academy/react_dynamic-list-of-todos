@@ -10,18 +10,18 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [loaderBool, setLoaderBool] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState('All');
 
   const [inputText, setInputText] = useState('');
 
   useEffect(() => {
-    getTodos().then(data => {
-      setTodosFromServer(data);
-      setLoaderBool(false);
-    });
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -40,10 +40,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loaderBool && <Loader />}
-              {todosFromServer.length > 0 && (
+              {isLoading && <Loader />}
+              {todos.length > 0 && (
                 <TodoList
-                  todos={todosFromServer}
+                  todos={todos}
                   selectOption={selectedOption}
                   inputText={inputText}
                 />
