@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { TodoModal } from '../TodoModal';
 import cn from 'classnames';
+import { TodoStatus } from '../../types/todoStatus';
 
 type Props = {
   todos: Todo[];
@@ -21,15 +22,15 @@ export const TodoList: React.FC<Props> = ({
     let newFilteredTodos = todos;
 
     switch (selectOption) {
-      case 'all':
+      case TodoStatus.All:
         newFilteredTodos = todos;
         break;
 
-      case 'active':
+      case TodoStatus.Active:
         newFilteredTodos = todos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
+      case TodoStatus.Completed:
         newFilteredTodos = todos.filter(todo => todo.completed);
         break;
 

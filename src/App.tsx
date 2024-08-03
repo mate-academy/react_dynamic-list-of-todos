@@ -8,12 +8,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/todoStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [selectedOption, setSelectedOption] = useState('All');
+  const [selectedOption, setSelectedOption] = useState(TodoStatus.All);
 
   const [inputText, setInputText] = useState('');
 

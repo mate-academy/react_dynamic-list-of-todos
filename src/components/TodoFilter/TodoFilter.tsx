@@ -1,16 +1,11 @@
 import React from 'react';
+import { TodoStatus } from '../../types/todoStatus';
 
 type Props = {
-  setSelectOption: (event: string) => void;
+  setSelectOption: (event: TodoStatus) => void;
   setInputText: (event: string) => void;
   inputText: string;
 };
-
-export enum TodoStatus {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
 
 export const TodoFilter: React.FC<Props> = ({
   setSelectOption,
@@ -23,13 +18,11 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => {
-              setSelectOption(event.target.value);
-            }}
+            onChange={(e) => setSelectOption(e.target.value as TodoStatus)}
           >
-            <option value="all">{TodoStatus.All}</option>
-            <option value="active">{TodoStatus.Active}</option>
-            <option value="completed">{TodoStatus.Completed}</option>
+            <option value={TodoStatus.All}>All</option>
+            <option value={TodoStatus.Active}>Active</option>
+            <option value={TodoStatus.Completed}>Completed</option>
           </select>
         </span>
       </p>
