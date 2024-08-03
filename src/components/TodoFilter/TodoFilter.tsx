@@ -1,11 +1,10 @@
 import React from 'react';
-import { StatusFilterOptions } from '../../types/StatusFilterOptions';
+import { StatusFilterOptions as SFO } from '../../types/StatusFilterOptions';
 
 type Props = {
   searchInputValue: string;
   onChangeTitleFilter: React.Dispatch<React.SetStateAction<string>>;
-  // eslint-disable-next-line max-len, prettier/prettier
-  onChangeStatusFilter: React.Dispatch<React.SetStateAction<StatusFilterOptions>>;
+  onChangeStatusFilter: React.Dispatch<React.SetStateAction<SFO>>;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -20,7 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleStatusSelectChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const value = e.target.value as StatusFilterOptions;
+    const value = e.target.value as SFO;
 
     onChangeStatusFilter(value);
   };
