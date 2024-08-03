@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
-import cn from 'classnames'
+import cn from 'classnames';
 
 type Props = {
   userId: number;
