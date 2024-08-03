@@ -1,1 +1,5 @@
-export type StatusFilterOptions = 'all' | 'active' | 'completed';
+export enum StatusFilterOptions {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}

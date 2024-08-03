@@ -12,7 +12,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | []>([]);
-  const [statusFilter, setStatusFilter] = useState<StatusFilterOptions>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilterOptions>(StatusFilterOptions.All);
   const [titleFilter, setTitleFilter] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,10 +32,10 @@ export const App: React.FC = () => {
       let statusCorresponding = true;
 
       switch (statusFilterValue) {
-        case 'active':
+        case StatusFilterOptions.Active:
           statusCorresponding = !todo.completed;
           break;
-        case 'completed':
+        case StatusFilterOptions.Completed:
           statusCorresponding = todo.completed;
           break;
         default:
