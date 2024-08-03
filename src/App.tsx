@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,51 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { StatusFilterOptions } from './types/StatusFilterOptions';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [statusFilter, setStatusFilter] = useState<StatusFilterOptions>('all');
+  const [titleFilter, setTitleFilter] = useState('');
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filterTodos = (
+    todosForFilter: Todo[],
+    titleFilterValue: string,
+    statusFilterValue: StatusFilterOptions,
+  ) => {
+    return todosForFilter.filter(todo => {
+      let statusCorresponding = true;
+
+      switch (statusFilterValue) {
+        case 'active':
+          statusCorresponding = !todo.completed;
+          break;
+        case 'completed':
+          statusCorresponding = todo.completed;
+          break;
+        default:
+          break;
+      }
+
+      return (
+        todo.title.toLowerCase().includes(titleFilterValue.toLowerCase()) &&
+        statusCorresponding
+      );
+    });
+  };
+
+  const filteredTodos = filterTodos(todos, titleFilter, statusFilter);
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                searchInputValue={titleFilter}
+                onChangeTitleFilter={setTitleFilter}
+                onChangeStatusFilter={setStatusFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  setSelectedTodo={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+      )}
     </>
   );
 };
