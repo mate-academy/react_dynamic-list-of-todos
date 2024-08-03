@@ -10,29 +10,13 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { Status } from './types/Status';
+import { getFilteredTodos } from './services/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<Status>('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-
-  const filteredTodos = (): Todo[] => {
-    const result = todos.filter(
-      (todo: Todo) =>
-        todo.title.toLowerCase().indexOf(query.toLowerCase()) >= 0,
-    );
-
-    switch (status) {
-      case 'active':
-        return result.filter((todo: Todo) => !todo.completed);
-
-      case 'completed':
-        return result.filter((todo: Todo) => todo.completed);
-      default:
-        return result;
-    }
-  };
 
   useEffect(() => {
     getTodos().then(setTodos);
@@ -49,17 +33,17 @@ export const App: React.FC = () => {
               <TodoFilter
                 status={status}
                 query={query}
-                onQueryChanged={value => setQuery(value)}
-                onStatusChanged={value => setStatus(value)}
+                onQueryChanged={setQuery}
+                onStatusChanged={setStatus}
               />
             </div>
 
             <div className="block">
               {todos.length > 0 ? (
                 <TodoList
-                  todos={filteredTodos()}
-                  todoId={selectedTodo?.id}
-                  onTodoSelected={todo => setSelectedTodo(todo)}
+                  todos={getFilteredTodos(todos, query, status)}
+                  selectedTodoId={selectedTodo?.id}
+                  onTodoSelected={setSelectedTodo}
                 />
               ) : (
                 <Loader />
@@ -70,10 +54,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          onClose={value => setSelectedTodo(value)}
-          todo={selectedTodo}
-        />
+        <TodoModal onClose={setSelectedTodo} todo={selectedTodo} />
       )}
     </>
   );

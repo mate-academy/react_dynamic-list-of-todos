@@ -3,13 +3,13 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  todoId?: number;
-  onTodoSelected?: (todo: Todo) => void;
+  selectedTodoId?: number;
+  onTodoSelected: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  todoId,
+  selectedTodoId: todoId,
   onTodoSelected = () => {},
 }) => (
   <table className="table is-narrow is-fullwidth">

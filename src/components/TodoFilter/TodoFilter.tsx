@@ -1,8 +1,8 @@
 import { Status } from '../../types/Status';
 
 type Props = {
-  onQueryChanged?: (query: string) => void;
-  onStatusChanged?: (statusName: Status) => void;
+  onQueryChanged: (query: string) => void;
+  onStatusChanged: (statusName: Status) => void;
   query: string;
   status: Status;
 };
