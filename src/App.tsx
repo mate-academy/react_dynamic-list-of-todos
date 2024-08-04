@@ -15,7 +15,7 @@ import { getFilteredTodos } from './services/todos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<Status>('all');
+  const [status, setStatus] = useState<Status>(Status.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length > 0 ? (
+              {!!todos.length ? (
                 <TodoList
                   todos={getFilteredTodos(todos, query, status)}
                   selectedTodoId={selectedTodo?.id}

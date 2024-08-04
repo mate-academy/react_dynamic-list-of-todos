@@ -11,10 +11,10 @@ export const getFilteredTodos = (
   );
 
   switch (status) {
-    case 'active':
+    case Status.Active:
       return result.filter((todo: Todo) => !todo.completed);
 
-    case 'completed':
+    case Status.Completed:
       return result.filter((todo: Todo) => todo.completed);
     default:
       return result;
