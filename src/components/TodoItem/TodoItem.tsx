@@ -45,7 +45,11 @@ export const TodoItem: React.FC<Props> = ({
           type="button"
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            {false ? (
+              <i className="far fa-eye-slash" />
+            ) : (
+              <i className="far fa-eye" />
+            )}
           </span>
         </button>
       </td>
