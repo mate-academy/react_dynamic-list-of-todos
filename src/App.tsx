@@ -47,10 +47,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     let todos = allTodos;
 
-    if (option === 'completed') {
-      todos = todos.filter(todo => todo.completed);
-    } else if (option === 'active') {
-      todos = todos.filter(todo => !todo.completed);
+    switch (option) {
+      case 'completed':
+        todos = todos.filter(todo => todo.completed);
+        break;
+      case 'active':
+        todos = todos.filter(todo => !todo.completed);
+        break;
     }
 
     if (filterText) {
