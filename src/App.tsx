@@ -23,9 +23,6 @@ export const App: React.FC = () => {
   const [modalLoading, setModalLoading] = useState(true);
   const [userData, setUserData] = useState<User>();
 
-  // To change the style of todo
-  // const [toIdSelected, setToIdSelected] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     getTodos()
@@ -57,7 +54,11 @@ export const App: React.FC = () => {
     }
 
     if (filterText) {
-      todos = todos.filter(todo => todo.title.includes(filterText));
+      const lowerCaseFilterText = filterText.toLowerCase();
+
+      todos = todos.filter(todo =>
+        todo.title.toLowerCase().includes(lowerCaseFilterText),
+      );
     }
 
     setFilteredTodos(todos);
