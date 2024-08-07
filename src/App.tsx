@@ -73,7 +73,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && todos.length > 0 && (
+              {!!todos.length && (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodoId={selectedTodo?.id}
