@@ -1,33 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Loader } from '../Loader';
-import { User } from '../../types/User';
-import { getUser } from '../../api';
+
 import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
   setShowModal: (v: boolean) => void;
-  userId: number | null;
   selectedTodo: Todo | null;
+  loading: boolean;
+  userData: User | undefined;
+  setSelectedTodo: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   setShowModal: showModal,
-  userId,
   selectedTodo,
+  loading,
+  userData,
+  setSelectedTodo,
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<User>();
-
   const checkedData = selectedTodo !== null;
 
-  useEffect(() => {
-    if (userId != null) {
-      setLoading(true);
-      getUser(userId)
-        .then(setUserData)
-        .finally(() => setLoading(false));
-    }
-  }, [userId]);
+  const handleClick = () => {
+    showModal(false);
+    setSelectedTodo(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -47,7 +44,7 @@ export const TodoModal: React.FC<Props> = ({
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
-              onClick={() => showModal(false)}
+              onClick={handleClick}
               type="button"
               className="delete"
               data-cy="modal-close"

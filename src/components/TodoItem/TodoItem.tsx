@@ -6,6 +6,7 @@ type Props = {
   setUserId: (v: number) => void;
   setShowModal: (v: boolean) => void;
   setSelectedTodo: (v: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoItem: React.FC<Props> = ({
@@ -13,6 +14,7 @@ export const TodoItem: React.FC<Props> = ({
   setUserId,
   setShowModal,
   setSelectedTodo,
+  selectedTodo,
 }) => {
   const handleClick = () => {
     setUserId(todo.userId);
@@ -21,7 +23,10 @@ export const TodoItem: React.FC<Props> = ({
   };
 
   return (
-    <tr data-cy="todo">
+    <tr
+      data-cy="todo"
+      className={`${selectedTodo?.id === todo.id && 'has-background-info-light'}`}
+    >
       <td>{todo.id}</td>
       {todo.completed ? (
         <td className="is-vcentered">
@@ -48,7 +53,9 @@ export const TodoItem: React.FC<Props> = ({
             {false ? (
               <i className="far fa-eye-slash" />
             ) : (
-              <i className="far fa-eye" />
+              <i
+                className={`far ${selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
+              />
             )}
           </span>
         </button>

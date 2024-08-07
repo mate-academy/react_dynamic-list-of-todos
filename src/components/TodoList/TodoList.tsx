@@ -7,6 +7,7 @@ type Props = {
   setUserId: (v: number) => void;
   setShowModal: (v: boolean) => void;
   setSelectedTodo: (v: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const TodoList: React.FC<Props> = ({
   setUserId,
   setShowModal,
   setSelectedTodo,
+  selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -32,6 +34,7 @@ export const TodoList: React.FC<Props> = ({
     <tbody>
       {todos.map(todo => (
         <TodoItem
+          selectedTodo={selectedTodo}
           key={todo.id}
           todo={todo}
           setUserId={setUserId}

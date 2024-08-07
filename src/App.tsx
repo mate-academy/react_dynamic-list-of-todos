@@ -6,8 +6,9 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,6 +19,12 @@ export const App: React.FC = () => {
   const [filterText, setFilterText] = useState('');
   const [userId, setUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [modalLoading, setModalLoading] = useState(true);
+  const [userData, setUserData] = useState<User>();
+
+  // To change the style of todo
+  // const [toIdSelected, setToIdSelected] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -30,6 +37,15 @@ export const App: React.FC = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (userId != null) {
+      setModalLoading(true);
+      getUser(userId)
+        .then(setUserData)
+        .finally(() => setModalLoading(false));
+    }
+  }, [userId]);
 
   useEffect(() => {
     let todos = allTodos;
@@ -72,6 +88,7 @@ export const App: React.FC = () => {
                   setUserId={setUserId}
                   setShowModal={setShowModal}
                   setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -81,9 +98,11 @@ export const App: React.FC = () => {
 
       {showModal && (
         <TodoModal
+          userData={userData}
+          loading={modalLoading}
           setShowModal={setShowModal}
-          userId={userId}
           selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
