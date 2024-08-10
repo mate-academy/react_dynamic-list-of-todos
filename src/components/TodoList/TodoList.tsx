@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   posts: Todo[];
@@ -28,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {posts.map(post => (
-        <tr data-cy="todo" className="" key={post.id}>
+        <tr data-cy="todo" key={post.id}>
           <td className="is-vcentered">{post.id}</td>
           <td className="is-vcentered">
             {post.completed && (
@@ -39,9 +40,9 @@ export const TodoList: React.FC<Props> = ({
           </td>
           <td className="is-vcentered is-expanded">
             <p
-              className={
-                !post.completed ? 'has-text-danger' : 'has-text-success'
-              }
+              className={classNames(
+                !post.completed ? 'has-text-danger' : 'has-text-success',
+              )}
             >
               {post.title}
             </p>
@@ -55,9 +56,9 @@ export const TodoList: React.FC<Props> = ({
             >
               <span className="icon">
                 <i
-                  className={
-                    post.id !== postId ? 'far fa-eye' : 'far fa-eye-slash'
-                  }
+                  className={classNames(
+                    post.id !== postId ? 'far fa-eye' : 'far fa-eye-slash',
+                  )}
                 />
               </span>
             </button>

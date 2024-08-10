@@ -14,7 +14,7 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectOption, setSelectOption] = useState<Options>('all');
+  const [selectOption, setSelectOption] = useState<Options>(Options.All);
   const [selectPost, setSelectPost] = useState<Todo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,12 +31,12 @@ export const App: React.FC = () => {
       todo.title.toLowerCase().includes(query.toLowerCase()),
     );
 
-    if (selectOption === 'active') {
-      return todoFilter.filter(todo => !todo.completed);
-    }
+    switch (selectOption) {
+      case Options.Active:
+        return todoFilter.filter(todo => !todo.completed);
 
-    if (selectOption === 'completed') {
-      return todoFilter.filter(todo => todo.completed);
+      case Options.Completed:
+        return todoFilter.filter(todo => todo.completed);
     }
 
     return todoFilter;
@@ -60,7 +60,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {todos.length && (
+              {!!todos.length && (
                 <TodoList
                   posts={filterTodos()}
                   postId={selectPost?.id}
