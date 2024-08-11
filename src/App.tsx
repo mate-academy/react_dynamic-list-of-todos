@@ -7,52 +7,36 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { FilterTypes } from './types/FilterTypes';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [showTodoId, setShowTodoId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalActive, setIsModalActive] = useState(false);
-  const [todoOwner, setTodoOwner] = useState<User | null>(null);
-  const [selectedUsers, setSelectedUsers] = useState('all');
+  const [selectedUsers, setSelectedUsers] = useState<FilterTypes>(
+    FilterTypes.All,
+  );
   const [query, setQuery] = useState('');
-  const [modalLoading, setModalLoading] = useState(false);
 
-  const todo = todos.find(t => t.id === showTodoId) || null;
-  const findUser = () => {
-    setModalLoading(true);
-    if (todo?.userId) {
-      getUser(todo.userId)
-        .then(({ email, id, name, phone }) => {
-          setTodoOwner({ email, id, name, phone });
-        })
-        .finally(() => {
-          setModalLoading(false);
-        });
-    }
-  };
+  const todo = selectedTodo;
 
   useEffect(() => {
-    findUser();
-  }, [todo]);
-
-  useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   let filteredTodos = [...todos];
 
-  if (selectedUsers === 'active') {
+  if (selectedUsers === FilterTypes.Active) {
     filteredTodos = filteredTodos.filter(t => !t.completed);
   }
 
-  if (selectedUsers === 'completed') {
+  if (selectedUsers === FilterTypes.Completed) {
     filteredTodos = filteredTodos.filter(t => t.completed);
   }
 
@@ -78,12 +62,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && (
+              {isLoading && <Loader />}
+              {!isLoading && (
                 <TodoList
                   filteredTodos={filteredTodos}
-                  showTodoId={showTodoId}
-                  setShowTodoId={setShowTodoId}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                   setIsModalActive={setIsModalActive}
                   isModalActive={isModalActive}
                 />
@@ -93,14 +77,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal
-        showTodoId={showTodoId}
-        isModalActive={isModalActive}
-        todo={todo || null}
-        setIsModalActive={setIsModalActive}
-        todoOwner={todoOwner}
-        modalLoading={modalLoading}
-      />
+      {isModalActive && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          todo={todo}
+          setIsModalActive={setIsModalActive}
+        />
+      )}
     </>
   );
 };

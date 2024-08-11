@@ -1,7 +1,10 @@
+import { FilterTypes } from '../../types/FilterTypes';
+import './TodoFilter.scss';
+
 type Props = {
-  setSelectedUsers: (a: string) => void;
+  setSelectedUsers: (filterType: FilterTypes) => void;
   query: string;
-  setQuery: (a: string) => void;
+  setQuery: (currentQuery: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -15,7 +18,9 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => setSelectedUsers(event.target.value)}
+            onChange={event =>
+              setSelectedUsers(event.target.value as FilterTypes)
+            }
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -37,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right pointer-all">
           {query.length !== 0 && (
             <button
               data-cy="clearSearchButton"
