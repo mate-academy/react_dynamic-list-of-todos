@@ -14,8 +14,8 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
-  const [selectOption, setSelectOption] = useState<Options>(Options.All);
-  const [selectPost, setSelectPost] = useState<Todo | null>(null);
+  const [selectedOption, setSelectedOption] = useState<Options>(Options.All);
+  const [selectedPost, setSelectedPost] = useState<Todo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const App: React.FC = () => {
       todo.title.toLowerCase().includes(query.toLowerCase()),
     );
 
-    switch (selectOption) {
+    switch (selectedOption) {
       case Options.Active:
         return todoFilter.filter(todo => !todo.completed);
 
@@ -51,10 +51,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                select={selectOption}
+                select={selectedOption}
                 query={query}
                 setQuery={setQuery}
-                setSelect={setSelectOption}
+                setSelect={setSelectedOption}
               />
             </div>
 
@@ -63,8 +63,8 @@ export const App: React.FC = () => {
               {!!todos.length && (
                 <TodoList
                   posts={filterTodos()}
-                  postId={selectPost?.id}
-                  setSelectPost={postTodo => setSelectPost(postTodo)}
+                  postId={selectedPost?.id}
+                  setSelectedPost={postTodo => setSelectedPost(postTodo)}
                 />
               )}
             </div>
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectPost && <TodoModal closePost={setSelectPost} post={selectPost} />}
+      {selectedPost && <TodoModal closePost={setSelectedPost} post={selectedPost} />}
     </>
   );
 };

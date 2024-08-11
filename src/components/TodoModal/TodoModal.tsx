@@ -10,17 +10,17 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ closePost, post }) => {
-  const [selectUser, setSelectUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const heandleClose = () => {
-    setSelectUser(null);
+    setSelectedUser(null);
     closePost(null);
   };
 
   useEffect(() => {
     if (post && post.userId) {
       getUser(post.userId).then(res => {
-        setSelectUser(res);
+        setSelectedUser(res);
       });
     }
   }, [post]);
@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({ closePost, post }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!selectUser?.email ? (
+      {!selectedUser?.email ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -64,7 +64,7 @@ export const TodoModal: React.FC<Props> = ({ closePost, post }) => {
 
               {' by '}
 
-              <a href={`mailto:${selectUser?.email}`}>{selectUser.name}</a>
+              <a href={`mailto:${selectedUser?.email}`}>{selectedUser.name}</a>
             </p>
           </div>
         </div>

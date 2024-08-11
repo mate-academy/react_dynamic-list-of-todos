@@ -5,13 +5,13 @@ import classNames from 'classnames';
 type Props = {
   posts: Todo[];
   postId?: number;
-  setSelectPost: (postTodo: Todo) => void;
+  setSelectedPost: (postTodo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   posts,
   postId,
-  setSelectPost = () => {},
+  setSelectedPost: setSelectPost = () => {},
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
