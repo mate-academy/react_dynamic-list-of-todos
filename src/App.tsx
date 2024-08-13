@@ -9,60 +9,45 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterType } from './types/FilteredType';
+
+const getFilteredTodos = (todos: Todo[], sorted: FilterType, query: string) => {
+  let filteredTodos = [...todos];
+
+  if (query) {
+    filteredTodos = filteredTodos.filter(todo =>
+      todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+    );
+  }
+
+  switch (sorted) {
+    case FilterType.active:
+      return filteredTodos.filter(todo => !todo.completed);
+
+    case FilterType.completed:
+      return filteredTodos.filter(todo => todo.completed);
+
+    default:
+      return filteredTodos;
+  }
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sorted, setSorted] = useState('all');
+  const [sorted, setSorted] = useState(FilterType.all);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setLoading(true);
 
-    if (sorted === 'all') {
-      getTodos()
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        .then(todos =>
-          setTodos(
-            todos.filter(todo =>
-              todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          ),
-        )
-        .finally(() => setLoading(false));
-    }
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
 
-    if (sorted === 'active') {
-      getTodos()
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        .then(todos =>
-          setTodos(
-            todos.filter(
-              todo =>
-                !todo.completed &&
-                todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          ),
-        )
-        .finally(() => setLoading(false));
-    }
-
-    if (sorted === 'completed') {
-      getTodos()
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        .then(todos =>
-          setTodos(
-            todos.filter(
-              todo =>
-                todo.completed &&
-                todo.title.toLowerCase().includes(query.toLowerCase()),
-            ),
-          ),
-        )
-        .finally(() => setLoading(false));
-    }
-  }, [sorted, query]);
+  const preparedTodos = getFilteredTodos(todos, sorted, query);
 
   return (
     <>
@@ -82,9 +67,9 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
-                  todos={todos}
+                  todos={preparedTodos}
                   selectedTodo={selectedTodo}
                   setselectedTodo={setSelectedTodo}
                 />

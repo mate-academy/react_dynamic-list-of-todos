@@ -1,12 +1,14 @@
+import { FilterType } from '../../types/FilteredType';
+
 type Props = {
-  setSorted: (query: string) => void;
+  setSorted: (query: FilterType) => void;
   query: string;
   setQuery: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ setSorted, query, setQuery }) => {
   const handleSelectedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSorted(e.target.value);
+    setSorted(e.target.value as FilterType);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,9 +20,9 @@ export const TodoFilter: React.FC<Props> = ({ setSorted, query, setQuery }) => {
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleSelectedChange}>
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.all}>All</option>
+            <option value={FilterType.active}>Active</option>
+            <option value={FilterType.completed}>Completed</option>
           </select>
         </span>
       </p>
