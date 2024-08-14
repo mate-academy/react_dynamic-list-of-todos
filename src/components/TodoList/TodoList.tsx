@@ -26,9 +26,10 @@ export const TodoList: React.FC<Props> = ({
         <th> </th>
       </tr>
     </thead>
-    {todos.map(todo => (
-      <tbody key={todo.id}>
-        <tr data-cy="todo" className="">
+
+    <tbody>
+      {todos.map(todo => (
+        <tr data-cy="todo" key={todo.id}>
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
@@ -58,16 +59,16 @@ export const TodoList: React.FC<Props> = ({
               <span className="icon">
                 {/* <i className="far fa-eye" /> */}
                 <i
-                  className={cn({
-                    'far fa-eye-slash': selectedTodo?.id === todo.id,
-                    'far fa-eye': selectedTodo?.id !== todo.id,
+                  className={cn('far', {
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
+                    'fa-eye': selectedTodo?.id !== todo.id,
                   })}
                 />
               </span>
             </button>
           </td>
         </tr>
-      </tbody>
-    ))}
+      ))}
+    </tbody>
   </table>
 );
