@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -12,9 +11,10 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [appFilter, setAppFilter] = useState<string>('all');
+  const [appQuery, setAppQuery] = useState<string>('');
 
   useEffect(() => {
     const loadTodos = async () => {
@@ -23,7 +23,6 @@ export const App: React.FC = () => {
         const loadedTodos = await getTodos();
 
         setTodos(loadedTodos);
-        setFilteredTodos(loadedTodos);
       } finally {
         setLoading(false);
       }
@@ -41,33 +40,23 @@ export const App: React.FC = () => {
   };
 
   const handleFilterChange = (filter: string) => {
-    const filtered = todos.filter(todo => {
-      switch (filter) {
-        case 'all':
-          return true;
-        case 'completed':
-          return todo.completed;
-        case 'active':
-          return !todo.completed;
-        default:
-          return true;
-      }
-    });
-
-    setFilteredTodos(filtered);
+    setAppFilter(filter);
   };
 
   const handleSearch = (query: string) => {
-    const searched = filteredTodos.filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase()),
-    );
-
-    setFilteredTodos(searched);
+    setAppQuery(query.toLowerCase());
   };
 
-  const handleClearSearch = () => {
-    setFilteredTodos(todos);
-  };
+  const filteredTodos = todos.filter(todo => {
+    const matchesFilter =
+      appFilter === 'all' ||
+      (appFilter === 'completed' && todo.completed) ||
+      (appFilter === 'active' && !todo.completed);
+
+    const matchesQuery = todo.title.toLowerCase().includes(appQuery);
+
+    return matchesFilter && matchesQuery;
+  });
 
   return (
     <>
@@ -80,7 +69,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
-                onClearSearch={handleClearSearch}
+                onClearSearch={() => setAppQuery('')}
               />
             </div>
 
