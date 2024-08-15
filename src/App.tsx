@@ -50,6 +50,10 @@ export const App: React.FC = () => {
     setAppQuery(query.toLowerCase());
   };
 
+  const handleClearSearch = () => {
+    setAppQuery('');
+  };
+
   const filteredTodos = todos.filter(todo => {
     const firstCondition = todo.title
       .toLowerCase()
@@ -78,7 +82,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 onFilterChange={handleFilterChange}
                 onSearch={handleSearch}
-                onClearSearch={() => setAppQuery('')}
+                onClearSearch={handleClearSearch}
               />
             </div>
 
