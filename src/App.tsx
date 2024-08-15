@@ -51,14 +51,20 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = todos.filter(todo => {
-    const matchesFilter =
-      appFilter === TodoFilterEnum.All ||
-      (appFilter === TodoFilterEnum.Completed && todo.completed) ||
-      (appFilter === TodoFilterEnum.Active && !todo.completed);
+    const firstCondition = todo.title
+      .toLowerCase()
+      .includes(appQuery.toLowerCase());
 
-    const matchesQuery = todo.title.toLowerCase().includes(appQuery);
-
-    return matchesFilter && matchesQuery;
+    switch (appFilter) {
+      case TodoFilterEnum.All:
+        return firstCondition;
+      case TodoFilterEnum.Active:
+        return firstCondition && !todo.completed;
+      case TodoFilterEnum.Completed:
+        return firstCondition && todo.completed;
+      default:
+        return true;
+    }
   });
 
   return (
