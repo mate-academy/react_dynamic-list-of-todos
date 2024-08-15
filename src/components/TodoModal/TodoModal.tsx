@@ -16,7 +16,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   useEffect(() => {
     setIsSelectedTodoListLoading(true);
     getUser(selectedTodo.userId)
-      .then(user => setSelectedUser(user))
+      .then(setSelectedUser)
       .finally(() => setIsSelectedTodoListLoading(false));
   }, [selectedTodo]);
 

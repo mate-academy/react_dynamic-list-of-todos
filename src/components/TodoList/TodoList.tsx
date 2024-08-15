@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 interface Props {
   displayedTodos: Todo[];
@@ -29,40 +30,12 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {displayedTodos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onSelect(todo)}
-              >
-                <span className="icon">
-                  <i
-                    className={`far ${selectedTodo === todo ? 'fa-eye-slash' : 'fa-eye'}`}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            isSelected={selectedTodo === todo}
+            onSelect={onSelect}
+          />
         ))}
       </tbody>
     </table>

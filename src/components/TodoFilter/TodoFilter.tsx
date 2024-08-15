@@ -1,3 +1,4 @@
+import React from 'react';
 import { StatusFilter } from '../../types/StatusFilter';
 
 interface Props {
@@ -22,9 +23,9 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={e => setStatusFilter(e.target.value as StatusFilter)}
             value={statusFilter}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={StatusFilter.All}>All</option>
+            <option value={StatusFilter.Active}>Active</option>
+            <option value={StatusFilter.Completed}>Completed</option>
           </select>
         </span>
       </p>

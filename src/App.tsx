@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -16,20 +15,22 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isTodoListLoading, setIsTodoListLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(
+    StatusFilter.All,
+  );
 
   const displayedTodos = useMemo(() => {
     return todosFromServer
       .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()))
       .filter(todo => {
         switch (statusFilter) {
-          case 'all':
+          case StatusFilter.All:
             return true;
 
-          case 'active':
+          case StatusFilter.Active:
             return !todo.completed;
 
-          case 'completed':
+          case StatusFilter.Completed:
             return todo.completed;
         }
       });
