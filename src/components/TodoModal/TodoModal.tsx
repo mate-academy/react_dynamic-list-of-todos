@@ -26,6 +26,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     loadUser();
   }, [todo.userId]);
 
+  const { title, id, completed } = todo;
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -39,10 +41,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {`Todo #${todo.id}`}
+              {`Todo #${id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -53,18 +54,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
                 })}
               >
-                {todo.completed ? 'Done' : 'Planned'}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

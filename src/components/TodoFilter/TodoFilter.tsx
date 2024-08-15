@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { TodoFilterEnum } from '../../enums/TodoFilterEnum';
 
 interface Props {
-  onFilterChange: (filter: string) => void;
+  onFilterChange: (filter: TodoFilterEnum) => void;
   onSearch: (query: string) => void;
   onClearSearch: () => void;
 }
@@ -14,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   const [query, setQuery] = useState('');
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.target.value);
+    onFilterChange(event.target.value as TodoFilterEnum);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,9 +33,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select" onChange={handleFilterChange}>
           <select data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={TodoFilterEnum.All}>All</option>
+            <option value={TodoFilterEnum.Active}>Active</option>
+            <option value={TodoFilterEnum.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -55,7 +56,6 @@ export const TodoFilter: React.FC<Props> = ({
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"

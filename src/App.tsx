@@ -7,13 +7,16 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { TodoFilterEnum } from './enums/TodoFilterEnum';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [appFilter, setAppFilter] = useState<string>('all');
+  const [appFilter, setAppFilter] = useState<TodoFilterEnum>(
+    TodoFilterEnum.All,
+  );
   const [appQuery, setAppQuery] = useState<string>('');
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: TodoFilterEnum) => {
     setAppFilter(filter);
   };
 
@@ -49,9 +52,9 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos.filter(todo => {
     const matchesFilter =
-      appFilter === 'all' ||
-      (appFilter === 'completed' && todo.completed) ||
-      (appFilter === 'active' && !todo.completed);
+      appFilter === TodoFilterEnum.All ||
+      (appFilter === TodoFilterEnum.Completed && todo.completed) ||
+      (appFilter === TodoFilterEnum.Active && !todo.completed);
 
     const matchesQuery = todo.title.toLowerCase().includes(appQuery);
 
