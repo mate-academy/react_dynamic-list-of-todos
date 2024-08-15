@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 interface Props {
-  selectedTodo: Todo | null;
-  selectedUser: User | null;
-  isSelectedTodoLoading: boolean;
+  selectedTodo: Todo;
   onClose: (val: null) => void;
 }
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  selectedUser,
-  isSelectedTodoLoading,
-  onClose,
-}) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isSelectedTodoLoading, setIsSelectedTodoListLoading] = useState(false);
+
+  useEffect(() => {
+    setIsSelectedTodoListLoading(true);
+    getUser(selectedTodo.userId)
+      .then(user => setSelectedUser(user))
+      .finally(() => setIsSelectedTodoListLoading(false));
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -32,7 +36,6 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{selectedTodo?.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"

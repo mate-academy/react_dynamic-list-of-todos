@@ -8,17 +8,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos } from './api';
 import { StatusFilter } from './types/StatusFilter';
 
 export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [isTodoListLoading, setIsTodoListLoading] = useState(false);
-  const [isSelectedTodoLoading, setIsSelectedTodoListLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
 
@@ -41,10 +37,6 @@ export const App: React.FC = () => {
 
   const onTodoSelect = useCallback((todo: Todo) => {
     setSelectedTodo(todo);
-    setIsSelectedTodoListLoading(true);
-    getUser(todo.userId)
-      .then(user => setSelectedUser(user))
-      .finally(() => setIsSelectedTodoListLoading(false));
   }, []);
 
   useEffect(() => {
@@ -87,12 +79,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          selectedUser={selectedUser}
-          isSelectedTodoLoading={isSelectedTodoLoading}
-          onClose={setSelectedTodo}
-        />
+        <TodoModal selectedTodo={selectedTodo} onClose={setSelectedTodo} />
       )}
     </>
   );
