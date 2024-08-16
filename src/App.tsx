@@ -12,7 +12,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [appFilter, setAppFilter] = useState<TodoFilterEnum>(
     TodoFilterEnum.All,
@@ -21,13 +21,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const loadTodos = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         const loadedTodos = await getTodos();
 
         setTodos(loadedTodos);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

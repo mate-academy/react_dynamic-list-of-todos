@@ -12,15 +12,15 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadUser = async () => {
-      setLoading(true);
+      setIsLoading(true);
       const loadedUser = await getUser(todo.userId);
 
       setUser(loadedUser);
-      setLoading(false);
+      setIsLoading(false);
     };
 
     loadUser();
@@ -32,7 +32,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">

@@ -33,9 +33,11 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select" onChange={handleFilterChange}>
           <select data-cy="statusSelect">
-            <option value={TodoFilterEnum.All}>All</option>
-            <option value={TodoFilterEnum.Active}>Active</option>
-            <option value={TodoFilterEnum.Completed}>Completed</option>
+            {Object.values(TodoFilterEnum).map(filter => (
+              <option key={filter} value={filter}>
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </option>
+            ))}
           </select>
         </span>
       </p>
