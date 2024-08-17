@@ -11,14 +11,15 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+  const { id, title, completed, userId } = todo;
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(todo.userId)
+    getUser(userId)
       .then(setUser)
       .finally(() => setIsLoading(false));
-  }, [todo.userId]);
+  }, [userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -33,7 +34,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo.id}
+              Todo #{id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -47,14 +48,14 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
                 className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
                 })}
               >
                 {todo.completed ? 'Done' : 'Planned'}

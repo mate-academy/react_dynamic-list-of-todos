@@ -12,7 +12,7 @@ import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
+  const [isTodosLoading, setIsTodosLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>(
     TodoStatusFilter.All,
@@ -20,10 +20,10 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setIsLoadingTodos(true);
+    setIsTodosLoading(true);
     getTodos()
       .then(setTodos)
-      .finally(() => setIsLoadingTodos(false));
+      .finally(() => setIsTodosLoading(false));
   }, []);
 
   const handleSelectTodo = (todo: Todo) => {
@@ -40,6 +40,10 @@ export const App: React.FC = () => {
 
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
+  };
+
+  const handleQueryReset = () => {
+    setQuery('');
   };
 
   const filteredTodos = useMemo(() => {
@@ -79,12 +83,12 @@ export const App: React.FC = () => {
                 query={query}
                 onFilterChange={handleFilterChange}
                 onQueryChange={handleQueryChange}
-                onClearQuery={() => setQuery('')}
+                onClearQuery={handleQueryReset}
               />
             </div>
 
             <div className="block">
-              {isLoadingTodos ? (
+              {isTodosLoading ? (
                 <Loader />
               ) : (
                 <TodoList
