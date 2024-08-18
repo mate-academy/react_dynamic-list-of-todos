@@ -34,14 +34,6 @@ export const App: React.FC = () => {
     setSelectedTodo(null);
   };
 
-  const handleFilterChange = (status: TodoStatusFilter) => {
-    setStatusFilter(status);
-  };
-
-  const handleQueryChange = (newQuery: string) => {
-    setQuery(newQuery);
-  };
-
   const handleQueryReset = () => {
     setQuery('');
   };
@@ -81,8 +73,10 @@ export const App: React.FC = () => {
               <TodoFilter
                 statusFilter={statusFilter}
                 query={query}
-                onFilterChange={handleFilterChange}
-                onQueryChange={handleQueryChange}
+                onFilterChange={event =>
+                  setStatusFilter(event.target.value as TodoStatusFilter)
+                }
+                onQueryChange={event => setQuery(event.target.value)}
                 onClearQuery={handleQueryReset}
               />
             </div>

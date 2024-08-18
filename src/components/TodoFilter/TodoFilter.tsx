@@ -4,8 +4,8 @@ import { TodoStatusFilter } from '../../types/Todo';
 interface Props {
   statusFilter: TodoStatusFilter;
   query: string;
-  onFilterChange: (status: TodoStatusFilter) => void;
-  onQueryChange: (query: string) => void;
+  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClearQuery: () => void;
 }
 
@@ -16,10 +16,6 @@ export const TodoFilter: React.FC<Props> = ({
   onQueryChange,
   onClearQuery,
 }) => {
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.target.value as TodoStatusFilter);
-  };
-
   return (
     <form className="field has-addons">
       <p className="control">
@@ -27,7 +23,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={statusFilter}
-            onChange={handleSelectChange}
+            onChange={onFilterChange}
           >
             <option value={TodoStatusFilter.All}>All</option>
             <option value={TodoStatusFilter.Active}>Active</option>
@@ -43,7 +39,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => onQueryChange(event.target.value)}
+          onChange={onQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
