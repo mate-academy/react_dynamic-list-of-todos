@@ -5,4 +5,4 @@ export interface Todo {
   userId: number;
 }
 
-export type filterStatusType = 'all' | 'active' | 'completed';
+export type FilterStatusType = 'all' | 'active' | 'completed';

@@ -6,14 +6,14 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
-import { filterStatusType, Todo } from './types/Todo';
+import { FilterStatusType, Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 function filterFunction(
   items: Todo[],
   str: string,
-  filterStates: filterStatusType,
+  filterStates: FilterStatusType,
 ) {
   let itemsInUse = [...items];
 
@@ -40,7 +40,7 @@ function filterFunction(
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo[]>([]);
   const [filterLetter, setFilterLetter] = useState('');
-  const [filterStates, setFilterStatus] = useState<filterStatusType>('all');
+  const [filterStates, setFilterStatus] = useState<FilterStatusType>('all');
   const [loading, setLoading] = useState(false);
   const [choiceTodo, setChoiceTodo] = useState<Todo | null>(null);
   const todoList = filterFunction(todo, filterLetter, filterStates);

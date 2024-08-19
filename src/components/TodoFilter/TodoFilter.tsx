@@ -1,8 +1,8 @@
-import { filterStatusType } from '../../types/Todo';
+import { FilterStatusType } from '../../types/Todo';
 
 type Props = {
   setFilterLetter: (letter: string) => void;
-  setFilterStatus: (status: filterStatusType) => void;
+  setFilterStatus: (status: FilterStatusType) => void;
   filterLetter: string;
 };
 
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterStatus(event.target.value as filterStatusType);
+    setFilterStatus(event.target.value as FilterStatusType);
   };
 
   const handlClearButton = () => {
