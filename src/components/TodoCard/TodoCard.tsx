@@ -17,6 +17,9 @@ const TodoCard: React.FC<Props> = ({
   isShowModal,
   selectedTodo,
 }) => {
+
+  const isSelectedTodo = selectedTodo?.id === todo.id;
+
   return (
     <tr
       data-cy="todo"
@@ -57,8 +60,8 @@ const TodoCard: React.FC<Props> = ({
           <span className="icon">
             <i
               className={cn('far', {
-                'fa-eye': selectedTodo?.id !== todo.id,
-                'fa-eye-slash': selectedTodo?.id === todo.id,
+                'fa-eye': !isSelectedTodo,
+                'fa-eye-slash': isSelectedTodo,
               })}
             />
           </span>

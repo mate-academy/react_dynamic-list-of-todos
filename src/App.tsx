@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -11,24 +10,28 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { debounce } from './utils';
 
+type FilterParameters = 'all' | 'active' | 'completed';
+
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
-  const [filterQuery, setFilterQuery] = useState('');
+  const [filterParameters, setFilterParameters] =
+    useState<FilterParameters>('all');
 
   const getAllTodos = () => {
+    setIsLoading(true);
     getTodos()
-      .then(data => setAllTodos(data))
+      .then(setAllTodos)
       .finally(() => setIsLoading(false));
   };
 
-  const applyQuery = useCallback(debounce(setAppliedQuery, 300), []);
+  const applyQuery = debounce(setAppliedQuery, 300);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -41,7 +44,7 @@ export const App: React.FC = () => {
   };
 
   const handleFilterQuery = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterQuery(event.target.value);
+    setFilterParameters(event.target.value as FilterParameters);
   };
 
   const closeModal = () => {
@@ -53,17 +56,13 @@ export const App: React.FC = () => {
     getAllTodos();
   }, []);
 
-  const getVisibleTodos = useCallback(() => {
-    let filteredTodos = [...allTodos];
+  const getVisibleTodos = () => {
+    let filteredTodos = allTodos;
 
-    if (filterQuery === 'active' || filterQuery === 'completed') {
-      filteredTodos = allTodos.filter(({ completed }) => {
-        if (filterQuery === 'active') {
-          return !completed;
-        } else {
-          return completed;
-        }
-      });
+    if (filterParameters === 'active' || filterParameters === 'completed') {
+      filteredTodos = filteredTodos.filter(({ completed }) =>
+        filterParameters === 'active' ? !completed : completed,
+      );
     }
 
     if (appliedQuery) {
@@ -73,7 +72,7 @@ export const App: React.FC = () => {
     }
 
     return filteredTodos;
-  }, [allTodos, filterQuery, appliedQuery]);
+  };
 
   const visibleTodos = getVisibleTodos();
 
@@ -110,7 +109,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {showModal && <TodoModal todo={selectedTodo} closeModal={closeModal} />}
+      {showModal && selectedTodo && (
+        <TodoModal todo={selectedTodo} closeModal={closeModal} />
+      )}
     </>
   );
 };

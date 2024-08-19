@@ -5,7 +5,7 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todo: Todo | null;
+  todo: Todo;
   closeModal: () => void;
 };
 
@@ -15,18 +15,16 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
   const findUser = useCallback(() => {
     setIsLoading(true);
-    if (todo?.userId) {
-      getUser(todo.userId)
-        .then(setTodoOwner)
-        .catch(error => {
-          alert(error);
-          setTodoOwner(null);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [todo?.userId]);
+    getUser(todo.userId)
+      .then(setTodoOwner)
+      .catch(error => {
+        alert(error);
+        setTodoOwner(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [todo.userId]);
 
   useEffect(() => {
     findUser();
@@ -45,7 +43,7 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo?.id}
+              Todo #{todo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -59,11 +57,11 @@ export const TodoModal: React.FC<Props> = ({ todo, closeModal }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo?.title}
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {!todo?.completed ? (
+              {!todo.completed ? (
                 <strong className="has-text-danger">Planned</strong>
               ) : (
                 <strong className="has-text-success">Done</strong>
