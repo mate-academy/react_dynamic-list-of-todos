@@ -49,9 +49,10 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-
     getTodos()
-      .then(todoFromServer => setTodo(todoFromServer))
+      .then(todoFromServer => {
+        setTodo(todoFromServer);
+      })
       .finally(() => setLoading(false));
   }, []);
 
