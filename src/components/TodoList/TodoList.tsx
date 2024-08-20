@@ -4,11 +4,11 @@ import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
-  selected: Todo | undefined;
-  show: (todo: Todo) => void;
+  selectedTodo: Todo | null;
+  onTodoSelect: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
+export const TodoList: React.FC<Props> = ({ todos, selectedTodo, onTodoSelect }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -25,7 +25,7 @@ export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
     <tbody>
       {todos.map(todo => {
         const { id, title, completed } = todo;
-        const isSelected = selected && selected.id === id;
+        const isSelected = selectedTodo && selectedTodo.id === id;
 
         return (
           <tr
@@ -58,7 +58,7 @@ export const TodoList: React.FC<Props> = ({ todos, selected, show }) => (
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => show(todo)}
+                onClick={() => onTodoSelect(todo)}
               >
                 <span className="icon">
                   <i

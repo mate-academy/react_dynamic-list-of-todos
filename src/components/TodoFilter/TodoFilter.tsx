@@ -3,14 +3,14 @@ import { SortQuery } from '../../types/Sort';
 
 type Props = {
   query: string;
-  onQChange: (query: string) => void;
+  onQueryChange: (query: string) => void;
   onSelect: (query: SortQuery) => void;
   onClear: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQChange,
+  onQueryChange,
   onSelect,
   onClear,
 }) => {
@@ -36,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={event => onQChange(event.target.value)}
+          onChange={event => onQueryChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

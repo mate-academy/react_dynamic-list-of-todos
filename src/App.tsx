@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -15,32 +14,34 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<Todo | undefined>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [sortQuery, setSortQuery] = useState<SortQuery>(SortQuery.ALL);
 
   useEffect(() => {
     getTodos()
-      .then(e => {
-        return e.filter(todo =>
+      .then(fetchedTodos => {
+        return fetchedTodos.filter(todo =>
           todo.title.toLowerCase().includes(query.toLowerCase()),
         );
       })
-      .then(e => {
-        return e.filter(todo => {
-          if (sortQuery === 'active') {
+      .then(filteredTodos => {
+        return filteredTodos.filter(todo => {
+          if (sortQuery === SortQuery.ACTIVE) {
             return !todo.completed;
           }
 
-          if (sortQuery === 'completed') {
+          if (sortQuery === SortQuery.COMPLETED) {
             return todo.completed;
           }
 
-          return todo;
+          return true; // This line was adjusted for clarity
         });
       })
       .then(setTodos)
       .finally(() => setLoading(false));
   }, [sortQuery, query]);
+
+  const handleCloseModal = () => setSelectedTodo(null);
 
   return (
     <>
@@ -52,7 +53,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 query={query}
                 onSelect={setSortQuery}
-                onQChange={setQuery}
+                onQueryChange={setQuery}
                 onClear={() => setQuery('')}
               />
             </div>
@@ -60,15 +61,15 @@ export const App: React.FC = () => {
               {loading && <Loader />}
               <TodoList
                 todos={todos}
-                selected={selected}
-                show={todo => setSelected(todo)}
+                selectedTodo={selectedTodo}
+                onTodoSelect={todo => setSelectedTodo(todo)}
               />
             </div>
           </div>
         </div>
       </div>
-      {selected && (
-        <TodoModal todo={selected} onClose={() => setSelected(undefined)} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
       )}
     </>
   );
