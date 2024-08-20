@@ -23,11 +23,11 @@ function filterFunction(
 
   itemsInUse = itemsInUse.filter(item => {
     switch (filterStates) {
-      case 'all':
+      case FilterStatusType.All:
         return true;
-      case 'active':
+      case FilterStatusType.Active:
         return !item.completed;
-      case 'completed':
+      case FilterStatusType.Completed:
         return item.completed;
       default:
         return true;
@@ -40,17 +40,18 @@ function filterFunction(
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo[]>([]);
   const [filterLetter, setFilterLetter] = useState('');
-  const [filterStates, setFilterStatus] = useState<FilterStatusType>('all');
+  const [filterStates, setFilterStatus] = useState<FilterStatusType>(
+    FilterStatusType.All,
+  );
   const [loading, setLoading] = useState(false);
-  const [choiceTodo, setChoiceTodo] = useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const todoList = filterFunction(todo, filterLetter, filterStates);
 
   useEffect(() => {
     setLoading(true);
+
     getTodos()
-      .then(todoFromServer => {
-        setTodo(todoFromServer);
-      })
+      .then(todoFromServer => setTodo(todoFromServer))
       .finally(() => setLoading(false));
   }, []);
 
@@ -74,16 +75,19 @@ export const App: React.FC = () => {
               {!loading && todoList.length > 0 && (
                 <TodoList
                   todos={todoList}
-                  setChoiceTodo={setChoiceTodo}
-                  choiceTodo={choiceTodo}
+                  setChoiceTodo={setSelectedTodo}
+                  choiceTodo={selectedTodo}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {choiceTodo && (
-        <TodoModal choiceTodo={choiceTodo} setChoiceTodo={setChoiceTodo} />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
       )}
     </>
   );
