@@ -1,17 +1,21 @@
 import { FC, useState, ChangeEvent } from 'react';
 
+import { FilterConditions } from '../../enums/FilterCondition';
+
 interface Props {
-  setSelectedFilter: (condition: string) => void;
+  setSelectedFilter: (condition: FilterConditions) => void;
   setQuery: (query: string) => void;
 }
 
 export const TodoFilter: FC<Props> = ({ setSelectedFilter, setQuery }) => {
-  const [selected, setSelected] = useState('all');
+  const [selected, setSelected] = useState<FilterConditions>(
+    FilterConditions.All,
+  );
   const [query, setSelectedQuery] = useState('');
 
   const handleOnChangeSelected = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelected(e.target.value);
-    setSelectedFilter(e.target.value);
+    setSelected(e.target.value as FilterConditions);
+    setSelectedFilter(e.target.value as FilterConditions);
   };
 
   const handleOnChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,9 +37,9 @@ export const TodoFilter: FC<Props> = ({ setSelectedFilter, setQuery }) => {
             value={selected}
             onChange={handleOnChangeSelected}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterConditions.All}>All</option>
+            <option value={FilterConditions.Active}>Active</option>
+            <option value={FilterConditions.Completed}>Completed</option>
           </select>
         </span>
       </p>

@@ -11,12 +11,15 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal/TodoModal';
 import { getFilteredList } from './components/helpers/helpres';
+import { FilterConditions } from './enums/FilterCondition';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState<FilterConditions>(
+    FilterConditions.All,
+  );
   const [query, setQuery] = useState('');
 
   const filteredTodos = getFilteredList(todos, selectedFilter, query);
@@ -57,7 +60,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setSelectedFilter={setSelectedFilter} setQuery={setQuery}/>
+              <TodoFilter
+                setSelectedFilter={setSelectedFilter}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">

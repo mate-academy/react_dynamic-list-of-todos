@@ -1,10 +1,14 @@
 import { Todo } from '../../types/Todo';
+import { FilterConditions } from '../../enums/FilterCondition';
 
-const getFilteredListBySelectValue = (todo: Todo, condition: string) => {
+const getFilteredListBySelectValue = (
+  todo: Todo,
+  condition: FilterConditions,
+) => {
   switch (condition) {
-    case 'completed':
+    case FilterConditions.Completed:
       return todo.completed;
-    case 'active':
+    case FilterConditions.Active:
       return !todo.completed;
     default:
       return true;
@@ -17,7 +21,7 @@ const getFilteredListByInputValue = (title: string, query: string) => {
 
 export const getFilteredList = (
   todosList: Todo[],
-  condition: string,
+  condition: FilterConditions,
   query: string,
 ): Todo[] => {
   if (condition || query) {
