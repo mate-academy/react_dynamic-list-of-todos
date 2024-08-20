@@ -13,15 +13,14 @@ import { TodosContext } from './store';
 export const App: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isOpenedPost, setIsOpenedPost] = useState<boolean>(false);
-  const {setTodos} = useContext(TodosContext);
+  const { setTodos } = useContext(TodosContext);
 
   useEffect(() => {
     getTodos()
-    .then((fetchData) => {
-      setTodos(fetchData),
-      localStorage.setItem('todos', JSON.stringify(fetchData));
-    })
-    .finally(() => setIsLoaded(true))
+      .then(fetchData => {
+        setTodos(fetchData)
+      })
+      .finally(() => setIsLoaded(true));
   }, []);
 
   return (
@@ -36,21 +35,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {
-                !isLoaded
-                  ? <Loader />
-                  : <TodoList setIsOpenedPost={setIsOpenedPost} />
-              }
+              {!isLoaded ? (
+                <Loader />
+              ) : (
+                <TodoList setIsOpenedPost={setIsOpenedPost} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {isOpenedPost && (
-        <TodoModal
-          setIsOpenedPost={setIsOpenedPost}
-        />
-      )}
+      {isOpenedPost && <TodoModal setIsOpenedPost={setIsOpenedPost} />}
     </>
   );
 };

@@ -2,27 +2,33 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { GetTodoContext, GetUserContext } from '../../store';
 import { getUser } from '../../api';
+import cn from 'classnames';
 
 type Props = {
-  setIsOpenedPost: React.Dispatch<React.SetStateAction<boolean>>,
-}
+  setIsOpenedPost: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const TodoModal: React.FC<Props> = ({ setIsOpenedPost }) => {
   const { todo, setTodo } = useContext(GetTodoContext);
   const { user, setUser } = useContext(GetUserContext);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
+  const isCompletedTodo = todo?.completed ? 'Done' : 'Planned';
+
   useEffect(() => {
-    todo?.userId && getUser(todo.userId)
-      .then(setUser)
-      .finally(() => setIsLoaded(true))
+    todo?.userId &&
+      getUser(todo.userId)
+        .then(setUser)
+        .finally(() => setIsLoaded(true));
   }, []);
 
-  const closeModalWindow = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const closeModalWindow = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
     setIsOpenedPost(false);
     setTodo(null);
-  }
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -56,7 +62,12 @@ export const TodoModal: React.FC<Props> = ({ setIsOpenedPost }) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={cn({
+                "has-text-success": todo?.completed,
+                "has-text-danger": !todo?.completed
+              })}>
+                {isCompletedTodo}
+                </strong>
 
               {' by '}
 

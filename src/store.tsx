@@ -1,34 +1,29 @@
-import React, { SetStateAction, useEffect, useMemo, useReducer, useState } from "react";
-import { Todo } from "./types/Todo";
-import { User } from "./types/User";
-
-const dataFromStor = localStorage.getItem('todos');
-const initialTodos: Todo[] = dataFromStor ? JSON.parse(dataFromStor) : [];
+import React, {
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
+import { Todo } from './types/Todo';
+import { User } from './types/User';
 
 type Action = {
-  type: string,
-  payload?: string
-}
+  type: string;
+  allTodos?: Todo[] | null;
+  payload?: string;
+};
 
 interface FilteredTodosContextProps {
-  filteredTodos: Todo[];
+  filteredTodos: Todo[] | null;
   dispatch: React.Dispatch<Action>;
 }
 
-export const FilteredTodosContext = React.createContext<FilteredTodosContextProps>({
-  filteredTodos: initialTodos,
-  dispatch: () => { },
-});
-
-interface FirtsLoadedContextProps {
-  firtsLoadedPage: boolean;
-  setFirtsLoadedPage: React.Dispatch<SetStateAction<boolean>>;
-}
-
-export const FirtsLoadedContext = React.createContext<FirtsLoadedContextProps>({
-  firtsLoadedPage: true,
-  setFirtsLoadedPage: () => { },
-});
+export const FilteredTodosContext =
+  React.createContext<FilteredTodosContextProps>({
+    filteredTodos: [],
+    dispatch: () => { },
+  });
 
 interface TodosContextProps {
   todos: Todo[] | null;
@@ -50,10 +45,8 @@ export const GetTodoContext = React.createContext<TodoContextProps>({
   setTodo: () => { },
 });
 
-export const todoReducer = (
-  state: Todo[],
-  action: Action,
-) => {
+export const todoReducer = (state: Todo[] | null, action: Action) => {
+  const initialTodos = action.allTodos ? action.allTodos : [];
 
   switch (action.type) {
     case 'ALL':
@@ -63,9 +56,11 @@ export const todoReducer = (
     case 'ACTIVE':
       return initialTodos.filter(todo => !todo.completed);
     case 'SEARCH':
-      return state.filter(todo => action.payload && todo.title.includes(action.payload));
+      return state && state.filter(
+        todo => action.payload && todo.title.toLowerCase().includes(action.payload.toLowerCase()),
+      );
     default:
-      return initialTodos;
+      return state;
   }
 };
 
@@ -79,20 +74,30 @@ export const GetUserContext = React.createContext<UserContextProps>({
   setUser: () => { },
 });
 
+interface TitileContextProps {
+  title: string;
+  setTitle: React.Dispatch<SetStateAction<string>>;
+}
+
+export const TitileContext = React.createContext<TitileContextProps>({
+  title: '',
+  setTitle: () => { },
+});
+
 type Props = {
   children: React.ReactNode;
 };
 
 export const TodosProvider: React.FC<Props> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
-  const [filteredTodos, dispatch] = useReducer(todoReducer, initialTodos);
+  const [filteredTodos, dispatch] = useReducer(todoReducer, []);
   const [user, setUser] = useState<User | null>(null);
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [firtsLoadedPage, setFirtsLoadedPage] = useState<boolean>(true);
+  const [title, setTitle] = useState<string>('');
 
   useEffect(() => {
-    dispatch({ type: 'ALL' });
-  }, []);
+    dispatch({ type: 'ALL', allTodos: todos });
+  }, [todos]);
 
   const valueOfFilteredTodos = useMemo(
     () => ({
@@ -122,23 +127,22 @@ export const TodosProvider: React.FC<Props> = ({ children }) => {
     }),
     [todos],
   );
-  const valueForFirstLoaded = useMemo(
+  const valueForTitle = useMemo(
     () => ({
-      firtsLoadedPage,
-      setFirtsLoadedPage,
+      title,
+      setTitle,
     }),
-    [firtsLoadedPage],
+    [title]
   );
-
 
   return (
     <FilteredTodosContext.Provider value={valueOfFilteredTodos}>
       <GetUserContext.Provider value={valueForUser}>
         <GetTodoContext.Provider value={valueForTodo}>
           <TodosContext.Provider value={valueForTodos}>
-            <FirtsLoadedContext.Provider value={valueForFirstLoaded}>
+            <TitileContext.Provider value={valueForTitle}>
               {children}
-            </FirtsLoadedContext.Provider>
+            </TitileContext.Provider>
           </TodosContext.Provider>
         </GetTodoContext.Provider>
       </GetUserContext.Provider>

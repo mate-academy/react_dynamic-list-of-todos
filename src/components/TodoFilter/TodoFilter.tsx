@@ -1,39 +1,36 @@
-import React, { useContext, useState } from "react";
-import { FilteredTodosContext, FirtsLoadedContext } from "../../store";
+import React, { useContext, useState } from 'react';
+import { FilteredTodosContext, TitileContext, TodosContext } from '../../store';
 
 export const TodoFilter: React.FC = () => {
-  const [title, setTitle] = useState<string>('');
-  const [option, setOption] = useState('');
-  const { setFirtsLoadedPage } = useContext(FirtsLoadedContext);
+  const { todos } = useContext(TodosContext);
+  const { title, setTitle } = useContext(TitileContext);
+  const [option, setOption] = useState('ALL');
 
   const { dispatch } = useContext(FilteredTodosContext);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFirtsLoadedPage(false);
-    const selectedValue = event.target.value;
+    const selectedOption = event.target.value;
 
-    dispatch({ type: selectedValue.toUpperCase() });
-    setOption(selectedValue.toUpperCase())
+    dispatch({ type: selectedOption.toUpperCase(), allTodos: todos });
+    setOption(selectedOption.toUpperCase());
 
     if (title) {
-      dispatch({ type: 'SEARCH', payload: title })
+      dispatch({ type: 'SEARCH', payload: title });
     }
   };
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFirtsLoadedPage(false);
     setTitle(event.currentTarget.value);
-    dispatch({ type: option })
+    dispatch({ type: option, allTodos: todos });
     if (event.currentTarget.value) {
-      dispatch({ type: 'SEARCH', payload: event.currentTarget.value })
+      dispatch({ type: 'SEARCH', payload: event.currentTarget.value });
     }
-  }
+  };
 
   const clearSerch = () => {
-    setFirtsLoadedPage(false);
     setTitle('');
-    dispatch({ type: option })
-  }
+    dispatch({ type: option, allTodos: todos });
+  };
 
   return (
     <form className="field has-addons">
@@ -60,16 +57,21 @@ export const TodoFilter: React.FC = () => {
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={clearSerch}
-          />
-        </span>
+        {title && (
+          <span
+            className="icon is-right"
+            style={{ pointerEvents: 'all' }
+            }>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={clearSerch}
+            />
+          </span>
+        )}
       </p>
     </form>
-  )
-}
+  );
+};
