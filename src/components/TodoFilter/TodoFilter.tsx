@@ -1,8 +1,9 @@
 import React from 'react';
+import { SortMethod } from '../../App';
 
 type Props = {
   method: string;
-  setMethod: (method: string) => void;
+  setMethod: (method: SortMethod) => void;
   value: string;
   setValue: (str: string) => void;
 };
@@ -14,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   setValue,
 }) => {
   const handleOnSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setMethod(event.target.value);
+    setMethod(event.target.value as SortMethod);
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,9 +35,9 @@ export const TodoFilter: React.FC<Props> = ({
             value={method}
             onChange={handleOnSelect}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={SortMethod.All}>All</option>
+            <option value={SortMethod.Active}>Active</option>
+            <option value={SortMethod.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -54,7 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {value.length > 0 && (
+        {!!value.length && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
