@@ -1,10 +1,11 @@
 import { TodoState } from '../../types/TodoState';
+import './TodoFilter.scss';
 
 type Props = {
   inputQuery: string;
   setInputQuery: (query: string) => void;
-  selectQuery: string;
-  setSelectQuery: (query: string) => void;
+  selectQuery: TodoState;
+  setSelectQuery: (query: TodoState) => void;
 };
 
 export const TodoFilter = ({
@@ -19,7 +20,7 @@ export const TodoFilter = ({
         <select
           data-cy="statusSelect"
           value={selectQuery}
-          onChange={event => setSelectQuery(event.target.value)}
+          onChange={event => setSelectQuery(event.target.value as TodoState)}
         >
           <option value={TodoState.ALL}>All</option>
           <option value={TodoState.ACTIVE}>Active</option>
@@ -42,8 +43,7 @@ export const TodoFilter = ({
       </span>
 
       {inputQuery && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <span className="icon is-right clearButton">
           <button
             data-cy="clearSearchButton"
             type="button"

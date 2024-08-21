@@ -10,43 +10,23 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoState } from './types/TodoState';
+import { getPreparedTodos } from './utils/todos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [inputQuery, setInputQuery] = useState('');
-  const [selectQuery, setSelectQuery] = useState<string>(TodoState.ALL);
+  const [selectQuery, setSelectQuery] = useState<TodoState>(TodoState.ALL);
 
-  const showSelectedTodo = (todoId: number) => {
-    const receivedTodo = todos.find(todo => todo.id === todoId) || null;
-
-    setSelectedTodo(receivedTodo);
-  };
+  const preparedTodos = getPreparedTodos(todos, { inputQuery, selectQuery });
 
   useEffect(() => {
     getTodos().then(todosFromServer => {
-      let filteredTodos = todosFromServer;
-      const preparedInputQuery = inputQuery.trim().toLowerCase();
-
-      if (preparedInputQuery) {
-        filteredTodos = filteredTodos.filter(todo =>
-          todo.title.toLowerCase().includes(preparedInputQuery),
-        );
-      }
-
-      if (selectQuery !== TodoState.ALL) {
-        if (selectQuery === TodoState.COMPLETED) {
-          filteredTodos = filteredTodos.filter(todo => todo.completed);
-        }
-
-        if (selectQuery === TodoState.ACTIVE) {
-          filteredTodos = filteredTodos.filter(todo => !todo.completed);
-        }
-      }
-
-      setTodos(filteredTodos);
+      setTodos(todosFromServer);
+      setIsLoading(false);
     });
-  });
+  }, []);
 
   return (
     <>
@@ -65,10 +45,10 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length !== 0 ? (
+              {!isLoading ? (
                 <TodoList
-                  todos={todos}
-                  showSelectedTodo={showSelectedTodo}
+                  todos={preparedTodos}
+                  setSelectedTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
               ) : (

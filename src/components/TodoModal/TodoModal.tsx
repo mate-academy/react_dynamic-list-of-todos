@@ -14,18 +14,20 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(userFromServer =>
-      setUser(userFromServer),
-    );
-  });
+    getUser(selectedTodo.userId).then(userFromServer => {
+      setUser(userFromServer);
+      setIsLoading(false);
+    });
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {!user ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -37,7 +39,6 @@ export const TodoModal: React.FC<Props> = ({
               {`Todo #${selectedTodo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -52,7 +53,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {selectedTodo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
@@ -61,7 +61,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>
