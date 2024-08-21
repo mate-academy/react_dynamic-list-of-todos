@@ -32,8 +32,8 @@ export const App: React.FC = () => {
 
   const applyQuery = debounce(setAppliedQuery, 300);
 
-  function handleToggleEye(todo: Todo) {
-    setSelectedTodo(() => (todo ? todo : null));
+  function handleSelectedTodo(todo: Todo) {
+    setSelectedTodo(todo);
   }
 
   function handleSetFilterName(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  onSelectedTodo={handleToggleEye}
+                  onSelectedTodo={handleSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
               )}
