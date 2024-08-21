@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +6,31 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { SelectedTodo } from './types/SelectedTodo';
+import { StatusTodo } from './types/StatusTodo';
+import { getFilteredTodos } from './helpers/TodoHelper';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>(null);
+  const [query, setQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<StatusTodo>(
+    StatusTodo.All,
+  );
+
+  useEffect(() => {
+    getTodos().then(setTodos);
+  }, []);
+
+  useEffect(() => {
+    const newFilteredTodos = getFilteredTodos(todos, selectedStatus, query);
+
+    setFilteredTodos(newFilteredTodos);
+  }, [todos, selectedStatus, query]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +39,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setSelectedStatus={setSelectedStatus}
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {todos.length <= 0 ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+      )}
     </>
   );
 };
