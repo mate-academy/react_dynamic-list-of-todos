@@ -16,15 +16,6 @@ export const getFilteredList = (
       filteredTodos = filteredTodos.filter(({ completed }) => completed);
       break;
   }
-  // if (filterName === Filter.active || filterName === Filter.completed) {
-  //   filteredTodos = todos.filter(({ completed }) => {
-  //     if (filterName === 'active') {
-  //       return !completed;
-  //     } else {
-  //       return completed;
-  //     }
-  //   });
-  // }
 
   if (appliedQuery) {
     filteredTodos = filteredTodos.filter(({ title }) =>
