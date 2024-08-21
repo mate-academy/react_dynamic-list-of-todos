@@ -14,11 +14,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(todo.userId).then(userFromServer => {
-      setUser(userFromServer);
-      setIsLoading(false);
-    });
-  }, []);
+    getUser(todo.userId)
+      .then(userFromServer => {
+        setUser(userFromServer);
+      })
+      .finally(() => setIsLoading(false));
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,36 +9,35 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { debounce } from './utils/debounce';
+import { getFilteredList } from './utils/helpers/getFilteredList';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState<Filter>(Filter.all);
   const [appliedQuery, setAppliedQuery] = useState('');
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
-    getTodos().then(todosFromServer => {
-      setIsLoading(false);
-      setTodos(todosFromServer);
-    });
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const applyQuery = useCallback(debounce(setAppliedQuery, 300), []);
+  const applyQuery = debounce(setAppliedQuery, 300);
 
-  function handleToggleEye(todoId: number | null) {
-    if (todoId) {
-      setSelectedTodo(todos.find(({ id }) => id === todoId) || null);
-    } else {
-      setSelectedTodo(null);
-    }
+  function handleToggleEye(todo: Todo) {
+    setSelectedTodo(() => (todo ? todo : null));
   }
 
   function handleSetFilterName(event: React.ChangeEvent<HTMLSelectElement>) {
-    setFilterName(event.target.value);
+    setFilterName(event.target.value as Filter);
   }
 
   function handleSetSearchQuery(event: React.ChangeEvent<HTMLInputElement>) {
@@ -51,29 +50,10 @@ export const App: React.FC = () => {
     applyQuery('');
   }
 
-  const getVisibleTodos = useCallback(() => {
-    let filteredTodos = [...todos];
-
-    if (filterName === 'active' || filterName === 'completed') {
-      filteredTodos = todos.filter(({ completed }) => {
-        if (filterName === 'active') {
-          return !completed;
-        } else {
-          return completed;
-        }
-      });
-    }
-
-    if (appliedQuery) {
-      filteredTodos = filteredTodos.filter(({ title }) =>
-        title.toLowerCase().includes(appliedQuery.toLowerCase()),
-      );
-    }
-
-    return filteredTodos;
-  }, [todos, filterName, appliedQuery]);
-
-  const visibleTodos = getVisibleTodos();
+  const visibleTodos: Todo[] = useMemo(
+    () => getFilteredList(todos, filterName, appliedQuery),
+    [todos, filterName, appliedQuery],
+  );
 
   return (
     <>
@@ -92,11 +72,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
-                  onToggleEye={handleToggleEye}
+                  onSelectedTodo={handleToggleEye}
                   selectedTodo={selectedTodo}
                 />
               )}
