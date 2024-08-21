@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 type Props = {
-  selectedTodo: Todo | null;
+  selectedTodo: Todo;
   setSelectedTodo: (choiceTodo: Todo | null) => void;
 };
 

@@ -10,50 +10,48 @@ import { FilterStatusType, Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
-function filterFunction(
-  items: Todo[],
-  str: string,
+function filterTodos(
+  todos: Todo[],
+  query: string,
   filterStates: FilterStatusType,
 ) {
-  let itemsInUse = [...items];
-
-  itemsInUse = itemsInUse.filter(todo =>
-    todo.title.toLowerCase().includes(str.toLowerCase().trim()),
+  let filteredTasks = [...todos].filter(todo =>
+    todo.title.toLowerCase().includes(query.toLowerCase().trim()),
   );
 
-  itemsInUse = itemsInUse.filter(item => {
+  filteredTasks = filteredTasks.filter(todo => {
     switch (filterStates) {
       case FilterStatusType.All:
         return true;
       case FilterStatusType.Active:
-        return !item.completed;
+        return !todo.completed;
       case FilterStatusType.Completed:
-        return item.completed;
+        return todo.completed;
       default:
         return true;
     }
   });
 
-  return itemsInUse;
+  return filteredTasks;
 }
 
 export const App: React.FC = () => {
   const [todo, setTodo] = useState<Todo[]>([]);
-  const [filterLetter, setFilterLetter] = useState('');
+  const [query, setQuery] = useState('');
   const [filterStates, setFilterStatus] = useState<FilterStatusType>(
     FilterStatusType.All,
   );
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const todoList = filterFunction(todo, filterLetter, filterStates);
+  const todoList = filterTodos(todo, query, filterStates);
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
       .then(todoFromServer => {
         setTodo(todoFromServer);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -65,15 +63,15 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilterLetter={setFilterLetter}
+                setQuery={setQuery}
                 setFilterStatus={setFilterStatus}
-                filterLetter={filterLetter}
+                query={query}
               />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todoList.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && todoList.length > 0 && (
                 <TodoList
                   todos={todoList}
                   setChoiceTodo={setSelectedTodo}

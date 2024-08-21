@@ -1,18 +1,18 @@
 import { FilterStatusType } from '../../types/Todo';
 
 type Props = {
-  setFilterLetter: (letter: string) => void;
+  setQuery: (letter: string) => void;
   setFilterStatus: (status: FilterStatusType) => void;
-  filterLetter: string;
+  query: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  setFilterLetter,
+  setQuery,
   setFilterStatus,
-  filterLetter,
+  query,
 }) => {
   const handleChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterLetter(event.target.value);
+    setQuery(event.target.value);
   };
 
   const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handlClearButton = () => {
-    setFilterLetter('');
+    setQuery('');
   };
 
   return (
@@ -42,15 +42,14 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           onChange={handleChangeFilter}
-          value={filterLetter}
+          value={query}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {filterLetter !== '' && (
+        <span className="icon is-right is-clickable">
+          {query && (
             <button
               data-cy="clearSearchButton"
               type="button"
