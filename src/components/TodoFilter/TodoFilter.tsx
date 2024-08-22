@@ -1,5 +1,5 @@
 import React from 'react';
-import { Statuses } from '../../App';
+import { Statuses } from '../../helpers/filterFunction';
 
 type Props = {
   setSelectedFilter: (filter: Statuses) => void;

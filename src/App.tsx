@@ -9,50 +9,25 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-// import { User } from './types/User';
-
-export enum Statuses {
-  All = 'All',
-  active = 'active',
-  completed = 'completed',
-}
+import { filterTodos, Statuses } from './helpers/filterFunction';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<Statuses>(Statuses.All);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [loader, setLoader] = useState<boolean>(false);
 
   useEffect(() => {
     getTodos().then(setTodos);
-  }, []);
 
-  const filteredTodo = useMemo(() => {
-    let filtered = todos;
-
-    switch (selectedFilter) {
-      case Statuses.All:
-        break;
-
-      case Statuses.active:
-        filtered = todos.filter(todo => !todo.completed);
-        break;
-
-      case Statuses.completed:
-        filtered = todos.filter(todo => todo.completed);
-        break;
-
-      default:
-        break;
+    if (todos.length > 0) {
+      setLoader(true);
     }
+  }, [todos.length]);
 
-    if (searchTerm) {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    }
-
-    return filtered;
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, selectedFilter, searchTerm);
   }, [todos, selectedFilter, searchTerm]);
 
   const onCloseHandler = useCallback(() => {
@@ -75,9 +50,9 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {todos.length > 0 ? (
+              {loader ? (
                 <TodoList
-                  todos={filteredTodo}
+                  todos={filteredTodos}
                   setSelectedTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
