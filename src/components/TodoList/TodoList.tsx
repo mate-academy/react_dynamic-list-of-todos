@@ -1,11 +1,10 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
 import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  handleEyeClick: (selectedUserId: number, todoId: number) => void;
+  handleEyeClick: (todoId: number) => void;
   selectedTodoId: number | null;
 };
 
@@ -54,9 +53,7 @@ export const TodoList: React.FC<Props> = ({
               className="button"
               type="button"
               onClick={() => {
-                getUser(todo.userId).then(user => {
-                  handleEyeClick(user.id, todo.id);
-                });
+                handleEyeClick(todo.id);
               }}
             >
               <span className="icon">

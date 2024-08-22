@@ -2,27 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
 
 type Props = {
-  selectedUser: User;
   userTodo: Todo | null;
   resetSelection: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  selectedUser,
-  userTodo,
-  resetSelection,
-}) => {
+export const TodoModal: React.FC<Props> = ({ userTodo, resetSelection }) => {
   const [isLoaderShowing, setIsLoaderShowing] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    getUser(userTodo?.userId || 0).then(user => {
+      setSelectedUser(user);
       setIsLoaderShowing(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, []);
+    });
+  }, [userTodo?.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -40,7 +36,6 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{userTodo?.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -63,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{selectedUser.name}</a>
+              <a href="mailto:Sincere@april.biz">{selectedUser?.name}</a>
             </p>
           </div>
         </div>

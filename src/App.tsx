@@ -8,12 +8,10 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
@@ -25,8 +23,7 @@ export const App: React.FC = () => {
   }, []);
 
   const handleEyeClick = useCallback(
-    (selectedUserId: number, selectedTodoId: number) => {
-      getUser(selectedUserId).then(setSelectedUser);
+    (selectedTodoId: number) => {
       setSelectedTodo(todos.find(todo => todo.id === selectedTodoId) || null);
     },
     [todos],
@@ -51,7 +48,6 @@ export const App: React.FC = () => {
   );
 
   const handleCancelSelection = useCallback(() => {
-    setSelectedUser(null);
     setSelectedTodo(null);
   }, []);
 
@@ -78,9 +74,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUser && (
+      {selectedTodo && (
         <TodoModal
-          selectedUser={selectedUser}
           userTodo={selectedTodo}
           resetSelection={handleCancelSelection}
         />
