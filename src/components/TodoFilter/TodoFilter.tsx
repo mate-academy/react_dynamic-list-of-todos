@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { TodoStatus } from '../../types/TodoStatus';
 import debounce from 'lodash/debounce';
+import './TodoFilter.css';
 
 type Props = {
   query: string;
@@ -66,8 +67,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {inputValue && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right icon-pointer-all">
             <button
               data-cy="clearSearchButton"
               type="button"
