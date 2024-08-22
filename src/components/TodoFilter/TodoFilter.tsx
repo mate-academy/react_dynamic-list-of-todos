@@ -1,8 +1,9 @@
 import React from 'react';
+import { Statuses } from '../../App';
 
 type Props = {
-  setSelectedFilter: (filter: string) => void;
-  selectedFilter: string;
+  setSelectedFilter: (filter: Statuses) => void;
+  selectedFilter: Statuses;
   setSearchTerm: (filter: string) => void;
   searchTerm: string;
 };
@@ -13,7 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   setSearchTerm,
 }) => {
   const handlerStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFilter(event.target.value);
+    setSelectedFilter(event.target.value as Statuses);
   };
 
   const handlerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

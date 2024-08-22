@@ -11,10 +11,16 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 // import { User } from './types/User';
 
+export enum Statuses {
+  All = 'All',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState<Statuses>(Statuses.All);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
@@ -25,14 +31,14 @@ export const App: React.FC = () => {
     let filtered = todos;
 
     switch (selectedFilter) {
-      case 'All':
+      case Statuses.All:
         break;
 
-      case 'active':
+      case Statuses.active:
         filtered = todos.filter(todo => !todo.completed);
         break;
 
-      case 'completed':
+      case Statuses.completed:
         filtered = todos.filter(todo => todo.completed);
         break;
 
