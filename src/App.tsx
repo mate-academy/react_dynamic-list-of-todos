@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,16 +9,38 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Query } from './types/Query';
+
+const TODO_IS_ACTIVE = 'active';
+const NO_SPECIFIC_QUERY_FOR_TODO = 'all';
+
+const filterTodosByQuery = (
+  todos: Todo[],
+  { finishQuery, searchQuery }: Query,
+): Todo[] => {
+  return todos?.filter(todo => {
+    if (finishQuery === NO_SPECIFIC_QUERY_FOR_TODO) {
+      return todo.title.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+
+    return (
+      todo.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      todo.completed === (finishQuery === TODO_IS_ACTIVE ? false : true)
+    );
+  });
+};
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
+  const [areDataLoading, setAreDataLoading] = useState(true);
+  const filteredTodos = useRef<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     getTodos().then(todosList => {
       setTodos(todosList);
-      setInitialTodos(todosList);
+      filteredTodos.current = todosList;
+      setAreDataLoading(false);
     });
   }, []);
 
@@ -30,21 +52,12 @@ export const App: React.FC = () => {
   );
 
   const handleFiltrationQueries = useCallback(
-    (finishQuery = 'all', searchQuery = '') => {
+    ({ finishQuery, searchQuery }: Query) => {
       setTodos(
-        initialTodos.filter(todo => {
-          if (finishQuery === 'all') {
-            return todo.title.toLowerCase().includes(searchQuery.toLowerCase());
-          }
-
-          return (
-            todo.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            todo.completed === (finishQuery === 'active' ? false : true)
-          );
-        }),
+        filterTodosByQuery(filteredTodos.current, { finishQuery, searchQuery }),
       );
     },
-    [initialTodos],
+    [filteredTodos],
   );
 
   const handleCancelSelection = useCallback(() => {
@@ -63,12 +76,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 && <Loader />}
-              <TodoList
-                todos={todos}
-                handleEyeClick={handleEyeClick}
-                selectedTodoId={selectedTodo?.id ?? null}
-              />
+              {areDataLoading ? (
+                <Loader />
+              ) : todos.length > 0 ? (
+                <TodoList
+                  todos={todos}
+                  handleEyeClick={handleEyeClick}
+                  selectedTodoId={selectedTodo?.id ?? null}
+                />
+              ) : (
+                'No data found'
+              )}
             </div>
           </div>
         </div>

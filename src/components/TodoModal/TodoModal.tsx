@@ -10,14 +10,20 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ userTodo, resetSelection }) => {
-  const [isLoaderShowing, setIsLoaderShowing] = useState(true);
+  const [isLoaderShowing, setIsLoaderShowing] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(userTodo?.userId || 0).then(user => {
-      setSelectedUser(user);
-      setIsLoaderShowing(false);
-    });
+    setIsLoaderShowing(true);
+
+    getUser(userTodo?.userId || 0)
+      .then(setSelectedUser)
+      .catch(error => {
+        throw new Error(error);
+      })
+      .finally(() => {
+        setIsLoaderShowing(false);
+      });
   }, [userTodo?.userId]);
 
   return (

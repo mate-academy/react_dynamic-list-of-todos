@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Query } from '../../types/Query';
 
 type Props = {
-  handleFiltrationQueries: (finishQuery?: string, searchQuery?: string) => void;
+  handleFiltrationQueries: (query: Query) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ handleFiltrationQueries }) => {
@@ -9,7 +10,7 @@ export const TodoFilter: React.FC<Props> = ({ handleFiltrationQueries }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    handleFiltrationQueries(finishQuery, searchQuery);
+    handleFiltrationQueries({ finishQuery, searchQuery });
   }, [finishQuery, searchQuery, handleFiltrationQueries]);
 
   return (
