@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Query } from '../../types/Query';
+import { FinishQuery, Query } from '../../types/Query';
 
 type Props = {
   handleFiltrationQueries: (query: Query) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({ handleFiltrationQueries }) => {
-  const [finishQuery, setFinishQuery] = useState('all');
+  const [finishQuery, setFinishQuery] = useState(FinishQuery.All);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -21,12 +21,12 @@ export const TodoFilter: React.FC<Props> = ({ handleFiltrationQueries }) => {
             data-cy="statusSelect"
             value={finishQuery}
             onChange={event => {
-              setFinishQuery(event.target.value);
+              setFinishQuery(event.target.value as FinishQuery);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FinishQuery.All}>All</option>
+            <option value={FinishQuery.Active}>Active</option>
+            <option value={FinishQuery.Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -53,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({ handleFiltrationQueries }) => {
               type="button"
               className="delete"
               onClick={() => {
-                setFinishQuery('all');
+                setFinishQuery(FinishQuery.All);
                 setSearchQuery('');
               }}
             />

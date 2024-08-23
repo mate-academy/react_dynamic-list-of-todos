@@ -33,15 +33,22 @@ const filterTodosByQuery = (
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [areDataLoading, setAreDataLoading] = useState(true);
-  const filteredTodos = useRef<Todo[]>([]);
+  const initialTodos = useRef<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(todosList => {
-      setTodos(todosList);
-      filteredTodos.current = todosList;
-      setAreDataLoading(false);
-    });
+    setAreDataLoading(true);
+    getTodos()
+      .then(todosList => {
+        setTodos(todosList);
+        initialTodos.current = todosList;
+      })
+      .catch(error => {
+        throw new Error(error);
+      })
+      .finally(() => {
+        setAreDataLoading(false);
+      });
   }, []);
 
   const handleEyeClick = useCallback(
@@ -54,10 +61,11 @@ export const App: React.FC = () => {
   const handleFiltrationQueries = useCallback(
     ({ finishQuery, searchQuery }: Query) => {
       setTodos(
-        filterTodosByQuery(filteredTodos.current, { finishQuery, searchQuery }),
+        filterTodosByQuery(initialTodos.current, { finishQuery, searchQuery }),
       );
     },
-    [filteredTodos],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [initialTodos.current],
   );
 
   const handleCancelSelection = useCallback(() => {
