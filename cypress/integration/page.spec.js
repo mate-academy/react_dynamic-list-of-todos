@@ -116,7 +116,7 @@ describe('Page', () => {
       page.mockUser1();
       cy.clock();
       page.selectTodo(1);
-  
+
       page.modal().byDataCy('loader').should('exist');
     });
 
@@ -126,48 +126,48 @@ describe('Page', () => {
 
       cy.wait('@user1');
       cy.wait(10);
-  
+
       page.modal().byDataCy('loader').should('not.exist');
     });
 
     it('should show correct data for a not completed todo', () => {
       page.mockUser1();
       page.selectTodo(0);
-  
+
       cy.byDataCy('modal-header')
         .should('have.text', 'Todo #1');
-  
+
       cy.byDataCy('modal-title')
         .should('have.text', 'Delectus aut autem');
-  
+
       cy.byDataCy('modal-user')
         .should('have.text', 'Planned by Leanne Graham');
     });
-  
+
     it('should show correct data for a completed todo', () => {
       page.mockUser2();
       page.selectTodo(4);
-  
+
       cy.byDataCy('modal-header')
         .should('have.text', 'Todo #22');
-  
+
       cy.byDataCy('modal-title')
         .should('have.text', 'Distinctio vitae autem nihil ut molestias quo');
-  
+
       cy.byDataCy('modal-user')
         .should('have.text', 'Done by Ervin Howell');
     });
-  
+
     it('should closes with close button', () => {
       page.mockUser2();
       page.selectTodo(4);
-  
+
       cy.byDataCy('modal-close')
         .click();
-  
+
       page.modal()
         .should('not.exist');
-  
+
       cy.get('.fa-eye-slash')
         .should('have.length', 0);
     });
@@ -275,6 +275,10 @@ describe('Page', () => {
       page.todos().should('have.length', 3);
       page.todos().eq(0).should('contain.text', 'Delectus aut autem');
       page.todos().eq(1).should('contain.text', 'Quis ut nam facilis et officia qui');
+
+
+
+      
       page.todos().eq(2).should('contain.text', 'Suscipit repellat esse quibusdam vuptatem incidunt');
     });
 
