@@ -16,18 +16,18 @@ import { handleFilter } from './services/filterTodos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [sortFilter, setSortFilter] = useState<Filter>({
     query: '',
     sortField: TodosFilter.All,
   });
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
 
     getTodos()
       .then(setTodos)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, []);
 
   const onCloseHandler = () => {
@@ -44,11 +44,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={sortFilter} manageChanges={setSortFilter} />
+              <TodoFilter filter={sortFilter} onFilterChange={setSortFilter} />
             </div>
 
             <div className="block">
-              {!loading || todos.length > 0 ? (
+              {!isLoading || todos.length > 0 ? (
                 <TodoList
                   todos={preparedTodos}
                   setSelectedTodo={setSelectedTodo}

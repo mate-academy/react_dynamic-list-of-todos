@@ -1,12 +1,17 @@
 import React from 'react';
 import { Filter } from '../../types/filter';
+import { TodosFilter } from '../../types/todosFilter';
+import './TodoFilter.scss';
 
 type Props = {
   filter: Filter;
-  manageChanges: ({ query, sortField }: Filter) => void;
+  onFilterChange: ({ query, sortField }: Filter) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, manageChanges }) => {
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  onFilterChange: manageChanges,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -17,9 +22,9 @@ export const TodoFilter: React.FC<Props> = ({ filter, manageChanges }) => {
               manageChanges({ ...filter, sortField: event.target.value });
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="all">{TodosFilter.All}</option>
+            <option value="active">{TodosFilter.Active}</option>
+            <option value="completed">{TodosFilter.Completed}</option>
           </select>
         </span>
       </p>
@@ -40,8 +45,7 @@ export const TodoFilter: React.FC<Props> = ({ filter, manageChanges }) => {
         </span>
 
         {filter.query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right pointer-all">
             <button
               data-cy="clearSearchButton"
               type="button"
