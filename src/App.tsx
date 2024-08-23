@@ -16,15 +16,17 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<Statuses>(Statuses.All);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [loader, setLoader] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
 
-    if (todos.length > 0) {
-      setLoader(true);
-    }
-  }, [todos.length]);
+    getTodos()
+      .then(setTodos)
+      // eslint-disable-next-line no-console
+      .catch(error => console.log(error.message))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const filteredTodos = useMemo(() => {
     return filterTodos(todos, selectedFilter, searchTerm);
@@ -50,7 +52,7 @@ export const App: React.FC = () => {
               />
             </div>
             <div className="block">
-              {loader ? (
+              {!isLoading ? (
                 <TodoList
                   todos={filteredTodos}
                   setSelectedTodo={setSelectedTodo}

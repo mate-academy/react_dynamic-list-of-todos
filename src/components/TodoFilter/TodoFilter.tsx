@@ -1,5 +1,6 @@
 import React from 'react';
 import { Statuses } from '../../helpers/filterFunction';
+import './TodoFilter.scss';
 
 type Props = {
   setSelectedFilter: (filter: Statuses) => void;
@@ -50,8 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
         {searchTerm && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <span className="icon is-right">
             <button
               onClick={clearSearch}
               data-cy="clearSearchButton"

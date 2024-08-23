@@ -11,20 +11,23 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loader, setLoader] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
-    if (user) {
-      setLoader(false);
-    }
-  }, [todo.userId, user]);
+    setIsLoading(true);
+
+    getUser(todo.userId)
+      .then(setUser)
+      // eslint-disable-next-line no-console
+      .catch(error => console.log(error.message))
+      .finally(() => setIsLoading(false));
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loader ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
