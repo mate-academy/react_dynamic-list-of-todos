@@ -2,7 +2,7 @@ import React from 'react';
 import { Filter } from '../../types/Filter';
 
 type Props = {
-  filter: string;
+  filter: Filter;
   setFilter: (filter: Filter) => void;
   query: string;
   setQuery: (query: string) => void;
@@ -22,9 +22,9 @@ export const TodoFilter: React.FC<Props> = ({
           value={filter}
           onChange={event => setFilter(event.target.value as Filter)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Filter.All}>All</option>
+          <option value={Filter.Active}>Active</option>
+          <option value={Filter.Completed}>Completed</option>
         </select>
       </span>
     </p>

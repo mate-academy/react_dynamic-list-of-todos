@@ -15,31 +15,41 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>(Filter.All);
   const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const filteredTodos = todos
-    .filter(todo => {
+    .filter(({ completed }) => {
       switch (filter) {
         case Filter.Completed:
-          return todo.completed;
+          return completed;
         case Filter.Active:
-          return !todo.completed;
+          return !completed;
         case Filter.All:
         default:
           return true;
       }
     })
     .filter(
-      todo => !query || todo.title.toLowerCase().includes(query.toLowerCase()),
+      ({ title }) =>
+        !query || title.toLowerCase().includes(query.toLowerCase()),
     );
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleEyeClick = (userId: number, todo: Todo) => {
     setSelectedUserId(userId);
     setSelectedTodo(todo);
+  };
+
+  const handleClose = () => {
+    setSelectedUserId(null);
+    setSelectedTodo(null);
   };
 
   return (
@@ -59,12 +69,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!todos.length ? (
-                <Loader />
-              ) : (
+              {isLoading && <Loader />}
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
-                  onEyeClick={handleEyeClick}
+                  handleSelectTodo={handleEyeClick}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -77,10 +86,7 @@ export const App: React.FC = () => {
         <TodoModal
           userId={selectedUserId}
           todo={selectedTodo}
-          onClose={() => {
-            setSelectedTodo(null);
-            setSelectedUserId(null);
-          }}
+          onClose={handleClose}
         />
       )}
     </>
