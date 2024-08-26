@@ -23,6 +23,16 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+async function getAsync<T>(url: string): Promise<T> {
+  // eslint-disable-next-line prefer-template
+  const fullURL = BASE_URL + url + '.json';
+
+  await wait(300);
+  const response: Response = await fetch(fullURL);
+
+  return response.json();
+}
+
+export const getTodos = () => getAsync<Todo[]>('/todos');
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
