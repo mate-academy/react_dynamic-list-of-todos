@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import 'bulma/css/bulma.css';
@@ -62,7 +61,7 @@ export const App: React.FC = () => {
         filterTodosByQuery(initialTodos.current, { finishQuery, searchQuery }),
       );
     },
-    [initialTodos.current],
+    [],
   );
 
   const handleCancelSelection = useCallback(() => {
