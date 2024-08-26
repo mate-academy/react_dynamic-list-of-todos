@@ -12,37 +12,36 @@ import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterBy, setFilterBy] = useState<Filter>(Filter.ALL);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     getTodos()
-      .then(todosFromServer => {
-        setTodos(todosFromServer);
-      })
-      .finally(() => setLoading(false));
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   const preparedTodos = useMemo(() => {
-    return todos
-      .filter((todo: Todo) => {
-        switch (filterBy) {
-          case Filter.ACTIVE:
-            return !todo.completed;
+    return todos.filter(todo => {
+      if (filterBy === Filter.ALL && !query.trim()) {
+        return true;
+      }
 
-          case Filter.COMPLETED:
-            return todo.completed;
+      const matchesFilter =
+        (filterBy === Filter.ACTIVE && !todo.completed) ||
+        (filterBy === Filter.COMPLETED && todo.completed) ||
+        filterBy === Filter.ALL;
 
-          default:
-            return todo;
-        }
-      })
-      .filter(todo =>
-        todo.title.toLowerCase().trim().includes(query.trim().toLowerCase()),
-      );
+      const matchesQuery = todo.title
+        .toLowerCase()
+        .trim()
+        .includes(query.trim().toLowerCase());
+
+      return matchesFilter && matchesQuery;
+    });
   }, [filterBy, todos, query]);
 
   return (
@@ -62,8 +61,8 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todos.length > 0 && (
+              {isLoading && <Loader />}
+              {!isLoading && todos.length > 0 && (
                 <TodoList
                   todos={preparedTodos}
                   selectedTodoId={selectedTodo?.id}
