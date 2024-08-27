@@ -1,48 +1,20 @@
-import { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
+import { SortName } from '../../types/sortByFilter';
 
 type Props = {
   todos: Todo[];
-  onSortList: (sortedTodos: Todo[]) => void;
+  onSortList: (el: SortName) => void;
+  handleSearchInput: (el: string) => void;
+  search: string;
+  sortBy: SortName;
 };
 
-enum SortName {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-export const TodoFilter: React.FC<Props> = ({ todos, onSortList }) => {
-  const [sortBy, setSortBy] = useState(SortName.All);
-  const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    let filteredTodos = todos;
-
-    if (search) {
-      filteredTodos = filteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(search.toLowerCase()),
-      );
-    }
-
-    switch (sortBy) {
-      case SortName.Active:
-        filteredTodos = filteredTodos.filter(todo => !todo.completed);
-        break;
-
-      case SortName.Completed:
-        filteredTodos = filteredTodos.filter(todo => todo.completed);
-        break;
-
-      case SortName.All:
-      default:
-        filteredTodos = filteredTodos;
-        break;
-    }
-
-    onSortList(filteredTodos);
-  }, [sortBy, search, todos, onSortList]);
-
+export const TodoFilter: React.FC<Props> = ({
+  onSortList,
+  handleSearchInput,
+  search,
+  sortBy,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -51,7 +23,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSortList }) => {
             data-cy="statusSelect"
             value={sortBy}
             onChange={ev => {
-              setSortBy(ev.target.value as SortName);
+              onSortList(ev.target.value as SortName);
             }}
           >
             <option value={SortName.All}>All</option>
@@ -68,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSortList }) => {
           className="input"
           placeholder="Search..."
           value={search}
-          onChange={ev => setSearch(ev.target.value)}
+          onChange={ev => handleSearchInput(ev.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -82,7 +54,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSortList }) => {
               type="button"
               className="delete"
               onClick={() => {
-                setSearch('');
+                handleSearchInput('');
               }}
             />
           )}

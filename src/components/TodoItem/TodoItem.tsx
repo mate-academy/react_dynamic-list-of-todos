@@ -6,14 +6,12 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todo: Todo;
   handleBuuton: (el: Todo) => void;
-  modalActive: boolean;
   selectedTodo: Todo | null;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
   handleBuuton,
-  modalActive,
   selectedTodo,
 }) => {
   return (
@@ -50,8 +48,8 @@ export const TodoItem: React.FC<Props> = ({
           <span className="icon">
             <i
               className={cn('far', {
-                'fa-eye': !modalActive || selectedTodo?.id !== todo.id,
-                'fa-eye-slash': modalActive && selectedTodo?.id === todo.id,
+                'fa-eye': selectedTodo?.id !== todo.id,
+                'fa-eye-slash': selectedTodo?.id === todo.id,
               })}
             />
           </span>

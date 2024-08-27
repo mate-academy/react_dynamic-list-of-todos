@@ -9,16 +9,13 @@ type Props = {
 };
 
 export const TodoList: React.FC<Props> = ({ todos }) => {
-  const [modalActive, setModalActive] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const handleOpenModal = (todo: Todo) => {
     setSelectedTodo(todo);
-    setModalActive(true);
   };
 
   const handleCloseModal = () => {
-    setModalActive(false);
     setSelectedTodo(null);
   };
 
@@ -44,14 +41,13 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
               key={todo.id}
               todo={todo}
               handleBuuton={handleOpenModal}
-              modalActive={modalActive}
               selectedTodo={selectedTodo}
             />
           ))}
         </tbody>
       </table>
 
-      {modalActive && selectedTodo && (
+      {selectedTodo && (
         <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
       )}
     </>
