@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
+
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -41,8 +43,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     onClose();
   };
 
+  const { title, id, completed } = todo;
+
   return (
-    <div className={`modal ${bgActive ? 'is-active' : ''}`} data-cy="modal">
+    <div className={cn('modal', { 'is-active': bgActive })} data-cy="modal">
       <div className="modal-background" onClick={handleCloseButton} />
       {loader ? (
         <Loader />
@@ -54,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
                 className="modal-card-title has-text-weight-medium"
                 data-cy="modal-header"
               >
-                Todo #{todo.id}
+                Todo #{id}
               </div>
 
               <button
@@ -67,16 +71,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
             <div className="modal-card-body">
               <p className="block" data-cy="modal-title">
-                {todo.title}
+                {title}
               </p>
 
               <p className="block" data-cy="modal-user">
                 <strong
-                  className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }
+                  className={cn({
+                    'has-text-success': completed,
+                    'has-text-danger': !completed,
+                  })}
                 >
-                  {todo.completed ? 'Done' : 'Planned'}
+                  {completed ? 'Done' : 'Planned'}
                 </strong>
                 {' by '}
                 <a href={`mailto:${user?.email || ''}`}>{selectedUser}</a>
