@@ -14,22 +14,20 @@ import { getFilteredTodos } from './helpers/TodoHelper';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>(null);
   const [query, setQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<StatusTodo>(
     StatusTodo.All,
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  useEffect(() => {
-    const newFilteredTodos = getFilteredTodos(todos, selectedStatus, query);
-
-    setFilteredTodos(newFilteredTodos);
-  }, [todos, selectedStatus, query]);
+  const filteredTodos = getFilteredTodos(todos, selectedStatus, query);
 
   return (
     <>
@@ -40,13 +38,14 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                selectedStatus={selectedStatus}
                 setSelectedStatus={setSelectedStatus}
                 setQuery={setQuery}
               />
             </div>
 
             <div className="block">
-              {todos.length <= 0 ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList

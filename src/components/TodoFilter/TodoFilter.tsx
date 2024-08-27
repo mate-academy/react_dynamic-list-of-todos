@@ -2,22 +2,24 @@ import { ChangeEvent, useState } from 'react';
 import { StatusTodo } from '../../types/StatusTodo';
 
 type Props = {
+  selectedStatus: StatusTodo;
   setSelectedStatus: (status: StatusTodo) => void;
   setQuery: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
+  selectedStatus,
   setSelectedStatus,
   setQuery,
 }: Props) => {
-  const [selected, setSelected] = useState<StatusTodo>(StatusTodo.All);
   const [query, setSelectedQuery] = useState('');
-
+  const filterOptions = Object.entries(StatusTodo);
   const handleOnChangeSelected = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelected(event.target.value as StatusTodo);
     setSelectedStatus(event.target.value as StatusTodo);
   };
 
+  // eslint-disable-next-line no-console
+  console.log(filterOptions);
   const handleOnChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedQuery(event.target.value);
     setQuery(event.target.value);
@@ -34,12 +36,19 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={selected}
+            value={selectedStatus}
             onChange={handleOnChangeSelected}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {filterOptions.map(option => {
+              const optionKey = option[0];
+              const optionValue = option[1];
+
+              return (
+                <option key={optionKey} value={optionValue}>
+                  {optionKey}
+                </option>
+              );
+            })}
           </select>
         </span>
       </p>
@@ -57,7 +66,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right">
           {query && (
             <button
               data-cy="clearSearchButton"
