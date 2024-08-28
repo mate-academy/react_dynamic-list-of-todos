@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
-import { getUserCastom } from '../../api';
+import { getUser } from '../../api';
 
 type Props = {
   todo: Todo;
@@ -13,14 +13,14 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUserCastom(todo.id).then(setUser);
-  }, [todo.id]);
+    getUser(todo.userId).then(setUser);
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user == null ? (
+      {user === null ? (
         <Loader />
       ) : (
         <div className="modal-card">

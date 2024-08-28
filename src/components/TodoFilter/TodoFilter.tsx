@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { FilterTypes } from '../enums/FilterTypes';
 
 interface Props {
@@ -12,12 +12,20 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const { All, Active, Completed } = FilterTypes;
 
+  const [inputValue, setInputValue] = useState('');
+
   const handleOnChangeStatus = (event: ChangeEvent<HTMLSelectElement>) => {
     handleFilterChange(event.target.value as FilterTypes);
   };
 
   const handleOnInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
     handleInputChange(event.target.value);
+  };
+
+  const resetInput = () => {
+    setInputValue('');
+    handleInputChange('');
   };
 
   return (
@@ -25,9 +33,9 @@ export const TodoFilter: React.FC<Props> = ({
       <p className="control">
         <span className="select">
           <select data-cy="statusSelect" onChange={handleOnChangeStatus}>
-            <option value={All}>{All}</option>
-            <option value={Active}>{Active}</option>
-            <option value={Completed}>{Completed}</option>
+            <option value={All}>All</option>
+            <option value={Active}>Active</option>
+            <option value={Completed}>Completed</option>
           </select>
         </span>
       </p>
@@ -38,6 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
+          value={inputValue}
           onChange={handleOnInputChange}
         />
         <span className="icon is-left">
@@ -45,12 +54,14 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => handleInputChange('')}
-          />
+          {inputValue && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => resetInput()}
+            />
+          )}
         </span>
       </p>
     </form>

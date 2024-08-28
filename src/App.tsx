@@ -79,8 +79,8 @@ export const App: React.FC = () => {
               {todos.length > 0 ? (
                 <TodoList
                   todos={filteredTodos}
-                  setSelectedTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               ) : (
                 <Loader />
