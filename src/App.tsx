@@ -19,9 +19,11 @@ export const App: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<StatusTodo>(
     StatusTodo.All,
   );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
       .then(setTodos)
       .finally(() => setIsLoading(false));
@@ -40,6 +42,7 @@ export const App: React.FC = () => {
               <TodoFilter
                 selectedStatus={selectedStatus}
                 setSelectedStatus={setSelectedStatus}
+                query={query}
                 setQuery={setQuery}
               />
             </div>

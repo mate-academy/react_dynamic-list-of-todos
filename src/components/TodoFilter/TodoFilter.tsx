@@ -1,32 +1,29 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { StatusTodo } from '../../types/StatusTodo';
 
 type Props = {
   selectedStatus: StatusTodo;
   setSelectedStatus: (status: StatusTodo) => void;
+  query: string;
   setQuery: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   selectedStatus,
   setSelectedStatus,
+  query,
   setQuery,
 }: Props) => {
-  const [query, setSelectedQuery] = useState('');
   const filterOptions = Object.entries(StatusTodo);
   const handleOnChangeSelected = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedStatus(event.target.value as StatusTodo);
   };
 
-  // eslint-disable-next-line no-console
-  console.log(filterOptions);
   const handleOnChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedQuery(event.target.value);
     setQuery(event.target.value);
   };
 
   const reset = () => {
-    setSelectedQuery('');
     setQuery('');
   };
 
@@ -40,8 +37,7 @@ export const TodoFilter: React.FC<Props> = ({
             onChange={handleOnChangeSelected}
           >
             {filterOptions.map(option => {
-              const optionKey = option[0];
-              const optionValue = option[1];
+              const [optionKey, optionValue] = option;
 
               return (
                 <option key={optionKey} value={optionValue}>
