@@ -17,6 +17,15 @@ export const TodoCard: React.FC<Props> = ({
   isModalActive,
   todo,
 }) => {
+  const handleSelectTodo = () => {
+    setSelectedTodo(todo);
+    setIsModalActive(false);
+
+    setTimeout(() => {
+      setIsModalActive(true);
+    }, 100);
+  };
+
   return (
     <tr
       data-cy="todo"
@@ -48,10 +57,7 @@ export const TodoCard: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => {
-            setSelectedTodo(todo);
-            setIsModalActive(true);
-          }}
+          onClick={handleSelectTodo}
         >
           <span className="icon">
             <i
