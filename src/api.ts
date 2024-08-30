@@ -13,7 +13,7 @@ function wait(delay: number): Promise<void> {
 function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
-  return wait(300)
+  return wait(2000)
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }
