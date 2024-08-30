@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({
   setIsModalActive,
 }) => {
   const [todoOwner, setTodoOwner] = useState<User | null>(null);
-  const [modalLoading, setModalLoading] = useState(true); // Змінено на true для відображення лоадера при відкритті
+  const [modalLoading, setModalLoading] = useState(true);
 
   const findUser = useCallback(() => {
     if (todo?.userId) {
@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
           setModalLoading(false);
         });
     } else {
-      setModalLoading(false); // Якщо userId відсутній, зупиняємо завантаження
+      setModalLoading(false);
     }
   }, [todo?.userId]);
 
@@ -39,7 +39,6 @@ export const TodoModal: React.FC<Props> = ({
     findUser();
   }, [findUser]);
 
-  // Перевіряємо, чи потрібно показувати модальне вікно
   const shouldShowModal = selectedTodo !== null;
 
   return (
