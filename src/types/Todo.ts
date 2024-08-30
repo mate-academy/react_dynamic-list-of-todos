@@ -4,3 +4,14 @@ export interface Todo {
   completed: boolean;
   userId: number;
 }
+
+export enum State {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
+export type Filter = {
+  state: State;
+  query: string;
+};
