@@ -25,8 +25,10 @@ export const App: React.FC = () => {
   }, [selectedTodo]);
 
   const filteredTodos = useMemo(() => {
+    const lowerCaseQuery = query.toLowerCase();
+
     return todos.filter(todo => {
-      const filteredByQuery = todo.title.includes(query);
+      const filteredByQuery = todo.title.toLowerCase().includes(lowerCaseQuery);
 
       if (filter === 'active') {
         return filteredByQuery && !todo.completed;
