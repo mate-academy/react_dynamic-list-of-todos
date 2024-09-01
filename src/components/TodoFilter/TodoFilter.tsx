@@ -1,8 +1,10 @@
+import { Filter } from '../../types/Filter';
+
 type Props = {
   query: string | number | undefined;
-  filter: 'all' | 'active' | 'completed';
+  filter: Filter;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFilterChange?: (filter: 'all' | 'active' | 'completed') => void;
+  onFilterChange?: (filter: Filter) => void;
   onClearQuery?: () => void;
 };
 
@@ -14,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
   onClearQuery = () => {},
 }) => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onFilterChange(event.target.value as 'all' | 'active' | 'completed');
+    onFilterChange(event.target.value as Filter);
   };
 
   return (
@@ -26,9 +28,14 @@ export const TodoFilter: React.FC<Props> = ({
             value={filter}
             onChange={handleFilterChange}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            {Object.keys(Filter).map(key => (
+              <option
+                key={Filter[key as keyof typeof Filter]}
+                value={Filter[key as keyof typeof Filter]}
+              >
+                {key}
+              </option>
+            ))}
           </select>
         </span>
       </p>

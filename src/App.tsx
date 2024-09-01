@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<Filter>(Filter.All);
 
   useEffect(() => {
     setLoading(true);
@@ -30,14 +31,15 @@ export const App: React.FC = () => {
     return todos.filter(todo => {
       const filteredByQuery = todo.title.toLowerCase().includes(lowerCaseQuery);
 
-      if (filter === 'active') {
-        return filteredByQuery && !todo.completed;
-      }
+      switch (filter) {
+        case Filter.Active:
+          return filteredByQuery && !todo.completed;
 
-      if (filter === 'completed') {
-        return filteredByQuery && todo.completed;
-      } else {
-        return filteredByQuery;
+        case Filter.Completed:
+          return filteredByQuery && todo.completed;
+
+        default:
+          return filteredByQuery;
       }
     });
   }, [query, todos, filter]);
@@ -46,7 +48,7 @@ export const App: React.FC = () => {
     setQuery(event.target.value);
   };
 
-  const handleFilterChange = (newFilter: 'all' | 'active' | 'completed') => {
+  const handleFilterChange = (newFilter: Filter) => {
     setFilter(newFilter);
   };
 
@@ -74,7 +76,7 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
                   todos={filteredTodos}
                   onSelect={setSelectedTodo}
