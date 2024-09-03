@@ -14,7 +14,6 @@ export const TodoFilter: React.FC<Props> = ({
   query,
 }) => {
   const handleClickDelete = () => {
-    setSelectedFilter(FILTER.ALL);
     setQuery('');
   };
 
