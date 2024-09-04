@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type PropsTodoModal = {
+  todo: Todo;
+  handleCloseModal: () => void;
+};
+
+export const TodoModal: React.FC<PropsTodoModal> = ({
+  todo,
+  handleCloseModal,
+}) => {
+  const [user, setUser] = useState<User | null>();
+
+  useEffect(() => {
+    getUser(todo.userId).then(setUser);
+  }, [todo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -19,7 +36,12 @@ export const TodoModal: React.FC = () => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleCloseModal}
+            />
           </header>
 
           <div className="modal-card-body">
