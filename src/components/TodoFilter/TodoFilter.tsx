@@ -1,27 +1,31 @@
-type Props = {
-  onStatusChanged: (status: string) => void;
-  onQueryChanged: (query: string) => void;
-  query: string;
-  status: string;
-};
+import { GroupStatusTypes } from '../../types/TextField';
 
-export const TodoFilter: React.FC<Props> = ({
-  onStatusChanged,
-  onQueryChanged,
-  status,
-  query,
+interface TodoFilterProps {
+  textInput: string;
+  setTextInput: (input: string) => void;
+  filteredStatus: GroupStatusTypes;
+  setFilteredStatus: (status: GroupStatusTypes) => void;
+}
+
+export const TodoFilter: React.FC<TodoFilterProps> = ({
+  textInput,
+  setTextInput,
+  filteredStatus,
+  setFilteredStatus,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={status}
-          onChange={event => onStatusChanged(event.target.value)}
+          value={filteredStatus}
+          onChange={event =>
+            setFilteredStatus(event.target.value as GroupStatusTypes)
+          }
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={GroupStatusTypes.ALL}>All</option>
+          <option value={GroupStatusTypes.ACTIVE}>Active</option>
+          <option value={GroupStatusTypes.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -32,24 +36,23 @@ export const TodoFilter: React.FC<Props> = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={query}
-        onChange={event => onQueryChanged(event.target.value)}
+        value={textInput}
+        onChange={event => setTextInput(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        {textInput && (
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => onQueryChanged('')}
+            onClick={() => setTextInput('')}
           />
-        </span>
-      )}
+        )}
+      </span>
     </p>
   </form>
 );

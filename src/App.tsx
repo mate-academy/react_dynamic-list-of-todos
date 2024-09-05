@@ -5,55 +5,33 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { getActiveTodo, getComplitedTodo, getToDos } from './utils/todos';
+import { GroupStatusTypes } from './types/TextField';
+import { TodoModal } from './components/TodoModal/TodoModal';
+import { getFilteredTodos } from './utils/FilterTodos';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
-  const [toDo, setTodo] = useState<Todo | null>(null);
+  const [textInput, setTextInput] = useState<string>('');
+  const [filteredStatus, setFilteredStatus] = useState<GroupStatusTypes>(
+    GroupStatusTypes.ALL,
+  );
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    let promise;
+    setIsLoading(true);
 
-    switch (status) {
-      case 'all':
-        promise = getToDos();
-        break;
-
-      case 'active':
-        promise = getActiveTodo();
-        break;
-
-      case 'completed':
-        promise = getComplitedTodo();
-        break;
-
-      default:
-        promise = getToDos();
-    }
-
-    promise
-      .then(response => {
-        if (query) {
-          setTodos(
-            response.filter(item => {
-              const reg = new RegExp(query, 'i');
-
-              return reg.test(item.title);
-            }),
-          );
-        } else {
-          setTodos(response);
-        }
+    getTodos()
+      .then(result => {
+        setTodos(result);
       })
-      .finally(() => setLoading(false));
-  }, [status, query]);
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const filteredTodos = getFilteredTodos(todos, textInput, filteredStatus);
 
   return (
     <>
@@ -64,24 +42,33 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={query}
-                status={status}
-                onStatusChanged={setStatus}
-                onQueryChanged={setQuery}
+                textInput={textInput}
+                setTextInput={setTextInput}
+                filteredStatus={filteredStatus}
+                setFilteredStatus={setFilteredStatus}
               />
             </div>
 
+            {isLoading && <Loader />}
+
             <div className="block">
-              {loading && <Loader />}
-              {!loading && todos.length > 0 && (
-                <TodoList todos={todos} item={toDo} onTodoSelected={setTodo} />
+              {!isLoading && (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
-
-      {toDo && <TodoModal item={toDo} onClose={setTodo} />}
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
+        />
+      )}
     </>
   );
 };
