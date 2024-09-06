@@ -14,15 +14,14 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>();
-  const [filteredPosts, setFilteredPosts] = useState<Todo[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [selectValue, setSelectValue] = useState('all');
 
   useEffect(() => {
     setLoading(true);
     getTodos()
       .then(data => {
         setTodos(data);
-        setFilteredPosts(data);
       })
       .catch(error => {
         {
@@ -43,21 +42,35 @@ export const App: React.FC = () => {
     setActiveTodo(null);
   };
 
-  const handleFilteredSelectPosts = (value: string): void => {
+  const handleFilteredSelectPosts = (value: string): Todo[] | null => {
     switch (value) {
       case 'all':
-        setFilteredPosts(todos);
-        break;
+        return todos;
       case 'active':
-        setFilteredPosts(todos.filter(todo => todo.completed === false));
-        break;
+        return todos.filter(todo => todo.completed === false);
       case 'completed':
-        setFilteredPosts(todos.filter(todo => todo.completed === true));
-        break;
+        return todos.filter(todo => todo.completed === true);
+
       default:
-        return;
+        return null;
     }
   };
+
+  const filteredPosts = (): Todo[] | null => {
+    let filteredValue: Todo[] | null = handleFilteredSelectPosts(selectValue);
+    if (!inputValue) {
+      return filteredValue;
+    } else {
+      if (filteredValue) {
+        return filteredValue.filter(todo =>
+          todo.title.toLowerCase().includes(inputValue?.toLowerCase()),
+        );
+      }
+    }
+    return null;
+  };
+
+  const filter = filteredPosts() || [];
 
   return (
     <>
@@ -68,8 +81,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filtered={handleFilteredSelectPosts}
+                inputValue={inputValue}
                 setInputValue={setInputValue}
+                selectValue={selectValue}
+                setSelectValue={setSelectValue}
               />
             </div>
             <div className="block">
@@ -77,10 +92,9 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredPosts}
+                  todos={filter}
                   handleShowTodo={handleShowTodo}
                   activeTodo={activeTodo}
-                  inputValue={inputValue}
                 />
               )}
             </div>
