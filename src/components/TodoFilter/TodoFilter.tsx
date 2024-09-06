@@ -22,6 +22,11 @@ export const TodoFilter: FC<TodoFilterProps> = ({
     setInputValue(event.target.value);
   };
 
+  const handleCloseButton = () => {
+    setValueInput('');
+    setInputValue('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -58,6 +63,7 @@ export const TodoFilter: FC<TodoFilterProps> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              onClick={handleCloseButton}
             />
           )}
         </span>

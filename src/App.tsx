@@ -21,7 +21,8 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(data => {
-        setTodos(data), setFilteredPosts(data);
+        setTodos(data);
+        setFilteredPosts(data);
       })
       .catch(error => {
         {
