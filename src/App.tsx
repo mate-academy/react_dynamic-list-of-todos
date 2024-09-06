@@ -14,17 +14,20 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTodo, setActiveTodo] = useState<Todo | null>();
+  const [filteredPosts, setFilteredPosts] = useState<Todo[]>([]);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(setTodos)
-      .catch(() => {
-        // {
-        //   /*  eslint-disable-no-console */
-        // }
-
-        // console.log(error);
+      .then(data => {
+        setTodos(data), setFilteredPosts(data);
+      })
+      .catch(error => {
+        {
+          /* eslint-disable-next-line no-console */
+          console.log(error);
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -39,6 +42,22 @@ export const App: React.FC = () => {
     setActiveTodo(null);
   };
 
+  const handleFilteredSelectPosts = (value: string): void => {
+    switch (value) {
+      case 'all':
+        setFilteredPosts(todos);
+        break;
+      case 'active':
+        setFilteredPosts(todos.filter(todo => todo.completed === false));
+        break;
+      case 'completed':
+        setFilteredPosts(todos.filter(todo => todo.completed === true));
+        break;
+      default:
+        return;
+    }
+  };
+
   return (
     <>
       <div className="section">
@@ -47,17 +66,20 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filtered={handleFilteredSelectPosts}
+                setInputValue={setInputValue}
+              />
             </div>
-
             <div className="block">
               {loading ? (
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={filteredPosts}
                   handleShowTodo={handleShowTodo}
                   activeTodo={activeTodo}
+                  inputValue={inputValue}
                 />
               )}
             </div>
