@@ -22,7 +22,6 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }, []);
 
