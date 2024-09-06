@@ -10,6 +10,12 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+export const enum Select {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -20,9 +26,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(data => {
-        setTodos(data);
-      })
+      .then(setTodos)
       .catch(error => {
         {
           /* eslint-disable-next-line no-console */
@@ -42,14 +46,14 @@ export const App: React.FC = () => {
     setActiveTodo(null);
   };
 
-  const handleFilteredSelectPosts = (value: string): Todo[] | null => {
+  const handleFilteredSelectPosts = (value: Select): Todo[] | null => {
     switch (value) {
-      case 'all':
+      case Select.all:
         return todos;
-      case 'active':
-        return todos.filter(todo => todo.completed === false);
-      case 'completed':
-        return todos.filter(todo => todo.completed === true);
+      case Select.active:
+        return todos.filter(todo => !todo.completed);
+      case Select.completed:
+        return todos.filter(todo => todo.completed);
 
       default:
         return null;
@@ -57,7 +61,10 @@ export const App: React.FC = () => {
   };
 
   const filteredPosts = (): Todo[] | null => {
-    let filteredValue: Todo[] | null = handleFilteredSelectPosts(selectValue);
+    const filteredValue: Todo[] | null = handleFilteredSelectPosts(
+      selectValue as Select,
+    );
+
     if (!inputValue) {
       return filteredValue;
     } else {
@@ -67,6 +74,7 @@ export const App: React.FC = () => {
         );
       }
     }
+
     return null;
   };
 

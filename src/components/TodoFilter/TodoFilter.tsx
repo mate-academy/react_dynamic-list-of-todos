@@ -1,4 +1,5 @@
-import { FC} from 'react';
+import { FC } from 'react';
+import { Select } from '../../App';
 
 type TodoFilterProps = {
   selectValue: string;
@@ -13,10 +14,8 @@ export const TodoFilter: FC<TodoFilterProps> = ({
   selectValue,
   setSelectValue,
 }) => {
-
   const handleChangeSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectValue(e.target.value);
-
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +35,9 @@ export const TodoFilter: FC<TodoFilterProps> = ({
             value={selectValue}
             onChange={handleChangeSelectValue}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Select.all}>All</option>
+            <option value={Select.active}>Active</option>
+            <option value={Select.completed}>Completed</option>
           </select>
         </span>
       </p>
