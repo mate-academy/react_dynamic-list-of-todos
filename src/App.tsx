@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
@@ -40,13 +40,13 @@ export const App: React.FC = () => {
     setOpenModal(false);
   };
 
-  const filteredTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(task => {
     const matchesStatus =
       usersSelect === 'all' ||
-      (usersSelect === 'active' && !todo.completed) ||
-      (usersSelect === 'completed' && todo.completed);
+      (usersSelect === 'active' && !task.completed) ||
+      (usersSelect === 'completed' && task.completed);
 
-    const matchesSearch = todo.title
+    const matchesSearch = task.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
 
@@ -71,7 +71,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && todos.length !== 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
                   todos={filteredTodos}
                   openModal={openModal}

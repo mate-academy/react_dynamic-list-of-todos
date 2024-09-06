@@ -1,7 +1,7 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem/TodoItem';
 
 type Props = {
   todos: Todo[];
@@ -32,46 +32,13 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => (
-        <tr data-cy="todo" key={todo.id} className="">
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check"></i>
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p
-              className={classNames({
-                'has-text-danger': !todo.completed,
-                'has-text-success': todo.completed,
-              })}
-            >
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => {
-                setOpenModal(true);
-                setTodo(todo);
-              }}
-            >
-              <span className="icon">
-                <i
-                  className={classNames('far', {
-                    'fa-eye': !openModal,
-                    'fa-eye-slash': openModal,
-                  })}
-                />
-              </span>
-            </button>
-          </td>
-        </tr>
+        <TodoItem
+          todo={todo}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          setTodo={setTodo}
+          key={todo.id}
+        />
       ))}
     </tbody>
   </table>
