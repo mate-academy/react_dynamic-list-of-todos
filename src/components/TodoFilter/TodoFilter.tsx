@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import { FilterTypes } from '../enums/FilterTypes';
+import classNames from 'classnames';
 
 interface Props {
   handleFilterChange: (filterOption: FilterTypes) => void;
@@ -53,7 +54,11 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span
+          className={classNames('icon', 'is-right', {
+            'pointer-events-all': inputValue,
+          })}
+        >
           {inputValue && (
             <button
               data-cy="clearSearchButton"

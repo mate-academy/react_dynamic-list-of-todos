@@ -37,27 +37,18 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterQuery, setFilterQuery] = useState(FilterTypes.All);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
       .then(setTodos)
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos:', error);
-      });
+      .finally(() => setIsLoading(false));
   }, []);
 
   const onCloseHandler = useCallback(() => {
     setSelectedTodo(null);
     setSearchQuery('');
-  }, []);
-
-  const handleFilterChange = useCallback((filterOption: FilterTypes) => {
-    setFilterQuery(filterOption);
-  }, []);
-
-  const handleInputChange = useCallback((input: string) => {
-    setSearchQuery(input);
   }, []);
 
   const filteredTodos = filterAndSearchTodos(todos, filterQuery, searchQuery);
@@ -71,19 +62,21 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleFilterChange={handleFilterChange}
-                handleInputChange={handleInputChange}
+                handleFilterChange={setFilterQuery}
+                handleInputChange={setSearchQuery}
               />
             </div>
             <div className="block">
-              {todos.length > 0 ? (
+              {isLoading ? (
+                <Loader />
+              ) : todos.length > 0 ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
               ) : (
-                <Loader />
+                <p>No todos available</p>
               )}
             </div>
           </div>

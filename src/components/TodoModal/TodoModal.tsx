@@ -3,6 +3,7 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
+import { UserStatus } from '../UserStatus';
 
 type Props = {
   todo: Todo;
@@ -11,16 +12,33 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getUser(todo.userId).then(setUser);
+    const fetchUser = async () => {
+      setLoading(true);
+      setUser(null);
+      try {
+        const fetchedUser = await getUser(todo.userId);
+
+        setUser(fetchedUser);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch user:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {user === null ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -46,15 +64,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             {user ? (
-              <p className="block" data-cy="modal-user">
-                {todo.completed ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
-                {' by '}
-                <a href={`mailto:${user.email}`}>{user.name}</a>
-              </p>
+              <UserStatus isCompleted={todo.completed} user={user} />
             ) : (
               <p>User information is not available</p>
             )}
