@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-// import debounce from 'lodash.debounce';
+import React, { useEffect, useState } from 'react';
 
 type Props = {
   onSelect: (value: boolean | null) => void;
@@ -33,24 +32,18 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
 
   // #region query
   const [query, setQuery] = useState('');
-  // const [appliedQuery, setAppliedQuery] = useState('');
-  // const applyQuery = useMemo(() => debounce(setAppliedQuery, 1000), []);
 
   const handleQuaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    // applyQuery(event.target.value);
   };
 
   useEffect(() => {
     onChange(query);
-    // onChange(appliedQuery);
   }, [query, onChange]);
-  // }, [appliedQuery, onChange]);
   // #endregion
 
   const handleDeleteBtnClick = () => {
     setQuery('');
-    // setAppliedQuery('');
   };
 
   return (
