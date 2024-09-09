@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { FilterCompleted } from '../../types/FilterCompleted';
 
 type Props = {
-  onSelect: (value: boolean | null) => void;
+  onSelect: (value: FilterCompleted) => void;
   onChange: (newQuery: string) => void;
 };
 
@@ -14,16 +15,17 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
     const newValue = event.target.value;
 
     switch (newValue) {
-      case 'active':
-        onSelect(false);
+      case FilterCompleted.Active:
+        onSelect(FilterCompleted.Active);
         break;
 
-      case 'completed':
-        onSelect(true);
+      case FilterCompleted.Completed:
+        onSelect(FilterCompleted.Completed);
         break;
 
+      case FilterCompleted.All:
       default:
-        onSelect(null);
+        onSelect(FilterCompleted.All);
     }
 
     setSelectValue(newValue);
@@ -55,9 +57,12 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
             value={selectValue}
             onChange={handleSelectValueChange}
           >
-            <option value="all">All</option>
+            <option value={FilterCompleted.All}>All</option>
+            <option value={FilterCompleted.Active}>Active</option>
+            <option value={FilterCompleted.Completed}>Completed</option>
+            {/* <option value="all">All</option>
             <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value="completed">Completed</option> */}
           </select>
         </span>
       </p>

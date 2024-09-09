@@ -10,20 +10,20 @@ type Props = {
 };
 
 export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser(selectedTodo.userId)
       .then(setUser)
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -50,8 +50,11 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {selectedTodo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 

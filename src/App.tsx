@@ -9,23 +9,25 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { FilterCompleted } from './types/FilterCompleted';
 
 type Filter = {
-  completed: boolean | null;
+  completed: FilterCompleted;
   query: string;
 };
 
 function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
-  const filteredTodos = [...todos].filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     const searchStringFilterCheck = todo.title.includes(filter.query);
 
     switch (filter.completed) {
-      case false:
+      case 'active':
         return searchStringFilterCheck && !todo.completed;
 
-      case true:
+      case 'completed':
         return searchStringFilterCheck && todo.completed;
 
+      case 'all':
       default:
         return searchStringFilterCheck;
     }
@@ -35,18 +37,18 @@ function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
 }
 
 export const App: React.FC = () => {
-  const [todosLoaded, setTodosLoaded] = useState(true);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(true);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   // #region filter
   const [filter, setFilter] = useState<Filter>({
-    completed: null,
+    completed: FilterCompleted.All,
     query: '',
   });
 
-  const handleFilterCompletedChange = (newCompletedValue: boolean | null) => {
+  const handleFilterCompletedChange = (newCompletedValue: FilterCompleted) => {
     setFilter({ ...filter, completed: newCompletedValue });
   };
 
@@ -58,16 +60,12 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodosFromServer)
-      .finally(() => setTodosLoaded(false));
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
   useEffect(() => {
     setFilteredTodos(getFilteredTodos(todosFromServer, filter));
   }, [todosFromServer, filter]);
-
-  const handleSelectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
@@ -88,11 +86,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todosLoaded && <Loader />}
-              {!todosLoaded && (
+              {isLoadingTodos && <Loader />}
+              {!isLoadingTodos && (
                 <TodoList
                   todos={filteredTodos}
-                  onSelect={handleSelectTodo}
+                  onSelect={setSelectedTodo}
                   selectedTodoId={selectedTodo?.id}
                 />
               )}
