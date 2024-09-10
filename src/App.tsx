@@ -13,11 +13,11 @@ const filterAndSearchTodos = (
   filterQuery: FilterTypes,
   searchQuery: string,
 ): Todo[] => {
-  const filteredTodos = todos.filter(todo => {
-    if (filterQuery === FilterTypes.All) {
-      return true;
-    }
+  if (filterQuery === FilterTypes.All && !searchQuery) {
+    return todos;
+  }
 
+  const filteredTodos = todos.filter(todo => {
     return filterQuery === FilterTypes.Completed
       ? todo.completed
       : !todo.completed;

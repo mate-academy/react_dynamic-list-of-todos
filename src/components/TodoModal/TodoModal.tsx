@@ -12,11 +12,11 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [hasLoading, setHasLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUser = async () => {
-      setLoading(true);
+      setHasLoading(true);
       setUser(null);
       try {
         const fetchedUser = await getUser(todo.userId);
@@ -27,7 +27,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
         console.error('Failed to fetch user:', error);
         setUser(null);
       } finally {
-        setLoading(false);
+        setHasLoading(false);
       }
     };
 
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loading ? (
+      {hasLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
