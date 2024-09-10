@@ -69,7 +69,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading ? (
                 <Loader />
-              ) : todos.length > 0 ? (
+              ) : todos.length ? (
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
