@@ -65,8 +65,6 @@ export const TodoList: React.FC<Props> = ({
                 ) : (
                   <i className="far fa-eye" />
                 )}
-                {/* <i className="far fa-eye" /> */}
-                {/* <i className="far fa-eye-slash" /> */}
               </span>
             </button>
           </td>

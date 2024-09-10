@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FilterCompleted } from '../../types/FilterCompleted';
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
 export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
   // #region select
   const [selectValue, setSelectValue] = useState('');
+
   const handleSelectValueChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
@@ -37,16 +38,14 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
 
   const handleQuaryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+    onChange(event.target.value);
   };
-
-  useEffect(() => {
-    onChange(query);
-  }, [query, onChange]);
-  // #endregion
 
   const handleDeleteBtnClick = () => {
     setQuery('');
+    onChange('');
   };
+  // #endregion
 
   return (
     <form className="field has-addons">
@@ -60,9 +59,6 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
             <option value={FilterCompleted.All}>All</option>
             <option value={FilterCompleted.Active}>Active</option>
             <option value={FilterCompleted.Completed}>Completed</option>
-            {/* <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option> */}
           </select>
         </span>
       </p>
@@ -82,7 +78,6 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onChange }) => {
 
         {query && (
           <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"

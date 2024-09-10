@@ -18,16 +18,18 @@ type Filter = {
 
 function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
   const filteredTodos = todos.filter(todo => {
-    const searchStringFilterCheck = todo.title.includes(filter.query);
+    const searchStringFilterCheck = todo.title
+      .toLowerCase()
+      .includes(filter.query.toLowerCase());
 
     switch (filter.completed) {
-      case 'active':
+      case FilterCompleted.Active:
         return searchStringFilterCheck && !todo.completed;
 
-      case 'completed':
+      case FilterCompleted.Completed:
         return searchStringFilterCheck && todo.completed;
 
-      case 'all':
+      case FilterCompleted.All:
       default:
         return searchStringFilterCheck;
     }
@@ -39,7 +41,6 @@ function getFilteredTodos(todos: Todo[], filter: Filter): Todo[] {
 export const App: React.FC = () => {
   const [isLoadingTodos, setIsLoadingTodos] = useState(true);
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   // #region filter
@@ -63,13 +64,7 @@ export const App: React.FC = () => {
       .finally(() => setIsLoadingTodos(false));
   }, []);
 
-  useEffect(() => {
-    setFilteredTodos(getFilteredTodos(todosFromServer, filter));
-  }, [todosFromServer, filter]);
-
-  const handleCloseModal = () => {
-    setSelectedTodo(null);
-  };
+  const filteredTodos = getFilteredTodos(todosFromServer, filter);
 
   return (
     <>
@@ -100,7 +95,10 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} onClose={handleCloseModal} />
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onClose={() => setSelectedTodo(null)}
+        />
       )}
     </>
   );
