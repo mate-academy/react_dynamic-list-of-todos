@@ -70,7 +70,7 @@ export const TodoModal: React.FC<Props> = ({
                   'has-text-danger': !currentTodo.completed,
                 })}
               >
-                {currentTodo.completed === true ? 'Done' : 'Planned'}
+                {currentTodo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

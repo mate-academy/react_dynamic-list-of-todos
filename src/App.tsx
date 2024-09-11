@@ -19,11 +19,17 @@ type Props = {
   onClose: () => void;
 };
 
+enum SelectTodo {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
 export const App: React.FC<Props> = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectValue, setSelectValue] = useState('');
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -35,7 +41,7 @@ export const App: React.FC<Props> = () => {
       });
   }, []);
 
-  function getPreparedTodo(todosForQuery: Todo[], newQuery: string) {
+  const getPreparedTodo = (todosForQuery: Todo[], newQuery: string) => {
     let preparedTodos = [...todosForQuery];
 
     const queryIgnore = newQuery.toLowerCase().trim();
@@ -47,15 +53,21 @@ export const App: React.FC<Props> = () => {
     }
 
     return preparedTodos;
-  }
-
-  const [query, setQuery] = useState('');
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
   let visibleTodos = getPreparedTodo(todos, query);
+
+  if (selectValue === SelectTodo.Active) {
+    visibleTodos = visibleTodos.filter(todo => !todo.completed);
+  }
+
+  if (selectValue === SelectTodo.Completed) {
+    visibleTodos = visibleTodos.filter(todo => todo.completed);
+  }
 
   const clearQuery = () => {
     setQuery('');
@@ -64,14 +76,6 @@ export const App: React.FC<Props> = () => {
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectValue(e.target.value);
   };
-
-  if (selectValue === 'active') {
-    visibleTodos = visibleTodos.filter(todo => todo.completed === false);
-  }
-
-  if (selectValue === 'completed') {
-    visibleTodos = visibleTodos.filter(todo => todo.completed === true);
-  }
 
   const canselSelectedTodo = () => {
     setSelectedTodo(null);
@@ -94,7 +98,7 @@ export const App: React.FC<Props> = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && todos.length > 0 && (
+              {!loading && !!todos.length && (
                 <TodoList
                   todos={visibleTodos}
                   onSelect={setSelectedTodo}
