@@ -39,9 +39,7 @@ export const TodoFilter: React.FC<Props> = ({
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         {query && (
           <button
-            onClick={() => {
-              clearQuery();
-            }}
+            onClick={clearQuery}
             data-cy="clearSearchButton"
             type="button"
             className="delete"

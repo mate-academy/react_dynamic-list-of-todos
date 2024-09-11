@@ -8,49 +8,37 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos } from './api';
 
 type Props = {
   query: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  prepared: Todo[];
+  preparedTodos: Todo[];
+  currentTodo: Todo;
+  onClose: () => void;
 };
 
 export const App: React.FC<Props> = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [cardLoading, setCardLoading] = useState(false);
   const [selectValue, setSelectValue] = useState('');
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    setCardLoading(true);
 
-    setTimeout(() => {
-      getTodos()
-        .then(setTodos)
-        .finally(() => {
-          setLoading(false);
-        });
-      if (selectedTodo) {
-        getUser(selectedTodo.userId)
-          .then(setUser)
-          .finally(() => {
-            setCardLoading(false);
-          });
-      }
-    }, 1000);
-  }, [selectedTodo]);
+    getTodos()
+      .then(setTodos)
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   function getPreparedTodo(todosForQuery: Todo[], newQuery: string) {
     let preparedTodos = [...todosForQuery];
 
     const queryIgnore = newQuery.toLowerCase().trim();
-    // console.log(newQuery + 'qury');
 
     if (newQuery) {
       preparedTodos = preparedTodos.filter(todo =>
@@ -120,10 +108,9 @@ export const App: React.FC<Props> = () => {
       {selectedTodo && (
         <TodoModal
           currentTodo={selectedTodo}
-          userId={selectedTodo?.userId}
-          canselSelectedTodo={canselSelectedTodo}
-          user={user}
-          cardLoading={cardLoading}
+          onClose={canselSelectedTodo}
+          user={null}
+          cardLoading={false}
         />
       )}
     </div>

@@ -1,23 +1,38 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
+import { getUser } from '../../api';
 
 type Props = {
   currentTodo: Todo;
   user: User | null;
-  userId: number;
-  canselSelectedTodo: () => void;
+  onClose: () => void;
   cardLoading: boolean;
 };
 
 export const TodoModal: React.FC<Props> = ({
   currentTodo,
-  cardLoading,
-  user,
-  canselSelectedTodo = () => {},
+  onClose = () => {},
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [cardLoading, setCardLoading] = useState(true);
+
+  useEffect(() => {
+    setCardLoading(true);
+
+    if (currentTodo) {
+      getUser(currentTodo.userId)
+        .then(setUser)
+        .finally(() => {
+          setCardLoading(false);
+        });
+    }
+  }, [currentTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -36,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
-              onClick={canselSelectedTodo}
+              onClick={onClose}
               type="button"
               className="delete"
               data-cy="modal-close"
@@ -52,7 +67,7 @@ export const TodoModal: React.FC<Props> = ({
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames('has-text-success', {
-                  'has-text-danger': currentTodo.completed === false,
+                  'has-text-danger': !currentTodo.completed,
                 })}
               >
                 {currentTodo.completed === true ? 'Done' : 'Planned'}
@@ -60,7 +75,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{user?.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>
