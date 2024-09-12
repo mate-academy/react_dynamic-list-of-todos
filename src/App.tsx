@@ -100,8 +100,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />} {/* Show Loader while loading */}
-              <TodoList todos={filteredTodos} onTodoClick={openModal} />
+              {loading && <Loader />}
+              <TodoList
+                todos={filteredTodos}
+                onSelected={openModal}
+                selectedTodoId={selectedTodoId}
+              />
             </div>
           </div>
         </div>
