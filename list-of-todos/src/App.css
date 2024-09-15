@@ -1,0 +1,23 @@
+.App {
+  width: 850px;
+  margin: 0 auto;
+}
+
+td {
+  border: 1px solid black;
+  background-color: antiquewhite 
+}
+
+td:first-child {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.td-completed {
+  background-color: lightgreen;
+}
+
+.td-inprogress {
+  background-color: lightcoral;
+}
