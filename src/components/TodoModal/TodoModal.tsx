@@ -12,7 +12,7 @@ interface Props {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose, userId }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
