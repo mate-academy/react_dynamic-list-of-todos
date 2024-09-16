@@ -40,11 +40,9 @@ export const App: React.FC = () => {
           return todo.completed;
         }
 
+        todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
         return true;
       })
-      .filter(todo =>
-        todo.title.trim().toLowerCase().includes(query.trim().toLowerCase()),
-      );
   }, [todos, query, filter]);
 
   return (
