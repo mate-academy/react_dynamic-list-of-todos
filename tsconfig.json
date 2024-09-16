@@ -1,10 +1,21 @@
 {
-  "extends": "@mate-academy/students-ts-config",
+  /* "extends": "@mate-academy/students-ts-config", */
   "include": [
     "src"
   ],
   "compilerOptions": {
-    "sourceMap": false,
-    "types": ["node", "cypress"]
+    "target": "ES6",                // Określa wersję ECMAScript
+    "module": "ESNext",             // Ustawienie modułu zgodnego z ECMAScript
+    "jsx": "react-jsx",             // JSX z Reacta (dla React 17+)
+    "esModuleInterop": true,        // Umożliwia importowanie domyślnych modułów
+    "skipLibCheck": true,           // Pomija sprawdzanie typów w plikach definicji bibliotek
+    "forceConsistentCasingInFileNames": true, // Wymusza jednolitą wielkość liter w nazwach plików
+    "strict": true,                 // Włącza rygorystyczne sprawdzanie typów
+    "moduleResolution": "node",     // Rozwiązywanie modułów w stylu Node.js
+    "isolatedModules": true,        // Kompiluje każdy plik jako moduł niezależny
+    "sourceMap": false,             // Wyłącza generowanie map źródłowych
+    "types": ["node", "cypress"],   // Uwzględnia typy dla Node.js i Cypress
+    "resolveJsonModule": true,      // Umożliwia importowanie plików JSON
+    "allowSyntheticDefaultImports": true // Umożliwia syntetyczne importy domyślne
   }
 }
