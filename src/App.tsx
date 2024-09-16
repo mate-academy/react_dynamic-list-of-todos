@@ -37,7 +37,7 @@ export const App: React.FC = () => {
 
     if (searchFilter.toLowerCase().length !== 0) {
       visTodos = visTodos.filter(todo =>
-        todo.title.includes(searchFilter.toLowerCase()),
+        todo.title.toLowerCase().includes(searchFilter.toLowerCase()),
       );
     }
 
