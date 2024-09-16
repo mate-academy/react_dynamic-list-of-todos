@@ -32,8 +32,13 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     return todos
       .filter(todo => {
-        if (filter === Filters.Active) return !todo.completed;
-        if (filter === Filters.Completed) return todo.completed;
+        if (filter === Filters.Active) {
+          return !todo.completed;
+        };
+        if (filter === Filters.Completed) {
+          return todo.completed
+        };
+
         return true;
       })
       .filter(todo =>
