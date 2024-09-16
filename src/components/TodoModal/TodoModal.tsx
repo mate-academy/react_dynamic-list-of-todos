@@ -1,3 +1,4 @@
+/* eslint-enable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
