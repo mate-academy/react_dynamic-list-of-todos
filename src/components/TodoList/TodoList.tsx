@@ -32,11 +32,14 @@ export const TodoList: React.FC<Props> = ({
         </tr>
       </thead>
 
-      {todos.map(todo => (
-        <tbody key={todo.id}>
+      <tbody>
+        {todos.map(todo => (
           <tr
+            key={todo.id}
             data-cy="todo"
-            className={cn({ 'has-background-info-light': todo.id === modalId })}
+            className={cn({
+              'has-background-info-light': todo.id === modalId,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -73,13 +76,14 @@ export const TodoList: React.FC<Props> = ({
               </button>
             </td>
           </tr>
-          {noSearchMatch && (
-            <p className="notification is-warning">
-              There are no todos matching current filter criteria
-            </p>
-          )}
-        </tbody>
-      ))}
+        ))}
+
+        {noSearchMatch && (
+          <p className="notification is-warning">
+            There are no todos matching current filter criteria
+          </p>
+        )}
+      </tbody>
     </table>
   );
 };
