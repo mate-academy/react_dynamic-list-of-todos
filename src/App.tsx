@@ -30,9 +30,7 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = useMemo(() => {
-    return todos
-    
-      .filter(todo => {
+    return todos.filter(todo => {
       if (filter === Filters.Active) {
         return !todo.completed;
       }
@@ -43,7 +41,7 @@ export const App: React.FC = () => {
 
       todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
 
-        return true;
+      return true;
     });
   }, [todos, query, filter]);
 
