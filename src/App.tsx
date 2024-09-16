@@ -31,18 +31,20 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     return todos
+    
       .filter(todo => {
-        if (filter === Filters.Active) {
-          return !todo.completed;
-        }
+      if (filter === Filters.Active) {
+        return !todo.completed;
+      }
 
-        if (filter === Filters.Completed) {
-          return todo.completed;
-        }
+      if (filter === Filters.Completed) {
+        return todo.completed;
+      }
 
-        todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
+      todo.title.trim().toLowerCase().includes(query.trim().toLowerCase());
+
         return true;
-      })
+    });
   }, [todos, query, filter]);
 
   return (
