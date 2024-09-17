@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
+  selectedTodoId: number;
   onSelectTodo: (todo: Todo) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelectTodo }) => {
-  const [currentId, setCurrentId] = useState(0);
-
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectTodo,
+  selectedTodoId,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -30,10 +33,12 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectTodo }) => {
           <tr data-cy="todo" className="" key={el.id}>
             <td className="is-vcentered">{el.id}</td>
             <td className="is-vcentered">
-              {el.completed && (
+              {el.completed ? (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
+              ) : (
+                <td className="is-vcentered" />
               )}
             </td>
             <td className="is-vcentered is-expanded">
@@ -53,14 +58,13 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectTodo }) => {
                 type="button"
                 onClick={() => {
                   onSelectTodo(el);
-                  setCurrentId(el.id);
                 }}
               >
                 <span className="icon" data-cy="iconCompleted">
                   <i
                     className={cn(
                       'far',
-                      el.id === currentId ? 'fa-eye-slash' : 'fa-eye',
+                      el.id === selectedTodoId ? 'fa-eye-slash' : 'fa-eye',
                     )}
                   />
                 </span>

@@ -92,7 +92,11 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} onSelectTodo={hadleSelectTodo} />
+                <TodoList
+                  todos={visibleTodos}
+                  onSelectTodo={hadleSelectTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
               )}
             </div>
           </div>
