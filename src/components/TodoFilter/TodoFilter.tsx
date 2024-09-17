@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { Filters } from '../../types/Filter';
 
 function debounce(callback: (query: string) => void, delay: number) {
   let timerId = 0;
@@ -12,7 +13,7 @@ function debounce(callback: (query: string) => void, delay: number) {
 }
 
 type Props = {
-  onSelect: (filter: string) => void;
+  onSelect: (filter: Filters) => void;
   onQuery: (query: string) => void;
 };
 
@@ -45,9 +46,9 @@ export const TodoFilter: React.FC<Props> = ({
               onSelect(event.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Filters.all}>All</option>
+            <option value={Filters.active}>Active</option>
+            <option value={Filters.completed}>Completed</option>
           </select>
         </span>
       </p>

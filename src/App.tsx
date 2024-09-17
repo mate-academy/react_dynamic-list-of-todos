@@ -10,6 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
 import { Todo } from './types/Todo';
+import { Filters } from './types/Filter';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,7 +18,7 @@ export const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [todosLoaded, setTodosLoaded] = useState(false);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState<Filters>(Filters.all);
 
   useEffect(() => {
     getTodos()
@@ -42,14 +43,14 @@ export const App: React.FC = () => {
         let tempTodos = [...res];
 
         switch (filter) {
-          case 'active':
+          case Filters.active:
             tempTodos = tempTodos.filter(todo => !todo.completed);
             break;
-          case 'completed':
+          case Filters.completed:
             tempTodos = tempTodos.filter(todo => todo.completed);
             break;
 
-          case 'all':
+          case Filters.all:
           default:
             break;
         }
