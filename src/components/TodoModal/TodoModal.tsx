@@ -1,7 +1,6 @@
-// TodoModal.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-import { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -29,12 +28,17 @@ export const TodoModal: React.FC<TodoModalProps> = ({
     }
   }, [todo]);
 
+  const { id, title, completed } = todo || {};
+
   if (!modal || !todo) {
     return null;
   }
 
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className={classNames('modal', { 'is-active': modal })}
+      data-cy="modal"
+    >
       <div className="modal-background" onClick={closeModal} />
 
       {loading ? (
@@ -46,7 +50,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo.id}
+              Todo #{id}
             </div>
 
             <button
@@ -59,16 +63,17 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {title}
             </p>
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': completed,
+                  'has-text-danger': !completed,
+                })}
               >
-                {todo.completed ? 'Done' : 'Planned'}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

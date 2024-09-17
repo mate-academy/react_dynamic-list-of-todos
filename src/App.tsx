@@ -12,32 +12,32 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [modal, setModal] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(todos1 => {
-      setTodos(todos1);
-      setFilteredTodos(todos1);
-      setLoading(false);
-    });
+    const fetchTodos = async () => {
+      const todosData = await getTodos();
+
+      setTodos(todosData);
+      setFilteredTodos(todosData);
+    };
+
+    fetchTodos();
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const handleFilter = (filteredTodos: Todo[]) => {
-    setFilteredTodos(filteredTodos);
+  const handleFilter = (newFilteredTodos: Todo[]) => {
+    setFilteredTodos(newFilteredTodos);
   };
 
   const openModal = (todo: Todo) => {
     setSelectedTodo(todo);
-    setModal(true);
   };
 
   const closeModal = () => {
     setSelectedTodo(null);
-    setModal(false);
   };
+
+  const isLoading = todos.length === 0 && !selectedTodo;
 
   return (
     <>
@@ -51,22 +51,26 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filteredTodos}
                   openModal={openModal}
-                  selectedTodo={selectedTodo} // Pass selectedTodo
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
-      {modal && selectedTodo ? (
-        <TodoModal modal={modal} todo={selectedTodo} closeModal={closeModal} />
-      ) : null}
+      {selectedTodo && (
+        <TodoModal
+          modal={!!selectedTodo}
+          todo={selectedTodo}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };
