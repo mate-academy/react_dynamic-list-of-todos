@@ -1,51 +1,30 @@
 import React, { useState } from 'react';
-import { Todo } from '../../types/Todo';
 
 interface TodoFilterProps {
-  todos: Todo[];
-  onFilter: (filteredTodos: Todo[]) => void;
+  onFilter: (searchText: string, status: string) => void;
 }
 
-export const TodoFilter: React.FC<TodoFilterProps> = ({ todos, onFilter }) => {
+export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilter }) => {
   const [searchText, setSearchText] = useState<string>('');
   const [status, setStatus] = useState<string>('all');
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const filterTodos = (status: string, searchText: string) => {
-    let filtered = todos;
-
-    if (status !== 'all') {
-      filtered = filtered.filter(todo =>
-        status === 'active' ? !todo.completed : todo.completed,
-      );
-    }
-
-    if (searchText) {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(searchText.toLowerCase()),
-      );
-    }
-
-    onFilter(filtered);
-  };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
 
     setStatus(newStatus);
-
-    filterTodos(newStatus, searchText);
+    onFilter(searchText, newStatus);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchText = e.target.value;
 
     setSearchText(newSearchText);
-    filterTodos(status, newSearchText);
+    onFilter(newSearchText, status);
   };
 
   const handleClearSearch = () => {
     setSearchText('');
-    filterTodos(status, '');
+    onFilter('', status);
   };
 
   return (
@@ -74,18 +53,19 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ todos, onFilter }) => {
           onChange={handleSearchChange}
         />
         <span className="icon is-left">
-          <i className="fas fa-magnifying-glass" />
+          <i className="fas fa-search" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {searchText.length !== 0 ? (
+        <span className="icon is-right">
+          {searchText.length > 0 && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
+              aria-label="Clear search"
               onClick={handleClearSearch}
             />
-          ) : null}
+          )}
         </span>
       </p>
     </form>
