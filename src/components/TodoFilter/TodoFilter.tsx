@@ -1,4 +1,5 @@
 import React from 'react';
+import { Status } from '../../App';
 
 type Props = {
   searchFilter: string;
@@ -32,9 +33,9 @@ export const TodoFilter: React.FC<Props> = ({
               setCompletedSearch(e.target.value);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Status.ALL}>All</option>
+            <option value={Status.ACTIVE}>Active</option>
+            <option value={Status.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>

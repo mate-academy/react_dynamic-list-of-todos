@@ -10,6 +10,12 @@ import { getTodos } from './api';
 import { Loader } from './components/Loader';
 import { TodoModal } from './components/TodoModal';
 
+export const Status = {
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
+  ALL: 'all',
+};
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loader, setLoader] = useState(false);
@@ -41,13 +47,13 @@ export const App: React.FC = () => {
       );
     }
 
-    if (completedSearch !== 'all') {
-      if (completedSearch === 'completed') {
-        visTodos = visTodos.filter(todo => todo.completed === true);
+    if (completedSearch !== Status.ALL) {
+      if (completedSearch === Status.COMPLETED) {
+        visTodos = visTodos.filter(todo => todo.completed);
       }
 
-      if (completedSearch === 'active') {
-        visTodos = visTodos.filter(todo => todo.completed === false);
+      if (completedSearch === Status.ACTIVE) {
+        visTodos = visTodos.filter(todo => !todo.completed);
       }
     }
 
