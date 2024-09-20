@@ -1,7 +1,7 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { TodoItem} from '../TodoItem';
+import { TodoItem } from '../TodoItem';
 
 interface TodoListProps {
   todos: Todo[];

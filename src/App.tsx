@@ -59,10 +59,6 @@ export const App: React.FC = () => {
   const handleTodoSelect = (todo: Todo) => {
     setModalLoading(true);
     setSelectedTodo(todo);
-
-    setTimeout(() => {
-      setModalLoading(false);
-    }, 1000);
   };
 
   const handleCloseModal = () => {

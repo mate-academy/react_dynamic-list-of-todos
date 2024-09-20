@@ -12,9 +12,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   onTodoSelect,
   selectedTodo,
 }) => (
-  <tr
-    data-cy="todo"
-  >
+  <tr data-cy="todo">
     <td className="is-vcentered">{todo.id}</td>
     <td className="is-vcentered">
       {todo.completed && (
@@ -24,11 +22,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       )}
     </td>
     <td className="is-vcentered is-expanded">
-      <p
-        className={
-          todo.completed ? 'has-text-success' : 'has-text-danger'
-        }
-      >
+      <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
         {todo.title}
       </p>
     </td>
