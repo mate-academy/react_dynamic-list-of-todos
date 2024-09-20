@@ -46,6 +46,7 @@ import { Loader } from './components/Loader';
 import { User } from './types/User';
 import { Todo } from './types/Todo';
 import { getTodos, getUsers } from './api';
+import { useMemo } from 'react';
 
 export const App: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -53,7 +54,6 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
 
@@ -64,36 +64,31 @@ export const App: React.FC = () => {
       Promise.all([getTodos(), getUsers()])
         .then(([loadedTodos, loadedUsers]) => {
           setTodos(loadedTodos);
-          setFilteredTodos(loadedTodos);
           setUsers(loadedUsers);
         })
         .finally(() => setLoading(false));
     }, 1000);
   }, []);
 
-  const filterTodos = (searchQuery: string, filterStatus: string = 'all') => {
-    let filtered = todos;
 
-    if (filterStatus === 'completed') {
-      filtered = filtered.filter(todo => todo.completed);
-    } else if (filterStatus === 'active') {
-      filtered = filtered.filter(todo => !todo.completed);
-    }
-
-    if (searchQuery !== '') {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }
-
-    setFilteredTodos(filtered);
-  };
+  const filterTodos = useMemo(() => {
+    const lowerCaseQuery = query.toLowerCase();
+    return todos.filter(todo => {
+      const filteredByQuery = todo.title.toLowerCase().includes(lowerCaseQuery);
+      switch (filter) {
+        case 'active':
+          return filteredByQuery && !todo.completed;
+        case 'completed':
+          return filteredByQuery && todo.completed;
+        default:
+          return filteredByQuery;
+      }
+    });
+  }, [query, todos, filter]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = event.target.value;
-
     setFilter(newValue);
-    filterTodos(query, newValue);
   };
 
   const handleTodoSelect = (todo: Todo) => {
@@ -111,15 +106,11 @@ export const App: React.FC = () => {
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = event.target.value;
-
     setQuery(newQuery);
-    filterTodos(newQuery, filter);
   };
 
   const clearQuery = () => {
     setQuery('');
-    setFilteredTodos(todos);
-    filterTodos('');
   };
 
   return (
@@ -144,7 +135,7 @@ export const App: React.FC = () => {
 
               {!loading && todos.length > 0 && (
                 <TodoList
-                  todos={filteredTodos}
+                  todos={filterTodos}
                   users={users}
                   onTodoSelect={handleTodoSelect}
                   selectedTodo={selectedTodo}
