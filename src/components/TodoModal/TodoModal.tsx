@@ -1,15 +1,17 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { Loader } from '../Loader';
 
 interface ModalProps {
   todo: Todo;
   users: User[];
   onClose: () => void;
+  loading: boolean;
 }
 
-export const TodoModal: React.FC<ModalProps> = ({ todo, users, onClose }) => {
-  const user = users.find(u => u.id === todo.userId);
+export const TodoModal: React.FC<ModalProps> = ({ todo, users, onClose, loading }) => {
+
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -34,25 +36,31 @@ export const TodoModal: React.FC<ModalProps> = ({ todo, users, onClose }) => {
         </header>
 
         <div className="modal-card-body">
-          <p className="block" data-cy="modal-title">
-            {todo.title}
-          </p>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <p className="block" data-cy="modal-title">
+                {todo.title}
+              </p>
 
-          <p className="block" data-cy="modal-user">
-            {todo.completed ? (
-              <strong className="has-text-success">Done</strong>
-            ) : (
-              <strong className="has-text-danger">Planned</strong>
-            )}
+              <p className="block" data-cy="modal-user">
+                {todo.completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-            {' by '}
+                {' by '}
 
-            {user ? (
-              <a href={`mailto:${user.email}`}>{user.name}</a>
-            ) : (
-              'Unknown User'
-            )}
-          </p>
+                {users.length > 0 ? (
+                  <a href={`mailto:${users[0].email}`}>{users[0].name}</a>
+                ) : (
+                  'Unknown User'
+                )}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </div>

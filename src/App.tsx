@@ -154,13 +154,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modalLoading && <Loader />}
-
       {selectedTodo && !modalLoading && (
         <TodoModal
           todo={selectedTodo}
           users={users}
           onClose={handleCloseModal}
+          loading={modalLoading}
         />
       )}
     </>
