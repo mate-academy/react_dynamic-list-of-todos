@@ -117,9 +117,14 @@ interface TodoListProps {
   todos: Todo[];
   users: User[];
   onTodoSelect: (todo: Todo) => void;
+  selectedTodo: Todo | null;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, onTodoSelect }) => (
+export const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  onTodoSelect,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -166,7 +171,11 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onTodoSelect }) => (
               onClick={() => onTodoSelect(todo)}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                {selectedTodo?.id === todo.id ? (
+                  <i className="far fa-eye-slash" />
+                ) : (
+                  <i className="far fa-eye" />
+                )}
               </span>
             </button>
           </td>

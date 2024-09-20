@@ -98,9 +98,9 @@ export const App: React.FC = () => {
 
   const handleTodoSelect = (todo: Todo) => {
     setModalLoading(true);
+    setSelectedTodo(todo);
 
     setTimeout(() => {
-      setSelectedTodo(todo);
       setModalLoading(false);
     }, 1000);
   };
@@ -147,6 +147,7 @@ export const App: React.FC = () => {
                   todos={filteredTodos}
                   users={users}
                   onTodoSelect={handleTodoSelect}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>
@@ -154,7 +155,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && !modalLoading && (
+      {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
           users={users}

@@ -10,8 +10,13 @@ interface ModalProps {
   loading: boolean;
 }
 
-export const TodoModal: React.FC<ModalProps> = ({ todo, users, onClose, loading }) => {
-
+export const TodoModal: React.FC<ModalProps> = ({
+  todo,
+  users,
+  onClose,
+  loading,
+}) => {
+  const user = users.find(u => u.id === todo.userId);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -53,8 +58,8 @@ export const TodoModal: React.FC<ModalProps> = ({ todo, users, onClose, loading 
 
                 {' by '}
 
-                {users.length > 0 ? (
-                  <a href={`mailto:${users[0].email}`}>{users[0].name}</a>
+                {user ? (
+                  <a href={`mailto:${user.email}`}>{user.name}</a>
                 ) : (
                   'Unknown User'
                 )}
