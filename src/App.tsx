@@ -1,14 +1,25 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+
+type Todo = {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 export const App: React.FC = () => {
+  const [filterBy, setFilterBy] = useState('');
+  const [filterBySelect, setFilterBySelect] = useState('all');
+  const [modalShowId, setModalShowId] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
   return (
     <>
       <div className="section">
@@ -17,18 +28,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterBy={filterBy}
+                setFilterBy={setFilterBy}
+                filterBySelect={filterBySelect}
+                setFilterBySelect={setFilterBySelect}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              <TodoList
+                modalShowId={modalShowId}
+                filterBy={filterBy}
+                filterBySelect={filterBySelect}
+                setModalShowId={setModalShowId}
+                todos={todos}
+                setTodos={setTodos}
+              />
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
+      {modalShowId !== 0 && (
+        <TodoModal
+          modalShowId={modalShowId}
+          setModalShowId={setModalShowId}
+          todos={todos}
+        />
+      )}
     </>
   );
 };
