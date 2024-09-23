@@ -1,26 +1,22 @@
-import { useState } from "react";
 import { TodoStatus } from "../../constants";
 
 type TodoFilterProps = {
+  searchTerm: string;
+  selectedStatus: TodoStatus;
   onSearchChange: (searchTerm: string) => void;
   onStatusChange: (status: TodoStatus) => void;
+
 };
 
-export const TodoFilter: React.FC<TodoFilterProps> = ({onSearchChange, onStatusChange}) => {
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
+export const TodoFilter: React.FC<TodoFilterProps> = ({searchTerm, selectedStatus, onSearchChange, onStatusChange}) => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
     onSearchChange(newSearchTerm);
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value as TodoStatus;
-
-    setSelectedStatus(newStatus);
     onStatusChange(newStatus);
   };
 
@@ -61,10 +57,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({onSearchChange, onStatusC
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => {
-              setSearchTerm("");
-              onSearchChange("");
-            }}
+            onClick={() => onSearchChange("")}
           />
         </span>
       )}

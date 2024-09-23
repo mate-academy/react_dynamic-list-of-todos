@@ -71,6 +71,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                searchTerm={searchTerm}
+                selectedStatus={selectedStatus}
                 onSearchChange={handleSearchChange}
                 onStatusChange={handleStatusChange}
               />
