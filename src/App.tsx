@@ -9,14 +9,14 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
+import { TodoStatus } from './constants';
+
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<TodoStatus>(TodoStatus.ALL);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
 
@@ -25,7 +25,6 @@ export const App: React.FC = () => {
   getTodos()
     .then(todosFromServer => {
       setTodos(todosFromServer);
-      setFilteredTodos(todosFromServer);
       setLoading(false);
     })
     .catch(error => {
@@ -34,40 +33,34 @@ export const App: React.FC = () => {
     });
 }, []);
 
-  useEffect(() => {
-    filterBySearch();
-  }, [searchTerm, selectedStatus, todos]);
-
   const filterBySearch = () => {
     const newFilteredTodos = todos.filter(todo => {
       const matchesTitle = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = selectedStatus === 'all' ||
-                            (selectedStatus === 'active' && !todo.completed) ||
-                            (selectedStatus === 'completed' && todo.completed);
+      const matchesStatus = selectedStatus === TodoStatus.ALL ||
+                            (selectedStatus === TodoStatus.ACTIVE && !todo.completed) ||
+                            (selectedStatus === TodoStatus.COMPLETED && todo.completed);
       return matchesTitle && matchesStatus;
     });
-    setFilteredTodos(newFilteredTodos);
+    return newFilteredTodos
   };
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
   };
 
-  const handleStatusChange = (status: string) => {
+  const handleStatusChange = (status: TodoStatus) => {
     setSelectedStatus(status);
+    filterBySearch();
   };
 
 
-  const openModal = (todoId: number) => {
-    setSelectedTodoId(todoId);
-    setShowModal(true)
+  const openModal = (todo: Todo) => {
+    setSelectedTodo(todo);
   }
 
   const closeModal = () => {
-    setSelectedTodoId(null);
-    setShowModal(false)
+    setSelectedTodo(null);
   }
-
 
   return (
     <>
@@ -77,19 +70,37 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-            <TodoFilter onSearchChange={handleSearchChange} onStatusChange={handleStatusChange}/>
+              <TodoFilter
+                onSearchChange={handleSearchChange}
+                onStatusChange={handleStatusChange}
+              />
             </div>
 
             <div className="block">
-            {loading ? <Loader /> : <TodoList todos={filteredTodos} openModal={openModal} selectedTodoId={selectedTodoId} />}
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={todos.filter(todo => {
+                    const matchesTitle = todo.title
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase());
+                    const matchesStatus =
+                      selectedStatus === TodoStatus.ALL ||
+                      (selectedStatus === TodoStatus.ACTIVE && !todo.completed) ||
+                      (selectedStatus === TodoStatus.COMPLETED && todo.completed);
+                    return matchesTitle && matchesStatus;
+                  })}
+                  openModal={openModal}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {showModal && selectedTodoId && (
-        <TodoModal todoId={selectedTodoId} onClose={closeModal} />
-      )}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={closeModal} />}
     </>
   );
-};
+}

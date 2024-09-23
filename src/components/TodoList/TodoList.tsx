@@ -2,8 +2,8 @@ import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
   todos: Todo[];
-  openModal: (todoId: number) => void;
-  selectedTodoId: number | null;
+  openModal: (todo: Todo) => void;
+  selectedTodoId?: number;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({todos, openModal, selectedTodoId}) => {
@@ -48,7 +48,7 @@ export const TodoList: React.FC<TodoListProps> = ({todos, openModal, selectedTod
            data-cy="selectButton"
            className="button"
            type="button"
-           onClick={() => openModal(todo.id)}
+           onClick={() => openModal(todo)}
           >
             <span className="icon">
               <i className={selectedTodoId === todo.id ? 'far fa-eye-slash' : 'far fa-eye'}/>

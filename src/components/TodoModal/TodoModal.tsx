@@ -1,52 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
-import { getTodos, getUser } from '../../api';
+import { getUser } from '../../api';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type TodoModalProps = {
-  todoId?: number;
+  todo: Todo;
   onClose: () => void;
 }
-export const TodoModal: React.FC<TodoModalProps> = ({ todoId, onClose }) => {
+export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-    useEffect(() => {
-      if (todoId) {
-        setLoading(true);
-        getTodos().then(todosFromServer => {
-          const todo = todosFromServer.find(todo => todo.id === todoId);
-          if (todo) {
-            setSelectedTodo(todo);
-
-            getUser(todo.userId).then(userFromServer => {
-              setSelectedUser(userFromServer);
-              setLoading(false);
-            });
-          } else {
-            setLoading(false);
-          }
-        });
-      }
-    }, [todoId])
-
-    console.log(loading)
+  useEffect(() => {
+    if (todo) {
+      setLoading(true);
+      getUser(todo.userId).then(userFromServer => {
+        setSelectedUser(userFromServer);
+        setLoading(false);
+      });
+    }}, [todo]
+    );
 
   if (loading) {
-  return (
-    <div className="modal is-active"  data-cy="modal">
-    <div className="modal-background">
-      <Loader />
-    </div>
-    </div>
-  )
-  }
+    return (
+      <div className="modal is-active"  data-cy="modal">
+      <div className="modal-background">
+        <Loader />
+      </div>
+      </div>
+    )
+    }
 
-  if (!selectedTodo || !selectedUser) {
-    return null;
-  }
+    if (!todo || !selectedUser) {
+      return null;
+    }
 
   return (
     <div
@@ -61,7 +49,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todoId, onClose }) => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{selectedTodo.id}
+              Todo #{todo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -75,13 +63,13 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todoId, onClose }) => {
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-             {selectedTodo.title}
+             {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={selectedTodo.completed ? "has-text-success" : "has-text-danger"}>
-              {selectedTodo.completed ? "Done" : "Planned"}</strong>
+              <strong className={todo.completed ? "has-text-success" : "has-text-danger"}>
+              {todo.completed ? "Done" : "Planned"}</strong>
 
               {' by '}
 

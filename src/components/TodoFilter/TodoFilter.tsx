@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { TodoStatus } from "../../constants";
 
 type TodoFilterProps = {
   onSearchChange: (searchTerm: string) => void;
-  onStatusChange: (status: string) => void;
+  onStatusChange: (status: TodoStatus) => void;
 };
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({onSearchChange, onStatusChange}) => {
@@ -17,7 +18,8 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({onSearchChange, onStatusC
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = e.target.value;
+    const newStatus = e.target.value as TodoStatus;
+
     setSelectedStatus(newStatus);
     onStatusChange(newStatus);
   };
