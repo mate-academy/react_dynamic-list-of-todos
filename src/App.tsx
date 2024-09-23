@@ -21,12 +21,12 @@ export const App: React.FC = () => {
 
 
   useEffect(() => {
-  setLoading(true);
-  getTodos()
-  .then(setTodos)
-  .catch(error => console.error('Error fetching todos:', error))
-  .finally(() => setLoading(false));
-}, []);
+    setLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(error => console.error('Error fetching todos:', error))
+      .finally(() => setLoading(false));
+  }, []);
 
 const visibleTodos = todos.filter(todo => {
   const matchesTitle = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
