@@ -30,9 +30,9 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({onSearchChange, onStatusC
     <p className="control">
       <span className="select">
         <select
-        data-cy="statusSelect"
-        value={selectedStatus}
-        onChange={handleStatusChange}
+          data-cy="statusSelect"
+          value={selectedStatus}
+          onChange={handleStatusChange}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

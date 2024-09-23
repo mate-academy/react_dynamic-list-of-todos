@@ -27,8 +27,8 @@ export const TodoList: React.FC<TodoListProps> = ({todos, openModal, selectedTod
     <tbody>
       {todos.map(todo => (
         <tr
-        key={todo.id}
-        data-cy="todo"
+          key={todo.id}
+          data-cy="todo"
         >
         <td className="is-vcentered">{todo.id}</td>
         <td className="is-vcentered">
