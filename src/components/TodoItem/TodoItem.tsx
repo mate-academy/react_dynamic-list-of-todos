@@ -5,6 +5,7 @@ import {
   StateContext,
 } from '../../context/TodoContext';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -31,7 +32,12 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
         <td className="is-vcentered" />
       )}
       <td className="is-vcentered is-expanded">
-        <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
+        <p
+          className={classNames({
+            'has-text-danger': !todo.completed,
+            'has-text-success': todo.completed,
+          })}
+        >
           {todo.title}
         </p>
       </td>

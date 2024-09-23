@@ -7,6 +7,7 @@ import {
 } from '../../context/TodoContext';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
+import classNames from 'classnames';
 
 export const TodoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,11 +66,10 @@ export const TodoModal: React.FC = () => {
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  currentTodo?.completed
-                    ? 'has-text-success'
-                    : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': currentTodo?.completed,
+                  'has-text-danger': !currentTodo?.completed,
+                })}
               >
                 {currentTodo?.completed ? 'Done' : 'Planned'}
               </strong>
