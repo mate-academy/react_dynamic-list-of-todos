@@ -23,26 +23,19 @@ export const App: React.FC = () => {
   useEffect(() => {
   setLoading(true);
   getTodos()
-    .then(todosFromServer => {
-      setTodos(todosFromServer);
-      setLoading(false);
-    })
-    .catch(error => {
-      console.error('Error fetching todos:', error);
-      setLoading(false);
-    });
+  .then(setTodos)
+  .catch(error => console.error('Error fetching todos:', error))
+  .finally(() => setLoading(false));
 }, []);
 
-  const filterBySearch = () => {
-    const newFilteredTodos = todos.filter(todo => {
-      const matchesTitle = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = selectedStatus === TodoStatus.ALL ||
-                            (selectedStatus === TodoStatus.ACTIVE && !todo.completed) ||
-                            (selectedStatus === TodoStatus.COMPLETED && todo.completed);
-      return matchesTitle && matchesStatus;
-    });
-    return newFilteredTodos
-  };
+const visibleTodos = todos.filter(todo => {
+  const matchesTitle = todo.title.toLowerCase().includes(searchTerm.toLowerCase());
+  const matchesStatus = selectedStatus === TodoStatus.ALL ||
+    (selectedStatus === TodoStatus.ACTIVE && !todo.completed) ||
+    (selectedStatus === TodoStatus.COMPLETED && todo.completed);
+  return matchesTitle && matchesStatus;
+});
+
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
@@ -50,7 +43,6 @@ export const App: React.FC = () => {
 
   const handleStatusChange = (status: TodoStatus) => {
     setSelectedStatus(status);
-    filterBySearch();
   };
 
 
@@ -83,16 +75,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos.filter(todo => {
-                    const matchesTitle = todo.title
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase());
-                    const matchesStatus =
-                      selectedStatus === TodoStatus.ALL ||
-                      (selectedStatus === TodoStatus.ACTIVE && !todo.completed) ||
-                      (selectedStatus === TodoStatus.COMPLETED && todo.completed);
-                    return matchesTitle && matchesStatus;
-                  })}
+                  todos={visibleTodos}
                   openModal={openModal}
                   selectedTodoId={selectedTodo?.id}
                 />
