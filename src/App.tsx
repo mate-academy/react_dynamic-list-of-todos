@@ -25,26 +25,25 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
-  let filteredTodos = [...todos];
+  const filterTodos = (todosFunc: Todo[], filterFunc: Filters) => {
+    switch (filterFunc) {
+      case Filters.Active:
+        return todosFunc.filter(todo => !todo.completed);
 
-  switch (filter) {
-    case Filters.Active:
-      filteredTodos = todos.filter(todo => !todo.completed);
-      break;
+      case Filters.Completed:
+        return todosFunc.filter(todo => todo.completed);
 
-    case Filters.Completed:
-      filteredTodos = todos.filter(todo => todo.completed);
-      break;
+      default:
+        return todosFunc;
+    }
+  };
 
-    default:
-      break;
-  }
+  let filteredTodos = filterTodos(todos, filter);
 
   filteredTodos = filteredTodos.filter(todo =>
     todo.title.trim().toLowerCase().includes(query.trim().toLowerCase()),
