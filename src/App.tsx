@@ -1,24 +1,33 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
-
-type Todo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState('');
   const [filterBySelect, setFilterBySelect] = useState('all');
   const [modalShowId, setModalShowId] = useState(0);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getTodos()
+      .then(todosData => {
+        setTodos(todosData);
+        setLoading(false);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Ошибка при загрузке задач:', error);
+      });
+  }, []);
 
   return (
     <>
@@ -37,14 +46,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <TodoList
-                modalShowId={modalShowId}
-                filterBy={filterBy}
-                filterBySelect={filterBySelect}
-                setModalShowId={setModalShowId}
-                todos={todos}
-                setTodos={setTodos}
-              />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  modalShowId={modalShowId}
+                  filterBy={filterBy}
+                  filterBySelect={filterBySelect}
+                  setModalShowId={setModalShowId}
+                  todos={todos}
+                  setTodos={setTodos}
+                />
+              )}
             </div>
           </div>
         </div>

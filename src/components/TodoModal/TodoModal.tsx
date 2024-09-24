@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../api';
 import { Loader } from '../Loader';
-
-type Todo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 type Props = {
   modalShowId: number;
@@ -15,29 +10,22 @@ type Props = {
   todos: Todo[];
 };
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
-
 export const TodoModal: React.FC<Props> = ({
   modalShowId,
   setModalShowId,
   todos,
 }) => {
-  const [loading, setLoading] = useState(true); // Состояние для индикации загрузки
-  const [user, setUser] = useState<User | null>(null); // Состояние для данных пользователя
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-  const todo = todos.find(cTodo => cTodo.id === modalShowId); // Поиск задачи по ID
+  const todo = todos.find(cTodo => cTodo.id === modalShowId);
 
-  // Загружаем данные пользователя при наличии todo
   useEffect(() => {
     if (todo) {
       getUser(todo.userId)
         .then(fUser => {
-          setUser(fUser); // Сохраняем пользователя в состоянии
-          setLoading(false); // Отключаем индикатор загрузки
+          setUser(fUser);
+          setLoading(false);
         })
         .catch(error => {
           // eslint-disable-next-line no-console
@@ -79,7 +67,6 @@ export const TodoModal: React.FC<Props> = ({
               </p>
 
               <p className="block" data-cy="modal-user">
-                {/* <strong className="has-text-success">Done</strong> */}
                 <strong className="has-text-danger">
                   {todo.completed ? `Done` : `Planned`}
                 </strong>

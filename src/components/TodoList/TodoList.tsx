@@ -1,13 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getTodos } from '../../api';
-import { Loader } from '../Loader';
-
-type Todo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import React from 'react';
+import { Todo } from '../../types/Todo';
 
 type Props = {
   filterBy: string;
@@ -22,24 +14,9 @@ export const TodoList: React.FC<Props> = ({
   filterBy,
   filterBySelect,
   setModalShowId,
-  setTodos,
   todos,
   modalShowId,
 }) => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getTodos()
-      .then(todosData => {
-        setTodos(todosData);
-        setLoading(false);
-      })
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error('Ошибка при загрузке задач:', error);
-      });
-  }, []);
-
   let filteredTodos = todos.filter(todo =>
     todo.title.toLowerCase().includes(filterBy.toLowerCase()),
   );
@@ -68,9 +45,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {loading ? (
-          <Loader />
-        ) : filteredTodos.length > 0 ? (
+        {filteredTodos.length > 0 ? (
           filteredTodos.map(todo => (
             <tr key={todo.id} data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>
