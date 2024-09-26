@@ -1,42 +1,89 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import cn from 'classnames';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { CurrentTodo } from '../../types/CurrentTodo';
 import { Loader } from '../Loader';
+import { Visibility } from '../../types/Visibility';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  isVisible: Visibility;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = ({ isVisible, onClose }) => {
+  const [currentUser, setCurrentUser] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const { currentTodo } = useContext(CurrentTodo);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const findUser = () => {
+      getUser(currentTodo.id)
+        .then((prev: User) => setCurrentUser(prev))
+        .finally(() => setIsLoading(false));
+    };
+
+    findUser();
+  }, [currentTodo]);
+
   return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+    <div
+      className={cn('modal', {
+        'is-active': isVisible.visible,
+      })}
+      data-cy="modal"
+    >
+      <div
+        className={cn({
+          'modal-background': isVisible.visible,
+        })}
+      />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
+        isVisible && (
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <div
+                className="modal-card-title has-text-weight-medium"
+                data-cy="modal-header"
+              >
+                Todo #{currentUser.id}
+              </div>
+
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                type="button"
+                className="delete"
+                data-cy="modal-close"
+                onClick={onClose}
+              />
+            </header>
+
+            <div className="modal-card-body">
+              <p className="block" data-cy="modal-title">
+                {currentTodo.title}
+              </p>
+
+              <p className="block" data-cy="modal-user">
+                {/* <strong className="has-text-success">Done</strong> */}
+                <strong className="has-text-danger">Planned</strong>
+
+                {' by '}
+
+                <a href={`mailto:${currentUser.email}`}>{currentUser.name}</a>
+              </p>
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
           </div>
-        </div>
+        )
       )}
     </div>
   );
