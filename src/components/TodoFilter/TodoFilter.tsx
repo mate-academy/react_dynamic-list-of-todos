@@ -62,12 +62,14 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={handleSearchClear}
-          />
+          {searchText != '' && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleSearchClear}
+            />
+          )}
         </span>
       </p>
     </form>

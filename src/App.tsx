@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -8,34 +7,52 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
+import { User } from './types/User';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [status, setStatus] = useState('all');
+  const [statusTodo, setStatusTodo] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [loader, setloader] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoadingModal, setIsLoadingModal] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-      setFilteredTodos(todosFromServer);
-    });
+    setLoader(true);
+
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+        setFilteredTodos(todosFromServer);
+
+        const userPromises = todosFromServer.map(todo => getUser(todo.userId));
+
+        return Promise.all(userPromises);
+      })
+      .then(usersFromServer => {
+        setUsers(usersFromServer);
+      })
+      .finally(() => setLoader(false));
   }, []);
 
-  const filterTodos = (statusTodo: string, searchTermTodo: string) => {
+  const filterTodos = (status: string, searchTermTodo: string) => {
     let updatedTodos = todos;
 
-    if (statusTodo === 'active') {
+    if (status === 'active') {
       updatedTodos = updatedTodos.filter(todo => !todo.completed);
-    } else if (statusTodo === 'completed') {
+    } else if (status === 'completed') {
       updatedTodos = updatedTodos.filter(todo => todo.completed);
     }
 
     if (searchTermTodo) {
+      const lowerCaseSearchTerm = searchTermTodo.toLowerCase();
+
       updatedTodos = updatedTodos.filter(todo =>
-        todo.title.toLowerCase().includes(searchTermTodo.toLowerCase()),
+        todo.title.toLowerCase().includes(lowerCaseSearchTerm),
       );
     }
 
@@ -43,13 +60,32 @@ export const App = () => {
   };
 
   const handleFilterChange = (selectedStatus: string) => {
-    setStatus(selectedStatus);
+    setStatusTodo(selectedStatus);
     filterTodos(selectedStatus, searchTerm);
   };
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
-    filterTodos(status, term);
+    filterTodos(statusTodo, term);
+  };
+
+  const handleSelectTodo = (todo: Todo) => {
+    setIsLoadingModal(true);
+    setSelectedTodo(todo);
+    setIsModalOpen(true);
+
+    setTimeout(() => {
+      setIsLoadingModal(false);
+    }, 1000);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTodo(null);
+  };
+
+  const getUserById = (userId: number) => {
+    return users.find(user => user.id === userId) || null;
   };
 
   return (
@@ -69,13 +105,25 @@ export const App = () => {
             <div className="block">
               {loader && <Loader />}
 
-              <TodoList todos={filteredTodos} />
+              {!loader && todos.length > 0 && (
+                <TodoList
+                  todos={filteredTodos}
+                  onSelectTodo={handleSelectTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
+      {isModalOpen && selectedTodo && (
+        <TodoModal
+          isLoading={isLoadingModal}
+          todo={selectedTodo}
+          onClose={closeModal}
+          user={getUserById(selectedTodo.userId)}
+        />
+      )}
     </>
   );
 };
