@@ -1,7 +1,11 @@
 import React from 'react';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  userId: number;
+};
+
+export const TodoModal: React.FC<Props> = () => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
