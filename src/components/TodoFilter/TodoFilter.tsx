@@ -1,9 +1,10 @@
 import React from 'react';
+import { Status } from '../../App';
 
 interface Props {
-  currentStatus: string;
+  currentStatus: Status;
   inputValue: string;
-  handleChangeStatus: (currentStatus: string) => void;
+  handleChangeStatus: (currentStatus: Status) => void;
   changeInput: (inputValue: string) => void;
 }
 
@@ -19,11 +20,11 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={currentStatus}
-          onChange={event => handleChangeStatus(event.target.value)}
+          onChange={event => handleChangeStatus(event.target.value as Status)}
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Status.all}></option>
+          <option value={Status.active}>Active</option>
+          <option value={Status.completed}>Completed</option>
         </select>
       </span>
     </p>

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
@@ -10,15 +9,21 @@ import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 
+export enum Status {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-  const [currentStatus, setCurrentStatus] = useState('all');
+  const [currentStatus, setCurrentStatus] = useState(Status.all);
   const [inputValue, setInputValue] = useState('');
 
-  const handleChangeCurrentStatus = (newCurrentStatus: string) =>
+  const handleChangeCurrentStatus = (newCurrentStatus: Status) =>
     setCurrentStatus(newCurrentStatus);
 
   const handleSetIsOpen = (value: boolean) => setIsOpen(value);
@@ -26,20 +31,20 @@ export const App: React.FC = () => {
   const handleSetCurrentTodo = (newTodo: Todo | null) =>
     setCurrentTodo(newTodo);
 
-  const handleChangeInut = (newInputValue: string) =>
+  const handleChangeInput = (newInputValue: string) =>
     setInputValue(newInputValue);
 
   const filteredTodos = (newStatus: string, qvery: string): Todo[] => {
     return todos
       .filter(todo => {
         switch (newStatus) {
-          case 'all':
+          case Status.all:
             return true;
 
-          case 'active':
+          case Status.active:
             return !todo.completed;
 
-          case 'completed':
+          case Status.completed:
             return todo.completed;
 
           default:
@@ -70,7 +75,7 @@ export const App: React.FC = () => {
                 currentStatus={currentStatus}
                 inputValue={inputValue}
                 handleChangeStatus={handleChangeCurrentStatus}
-                changeInput={handleChangeInut}
+                changeInput={handleChangeInput}
               />
             </div>
 
