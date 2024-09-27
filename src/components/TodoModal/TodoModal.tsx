@@ -20,10 +20,9 @@ export const TodoModal: React.FC<Props> = ({
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isModalLoading && <Loader />}
-
-      {!isModalLoading && (
-        <div className="modal-card">
+      {isModalLoading
+        ? (<Loader />)
+        : (<div className="modal-card">
           <header className="modal-card-head">
             <div
               className="modal-card-title has-text-weight-medium"
@@ -56,7 +55,8 @@ export const TodoModal: React.FC<Props> = ({
             </p>
           </div>
         </div>
-      )}
+        )
+      }
     </div>
   );
 };
