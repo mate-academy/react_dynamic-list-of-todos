@@ -10,17 +10,14 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos} from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalLoading, setIsModalLoading] = useState(false);
   const [filter, setFilter] = useState(Filter.All);
   const [searchValue, setSearchValue] = useState('');
   const [activeTodo, setActiveTodo] = useState<Todo | null>(null);
-  const [activeUser, setActiveUser] = useState<User | null>(null);
 
   const handleEyeChange = (id: number) => {
     setActiveTodo(todos.find(todo => todo.id === id) || null);
@@ -52,24 +49,6 @@ export const App: React.FC = () => {
       .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (activeTodo) {
-      setIsModalLoading(true);
-
-      getUser(activeTodo.userId)
-        .then(setActiveUser)
-        .catch(() => {})
-        .finally(() => {
-          setIsModalLoading(false);
-        });
-    }
-  }, [activeTodo]);
-
-  const closeModal = () => {
-    setActiveTodo(null);
-    setActiveUser(null);
-  };
 
   return (
     <>
@@ -103,10 +82,8 @@ export const App: React.FC = () => {
 
       {activeTodo && (
         <TodoModal
-          activeUser={activeUser}
           activeTodo={activeTodo}
-          isModalLoading={isModalLoading}
-          closeModal={closeModal}
+          setActiveTodo={setActiveTodo}
         />
       )}
     </>
