@@ -24,9 +24,6 @@ export const TodoModal: React.FC<Props> = ({
       .finally(() => setLoadingInModal(false));
   }, [userId]);
 
-  // console.log(currentTodo);
-  // console.log(user);
-
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -43,7 +40,6 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -58,7 +54,6 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={cn({
                   'has-text-success': completed,

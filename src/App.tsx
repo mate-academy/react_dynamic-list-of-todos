@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -8,12 +7,8 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-export enum Status {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
-}
+import { filteredTodos } from './utils/FilteredTodos';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,28 +28,6 @@ export const App: React.FC = () => {
 
   const handleChangeInput = (newInputValue: string) =>
     setInputValue(newInputValue);
-
-  const filteredTodos = (newStatus: string, qvery: string): Todo[] => {
-    return todos
-      .filter(todo => {
-        switch (newStatus) {
-          case Status.all:
-            return true;
-
-          case Status.active:
-            return !todo.completed;
-
-          case Status.completed:
-            return todo.completed;
-
-          default:
-            return false;
-        }
-      })
-      .filter(todo =>
-        todo.title.toLocaleLowerCase().includes(qvery.toLocaleLowerCase()),
-      );
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -84,7 +57,7 @@ export const App: React.FC = () => {
 
               {!loading && (
                 <TodoList
-                  todos={filteredTodos(currentStatus, inputValue)}
+                  todos={filteredTodos(todos, currentStatus, inputValue)}
                   isOpen={isOpen}
                   changeOpen={handleSetIsOpen}
                   changeCurrentTodo={handleSetCurrentTodo}
@@ -101,3 +74,5 @@ export const App: React.FC = () => {
     </>
   );
 };
+
+export { Status };
