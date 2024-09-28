@@ -10,7 +10,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos} from './api';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -81,10 +81,7 @@ export const App: React.FC = () => {
       </div>
 
       {activeTodo && (
-        <TodoModal
-          activeTodo={activeTodo}
-          setActiveTodo={setActiveTodo}
-        />
+        <TodoModal activeTodo={activeTodo} setActiveTodo={setActiveTodo} />
       )}
     </>
   );
