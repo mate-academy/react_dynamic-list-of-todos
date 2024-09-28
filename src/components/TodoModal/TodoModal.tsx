@@ -25,6 +25,7 @@ export const TodoModal: React.FC<Props> = ({ activeTodo, setActiveTodo }) => {
       });
   }, [activeTodo.userId]);
 
+  
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
