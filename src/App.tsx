@@ -24,7 +24,7 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = useMemo(() => {
-    return todos.filter(todo => todo.title.includes(searchValue));
+    return todos.filter(todo => todo.title.toLowerCase().includes(searchValue.toLowerCase()));
   }, [todos, searchValue]);
 
   const getVisibleTodos = () => {
