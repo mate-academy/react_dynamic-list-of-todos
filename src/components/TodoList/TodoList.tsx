@@ -14,65 +14,79 @@ export const TodoList: React.FC<Props> = ({
   onClicked,
   iconState,
   onIconToggle,
-}) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+}) => {
+  const handleClick = (
+    todo: Todo,
+    handleTodoClick: (todo: Todo) => void,
+    handleIconToggle: (todoId: number) => void,
+  ) => {
+    return () => {
+      handleTodoClick(todo);
+      handleIconToggle(todo.id);
+    };
+  };
 
-    <tbody>
-      {todos &&
-        todos.map(todo => (
-          <tr key={todo.id} data-cy="todo" className="">
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                })}
-              >
-                {todo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => {
-                  onClicked(todo);
-                  onIconToggle(todo.id);
-                }}
-              >
-                <span className="icon">
-                  <i
-                    className={classNames('far', {
-                      'fa-eye-slash': iconState[todo.id],
-                      'fa-eye': !iconState[todo.id],
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {todos &&
+          todos.map(todo => {
+            const { id, title, completed } = todo;
+
+            return (
+              <tr key={id} data-cy="todo">
+                <td className="is-vcentered">{id}</td>
+                <td className="is-vcentered">
+                  {completed && (
+                    <span className="icon" data-cy="iconCompleted">
+                      <i className="fas fa-check" />
+                    </span>
+                  )}
+                </td>
+                <td className="is-vcentered is-expanded">
+                  <p
+                    className={classNames({
+                      'has-text-success': completed,
+                      'has-text-danger': !completed,
                     })}
-                  />
-                </span>
-              </button>
-            </td>
-          </tr>
-        ))}
-    </tbody>
-  </table>
-);
+                  >
+                    {title}
+                  </p>
+                </td>
+                <td className="has-text-right is-vcentered">
+                  <button
+                    data-cy="selectButton"
+                    className="button"
+                    type="button"
+                    onClick={handleClick(todo, onClicked, onIconToggle)}
+                  >
+                    <span className="icon">
+                      <i
+                        className={classNames('far', {
+                          'fa-eye-slash': iconState[id],
+                          'fa-eye': !iconState[id],
+                        })}
+                      />
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+      </tbody>
+    </table>
+  );
+};
