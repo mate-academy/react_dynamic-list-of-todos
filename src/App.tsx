@@ -32,9 +32,11 @@ export const App: React.FC = () => {
     const copyList = [...list];
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
-    const filteredByQuery = normalizedQuery // eslint-disable-next-line prettier/prettier
-    ? copyList.filter(todo => todo.title.toLowerCase().includes(normalizedQuery))
-     : copyList;
+    const filteredByQuery = normalizedQuery
+    ? copyList.filter(todo => 
+      todo.title.toLowerCase().includes(normalizedQuery)
+      )
+    : copyList;
 
     switch (filterType) {
       case 'active':
