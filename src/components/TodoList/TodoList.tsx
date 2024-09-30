@@ -1,15 +1,16 @@
 import { Todo } from '../../types/Todo';
+import { TodoItem } from '../TodoItem';
 
 export interface TodoListProps {
   selected: Todo | null;
   onSelected: (todo: Todo | null) => void;
-  toDoList: Todo[];
+  todos: Todo[];
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   selected,
   onSelected,
-  toDoList,
+  todos,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -27,48 +28,13 @@ export const TodoList: React.FC<TodoListProps> = ({
       </thead>
 
       <tbody>
-        {toDoList.map(toDo => (
-          <tr
+        {todos.map(toDo => (
+          <TodoItem
             key={toDo.id}
-            data-cy="todo"
-            className={
-              toDo.id === selected?.id ? 'has-background-info-light' : ''
-            }
-          >
-            <td className="is-vcentered">{toDo.id}</td>
-            <td className="is-vcentered">
-              {toDo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check"></i>
-                </span>
-              )}
-            </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  toDo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
-                {toDo.title}
-              </p>
-            </td>
-            <td className="has-text-right is-vcentered">
-              <button
-                data-cy="selectButton"
-                className="button"
-                type="button"
-                onClick={() => onSelected(toDo)}
-              >
-                <span className="icon">
-                  {toDo.id === selected?.id ? (
-                    <i className="far fa-eye-slash" />
-                  ) : (
-                    <i className="far fa-eye" />
-                  )}
-                </span>
-              </button>
-            </td>
-          </tr>
+            selected={selected}
+            onSelected={onSelected}
+            toDo={toDo}
+          />
         ))}
       </tbody>
     </table>

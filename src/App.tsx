@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
@@ -9,6 +10,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { FilterType } from './types/FilterType';
 
 export const App: React.FC = () => {
   const [selected, setSelected] = useState<Todo | null>(null);
@@ -33,17 +35,15 @@ export const App: React.FC = () => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
     const filteredByQuery = normalizedQuery
-    ? copyList.filter(todo => 
-      todo.title.toLowerCase().includes(normalizedQuery)
-      )
-    : copyList;
+      ? copyList.filter(todo => todo.title.toLowerCase().includes(normalizedQuery))
+      : copyList;
 
     switch (filterType) {
-      case 'active':
+      case FilterType.Active:
         return filteredByQuery.filter(todo => !todo.completed);
-      case 'completed':
+      case FilterType.Completed:
         return filteredByQuery.filter(todo => todo.completed);
-      case 'all':
+      case FilterType.All:
       default:
         return filteredByQuery;
     }
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
                 <TodoList
                   selected={selected}
                   onSelected={setSelected}
-                  toDoList={preparedToDoList(toDoList, filter, query)}
+                  todos={preparedToDoList(toDoList, filter, query)}
                 />
               )}
             </div>
