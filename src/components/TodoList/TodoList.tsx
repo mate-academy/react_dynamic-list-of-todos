@@ -1,8 +1,8 @@
 import { Todo } from '../../types/Todo';
 
 export interface TodoListProps {
-  selected: number;
-  onSelected: (id: number) => void;
+  selected: Todo | null;
+  onSelected: (todo: Todo | null) => void;
   toDoList: Todo[];
 }
 
@@ -31,7 +31,9 @@ export const TodoList: React.FC<TodoListProps> = ({
           <tr
             key={toDo.id}
             data-cy="todo"
-            className={toDo.id === selected ? 'has-background-info-light' : ''}
+            className={
+              toDo.id === selected?.id ? 'has-background-info-light' : ''
+            }
           >
             <td className="is-vcentered">{toDo.id}</td>
             <td className="is-vcentered">
@@ -55,10 +57,10 @@ export const TodoList: React.FC<TodoListProps> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onSelected(toDo.id)}
+                onClick={() => onSelected(toDo)}
               >
                 <span className="icon">
-                  {toDo.id === selected ? (
+                  {toDo.id === selected?.id ? (
                     <i className="far fa-eye-slash" />
                   ) : (
                     <i className="far fa-eye" />

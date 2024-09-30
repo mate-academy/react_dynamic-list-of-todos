@@ -11,7 +11,7 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [selected, setSelected] = useState<number>(0);
+  const [selected, setSelected] = useState<Todo | null>(null);
   const [toDoList, setToDoList] = useState<Todo[]>([]);
   const [isLoadingTodosList, setIsLoadingTodosList] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selected && <TodoModal selected={selected} onSelected={setSelected} />}
+      {!!selected && <TodoModal selected={selected} onSelected={setSelected} />}
     </>
   );
 };
