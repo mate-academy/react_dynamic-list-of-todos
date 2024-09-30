@@ -46,7 +46,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onSelected(0)}
+              onClick={() => onSelected(null)}
             />
           </header>
 
