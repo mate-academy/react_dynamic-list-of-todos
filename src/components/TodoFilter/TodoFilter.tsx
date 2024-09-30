@@ -1,35 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface TodoFilterProps {
   onFilterChange: (status: string) => void;
   onSearchChange: (term: string) => void;
+  statusTodo: string;
+  searchTerm: string;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({
   onFilterChange,
   onSearchChange,
+  statusTodo,
+  searchTerm,
 }) => {
-  const [status, setStatus] = useState('all');
-  const [searchText, setSearchText] = useState('');
-
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedStatus = event.target.value;
 
-    setStatus(selectedStatus);
     onFilterChange(selectedStatus);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
 
-    setSearchText(searchValue);
     onSearchChange(searchValue);
   };
 
   const handleSearchClear = () => {
-    setSearchText('');
     onSearchChange('');
-    onFilterChange(status);
+    onFilterChange(statusTodo);
   };
 
   return (
@@ -38,7 +36,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={status}
+            value={statusTodo}
             onChange={handleStatusChange}
           >
             <option value="all">All</option>
@@ -54,7 +52,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={searchText}
+          value={searchTerm}
           onChange={handleSearchChange}
         />
         <span className="icon is-left">
@@ -62,7 +60,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {searchText != '' && (
+          {searchTerm != '' && (
             <button
               data-cy="clearSearchButton"
               type="button"

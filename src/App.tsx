@@ -7,19 +7,16 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos, getUser } from './api';
-import { User } from './types/User';
+import { getTodos } from './api';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [statusTodo, setStatusTodo] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [loader, setLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoadingModal, setIsLoadingModal] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     setLoader(true);
@@ -27,14 +24,6 @@ export const App = () => {
     getTodos()
       .then(todosFromServer => {
         setTodos(todosFromServer);
-        setFilteredTodos(todosFromServer);
-
-        const userPromises = todosFromServer.map(todo => getUser(todo.userId));
-
-        return Promise.all(userPromises);
-      })
-      .then(usersFromServer => {
-        setUsers(usersFromServer);
       })
       .finally(() => setLoader(false));
   }, []);
@@ -56,17 +45,15 @@ export const App = () => {
       );
     }
 
-    setFilteredTodos(updatedTodos);
+    return updatedTodos;
   };
 
   const handleFilterChange = (selectedStatus: string) => {
     setStatusTodo(selectedStatus);
-    filterTodos(selectedStatus, searchTerm);
   };
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
-    filterTodos(statusTodo, term);
   };
 
   const handleSelectTodo = (todo: Todo) => {
@@ -84,9 +71,7 @@ export const App = () => {
     setSelectedTodo(null);
   };
 
-  const getUserById = (userId: number) => {
-    return users.find(user => user.id === userId) || null;
-  };
+  const filteredTodos = filterTodos(statusTodo, searchTerm);
 
   return (
     <>
@@ -99,13 +84,15 @@ export const App = () => {
               <TodoFilter
                 onFilterChange={handleFilterChange}
                 onSearchChange={handleSearchChange}
+                statusTodo={statusTodo}
+                searchTerm={searchTerm}
               />
             </div>
 
             <div className="block">
-              {loader && <Loader />}
-
-              {!loader && todos.length > 0 && (
+              {loader ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={filteredTodos}
                   onSelectTodo={handleSelectTodo}
@@ -121,7 +108,6 @@ export const App = () => {
           isLoading={isLoadingModal}
           todo={selectedTodo}
           onClose={closeModal}
-          user={getUserById(selectedTodo.userId)}
         />
       )}
     </>
