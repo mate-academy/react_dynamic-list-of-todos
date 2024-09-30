@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,46 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [selected, setSelected] = useState<number>(0);
+  const [toDoList, setToDoList] = useState<Todo[]>([]);
+  const [isLoadingTodosList, setIsLoadingTodosList] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    setIsLoadingTodosList(true);
+    getTodos()
+      .then(setToDoList)
+      .finally(() => setIsLoadingTodosList(false));
+  }, []);
+
+  function preparedToDoList(
+    list: Todo[],
+    filterType: string,
+    searchQuery: string,
+  ): Todo[] {
+    const copyList = [...list];
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
+    const filteredByQuery = normalizedQuery // eslint-disable-next-line prettier/prettier
+      ? copyList.filter(todo => todo.title.toLowerCase().includes(normalizedQuery))
+      : copyList;
+
+    switch (filterType) {
+      case 'active':
+        return filteredByQuery.filter(todo => !todo.completed);
+      case 'completed':
+        return filteredByQuery.filter(todo => todo.completed);
+      case 'all':
+      default:
+        return filteredByQuery;
+    }
+  }
+
   return (
     <>
       <div className="section">
@@ -17,18 +55,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filter={filter}
+                onFilter={setFilter}
+                query={query}
+                onQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoadingTodosList ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  selected={selected}
+                  onSelected={setSelected}
+                  toDoList={preparedToDoList(toDoList, filter, query)}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selected && <TodoModal selected={selected} onSelected={setSelected} />}
     </>
   );
 };
