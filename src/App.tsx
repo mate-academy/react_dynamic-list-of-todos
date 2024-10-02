@@ -8,6 +8,7 @@ import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
+import { Status } from './types/Status';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -15,14 +16,12 @@ export const App: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoaderActive, setIsLoaderActive] = useState(false);
   const [query, setQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(Status.All);
 
   useEffect(() => {
     setIsLoaderActive(true);
     getTodos()
-      .then(res => {
-        setTodos(res);
-      })
+      .then(setTodos)
       .finally(() => setIsLoaderActive(false));
   }, []);
 
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const selectStatusTodosHandler = (statusValue: string) => {
+  const selectStatusTodosHandler = (statusValue: Status) => {
     setFilterStatus(statusValue);
   };
 
@@ -47,9 +46,9 @@ export const App: React.FC = () => {
       const filteredByQuery = todo.title.toLowerCase().includes(lowerCaseQuery);
 
       switch (filterStatus) {
-        case 'active':
+        case Status.Active:
           return filteredByQuery && !todo.completed;
-        case 'completed':
+        case Status.Completed:
           return filteredByQuery && todo.completed;
         default:
           return filteredByQuery;
