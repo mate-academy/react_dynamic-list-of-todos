@@ -9,19 +9,20 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
+import { Status } from './utils/Status';
 
 function getPreparedTodos(
   initTodos: Todo[],
-  status: string,
+  status: Status,
   query: string,
 ): Todo[] {
   let todos = [...initTodos];
 
-  if (status === 'completed') {
+  if (status === Status.completed) {
     todos = todos.filter(todo => todo.completed);
   }
 
-  if (status === 'active') {
+  if (status === Status.active) {
     todos = todos.filter(todo => !todo.completed);
   }
 
@@ -39,7 +40,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [todo, setTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState(Status.all);
 
   useEffect(() => {
     setIsLoading(true);
@@ -72,7 +73,6 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={visibleTodos}
-                  // onModal={setIsModalActive}
                   onSelectTodo={setTodo}
                   selectedTodo={todo}
                 />
