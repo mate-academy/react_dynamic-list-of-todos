@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { TodoList } from './components/TodoList';
@@ -10,10 +10,9 @@ import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
-  const [originalTodos, setOriginalTodos] = useState<Todo[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); //
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoaderActive, setIsLoaderActive] = useState(false);
   const [query, setQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -22,7 +21,6 @@ export const App: React.FC = () => {
     setIsLoaderActive(true);
     getTodos()
       .then(res => {
-        setOriginalTodos(res);
         setTodos(res);
       })
       .finally(() => setIsLoaderActive(false));
@@ -42,37 +40,22 @@ export const App: React.FC = () => {
     setFilterStatus(statusValue);
   };
 
-  const applyFilters = () => {
-    // status: string, query: string
-    let filteredTodos: Todo[] = [];
+  const filteredTodos = useMemo(() => {
+    const lowerCaseQuery = query.toLowerCase();
 
-    if (filterStatus === 'active') {
-      filteredTodos = originalTodos.filter(todo => !todo.completed);
-    } else if (filterStatus === 'completed') {
-      filteredTodos = originalTodos.filter(todo => todo.completed);
-    } else {
-      filteredTodos = [...originalTodos];
-    }
+    return todos.filter(todo => {
+      const filteredByQuery = todo.title.toLowerCase().includes(lowerCaseQuery);
 
-    if (query) {
-      const lowerQuery = query.toLowerCase();
-
-      filteredTodos = filteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(lowerQuery),
-      );
-    }
-
-    setTodos(filteredTodos);
-  };
-
-  // const filterChangeHandler = (data: { status: string; query: string }) => {
-  //   applyFilters(data.status, data.query);
-  //   // console.log(data);
-  // };
-
-  useEffect(() => {
-    applyFilters();
-  }, [query, filterStatus]);
+      switch (filterStatus) {
+        case 'active':
+          return filteredByQuery && !todo.completed;
+        case 'completed':
+          return filteredByQuery && todo.completed;
+        default:
+          return filteredByQuery;
+      }
+    });
+  }, [query, todos, filterStatus]);
 
   return (
     <>
@@ -86,7 +69,6 @@ export const App: React.FC = () => {
                 selectStatus={selectStatusTodosHandler}
                 filtredQuery={setQuery}
                 query={query}
-                // filterChange={filterChangeHandler}
               />
             </div>
 
@@ -95,7 +77,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectTodo={selectTodoHandler}
                   selectedTodoId={currentTodo?.id}
                 />
