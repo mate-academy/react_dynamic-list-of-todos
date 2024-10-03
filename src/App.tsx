@@ -13,7 +13,6 @@ import { Status } from './types/Status';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoaderActive, setIsLoaderActive] = useState(false);
   const [query, setQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState(Status.All);
@@ -27,12 +26,10 @@ export const App: React.FC = () => {
 
   const selectTodoHandler = (todo: Todo) => {
     setCurrentTodo(todo);
-    setIsModalVisible(true);
   };
 
   const closeModalHandler = () => {
     setCurrentTodo(null);
-    setIsModalVisible(false);
   };
 
   const selectStatusTodosHandler = (statusValue: Status) => {
@@ -85,7 +82,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {currentTodo && isModalVisible && (
+      {currentTodo && (
         <TodoModal currentTodo={currentTodo} closeModal={closeModalHandler} />
       )}
     </>
