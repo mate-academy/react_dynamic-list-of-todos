@@ -7,10 +7,9 @@ import { getUser } from '../../api';
 type Props = {
   todo: Todo;
   onClose: () => void;
-  isLoading: boolean;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onClose, isLoading }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -31,7 +30,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose, isLoading }) => {
       <div className="modal-background" />
 
       <div className="modal-card">
-        {isLoading || isLoadingUser ? (
+        {isLoadingUser ? (
           <Loader />
         ) : (
           <>

@@ -15,8 +15,6 @@ export const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loader, setLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
 
   useEffect(() => {
     setLoader(true);
@@ -31,10 +29,15 @@ export const App = () => {
   const filterTodos = (status: string, searchTermTodo: string) => {
     let updatedTodos = todos;
 
-    if (status === 'active') {
-      updatedTodos = updatedTodos.filter(todo => !todo.completed);
-    } else if (status === 'completed') {
-      updatedTodos = updatedTodos.filter(todo => todo.completed);
+    switch (status) {
+      case 'active':
+        updatedTodos = updatedTodos.filter(todo => !todo.completed);
+        break;
+      case 'completed':
+        updatedTodos = updatedTodos.filter(todo => todo.completed);
+        break;
+      default:
+        break;
     }
 
     if (searchTermTodo) {
@@ -57,17 +60,10 @@ export const App = () => {
   };
 
   const handleSelectTodo = (todo: Todo) => {
-    setIsLoadingModal(true);
     setSelectedTodo(todo);
-    setIsModalOpen(true);
-
-    setTimeout(() => {
-      setIsLoadingModal(false);
-    }, 1000);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
     setSelectedTodo(null);
   };
 
@@ -103,13 +99,7 @@ export const App = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && selectedTodo && (
-        <TodoModal
-          isLoading={isLoadingModal}
-          todo={selectedTodo}
-          onClose={closeModal}
-        />
-      )}
+      {selectedTodo && <TodoModal todo={selectedTodo} onClose={closeModal} />}
     </>
   );
 };
