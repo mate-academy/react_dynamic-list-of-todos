@@ -34,6 +34,7 @@ export const App: React.FC = () => {
           setTodos(filteredTodos.filter(todo => todo.completed));
           break;
       }
+
       setLoader(false);
     });
   }, [selectedOption, searchInputValue]);
