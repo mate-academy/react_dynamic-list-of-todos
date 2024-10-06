@@ -25,4 +25,36 @@ function get<T>(url: string): Promise<T> {
 
 export const getTodos = () => get<Todo[]>('/todos');
 
+export const getSortedTodos = () => {
+  return getTodos().then(todos => todos.sort((a, b) => a.id - b.id));
+};
+
+export const getCompletedTodos = () => {
+  return getSortedTodos().then(todos =>
+    todos.filter(todo => todo.completed === true),
+  );
+};
+
+export const getActiveTodos = () => {
+  return getSortedTodos().then(todos =>
+    todos.filter(todo => todo.completed === false),
+  );
+};
+
+export const getFilteredTodos = (value: string) => {
+  switch (value) {
+    case 'all':
+      return getSortedTodos();
+
+    case 'active':
+      return getActiveTodos();
+
+    case 'completed':
+      return getCompletedTodos();
+
+    default:
+      return getSortedTodos();
+  }
+};
+
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
