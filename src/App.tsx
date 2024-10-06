@@ -19,13 +19,12 @@ export const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const delayTimer = setTimeout(() => setLoading(true), 300);
+    setLoading(true);
 
     getTodos()
       .then(setTodos)
       .finally(() => {
-        clearTimeout(delayTimer);
-        setTimeout(() => setLoading(false), 500);
+        setLoading(false);
       });
   }, []);
 

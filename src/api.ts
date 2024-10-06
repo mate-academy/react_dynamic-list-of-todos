@@ -1,4 +1,5 @@
 import { Todo } from './types/Todo';
+import { TodoStatus } from './types/TodoStatus';
 import { User } from './types/User';
 
 // eslint-disable-next-line operator-linebreak
@@ -41,15 +42,15 @@ export const getActiveTodos = () => {
   );
 };
 
-export const getFilteredTodos = (value: string) => {
+export const getFilteredTodos = (value: TodoStatus) => {
   switch (value) {
-    case 'all':
+    case TodoStatus.all:
       return getSortedTodos();
 
-    case 'active':
+    case TodoStatus.active:
       return getActiveTodos();
 
-    case 'completed':
+    case TodoStatus.completed:
       return getCompletedTodos();
 
     default:

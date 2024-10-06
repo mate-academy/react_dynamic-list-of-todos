@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getFilteredTodos } from '../../api';
 import { Todo } from '../../types/Todo';
+import { TodoStatus } from '../../types/TodoStatus';
 
 type Props = {
   setTodos: (todos: Todo[]) => void;
@@ -8,7 +9,9 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ setTodos = () => {} }) => {
   const [query, setQuery] = useState('');
-  const [selectedValue, setSelectedValue] = useState('all');
+  const [selectedValue, setSelectedValue] = useState<TodoStatus>(
+    TodoStatus.all,
+  );
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -16,10 +19,7 @@ export const TodoFilter: React.FC<Props> = ({ setTodos = () => {} }) => {
     setQuery(newValue);
   };
 
-  // const normalizedQuery = query.toLowerCase();
-
   const handleDelete = () => {
-    setSelectedValue('all');
     setQuery('');
   };
 
@@ -44,12 +44,12 @@ export const TodoFilter: React.FC<Props> = ({ setTodos = () => {} }) => {
           <select
             data-cy="statusSelect"
             onChange={e => {
-              setSelectedValue(e.target.value);
+              setSelectedValue(e.target.value as TodoStatus);
             }}
           >
-            <option value="all">All</option>
-            <option value="active">Active </option>
-            <option value="completed">Completed</option>
+            <option value={TodoStatus.all}>All</option>
+            <option value={TodoStatus.active}>Active </option>
+            <option value={TodoStatus.completed}>Completed</option>
           </select>
         </span>
       </p>
