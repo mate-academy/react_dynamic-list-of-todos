@@ -12,6 +12,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [loader, setLoader] = useState(true);
   const [selectedOption, setSelectedOption] = useState('all');
@@ -19,25 +20,29 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos().then(fetchedTodos => {
-      const filteredTodos = fetchedTodos.filter(todo =>
-        todo.title.toLowerCase().includes(searchInputValue.toLowerCase()),
+      setTodos(fetchedTodos);
+      setLoader(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    const filterTodos = () => {
+      const filtered = todos.filter(todo =>
+        todo.title.toLowerCase().includes(searchInputValue.toLowerCase())
       );
 
       switch (selectedOption) {
-        case 'all':
-          setTodos(filteredTodos);
-          break;
         case 'active':
-          setTodos(filteredTodos.filter(todo => !todo.completed));
-          break;
+          return filtered.filter(todo => !todo.completed);
         case 'completed':
-          setTodos(filteredTodos.filter(todo => todo.completed));
-          break;
+          return filtered.filter(todo => todo.completed);
+        default:
+          return filtered;
       }
+    };
 
-      setLoader(false);
-    });
-  }, [selectedOption, searchInputValue]);
+    setFilteredTodos(filterTodos());
+  }, [todos, selectedOption, searchInputValue]);
 
   return (
     <>
@@ -59,7 +64,7 @@ export const App: React.FC = () => {
               {loader && <Loader />}
               {!loader && (
                 <TodoList
-                  todos={todos}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                 />
