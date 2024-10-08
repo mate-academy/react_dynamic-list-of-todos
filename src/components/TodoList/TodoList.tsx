@@ -13,6 +13,10 @@ export const TodoList: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
+  const handleSelectTodo = (todo: Todo) => () => {
+    setSelectedTodo(todo);
+  };
+
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -58,7 +62,7 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="has-text-right is-vcentered">
                 <button
-                  onClick={() => setSelectedTodo(todo)}
+                  onClick={handleSelectTodo(todo)}
                   data-cy="selectButton"
                   className="button"
                   type="button"

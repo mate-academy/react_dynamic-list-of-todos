@@ -25,19 +25,22 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const filteredTodos = todos.filter(todo =>
-    todo.title.toLowerCase().includes(searchInputValue.toLowerCase()),
-  ).filter(todo => {
-    switch (selectedOption) {
-      case 'active':
-        return !todo.completed;
-      case 'completed':
-        return todo.completed;
-      default:
-        return true;
-    }
-  });
+  const filteredTodos = todos.filter(todo => {
+    const matchesTitle = todo.title.toLowerCase().includes(searchInputValue.toLowerCase());
 
+    const matchesStatus = (() => {
+      switch (selectedOption) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    })();
+
+    return matchesTitle && matchesStatus;
+  });
 
   return (
     <>
