@@ -1,11 +1,19 @@
 import React from 'react';
 import { Filters } from '../../App';
+
 interface Props {
   value: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
   setFilter: React.Dispatch<React.SetStateAction<Filters>>;
 }
+
 export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, value }) => {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent the default behavior (form submission)
+    }
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -31,6 +39,7 @@ export const TodoFilter: React.FC<Props> = ({ setFilter, setQuery, value }) => {
           placeholder="Search..."
           value={value}
           onChange={e => setQuery(e.target.value)}
+          onKeyPress={handleKeyPress} // Add the onKeyPress handler
         />
 
         <span className="icon is-left">
