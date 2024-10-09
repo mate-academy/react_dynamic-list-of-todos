@@ -5,6 +5,7 @@
   ],
   "compilerOptions": {
     "sourceMap": false,
+    "noUnusedLocals": false,
     "types": ["node", "cypress"]
   }
 }
