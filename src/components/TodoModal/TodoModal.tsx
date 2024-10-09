@@ -5,18 +5,20 @@ import { getUser } from '../../api';
 
 type Props = {
   selectedTodo: Todo;
-  onClose?: (todo: Todo | null) => void;
+  handleClose?: (todo: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo: { title, id, user, completed },
-  onClose = () => {},
+  handleClose: onClose = () => {},
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(user?.id || 0).then(() => setIsLoading(false));
+    getUser(user?.id || 0)
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
   }, [user?.id]);
 
   return (

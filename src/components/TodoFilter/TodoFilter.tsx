@@ -2,16 +2,16 @@ import { SelectOptions } from '../../types/SelectOptions';
 
 type Props = {
   selectedOption: SelectOptions;
-  onSelectChange: (newValue: SelectOptions) => void;
+  handleSelectChange: (newValue: SelectOptions) => void;
   query: string;
-  onQueryChange: (newValue: string) => void;
+  handleQueryChange: (newValue: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   selectedOption,
-  onSelectChange = () => {},
+  handleSelectChange: onSelectChange = () => {},
   query,
-  onQueryChange = () => {},
+  handleQueryChange: onQueryChange = () => {},
 }) => {
   return (
     <form className="field has-addons">
