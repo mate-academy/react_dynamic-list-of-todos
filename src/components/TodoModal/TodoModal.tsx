@@ -16,11 +16,7 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     setIsLoading(true);
-    getUser(user?.id || 0)
-      .then()
-      .finally(() => {
-        setIsLoading(false);
-      });
+    getUser(user?.id || 0).then(() => setIsLoading(false));
   }, [user?.id]);
 
   return (
