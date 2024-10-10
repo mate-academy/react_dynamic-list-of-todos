@@ -13,7 +13,12 @@ export const TodoItem: FC<Props> = ({ todo, selectedTodo, onSelectTodo }) => {
   const { id, title, completed } = todo;
 
   return (
-    <tr data-cy="todo" className="">
+    <tr
+      data-cy="todo"
+      className={cn({
+        'has-background-info-light': selectedTodo?.id === id,
+      })}
+    >
       <td className="is-vcentered">{id}</td>
 
       {!completed ? (

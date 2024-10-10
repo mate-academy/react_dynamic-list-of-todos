@@ -8,11 +8,12 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { FilterBy } from './types/FilterBy';
 
+import { getFilteredTodos } from './utils/getFilteredTodos';
+
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getFilteredTodos } from './utils/getFilteredTodos';
 
 export const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -75,13 +76,15 @@ export const App: FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-
-              <TodoList
-                todos={filteredTodos}
-                selectedTodo={selectedTodo}
-                onSelectTodo={handleSelectTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  onSelectTodo={handleSelectTodo}
+                />
+              )}
             </div>
           </div>
         </div>
