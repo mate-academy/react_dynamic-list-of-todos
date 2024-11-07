@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
   const handleFilterByValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     setShowButton(true);
-    filteredByValue(inputValue);
+    filteredByValue(e.target.value);
 
     if (e.target.value === '') {
       setShowButton(false);

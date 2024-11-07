@@ -36,10 +36,11 @@ export const App: React.FC = () => {
       case Filter.Active:
         setFlag(Filter.Active);
         getTodos()
-          .then(fitchedTodos => fitchedTodos.filter(t => !t.completed))
+          .then(fetchedTodos => fetchedTodos.filter(t => !t.completed))
           .then(setTodos);
         break;
       case Filter.Completed:
+        setFlag(Filter.Completed);
         getTodos()
           .then(fetchTodos => fetchTodos.filter(t => t.completed))
           .then(setTodos);
@@ -100,7 +101,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {user && todo && (
+      {todo && (
         <TodoModal
           user={user}
           todo={todo}
