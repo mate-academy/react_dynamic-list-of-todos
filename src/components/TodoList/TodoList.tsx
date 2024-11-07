@@ -4,9 +4,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   getUserAndTodo: (todoUserId: number) => void;
+  todoId?: number;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, getUserAndTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  getUserAndTodo,
+  todoId,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -23,7 +28,11 @@ export const TodoList: React.FC<Props> = ({ todos, getUserAndTodo }) => {
       </thead>
       <tbody>
         {todos.map(todo => (
-          <tr data-cy="todo" className="" key={todo.id}>
+          <tr
+            data-cy="todo"
+            className={`${todoId === todo.id && `has-background-info-light`}`}
+            key={todo.id}
+          >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
@@ -47,7 +56,9 @@ export const TodoList: React.FC<Props> = ({ todos, getUserAndTodo }) => {
                 onClick={() => getUserAndTodo(todo.userId)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={`far ${todoId === todo.id ? `fa-eye-slash` : `fa-eye`}`}
+                  />
                 </span>
               </button>
             </td>

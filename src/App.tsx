@@ -94,7 +94,11 @@ export const App: React.FC = () => {
               {loader ? (
                 <Loader />
               ) : (
-                <TodoList todos={todos} getUserAndTodo={getUserAndTodo} />
+                <TodoList
+                  todos={todos}
+                  getUserAndTodo={getUserAndTodo}
+                  todoId={todo?.id}
+                />
               )}
             </div>
           </div>
