@@ -5,7 +5,11 @@ type Props = {
   todos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelectTodo, selectedTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectTodo,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -61,7 +65,6 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectTodo, selectedTodo })
           </td>
         </tr>
       ))}
-
     </tbody>
   </table>
 );

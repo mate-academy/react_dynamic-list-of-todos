@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [modalOpen, setModelOpen] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [filterSelected, setFilterSelected] = useState<String>('all')
+  const [filterSelected, setFilterSelected] = useState<string>('all');
 
   function applyFilters() {
     let updatedTodos = todos;
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
 
     if (inputVal) {
       updatedTodos = updatedTodos.filter(todo =>
-        todo.title.toLowerCase().includes(inputVal.toLowerCase())
+        todo.title.toLowerCase().includes(inputVal.toLowerCase()),
       );
     }
 
@@ -57,7 +57,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [inputVal, filterSelected, todos]);
+  }, [inputVal, filterSelected, todos, applyFilters]);
 
   function openModal(todo: Todo) {
     setSelectedTodo(todo);
@@ -87,7 +87,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              <TodoList todos={filteredTodos} onSelectTodo={openModal} selectedTodo = {selectedTodo} />
+              <TodoList
+                todos={filteredTodos}
+                onSelectTodo={openModal}
+                selectedTodo={selectedTodo}
+              />
             </div>
           </div>
         </div>
