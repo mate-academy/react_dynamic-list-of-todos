@@ -1,12 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  onSelect: (todo: Todo | null) => void;
+  selectedTodo: Todo | null;
+};
+
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onSelect }) => {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+
+    getUser(selectedTodo?.userId as number)
+      .then(setUser)
+      .catch(() => {
+        throw new Error('Try again later');
+      })
+      .finally(() => setLoading(false));
+  }, [selectedTodo]);
+
+  const handleModalClose = () => {
+    onSelect(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +41,35 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{selectedTodo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleModalClose}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+
+              <strong
+                className={`${selectedTodo?.completed ? 'has-text-success' : 'has-text-danger'}`}
+              >
+                {selectedTodo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>
