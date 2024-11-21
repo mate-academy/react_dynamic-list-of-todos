@@ -1,0 +1,9 @@
+/* td {
+  text-align: center;
+  border: 1px solid black;
+} */
+
+.todos {
+  text-align: left;
+  padding-left: 20px;
+}
