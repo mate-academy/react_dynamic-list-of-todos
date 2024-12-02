@@ -1,28 +1,21 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
-// eslint-disable-next-line operator-linebreak
 const BASE_URL =
   'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
-// This function creates a promise
-// that is resolved after a given delay
-function wait(delay: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
-}
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+export const getTodos = async (): Promise<Todo[]> => {
+  await wait(1000);
+  const response = await fetch(`${BASE_URL}/todos.json`);
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
-}
+  return response.json();
+};
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getUser = async (userId: number): Promise<User> => {
+  await wait(1000);
+  const response = await fetch(`${BASE_URL}/users/${userId}.json`);
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+  return response.json();
+};
