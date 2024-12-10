@@ -1,30 +1,66 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import { Completed, Filters } from '../../types/Filters';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface Props {
+  filterOptions: Filters;
+  onFilterChange: (key: keyof Filters, value: string | Completed) => void;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+export const TodoFilter: React.FC<Props> = ({
+  filterOptions,
+  onFilterChange,
+}) => {
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value as Completed;
+    onFilterChange('completedType', selectedValue);
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value.toLowerCase();
+    onFilterChange('searchByText', query);
+  };
+
+  const clearSearch = () => {
+    onFilterChange('searchByText', '');
+  };
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterOptions.completedType}
+            onChange={handleStatusChange}
+          >
+            <option value={Completed.All}>All</option>
+            <option value={Completed.Active}>Active</option>
+            <option value={Completed.Completed}>Completed</option>
+          </select>
+        </span>
+      </p>
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={filterOptions.searchByText}
+          onChange={handleSearchChange}
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+        {filterOptions.searchByText && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={clearSearch}
+            />
+          </span>
+       )}
+       </p>
+     </form>
+   );
+ };
