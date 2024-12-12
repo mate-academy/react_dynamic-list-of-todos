@@ -37,40 +37,38 @@ export const App: React.FC = () => {
     );
 
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+    <div className="section">
+      <div className="container">
+        <div className="box">
+          <h1 className="title">Todos:</h1>
 
-            <div className="block">
-              <TodoFilter
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-              />
-            </div>
+          <div className="block">
+            <TodoFilter
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+            />
+          </div>
 
-            <div className="block">
-              {loading && <Loader />}
+          <div className="block">
+            {loading && <Loader />}
 
-              {selectedTodo && (
-                <TodoModal
-                  selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
-                />
-              )}
-
-              <TodoList
-                todos={filteredTodos}
+            {selectedTodo && (
+              <TodoModal
                 selectedTodo={selectedTodo}
                 setSelectedTodo={setSelectedTodo}
               />
-            </div>
+            )}
+
+            <TodoList
+              todos={filteredTodos}
+              selectedTodo={selectedTodo}
+              setSelectedTodo={setSelectedTodo}
+            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
