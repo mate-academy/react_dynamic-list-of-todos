@@ -1,8 +1,25 @@
-export const TodoFilter = () => (
+type Props = {
+  selectOption: (option: string) => void;
+  handleSearchChange: (text: string) => void;
+  clearSearchButton: () => void;
+  value: string;
+  buttonStatus: boolean;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  selectOption,
+  handleSearchChange,
+  clearSearchButton,
+  value,
+  buttonStatus,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={event => selectOption(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,15 +33,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={value}
+        onChange={event => handleSearchChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
+      {buttonStatus && value.trim() !== '' && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={clearSearchButton}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
