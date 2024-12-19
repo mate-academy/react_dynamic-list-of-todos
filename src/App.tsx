@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,51 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [filter, setFilter] = useState<Filter>(Filter.All);
+  const [query, setQuery] = useState('');
+
+  const visibleTodos = useMemo(() => {
+    return todos.filter(todo => {
+      const matchesQuery = todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase());
+
+      if (!matchesQuery) {
+        return false;
+      }
+
+      if (filter === Filter.All) {
+        return true;
+      }
+
+      return filter === Filter.Completed ? todo.completed : !todo.completed;
+    });
+  }, [filter, query, todos]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setLoading(true);
+
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTodos();
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +60,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                filter={filter}
+                setFilter={setFilter}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading && <Loader />}
+              {!loading && todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+      )}
     </>
   );
 };
