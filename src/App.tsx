@@ -1,14 +1,15 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [sortType, setSorttype] = useState('all');
+  const [query, setQuery] = useState('');
+
   return (
     <>
       <div className="section">
@@ -17,18 +18,20 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                setSortType={setSorttype}
+                setQuery={setQuery}
+                query={query}
+                sortType={sortType}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              <TodoList sortType={sortType} query={query} />
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
     </>
   );
 };
