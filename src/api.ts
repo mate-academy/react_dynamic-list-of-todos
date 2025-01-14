@@ -23,6 +23,27 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+// interface GetTodosResponse {
+//   todos: Todo[];
+// }
+
+export const getTodos = (
+  filter: 'all' | 'active' | 'completed',
+): Promise<Todo[]> => {
+  const todos = get<Todo[]>('/todos');
+
+  switch (filter) {
+    case 'all':
+      return todos;
+    case 'active':
+      return todos.then(todo => todo.filter(data => !data.completed));
+    case 'completed':
+      return todos.then(todo => todo.filter(data => data.completed));
+    default:
+      return todos;
+  }
+
+  // return todos.then(data => ({ todos: data }));
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
