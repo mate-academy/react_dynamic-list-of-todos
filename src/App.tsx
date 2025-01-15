@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-// import React, { useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,6 +9,7 @@ import { TodoFilter } from './components/TodoFilter';
 // import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
+  const [filter, setFilter] = useState('');
   // const [loader, setLoader] = useState(false);
 
   return (
@@ -19,12 +20,12 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter filter={filter} setFilter={setFilter} />
             </div>
 
             <div className="block">
               {/* <Loader loader={loader} /> */}
-              <TodoList />
+              <TodoList filter={filter} />
             </div>
           </div>
         </div>

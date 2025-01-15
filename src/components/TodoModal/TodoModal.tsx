@@ -7,7 +7,7 @@ export const TodoModal: React.FC = () => {
       <div className="modal-background" />
 
       {true ? (
-        <Loader loader={false} />
+        <Loader loader={true} />
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
