@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
 
   useEffect(() => {
-    getTodos().then(fetchedTodo => {
+    getTodos().then((fetchedTodo: Todo[]) => {
       setTodos(fetchedTodo);
       setFilteredTodo(fetchedTodo);
       setIsLoadingList(false);
