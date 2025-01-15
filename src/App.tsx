@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,62 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
+
+  const handleQueryChanged = (newValue: string) => {
+    setQuery(newValue);
+  };
+
+  const handleClearQuery = () => {
+    setQuery('');
+  };
+
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(event.target.value);
+  };
+
+  const normalizedQuery = query.toLowerCase();
+  const filteredTodos = todos.filter(todo => {
+    const filter = todo.title.toLowerCase().includes(normalizedQuery);
+
+    if (status === 'all') {
+      return filter;
+    }
+
+    if (status === 'active') {
+      return !todo.completed && filter;
+    }
+
+    if (status === 'completed') {
+      return todo.completed && filter;
+    }
+
+    return todo.title.toLowerCase().includes(normalizedQuery);
+  });
+
+  const handleOpenModal = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +71,33 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onQueryChanged={handleQueryChanged}
+                onClearQuery={handleClearQuery}
+                onStatusChange={handleStatusChange}
+                status={status}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading && <Loader />}
+
+              {!loading && todos.length > 0 && (
+                <TodoList
+                  todos={filteredTodos}
+                  onTodoSelect={handleOpenModal}
+                  selectedTodoId={selectedTodo?.id || 0}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal onClose={handleCloseModal} todo={selectedTodo} />
+      )}
     </>
   );
 };
