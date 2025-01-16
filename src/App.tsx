@@ -5,12 +5,10 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-// import { TodoModal } from './components/TodoModal';
-// import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   const [filter, setFilter] = useState('');
-  // const [loader, setLoader] = useState(false);
+  const [filterStatus, setFilterStatus] = useState('all');
 
   return (
     <>
@@ -20,18 +18,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter filter={filter} setFilter={setFilter} />
+              <TodoFilter
+                filter={filter}
+                setFilter={setFilter}
+                setFilterStatus={setFilterStatus}
+              />
             </div>
 
             <div className="block">
-              {/* <Loader loader={loader} /> */}
-              <TodoList filter={filter} />
+              <TodoList filter={filter} filterStatus={filterStatus} />
             </div>
           </div>
         </div>
       </div>
-
-      {/* <TodoModal /> */}
     </>
   );
 };

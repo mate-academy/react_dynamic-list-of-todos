@@ -3,14 +3,22 @@ import React from 'react';
 type Props = {
   filter: string;
   setFilter: (value: string) => void;
+  setFilterStatus: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  setFilter,
+  setFilterStatus,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
+          <select
+            data-cy="statusSelect"
+            onChange={event => setFilterStatus(event.target.value)}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -33,12 +41,14 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter }) => {
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => setFilter('')}
-          />
+          {filter && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => setFilter('')}
+            />
+          )}
         </span>
       </p>
     </form>
