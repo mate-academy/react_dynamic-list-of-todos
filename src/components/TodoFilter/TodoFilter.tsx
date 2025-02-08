@@ -1,41 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { Options } from '../../types/Options';
 
-interface FilterParams {
+type Props = {
   query: string;
-  status: string;
-}
+  selectedOption: Options;
+  onQuery: (newQuery: string) => void;
+  onSelectOption: (newOption: Options) => void;
+};
 
-interface TodoFilterProps {
-  onFilterChange: (params: FilterParams) => void;
-}
-
-export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilterChange }) => {
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
-
-  const handleFilterChange = useCallback(() => {
-    onFilterChange({ query, status });
-  }, [query, status, onFilterChange]);
-
-  useEffect(() => {
-    handleFilterChange();
-  }, [handleFilterChange]);
-
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  selectedOption,
+  onQuery = () => {},
+  onSelectOption = () => {},
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            value={status}
-            onChange={e => setStatus(e.target.value)}
+            value={selectedOption}
+            onChange={e => onSelectOption(e.target.value as Options)}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={Options.ALL}>All</option>
+            <option value={Options.ACTIVE}>Active</option>
+            <option value={Options.COMPLETED}>Completed</option>
           </select>
         </span>
       </p>
+
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
           data-cy="searchInput"
@@ -43,22 +36,23 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({ onFilterChange }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => onQuery(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          {query.length > 0 && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              aria-label="Clear search input"
-              onClick={() => setQuery('')}
+              onClick={() => onQuery('')}
             />
-          </span>
-        )}
+          )}
+        </span>
       </p>
     </form>
   );

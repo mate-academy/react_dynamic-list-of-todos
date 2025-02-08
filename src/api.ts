@@ -1,5 +1,6 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
+import { Options } from './types/Options';
 
 // eslint-disable-next-line operator-linebreak
 const BASE_URL =
@@ -24,5 +25,37 @@ function get<T>(url: string): Promise<T> {
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
+
+export const getSortedTodos = () => {
+  return getTodos().then(todos => todos.sort((a, b) => a.id - b.id));
+};
+
+export const getCompletedTodos = () => {
+  return getSortedTodos().then(todos =>
+    todos.filter(todo => todo.completed === true),
+  );
+};
+
+export const getActiveTodos = () => {
+  return getSortedTodos().then(todos =>
+    todos.filter(todo => todo.completed === false),
+  );
+};
+
+export const getFilteredTodos = (value: Options) => {
+  switch (value) {
+    case Options.ALL:
+      return getSortedTodos();
+
+    case Options.ACTIVE:
+      return getActiveTodos();
+
+    case Options.COMPLETED:
+      return getCompletedTodos();
+
+    default:
+      return getSortedTodos();
+  }
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);

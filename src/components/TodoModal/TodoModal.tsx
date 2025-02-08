@@ -1,30 +1,32 @@
-import React from 'react';
-import { Loader } from '../Loader';
+import { useEffect, useState } from 'react';
+
+import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
+import { Loader } from '../Loader';
 import { User } from '../../types/User';
 
-interface TodoModalProps {
-  todo: Todo;
-  user: User | null;
-  loadingUser: boolean;
-  onClose: () => void;
-}
+type Props = {
+  selectedTodo: Todo;
+  onSelectTodo: (nothing: null) => void;
+};
 
-export const TodoModal: React.FC<TodoModalProps> = ({
-  todo,
-  user,
-  loadingUser,
-  onClose,
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  onSelectTodo = () => {},
 }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getUser(selectedTodo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
+  }, [selectedTodo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div
-        className="modal-background"
-        onClick={onClose}
-        aria-label="Close modal background"
-      />
-
-      {loadingUser ? (
+      <div className="modal-background" />
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -33,42 +35,32 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #{todo.id}
+              Todo #{selectedTodo.id}
             </div>
 
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose}
-              aria-label="Close modal"
+              onClick={() => onSelectTodo(null)}
             />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title}
+              {selectedTodo.title}
             </p>
-
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
+              {selectedTodo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
 
-              {user ? (
-                <>
-                  {' by '}
-                  {user.email && user.name ? (
-                    <a href={`mailto:${user.email}`}>{user.name}</a>
-                  ) : (
-                    <span>Unknown user</span>
-                  )}
-                </>
-              ) : (
-                ' by Unknown user'
-              )}
+              {' by '}
+
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>
