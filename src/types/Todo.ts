@@ -4,3 +4,5 @@ export interface Todo {
   completed: boolean;
   userId: number;
 }
+
+export type CompletedType = 'all' | 'completed' | 'active';
