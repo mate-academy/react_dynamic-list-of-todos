@@ -35,7 +35,7 @@ export const App: React.FC = () => {
 
   const handleClose = () => {
     setSelectedTodo(null);
-    setActiveTodoId(null); // Сбрасываем активный ID
+    setActiveTodoId(null);
   };
 
   const filteredTodos = todos.filter(todo => {
@@ -88,7 +88,9 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      <TodoModal selectedTodo={selectedTodo} handleClose={handleClose} />
+      {selectedTodo && (
+        <TodoModal selectedTodo={selectedTodo} handleClose={handleClose} />
+      )}
     </>
   );
 };

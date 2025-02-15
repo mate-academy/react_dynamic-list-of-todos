@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 type TodoModalProps = {
   selectedTodo: Todo | null;
@@ -24,6 +26,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
       setIsLoading(true);
       getUser(selectedTodo.userId)
         .then(setUser)
+        .catch(error)
         .finally(() => setIsLoading(false));
     }
   }, [selectedTodo]);
@@ -47,8 +50,6 @@ export const TodoModal: React.FC<TodoModalProps> = ({
             >
               Todo #{selectedTodo.id}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
