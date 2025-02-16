@@ -1,6 +1,7 @@
 # React dynamic list of TODOs
 
 The goal of this task is to teach you:
+
 - how to work with a not detailed task description;
 - to learn the existing code before you start;
 - to understand tests and why they fail;
@@ -25,8 +26,9 @@ loaded and show them using `TodoList` (check the code in the `api.ts`);
     - the `x` button should clear the `query` and reset the todos;
 
 ## Instructions
+
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://ZakZh.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
