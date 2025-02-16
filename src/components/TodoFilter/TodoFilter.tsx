@@ -9,9 +9,9 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({
   searchValue,
-  onSearch = () => {},
+  onSearch,
   filterStatus,
-  onFilterChange = () => {},
+  onFilterChange,
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(event.target.value);

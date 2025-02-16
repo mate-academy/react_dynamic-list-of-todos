@@ -11,7 +11,7 @@ type Props = {
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onOpenModal = () => {},
+  onOpenModal,
   isModalShow,
   selectedTodoId,
 }) => {
