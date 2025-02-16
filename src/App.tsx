@@ -1,16 +1,16 @@
-/* eslint-disable max-len */
 import React from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './App.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
+import { GlobalAppProvider } from './store/Store';
 import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
 
 export const App: React.FC = () => {
   return (
-    <>
+    <GlobalAppProvider>
       <div className="section">
         <div className="container">
           <div className="box">
@@ -21,7 +21,6 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
               <TodoList />
             </div>
           </div>
@@ -29,6 +28,6 @@ export const App: React.FC = () => {
       </div>
 
       <TodoModal />
-    </>
+    </GlobalAppProvider>
   );
 };
