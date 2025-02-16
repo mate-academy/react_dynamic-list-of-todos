@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { GetTodoContext, GetUserContext } from '../../store';
+import { getUser } from '../../api';
+import cn from 'classnames';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  setIsOpenedPost: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const TodoModal: React.FC<Props> = ({ setIsOpenedPost }) => {
+  const { todo, setTodo } = useContext(GetTodoContext);
+  const { user, setUser } = useContext(GetUserContext);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  const isCompletedTodo = todo?.completed ? 'Done' : 'Planned';
+
+  useEffect(() => {
+    todo?.userId &&
+      getUser(todo.userId)
+        .then(setUser)
+        .finally(() => setIsLoaded(true));
+  }, []);
+
+  const closeModalWindow = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    setIsOpenedPost(false);
+    setTodo(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {!isLoaded ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +43,35 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{todo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={closeModalWindow}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className={cn({
+                "has-text-success": todo?.completed,
+                "has-text-danger": !todo?.completed
+              })}>
+                {isCompletedTodo}
+                </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href="mailto:Sincere@april.biz">{user?.name}</a>
             </p>
           </div>
         </div>

@@ -1,14 +1,28 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { TodoModal } from './components/TodoModal';
+import { TodosContext } from './store';
 
 export const App: React.FC = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isOpenedPost, setIsOpenedPost] = useState<boolean>(false);
+  const { setTodos } = useContext(TodosContext);
+
+  useEffect(() => {
+    getTodos()
+      .then(fetchData => {
+        setTodos(fetchData)
+      })
+      .finally(() => setIsLoaded(true));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -21,14 +35,17 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {!isLoaded ? (
+                <Loader />
+              ) : (
+                <TodoList setIsOpenedPost={setIsOpenedPost} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isOpenedPost && <TodoModal setIsOpenedPost={setIsOpenedPost} />}
     </>
   );
 };
