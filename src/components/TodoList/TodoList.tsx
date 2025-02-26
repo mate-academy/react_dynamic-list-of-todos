@@ -1,100 +1,94 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Todo } from '../../types/Todo';
+import { TodoModal } from '../TodoModal';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export const TodoList: React.FC<{ todos: Todo[] }> = ({ todos }) => {
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  // Функція для відкриття модалки
+  const showModal = (todoId: number) => {
+    const todo = todos.find(t => t.id === todoId);
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+    if (todo) {
+      setSelectedTodo(todo);
+    }
+  };
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  // Функція для закриття модалки
+  const closeModal = () => {
+    setSelectedTodo(null);
+  };
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+  return (
+    <>
+      <table className="table is-narrow is-fullwidth">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>
+              <span className="icon">
+                <i className="fas fa-check" />
+              </span>
+            </th>
+            <th>Title</th>
+            <th> </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {todos.length === 0 ? (
+            <tr>
+              <td colSpan={4}>Немає доступних тудушок</td>
+            </tr>
+          ) : (
+            todos.map(todo => (
+              <tr key={todo.id} data-cy="todo">
+                <td>{todo.id}</td>
+                <td>
+                  {todo.completed ? (
+                    <span
+                      className="icon has-text-success"
+                      data-cy="iconCompleted"
+                    >
+                      <i className="fas fa-check-circle" />
+                    </span>
+                  ) : (
+                    <span className="icon has-text-grey">
+                      <i className="fas fa-circle" />
+                    </span>
+                  )}
+                </td>
+
+                <td>{todo.title}</td>
+                <td>
+                  {selectedTodo && selectedTodo.id === todo.id ? (
+                    <button
+                      type="button"
+                      data-cy="selectButton"
+                      onClick={closeModal}
+                    >
+                      <i className="fas fa-eye-slash" /> Hide
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      data-cy="selectButton"
+                      onClick={() => showModal(todo.id)}
+                    >
+                      <i className="fas fa-eye" /> Show
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {/* Відображаємо модалку, якщо вибрана тудушка */}
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} closeModal={closeModal} />
+      )}
+    </>
+  );
+};
