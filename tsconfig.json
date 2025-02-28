@@ -5,6 +5,11 @@
   ],
   "compilerOptions": {
     "sourceMap": false,
-    "types": ["node", "cypress"]
+    "types": ["node", "cypress", "react", "react-dom"],  // Додаємо типи для React
+    "jsx": "react",  // Вказуємо, що будемо використовувати JSX
+    "esModuleInterop": true,  // Додаємо підтримку імпорту через default
+    "lib": ["ES2015", "DOM"],  // Підключаємо бібліотеки для ES2015 та DOM
+    "strict": true,  // Увімкнення строгого режиму
+    "skipLibCheck": true  // Пропускаємо перевірку типів у бібліотеках
   }
 }
