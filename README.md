@@ -4,7 +4,7 @@ The goal of this task is to teach you:
 - how to work with a not detailed task description;
 - to learn the existing code before you start;
 - to understand tests and why they fail;
-- to try the working page and implement the same behaviour;
+- to try the working page and implement the same behavior;
 
 > Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
 
