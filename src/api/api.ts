@@ -1,5 +1,5 @@
-import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { Todo } from '../types/Todo';
+import { User } from '../types/User';
 
 // eslint-disable-next-line operator-linebreak
 const BASE_URL =
@@ -18,9 +18,18 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see how the loader works
-  return wait(300)
+  return wait(500)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Server data was not loaded...');
+      }
+
+      return res.json() as Promise<T>;
+    })
+    .catch(err => {
+      throw new Error(`Error: ${err}`);
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
