@@ -1,14 +1,27 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import classNames from 'classnames';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { fetchTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -20,9 +33,9 @@ export const App: React.FC = () => {
               <TodoFilter />
             </div>
 
-            <div className="block">
-              <Loader />
-              <TodoList />
+            <div className={classNames('block', { 'is-loading': isLoading })}>
+              {isLoading && <Loader />}
+              <TodoList todos={todos} />
             </div>
           </div>
         </div>
