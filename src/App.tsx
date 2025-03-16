@@ -81,7 +81,7 @@ export const App: React.FC = () => {
               {!loading && filterTodos.length > 0 && (
                 <TodoList
                   todos={filterTodos}
-                  selectedTodo={selectedTodo}
+                  selectedTodoId={selectedTodo?.id ?? null}
                   onShowModal={handleShowModal}
                 />
               )}
