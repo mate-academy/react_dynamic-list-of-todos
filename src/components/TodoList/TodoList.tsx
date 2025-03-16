@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   onShowModal: (todo: Todo) => void;
-  selectedTodo: Todo | null;
+  selectedTodoId: number | null;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onShowModal,
-  selectedTodo,
+  selectedTodoId,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -54,7 +54,7 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onShowModal(todo)}
               >
                 <span className="icon">
-                  {selectedTodo?.id === todo.id ? (
+                  {selectedTodoId === todo.id ? (
                     <i className="far fa-eye-slash" data-cy="iconHide" />
                   ) : (
                     <i className="far fa-eye" data-cy="iconShow" />
