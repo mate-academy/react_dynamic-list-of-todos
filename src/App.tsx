@@ -13,13 +13,15 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Todo | undefined>(undefined);
   const [filter, setFilter] = useState<string>('all');
   const [filterTitle, setFilterTitle] = useState('');
 
   useEffect(() => {
     const delayTimer = setTimeout(() => setLoading(true), 200);
+
+    setLoading(true);
 
     getTodos()
       .then(response => {

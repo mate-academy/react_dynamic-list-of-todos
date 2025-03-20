@@ -11,15 +11,20 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ selected, setSelected }) => {
   const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(true); // set loading to true immediately
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true); // show the loader immediately
+    setLoading(true);
 
     getUser(selected.userId)
-      .then(setUser)
+      .then(response => {
+        if (response) {
+          setUser(response);
+          setLoading(false);
+        }
+      })
       .finally(() => {
-        setLoading(false); // hide the loader after fetching data
+        setTimeout(() => setLoading(false), 500);
       });
   }, [selected]);
 
