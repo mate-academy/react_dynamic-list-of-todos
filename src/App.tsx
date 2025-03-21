@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
