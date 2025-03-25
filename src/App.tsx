@@ -36,7 +36,7 @@ export const App: React.FC = () => {
   ) => {
     let filteredTodos = [...todosList];
 
-    if (query) {
+    if (queryToFilter) {
       filteredTodos = filteredTodos.filter(todo =>
         todo.title.toLowerCase().includes(queryToFilter.toLowerCase().trim()),
       );
