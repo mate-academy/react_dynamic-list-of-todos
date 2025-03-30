@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  activeTodo: Todo | null;
+  activeTodo?: Todo;
   setTodo: (todo: Todo) => void;
 };
 
