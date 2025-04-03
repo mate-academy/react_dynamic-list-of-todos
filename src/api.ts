@@ -20,9 +20,24 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
+    .catch(() => {
+      throw Error('An error ocurred');
+    })
     .then(res => res.json());
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
+
+export const getTodo = (id: number): Promise<Todo | null> => {
+  return getTodos().then(todos => {
+    const todo = todos.find(t => t.id === id);
+
+    if (!todo) {
+      return null;
+    }
+
+    return todo as Todo;
+  });
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
