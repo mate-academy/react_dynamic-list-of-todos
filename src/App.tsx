@@ -55,7 +55,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setSelectedTodo(null);
     setUserDetails(null);
   };
@@ -113,7 +113,7 @@ export const App: React.FC = () => {
           todo={selectedTodo}
           user={userDetails}
           isLoading={loading}
-          onClose={closeModal}
+          onClose={handleCloseModal}
         />
       )}
     </>
