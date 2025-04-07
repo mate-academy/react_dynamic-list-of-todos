@@ -20,18 +20,21 @@ export const App: React.FC = () => {
   const [filterQuery, setFilterQuery] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/indent
   const [filterS, setFilterS] = useState<'all' | 'completed' | 'active'>('all');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const fetchedTodos = await getTodos();
 
         setTodos(fetchedTodos);
         setFilteredTodos(fetchedTodos);
-      } catch (error) {
+      } catch (err) {
         // eslint-disable-next-line no-console
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', err);
+        setError('Failed to fetch todos. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -42,12 +45,14 @@ export const App: React.FC = () => {
 
   const handleShowTodo = async (todo: Todo) => {
     setLoading(true);
+    setError(null);
     try {
       const user = await getUser(todo.userId);
 
       setSelectedTodo(todo);
       setUserDetails(user);
-    } catch (error) {
+    } catch (err) {
+      setError('Failed to fetch user data. Please try again later.');
       // eslint-disable-next-line no-console
       console.error('Error fetching user data:', error);
     } finally {
@@ -88,6 +93,8 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
+
+            {error && <div className="notification is-danger">{error}</div>}
 
             <div className="block">
               <TodoFilter
