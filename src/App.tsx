@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [todoData, setTodoData] = useState<Todo[]>([]);
+  const [todoData, setTodoData] = useState<Todo[] | null>(null);
   const [preparedData, setPreparedData] = useState<Todo[]>([]);
   const [selectedId, setSelectedId] = useState(0);
   // const [selectedUserId, setSelectedUserId] = useState(0);
@@ -50,7 +50,7 @@ export const App: React.FC = () => {
                   <div className="message-body">{errorMessage}</div>
                 </article>
               )}
-              {loading && !errorMessage && preparedData.length > 0 ? (
+              {loading && !errorMessage ? (
                 <Loader />
               ) : (
                 <TodoList
