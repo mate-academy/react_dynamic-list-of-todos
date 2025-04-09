@@ -13,10 +13,8 @@ export const TodoFilter: React.FC<Props> = ({ todoData, setPreparedData }) => {
   const [appliedQuery, setAppliedQuery] = useState('');
   const [filteredBy, setFilteredBy] = useState('all');
 
-  const applyQuery = useCallback(
-    debounce((value: string) => setAppliedQuery(value), 200),
-    [],
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const applyQuery = useCallback(debounce(setAppliedQuery, 200), []);
 
   const handleChange = (changeEvent: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(changeEvent.target.value);
