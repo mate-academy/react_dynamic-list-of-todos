@@ -26,7 +26,7 @@ export const App: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [todoData]);
 
   return (
     <>
