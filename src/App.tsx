@@ -13,15 +13,16 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [todoData, setTodoData] = useState<Todo[] | null>(null);
-  const [preparedData, setPreparedData] = useState<Todo[] | null>(todoData);
+  const [preparedData, setPreparedData] = useState<Todo[] | null>(null);
   const [selectedId, setSelectedId] = useState(0);
   const [selectedUserId, setSelectedUserId] = useState(0);
-  const [errorMessage, setErrorMeddage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTodos()
       .then(setTodoData)
-      .catch(error => setErrorMeddage(error.message))
+      .then(() => setPreparedData(todoData))
+      .catch(error => setErrorMessage(error.message))
       .finally(() => {
         setLoading(false);
       });
@@ -42,9 +43,14 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!errorMessage}
-              {loading ? (
-                <Loader />
+              {errorMessage}
+              {loading && !errorMessage ? (
+                <>
+                  <Loader />
+                  <article className="message is-danger">
+                    <div className="message-body">{errorMessage}</div>
+                  </article>
+                </>
               ) : (
                 <TodoList
                   todoData={preparedData || []}
