@@ -5,7 +5,7 @@ import { debounce } from 'lodash';
 
 type Props = {
   todoData: Todo[] | null;
-  setPreparedData: React.Dispatch<React.SetStateAction<Todo[] | null>>;
+  setPreparedData: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
 export const TodoFilter: React.FC<Props> = ({ todoData, setPreparedData }) => {

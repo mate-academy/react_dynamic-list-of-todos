@@ -12,21 +12,23 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [todoData, setTodoData] = useState<Todo[] | null>(null);
-  const [preparedData, setPreparedData] = useState<Todo[] | null>(null);
+  const [todoData, setTodoData] = useState<Todo[]>([]);
+  const [preparedData, setPreparedData] = useState<Todo[]>([]);
   const [selectedId, setSelectedId] = useState(0);
-  const [selectedUserId, setSelectedUserId] = useState(0);
+  // const [selectedUserId, setSelectedUserId] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTodos()
-      .then(setTodoData)
-      .then(() => setPreparedData(todoData))
+      .then(fetchedTodos => {
+        setTodoData(fetchedTodos);
+        setPreparedData(fetchedTodos);
+      })
       .catch(error => setErrorMessage(error.message))
       .finally(() => {
         setLoading(false);
       });
-  }, [todoData]);
+  }, []);
 
   return (
     <>
@@ -43,20 +45,18 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {errorMessage}
-              {loading && !errorMessage ? (
-                <>
-                  <Loader />
-                  <article className="message is-danger">
-                    <div className="message-body">{errorMessage}</div>
-                  </article>
-                </>
+              {errorMessage && (
+                <article className="message is-danger">
+                  <div className="message-body">{errorMessage}</div>
+                </article>
+              )}
+              {loading && !errorMessage && preparedData.length > 0 ? (
+                <Loader />
               ) : (
                 <TodoList
                   todoData={preparedData || []}
                   selectedId={selectedId}
                   setSelectedId={setSelectedId}
-                  setSelectedUserId={setSelectedUserId}
                 />
               )}
             </div>
@@ -68,8 +68,6 @@ export const App: React.FC = () => {
           todoData={todoData}
           selectedId={selectedId}
           setSelectedId={setSelectedId}
-          selectedUserId={selectedUserId}
-          setSelectedUserId={setSelectedUserId}
         />
       )}
     </>

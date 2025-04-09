@@ -5,14 +5,12 @@ type Props = {
   todoData: Todo[];
   selectedId: number;
   setSelectedId: (newId: number) => void;
-  setSelectedUserId: (newId: number) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todoData,
   selectedId,
   setSelectedId,
-  setSelectedUserId,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -59,7 +57,6 @@ export const TodoList: React.FC<Props> = ({
               type="button"
               onClick={() => {
                 setSelectedId(todo.id);
-                setSelectedUserId(todo.userId);
               }}
             >
               <span className="icon">

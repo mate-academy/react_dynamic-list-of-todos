@@ -6,33 +6,30 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todoData: Todo[] | null;
   selectedId: number;
-  selectedUserId: number;
-  setSelectedId: (newId: number) => void;
-  setSelectedUserId: (newId: number) => void;
+  setSelectedId: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todoData,
   selectedId,
-  selectedUserId,
   setSelectedId,
-  setSelectedUserId,
 }) => {
   const [loading, setLoading] = useState(true);
-  // const [errorMessage, setErrorMeddage] = useState('');
-  const [currentTodo, setCurrentTodo] = useState<Todo | undefined>(undefined);
+  const [currentTodo, setCurrentTodo] = useState<Todo | undefined>(
+    todoData?.find(todo => todo.id === selectedId) || undefined,
+  );
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedUserId)
-      .then(setUser)
-      // .catch(error => setErrorMeddage(error.message))
-      .finally(() => {
-        setLoading(false);
-      });
-
-    setCurrentTodo(() => todoData?.find(todo => todo.id === selectedId));
-  }, [todoData, selectedUserId, selectedId]);
+    if (currentTodo?.userId) {
+      getUser(currentTodo.userId)
+        .then(setUser)
+        .catch(error => {
+          throw new Error(error.message);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [currentTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -56,9 +53,9 @@ export const TodoModal: React.FC<Props> = ({
               data-cy="modal-close"
               onClick={() => {
                 setSelectedId(0);
-                setSelectedUserId(0);
                 setUser(null);
                 setLoading(true);
+                setCurrentTodo(undefined);
               }}
             />
           </header>
