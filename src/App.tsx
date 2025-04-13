@@ -45,7 +45,6 @@ export const App: React.FC = () => {
               <TodoList
                 visibleTodos={visibleTodos}
                 setModalIsShown={setModalIsShown}
-                modalIsShown={modalIsShown}
                 gettingTodo={gettingTodo}
                 setUserId={setUserId}
                 setGettingTodos={setGettingTodos}
