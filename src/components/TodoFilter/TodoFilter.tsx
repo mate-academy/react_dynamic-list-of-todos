@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({
     }
 
     setVisibleTodos(filtered);
-  }, [option, query, startingTodos]);
+  }, [option, query, startingTodos, setVisibleTodos]);
 
   return (
     <form
