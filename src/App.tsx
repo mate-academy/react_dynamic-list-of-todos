@@ -84,7 +84,7 @@ export const App: React.FC = () => {
       {currentTodo && (
         <TodoModal
           todo={currentTodo}
-          onClick={(td: undefined) => setCurrentTodo(td)}
+          onClick={() => setCurrentTodo(undefined)}
         />
       )}
     </>

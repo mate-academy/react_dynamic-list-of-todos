@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo;
-  onClick: (td: undefined) => void;
+  onClick: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
@@ -17,7 +17,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
     getUser(todo.userId)
       .then(resp => setUser(resp))
       .finally(() => setLoading(false));
-  });
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -41,7 +41,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onClick(undefined);
+                onClick();
               }}
             />
           </header>
