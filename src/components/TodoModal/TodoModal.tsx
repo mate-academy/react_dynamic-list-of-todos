@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -13,9 +13,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClick }) => {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
 
-  getUser(todo.userId)
-    .then(resp => setUser(resp))
-    .finally(() => setLoading(false));
+  useEffect(() => {
+    getUser(todo.userId)
+      .then(resp => setUser(resp))
+      .finally(() => setLoading(false));
+  });
 
   return (
     <div className="modal is-active" data-cy="modal">

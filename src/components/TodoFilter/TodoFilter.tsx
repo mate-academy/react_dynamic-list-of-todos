@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const TodoFilter: React.FC<Props> = ({ onChange }) => {
-  const [query, setQuery] = useState<Filter>({ status: '', query: '' });
+  const [query, setQuery] = useState<Filter>({ status: 'all', query: '' });
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery({ ...query, query: event.target.value });
