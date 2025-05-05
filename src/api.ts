@@ -1,28 +1,15 @@
-import { Todo } from './types/Todo';
-import { User } from './types/User';
+import { Todo } from "./types/Todo";
+import { User } from "./types/User";
 
-// eslint-disable-next-line operator-linebreak
-const BASE_URL =
-  'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
+const TODOS_API_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json';
+const USERS_API_URL = 'https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/';
 
-// This function creates a promise
-// that is resolved after a given delay
-function wait(delay: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
-}
+export const getTodos = async (): Promise<Todo[]> => {
+  const response = await fetch(TODOS_API_URL);
+  return response.json();
+};
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
-
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
-}
-
-export const getTodos = () => get<Todo[]>('/todos');
-
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUserDetails = async (userId: number): Promise<User> => {
+  const response = await fetch(`${USERS_API_URL}${userId}.json`);
+  return response.json();
+};
