@@ -8,7 +8,6 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -16,7 +15,6 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalLoading, setIsModalLoading] = useState(false);
 
@@ -25,15 +23,12 @@ export const App: React.FC = () => {
   };
 
   const openModal = async (todo: Todo) => {
-    setIsModalLoading(true); // Ativa o carregamento no modal
-    setLoading(true);
-    setSelectedTodo(todo); // Define o todo selecionado
-    setIsModalOpen(true); // Abre o modal
+    setIsModalLoading(true);
+    setSelectedTodo(todo);
+    setIsModalOpen(true);
 
-    // Aguarda 3 segundos (simula o carregamento)
-    await wait(1000);
-
-    setLoading(false); // Após o tempo de espera, desativa o carregamento
+    await wait(3000); // agora espera de verdade
+    setIsModalLoading(false);
   };
 
   const closeModal = () => {
@@ -102,8 +97,12 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {isModalLoading && selectedTodo && (
-        <TodoModal todo={selectedTodo} loader={loading} onClose={closeModal} />
+      {isModalOpen && selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          loader={isModalLoading}
+          onClose={closeModal}
+        />
       )}
     </>
   );
