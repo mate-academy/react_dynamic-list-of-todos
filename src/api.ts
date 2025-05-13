@@ -1,3 +1,4 @@
+import { CompletedStatus } from './types/Status';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
@@ -23,6 +24,23 @@ function get<T>(url: string): Promise<T> {
     .then(res => res.json());
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+// export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = (status: CompletedStatus): Promise<Todo[]> => {
+  return get<Todo[]>('/todos').then(res => {
+    switch (status) {
+      case CompletedStatus.all:
+        return res;
+
+      case CompletedStatus.active:
+        return res.filter(todo => !todo.completed);
+
+      case CompletedStatus.completed:
+        return res.filter(todo => todo.completed);
+
+      default:
+        return [];
+    }
+  });
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
