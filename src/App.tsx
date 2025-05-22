@@ -1,14 +1,16 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+import { TodoState } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [styleFilter, setStyleFilter] = useState<TodoState>(TodoState.All);
+  const [inputSearch, setInputSearch] = useState('');
+
   return (
     <>
       <div className="section">
@@ -17,18 +19,19 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                styleFilter={styleFilter}
+                setStyleFilter={setStyleFilter}
+                setInputSearch={setInputSearch}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              <TodoList styleFilter={styleFilter} inputSearch={inputSearch} />
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal />
     </>
   );
 };

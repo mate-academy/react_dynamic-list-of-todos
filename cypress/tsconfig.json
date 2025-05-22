@@ -1,6 +1,13 @@
 {
   "extends": "@mate-academy/students-ts-config",
   "compilerOptions": {
-    "sourceMap": false
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx", // or "react" depending on your setup
+    "module": "esnext",
+    "target": "es6",
+    "strict": true,
+    "moduleResolution": "node"
   }
 }
