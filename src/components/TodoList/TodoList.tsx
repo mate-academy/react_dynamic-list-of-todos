@@ -1,6 +1,15 @@
-import React from 'react';
+import { Todo } from '../../types/Todo';
+import { TodoRow } from '../TodoRow';
 
-export const TodoList: React.FC = () => (
+type Props = {
+  todos: Todo[];
+  showTodoModal: (
+    todo: Todo,
+    setButtonPressed: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => void;
+};
+
+export const TodoList: React.FC<Props> = ({ todos, showTodoModal }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,7 +25,11 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
+      {todos.map(todo => (
+        <TodoRow todo={todo} showTodoModal={showTodoModal} key={todo.id} />
+      ))}
+
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -30,6 +43,7 @@ export const TodoList: React.FC = () => (
           </button>
         </td>
       </tr>
+
       <tr data-cy="todo" className="has-background-info-light">
         <td className="is-vcentered">2</td>
         <td className="is-vcentered" />
@@ -94,7 +108,7 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
     </tbody>
   </table>
 );
