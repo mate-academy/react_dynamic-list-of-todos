@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: List.ALL }}>
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {searchFilter && (
             <button
               data-cy="clearSearchButton"

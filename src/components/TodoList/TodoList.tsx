@@ -1,7 +1,6 @@
 import { React } from 'react';
 import { Todo } from '../../types/Todo';
 
-
 type Props = {
   todos: Todo[];
   onSelect: (todo: Todo | null) => void;

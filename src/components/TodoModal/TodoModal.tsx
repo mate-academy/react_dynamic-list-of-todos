@@ -16,13 +16,18 @@ export const TodoModal: React.FC<Props> = ({
   isLoading,
   onClose,
 }) => {
+  // Якщо не завантажується і немає вибраного туду — не показуємо модалку
+  if (!isLoading && !selectedTodo) {
+    return null;
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
       {isLoading ? (
         <Loader />
-      ) : (
+      ) : selectedTodo ? (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -32,11 +37,11 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
+              aria-label="close"
               onClick={onClose}
             />
           </header>
@@ -47,12 +52,11 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={
                   selectedTodo.completed
-                    ? `has-text-danger`
-                    : `has-text-success`
+                    ? 'has-text-danger'
+                    : 'has-text-success'
                 }
               >
                 {selectedTodo.completed ? 'Done' : 'Planned'}
@@ -67,6 +71,21 @@ export const TodoModal: React.FC<Props> = ({
               )}
             </p>
           </div>
+        </div>
+      ) : (
+        // Це запасний варіант, якщо selectedTodo з якоїсь причини все ж null, але isLoading false
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div className="modal-card-title">No todo selected</div>
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              aria-label="close"
+              onClick={onClose}
+            />
+          </header>
+          <div className="modal-card-body">Please select a todo.</div>
         </div>
       )}
     </div>
