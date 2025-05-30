@@ -6,7 +6,7 @@ import { User } from '../../types/User';
 type Props = {
   todo: Todo | null;
   loading: boolean;
-  user: User;
+  user: User | null;
   onClose: () => void;
 };
 
@@ -53,7 +53,7 @@ export const TodoModal: React.FC<Props> = ({
               )}
               {' by '}
 
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

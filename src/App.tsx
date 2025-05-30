@@ -105,7 +105,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   onTodoSelect={handleTodoSelect}
-                  selectedTodoId={selectedTodo?.userId}
+                  selectedTodoId={selectedTodo?.id}
                 />
               )}
             </div>
@@ -113,7 +113,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedUser && (
+      {selectedTodo && (
         <TodoModal
           loading={loading}
           todo={selectedTodo}
