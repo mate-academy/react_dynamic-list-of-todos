@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
-  filter: "all" | "active" | "completed";
-  setFilter: (value: "all" | "active" | "completed") => void;
-  search: string
-  setSearch: (e: string) => void
+  filter: 'all' | 'active' | 'completed';
+  setFilter: (value: 'all' | 'active' | 'completed') => void;
+  search: string;
+  setSearch: (e: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ filter, setFilter, search, setSearch }) => {
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  setFilter,
+  search,
+  setSearch,
+}) => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
@@ -17,8 +22,9 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter, search, setSear
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilter(e.target.value as Props["filter"]);
+    setFilter(e.target.value as Props['filter']);
   };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -50,14 +56,16 @@ export const TodoFilter: React.FC<Props> = ({ filter, setFilter, search, setSear
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            {search && <button
+          {search && (
+            <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={handleSearchDelete}
-            />}
+            />
+          )}
         </span>
       </p>
     </form>
   );
-}
+};

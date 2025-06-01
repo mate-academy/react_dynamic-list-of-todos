@@ -46,12 +46,14 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
         </thead>
 
         <tbody>
-          {todos.map((todo) => (
+          {todos.map(todo => (
             <tr
               data-cy="todo"
               key={todo.id}
-              className={classNames(
-                {'has-background-info-light': selectedTodo?.id === todo.id})}>
+              className={classNames({
+                'has-background-info-light': selectedTodo?.id === todo.id,
+              })}
+            >
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
@@ -78,7 +80,13 @@ export const TodoList: React.FC<Props> = ({ todos }) => {
                   onClick={() => handleModalLoading(todo)}
                 >
                   <span className="icon">
-                    <i className={selectedTodo?.id === todo.id ? 'fas fa-eye-slash' : 'far fa-eye'} />
+                    <i
+                      className={
+                        selectedTodo?.id === todo.id
+                          ? 'fas fa-eye-slash'
+                          : 'far fa-eye'
+                      }
+                    />
                   </span>
                 </button>
               </td>
