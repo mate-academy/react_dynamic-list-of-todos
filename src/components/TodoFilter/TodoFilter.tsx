@@ -1,8 +1,15 @@
-export const TodoFilter = () => (
+type Props = {
+  setTodoFilter: (filter: string) => void;
+};
+
+export const TodoFilter = ({ setTodoFilter }: Props) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={e => setTodoFilter(e.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
