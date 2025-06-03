@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
+import { User } from '../../types/User';
 
 type Props = {
   todo: Todo | null;
@@ -9,8 +11,20 @@ type Props = {
 
 export const TodoModal = ({ todo, setIsTodoModal }: Props) => {
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User>();
 
-  setTimeout(() => setLoading(false), 200);
+  useEffect(() => {
+    fetch('api/users.json')
+      .then(res => res.json())
+      .then(usersFromServer => {
+        const thisUser = usersFromServer.find(
+          (u: User) => u.id === todo?.userId,
+        );
+
+        setUser(thisUser);
+      })
+      .finally(() => setTimeout(() => setLoading(false), 200));
+  }, [todo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -44,11 +58,17 @@ export const TodoModal = ({ todo, setIsTodoModal }: Props) => {
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={classNames(
+                  todo?.completed ? 'has-text-success' : 'has-text-danger',
+                )}
+              >
+                {todo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

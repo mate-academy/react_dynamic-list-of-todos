@@ -13,27 +13,34 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [todoFilter, setTodoFilter] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [isTodoModal, setIsTodoModal] = useState(false);
   const [chosenTodo, setChosenTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     fetch('api/todos.json')
-      .then(response => response.json())
-      .then((todosFromServer: Todo[]) => {
+      .then(res => res.json())
+      .then(todosFromServer => {
+        let filteredTodos = todosFromServer;
+
         if (todoFilter === 'active') {
-          setTodos(todosFromServer.filter(todo => !todo.completed));
+          filteredTodos = filteredTodos.filter((todo: Todo) => !todo.completed);
+        } else if (todoFilter === 'completed') {
+          filteredTodos = filteredTodos.filter((todo: Todo) => todo.completed);
         }
 
-        if (todoFilter === 'completed') {
-          setTodos(todosFromServer.filter(todo => todo.completed));
+        if (inputValue !== '') {
+          const value = inputValue.toLowerCase();
+
+          filteredTodos = filteredTodos.filter((todo: Todo) =>
+            todo.title.toLowerCase().includes(value),
+          );
         }
 
-        if (todoFilter === '') {
-          setTodos(todosFromServer);
-        }
+        setTodos(filteredTodos);
       })
       .finally(() => setTimeout(() => setIsLoading(false), 200));
-  }, [todoFilter]);
+  }, [todoFilter, inputValue]);
 
   return (
     <>
@@ -43,7 +50,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter setTodoFilter={setTodoFilter} />
+              <TodoFilter
+                setTodoFilter={setTodoFilter}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+              />
             </div>
 
             <div className="block">
