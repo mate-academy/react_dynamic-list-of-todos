@@ -1,8 +1,21 @@
-export const TodoFilter = () => (
+type Props = {
+  setTodoFilter: (filter: string) => void;
+  inputValue: string;
+  setInputValue: (s: string) => void;
+};
+
+export const TodoFilter = ({
+  setTodoFilter,
+  inputValue,
+  setInputValue,
+}: Props) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={e => setTodoFilter(e.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,6 +29,10 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={inputValue}
+        onChange={e => {
+          setInputValue(e.target.value);
+        }}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -23,7 +40,14 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {inputValue !== '' && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => setInputValue('')}
+          />
+        )}
       </span>
     </p>
   </form>
