@@ -1,43 +1,36 @@
-import React from 'react';
-import { Loader } from '../Loader';
+const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+const [selectedUser, setSelectedUser] = useState<User | null>(null);
+const [isUserLoading, setIsUserLoading] = useState(false);
 
-export const TodoModal: React.FC = () => {
-  return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+const handleShow = (todo: Todo) => {
+  setSelectedTodo(todo);
+  setIsUserLoading(true);
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  getUser(todo.userId)
+    .then(setSelectedUser)
+    .finally(() => setIsUserLoading(false));
 };
+
+{selectedTodo && (
+  <TodoModal
+    todo={selectedTodo}
+    user={selectedUser}
+    onClose={() => setSelectedTodo(null)}
+    isLoading={isUserLoading}
+  />
+)}
+
+const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'active'>('all');
+const [searchQuery, setSearchQuery] = useState('');
+
+const filteredTodos = todos
+  .filter(todo => {
+    if (statusFilter === 'completed') return todo.completed;
+    if (statusFilter === 'active') return !todo.completed;
+    return true;
+  })
+  .filter(todo => todo.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  {searchQuery && (
+    <button onClick={() => setSearchQuery('')}>x</button>
+  )}
