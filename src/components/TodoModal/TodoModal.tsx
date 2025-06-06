@@ -6,16 +6,16 @@ import { User } from '../../types/User';
 import cn from 'classnames';
 
 type Props = {
-  onModalVisible: (arg: boolean) => void;
+  onTodoSelect: (todo: Todo | null) => void;
   todo: Todo | null;
 };
 
-export const TodoModal: React.FC<Props> = ({ onModalVisible, todo }) => {
+export const TodoModal: React.FC<Props> = ({ onTodoSelect, todo }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (todo) {
-      getUser(todo.userId).then(user => setSelectedUser(user));
+      getUser(todo.userId).then(setSelectedUser);
     }
   }, [todo]);
 
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({ onModalVisible, todo }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onModalVisible(false)}
+              onClick={() => onTodoSelect(null)}
             />
           </header>
 

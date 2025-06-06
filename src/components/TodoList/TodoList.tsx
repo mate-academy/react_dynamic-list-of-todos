@@ -3,21 +3,18 @@ import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 type Props = {
-  onModalVisible: (arg: boolean) => void;
-  isModalVisible: boolean;
+  selectedTodo: Todo | null;
   todos: Todo[];
   onTodoSelect: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
-  onModalVisible,
   todos,
-  isModalVisible,
+  selectedTodo,
   onTodoSelect,
 }) => {
   const handleModal = (todo: Todo) => {
     onTodoSelect(todo);
-    onModalVisible(true);
   };
 
   return (
@@ -37,11 +34,13 @@ export const TodoList: React.FC<Props> = ({
 
       <tbody>
         {todos.map(todo => {
+          const isTodoSelected = todo.id === selectedTodo?.id;
+
           return (
             <tr
               key={todo.id}
               data-cy="todo"
-              className={cn({ 'has-background-info-light': isModalVisible })}
+              className={cn({ 'has-background-info-light': isTodoSelected })}
             >
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
@@ -71,8 +70,8 @@ export const TodoList: React.FC<Props> = ({
                   <span className="icon">
                     <i
                       className={cn('far', {
-                        'fa-eye': !isModalVisible,
-                        'fa-eye-slash': isModalVisible,
+                        'fa-eye': !isTodoSelected,
+                        'fa-eye-slash': isTodoSelected,
                       })}
                     />
                   </span>

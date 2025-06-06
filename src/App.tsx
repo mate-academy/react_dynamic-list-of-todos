@@ -13,16 +13,16 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getTodos().then(todosFromServ => {
-      setTodos(todosFromServ);
-      setFilteredTodos(todosFromServ);
-      setLoading(false);
-    });
+    getTodos()
+      .then(todosFromServ => {
+        setTodos(todosFromServ);
+        setFilteredTodos(todosFromServ);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -33,17 +33,16 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} onSetTodos={setFilteredTodos} />
+              <TodoFilter todos={todos} onSetFilteredTodos={setFilteredTodos} />
             </div>
 
             <div className="block">
-              {loading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
                 <TodoList
-                  onModalVisible={setIsModalVisible}
-                  isModalVisible={isModalVisible}
                   todos={filteredTodos}
+                  selectedTodo={selectedTodo}
                   onTodoSelect={setSelectedTodo}
                 />
               )}
@@ -52,8 +51,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isModalVisible && (
-        <TodoModal onModalVisible={setIsModalVisible} todo={selectedTodo} />
+      {selectedTodo && (
+        <TodoModal onTodoSelect={setSelectedTodo} todo={selectedTodo} />
       )}
     </>
   );

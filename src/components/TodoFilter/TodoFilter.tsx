@@ -3,10 +3,10 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onSetTodos: (todos: Todo[]) => void;
+  onSetFilteredTodos: (todos: Todo[]) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, onSetTodos }) => {
+export const TodoFilter: React.FC<Props> = ({ todos, onSetFilteredTodos }) => {
   const [filter, setFilter] = useState('all');
   const [query, setQuery] = useState('');
 
@@ -32,8 +32,8 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSetTodos }) => {
         break;
     }
 
-    onSetTodos(filtered);
-  }, [filter, todos, onSetTodos, query]);
+    onSetFilteredTodos(filtered);
+  }, [filter, todos, onSetFilteredTodos, query]);
 
   return (
     <form className="field has-addons">
