@@ -8,7 +8,7 @@ type Props = {
   hasClicked: boolean;
   setHasClicked: React.Dispatch<React.SetStateAction<boolean>>;
   setUser: (user: User) => void;
-  setChoosed: (todo: Todo) => void;
+  setChoosedItem: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -16,7 +16,7 @@ export const TodoList: React.FC<Props> = ({
   hasClicked,
   setHasClicked,
   setUser,
-  setChoosed,
+  setChoosedItem,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -48,9 +48,10 @@ export const TodoList: React.FC<Props> = ({
                 <td className="is-vcentered"></td>
               )}
               <td className="is-vcentered is-expanded">
-                <p className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                <p
+                  className={
+                    todo.completed ? 'has-text-success' : 'has-text-danger'
+                  }
                 >
                   {todo.title}
                 </p>
@@ -62,7 +63,7 @@ export const TodoList: React.FC<Props> = ({
                   type="button"
                   onClick={() => {
                     setHasClicked((prev: boolean) => !prev);
-                    setChoosed(todo);
+                    setChoosedItem(todo);
                     getUser(todo.userId).then(setUser);
                   }}
                 >

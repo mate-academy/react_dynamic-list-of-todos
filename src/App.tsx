@@ -25,7 +25,7 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     return [...todos].filter(todo =>
-      todo.title.toLowerCase().includes(query.toLowerCase())
+      todo.title.toLowerCase().includes(query.toLowerCase()),
     );
   }, [todos, query]);
 
@@ -65,8 +65,6 @@ export const App: React.FC = () => {
         setTodos(filteredTodos);
       });
     }
-
-    fetchData().then(console.log);
   }, [selectedItem]);
 
   return (
@@ -91,7 +89,7 @@ export const App: React.FC = () => {
                   hasClicked={hasClicked}
                   setHasClicked={setHasClicked}
                   setUser={setUser}
-                  setChoosed={setChoosedItem}
+                  setChoosedItem={setChoosedItem}
                 />
               ) : (
                 <Loader />
