@@ -4,3 +4,9 @@ export interface Todo {
   completed: boolean;
   userId: number;
 }
+
+export enum TodosFilterChoice {
+  all = 'all',
+  active = 'active',
+  completed = 'completed',
+}
