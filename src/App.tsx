@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[] | null>(null);
   const [selectedTodosFilter, setSelectedTodosFilter] =
     useState<TodosFilterChoice>(TodosFilterChoice.all);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[] | null>(null);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 

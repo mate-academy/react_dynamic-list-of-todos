@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
 type TodoListProps = {
-  todos: Todo[] | null;
+  todos: Todo[];
   setTodo: React.Dispatch<React.SetStateAction<Todo | null>>;
   selectedTodo: Todo | null;
 };
@@ -28,7 +28,7 @@ export const TodoList: React.FC<TodoListProps> = ({
     </thead>
 
     <tbody>
-      {todos?.map(todo => (
+      {todos.map(todo => (
         <tr
           data-cy="todo"
           className={classNames({
@@ -39,11 +39,9 @@ export const TodoList: React.FC<TodoListProps> = ({
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
-              <td className="is-vcentered">
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              </td>
+              <span className="icon" data-cy="iconCompleted">
+                <i className="fas fa-check" />
+              </span>
             )}
           </td>
           <td className="is-vcentered is-expanded">
