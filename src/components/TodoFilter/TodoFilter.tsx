@@ -1,8 +1,28 @@
-export const TodoFilter = () => (
+import React from 'react';
+
+type Props = {
+  searchInput: string;
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear: () => void;
+  filterSelected: string;
+  onFilter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  searchInput,
+  onInputChange,
+  onClear,
+  filterSelected,
+  onFilter,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filterSelected}
+          onChange={onFilter}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,14 +36,22 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={searchInput}
+        onChange={onInputChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {searchInput && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={onClear}
+          />
+        )}
       </span>
     </p>
   </form>
