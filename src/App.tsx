@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,50 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { Filtered } from './types/Filetered';
+import { getTodos } from './api';
+
+function getFilteredTodos(
+  todos: Todo[],
+  selectedOption: Filtered,
+  query: string,
+) {
+  let filteredTodos = todos;
+
+  if (query) {
+    filteredTodos = filteredTodos.filter(todo =>
+      todo.title.toLowerCase().includes(query.toLowerCase().trim()),
+    );
+  }
+
+  switch (selectedOption) {
+    case Filtered.Active:
+      return filteredTodos.filter(todo => !todo.completed);
+    case Filtered.Completed:
+      return filteredTodos.filter(todo => todo.completed);
+
+    default:
+      return filteredTodos;
+  }
+}
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [selectedOption, setSelectedOption] = useState<Filtered>(Filtered.All);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const preparedTodos = getFilteredTodos(todos, selectedOption, query);
+
   return (
     <>
       <div className="section">
@@ -17,18 +59,34 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                handleSetOption={setSelectedOption}
+                selectedOption={selectedOption}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              {!isLoading && todos.length > 0 && (
+                <TodoList
+                  todos={preparedTodos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          setSelectedTodo={setSelectedTodo}
+          selectedTodo={selectedTodo}
+        />
+      )}
     </>
   );
 };
