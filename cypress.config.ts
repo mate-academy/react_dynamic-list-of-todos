@@ -1,4 +1,5 @@
-const { defineConfig } = require('cypress');
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { defineConfig } from 'cypress';
 
 module.exports = defineConfig({
   e2e: {
@@ -6,8 +7,8 @@ module.exports = defineConfig({
     specPattern: 'cypress/integration/**/*.spec.{js,ts,jsx,tsx}',
   },
   video: true,
-  viewportHeight: 1920,
-  viewportWidth: 1080,
+  viewportHeight: 1080,
+  viewportWidth: 1920,
   screenshotOnRunFailure: true,
   reporter: 'mochawesome',
   reporterOptions: {
