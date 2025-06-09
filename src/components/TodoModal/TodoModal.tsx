@@ -14,7 +14,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onCheck }) => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getUser(todo?.userId || 0)
+    getUser((todo && todo.userId) || 0)
       .then(setUser)
       .catch(() => new Error())
       .finally(() => setLoader(false));

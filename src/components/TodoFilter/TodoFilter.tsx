@@ -52,11 +52,11 @@ export const TodoFilter: React.FC<Props> = ({ onSelect, onHandle }) => {
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           {query.length > 0 && (
             <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={resetInput}
-          />
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={resetInput}
+            />
           )}
         </span>
       </p>
