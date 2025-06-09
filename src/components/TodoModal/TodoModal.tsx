@@ -32,7 +32,6 @@ export const TodoModal: React.FC<Props> = ({
   const onModalClose = () => {
     setIsModalShown(false);
     setSelectedTodo(null);
-    setIsUserLoading(false);
   };
 
   return (

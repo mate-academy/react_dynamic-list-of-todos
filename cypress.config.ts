@@ -1,4 +1,5 @@
-const { defineConfig } = require('cypress');
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { defineConfig } from 'cypress';
 
 module.exports = defineConfig({
   e2e: {
