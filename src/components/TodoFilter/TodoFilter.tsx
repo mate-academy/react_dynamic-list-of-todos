@@ -1,19 +1,4 @@
-import { debounce } from 'lodash';
-import { useCallback, useState } from 'react';
-
-// function debounce<T extends (...args: any[]) => void>(
-//   func: T,
-//   delay: number,
-// ): (...args: Parameters<T>) => void {
-//   let timer: ReturnType<typeof setTimeout>;
-
-//   return (...args: Parameters<T>) => {
-//     clearTimeout(timer);
-//     timer = setTimeout(() => {
-//       func(...args);
-//     }, delay);
-//   };
-// }
+import { useState } from 'react';
 
 type Props = {
   onSelect: (val: string) => void;
@@ -22,16 +7,15 @@ type Props = {
 
 export const TodoFilter: React.FC<Props> = ({ onSelect, onHandle }) => {
   const [query, setQuery] = useState('');
-  const applyQuery = useCallback(debounce(onHandle, 1000), [onHandle]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    applyQuery(event.target.value.toLowerCase().trim());
+    onHandle(event.target.value.toLowerCase().trim());
   };
 
   const resetInput = () => {
     setQuery('');
-    applyQuery('');
+    onHandle('');
   };
 
   return (
