@@ -1,12 +1,25 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { useUser } from '../../hooks/useUser';
 
-export const TodoModal: React.FC = () => {
+interface ToDoModalProps {
+  isLoading: boolean;
+  onClose: () => void;
+  selectedTodo: Todo;
+}
+
+export const TodoModal: React.FC<ToDoModalProps> = ({
+  selectedTodo,
+  onClose,
+  isLoading,
+}) => {
+  const userQuery = useUser(selectedTodo.userId);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {true ? (
+      {userQuery.isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,26 +28,37 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => onClose()}
+            />
           </header>
 
           <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+            <>
+              <p className="block" data-cy="modal-title">
+                {selectedTodo.title}
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
+              <p className="block" data-cy="modal-user">
+                {selectedTodo.completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
+                {' by '}
+                {userQuery.data && (
+                  <a href={`mailto:${userQuery.data.email}`}>
+                    {userQuery.data.name}
+                  </a>
+                )}
+              </p>
+            </>
           </div>
         </div>
       )}
