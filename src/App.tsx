@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -27,10 +27,6 @@ export const App: React.FC = () => {
     setStatus(statusFilter);
   };
 
-  const handleSelectTodo = (td: Todo) => {
-    setSelectedTodo(td);
-  };
-
   const filteredTodos = getFilteredTodos(todosQuery.data, { query, status });
 
   return (
@@ -56,7 +52,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  onSelect={handleSelectTodo}
+                  onSelect={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
               )}

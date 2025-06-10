@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
-import { Todo } from '../../types/Todo';
 const STATUS_VALUE_TEXT_MAPPING = {
   all: 'All',
   active: 'Active',
@@ -17,12 +16,7 @@ interface ToDoFilterProps {
   onFilter: (filterBy: StatusFilter) => void;
 }
 
-export const TodoFilter = ({
-  query,
-  setQuery,
-  status,
-  setStatus,
-}: ToDoFilterProps) => {
+export const TodoFilter = ({ query, setQuery, setStatus }: ToDoFilterProps) => {
   return (
     <form className="field has-addons">
       <p className="control">

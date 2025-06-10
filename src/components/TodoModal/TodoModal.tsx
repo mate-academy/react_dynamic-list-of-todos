@@ -12,7 +12,6 @@ interface ToDoModalProps {
 export const TodoModal: React.FC<ToDoModalProps> = ({
   selectedTodo,
   onClose,
-  isLoading,
 }) => {
   const userQuery = useUser(selectedTodo.userId);
 
