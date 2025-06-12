@@ -48,7 +48,7 @@ export const App: React.FC = () => {
       case 'completed':
         return todo.completed;
       default:
-        return todos;
+        return todo;
     }
   });
 
