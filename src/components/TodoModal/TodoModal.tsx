@@ -7,15 +7,11 @@ import type { Todo } from '../../types/Todo';
 //idk so it commits
 
 type ModalProps = {
-  id: string;
-  setModal: (item: string) => void;
   openedModal: Todo | null;
   setOpenedModal: (item: Todo | null) => void;
 };
 
 export const TodoModal: React.FC<ModalProps> = ({
-  id,
-  setModal,
   openedModal,
   setOpenedModal,
 }: ModalProps) => {
@@ -23,13 +19,13 @@ export const TodoModal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     const loadUser = async () => {
-      const userData = await getUser(Number(id));
+      const userData = await getUser(Number(openedModal?.userId));
 
       setUser(userData);
     };
 
     loadUser();
-  }, [id]);
+  }, [openedModal?.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -53,7 +49,6 @@ export const TodoModal: React.FC<ModalProps> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                setModal('');
                 setOpenedModal(null);
               }}
             />

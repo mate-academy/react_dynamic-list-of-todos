@@ -15,7 +15,6 @@ import { useState, useEffect } from 'react';
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filtered, setFiltered] = useState<Todo[]>([]);
-  const [modal, setModal] = useState<string>('');
   const [modalTodo, setModalTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ export const App: React.FC = () => {
               {filtered.length > 0 ? (
                 <TodoList
                   todos={filtered}
-                  setModal={setModal}
                   setModalTodo={setModalTodo}
                   modalTodo={modalTodo}
                 />
@@ -54,11 +52,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {modal.length === 0 ? null : (
+      {modalTodo === null ? null : (
         <TodoModal
           openedModal={modalTodo}
-          id={modal}
-          setModal={setModal}
           setOpenedModal={setModalTodo}
         />
       )}

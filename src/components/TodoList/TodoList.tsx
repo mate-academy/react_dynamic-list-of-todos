@@ -3,14 +3,12 @@ import type { Todo } from '../../types/Todo';
 
 type ListProps = {
   todos: Todo[];
-  setModal: (id: string) => void;
   setModalTodo: (id: Todo) => void;
   modalTodo: Todo | null;
 };
 
 export const TodoList: React.FC<ListProps> = ({
   todos,
-  setModal,
   setModalTodo,
   modalTodo,
 }: ListProps) => (
@@ -54,7 +52,6 @@ export const TodoList: React.FC<ListProps> = ({
               className="button"
               type="button"
               onClick={() => {
-                setModal(todo.userId.toString());
                 setModalTodo(todo);
               }}
             >
