@@ -4,26 +4,32 @@ import { getUser } from '../../api';
 import type { User } from '../../types/User';
 import type { Todo } from '../../types/Todo';
 
-type modalProps = {
+//idk so it commits
+
+type ModalProps = {
   id: string;
   setModal: (item: string) => void;
-  openedModal: Todo | null
-  setOpenedModal: (item: Todo | null) => void
+  openedModal: Todo | null;
+  setOpenedModal: (item: Todo | null) => void;
 };
 
-export const TodoModal: React.FC<modalProps> = ({ id, setModal, openedModal, setOpenedModal }: modalProps) => {
+export const TodoModal: React.FC<ModalProps> = ({
+  id,
+  setModal,
+  openedModal,
+  setOpenedModal,
+}: ModalProps) => {
   const [user, setUser] = React.useState<User | null>(null);
 
   useEffect(() => {
     const loadUser = async () => {
       const userData = await getUser(Number(id));
+
       setUser(userData);
     };
 
     loadUser();
   }, [id]);
-
-  console.log(openedModal)
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -42,7 +48,15 @@ export const TodoModal: React.FC<modalProps> = ({ id, setModal, openedModal, set
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" onClick={() => {setModal(''); setOpenedModal(null)}}/>
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => {
+                setModal('');
+                setOpenedModal(null);
+              }}
+            />
           </header>
 
           <div className="modal-card-body">
@@ -52,7 +66,11 @@ export const TodoModal: React.FC<modalProps> = ({ id, setModal, openedModal, set
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={`has-text-${openedModal?.completed === true ? 'success' : 'danger'}`}>{openedModal?.completed === true ? 'Done' : 'Planned'}</strong>
+              <strong
+                className={`has-text-${openedModal?.completed === true ? 'success' : 'danger'}`}
+              >
+                {openedModal?.completed === true ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

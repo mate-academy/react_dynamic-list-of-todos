@@ -10,19 +10,18 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import type { Todo } from './types/Todo';
 
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [filtered, setFiltered] = useState<Todo[]>([]);
-  const [modal, setModal] = useState<string>('')
-  const [modalTodo, setModalTodo] = useState<Todo | null>(null)
-
+  const [modal, setModal] = useState<string>('');
+  const [modalTodo, setModalTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     (async () => {
       const todosFromServer = await getTodos();
+
       setAllTodos(todosFromServer);
       setFiltered(todosFromServer);
     })();
@@ -40,8 +39,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {filtered.length > 0 ? (<TodoList todos={filtered} setModal={setModal} setModalTodo={setModalTodo} modalTodo={modalTodo}/>) : (
-                <Loader/>
+              {filtered.length > 0 ? (
+                <TodoList
+                  todos={filtered}
+                  setModal={setModal}
+                  setModalTodo={setModalTodo}
+                  modalTodo={modalTodo}
+                />
+              ) : (
+                <Loader />
               )}
             </div>
           </div>
@@ -49,9 +55,13 @@ export const App: React.FC = () => {
       </div>
 
       {modal.length === 0 ? null : (
-        <TodoModal openedModal={modalTodo} id={modal} setModal={setModal} setOpenedModal={setModalTodo}/>
+        <TodoModal
+          openedModal={modalTodo}
+          id={modal}
+          setModal={setModal}
+          setOpenedModal={setModalTodo}
+        />
       )}
-
     </>
   );
 };

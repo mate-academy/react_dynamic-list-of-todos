@@ -1,16 +1,16 @@
 import type { Todo } from '../../types/Todo';
 import { useState, useEffect } from 'react';
 
-type filterProps = {
+type FilterProps = {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-export const TodoFilter = ({ todos, setTodos }: filterProps) => {
+export const TodoFilter = ({ todos, setTodos }: FilterProps) => {
   const [status, setStatus] = useState('all');
   const [search, setSearch] = useState('');
 
-   useEffect(() => {
+  useEffect(() => {
     let filtered = todos;
 
     if (status === 'active') {
@@ -21,7 +21,7 @@ export const TodoFilter = ({ todos, setTodos }: filterProps) => {
 
     if (search.trim() !== '') {
       filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(search.toLowerCase())
+        todo.title.toLowerCase().includes(search.toLowerCase()),
       );
     }
 
@@ -29,13 +29,13 @@ export const TodoFilter = ({ todos, setTodos }: filterProps) => {
   }, [status, search, todos, setTodos]);
 
   return (
-    <form className="field has-addons" onSubmit={(e) => e.preventDefault()}>
+    <form className="field has-addons" onSubmit={e => e.preventDefault()}>
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={e => setStatus(e.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -51,7 +51,7 @@ export const TodoFilter = ({ todos, setTodos }: filterProps) => {
           className="input"
           placeholder="Search..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={e => setSearch(e.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
