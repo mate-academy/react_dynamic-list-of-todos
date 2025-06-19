@@ -1,30 +1,34 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+export const TodoFilter = ({
+  query,
+  onQueryChange,
+  onClearQuery,
+  status,
+  onStatusChange,
+}: {
+  query: string;
+  onQueryChange: (q: string) => void;
+  onClearQuery: () => void;
+  status: 'all' | 'completed' | 'active';
+  onStatusChange: (s: 'all' | 'completed' | 'active') => void;
+}) => (
+  <div>
+    <input
+      type="text"
+      placeholder="Search..."
+      value={query}
+      onChange={e => onQueryChange(e.target.value)}
+    />
+    {query && <button onClick={onClearQuery}>x</button>}
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
-
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
+    <select
+      value={status}
+      onChange={e =>
+        onStatusChange(e.target.value as 'all' | 'completed' | 'active')
+      }
+    >
+      <option value="all">All</option>
+      <option value="completed">Completed</option>
+      <option value="active">Active</option>
+    </select>
+  </div>
 );
