@@ -44,7 +44,7 @@ export const App: React.FC = () => {
         return !todo.completed;
       }
 
-      return todo;
+      return true;
     });
 
   return (

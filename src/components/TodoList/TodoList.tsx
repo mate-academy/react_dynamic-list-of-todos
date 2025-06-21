@@ -1,3 +1,4 @@
+import React from 'react';
 import { Todo } from '../../types/Todo';
 // import { todo } from 'node:test';
 
@@ -24,8 +25,8 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
 
       <tbody>
         {todos.map(todo => (
-          <>
-            <tr data-cy="todo" className="" key={todo.id}>
+          <React.Fragment key={todo.id}>
+            <tr data-cy="todo" className="">
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
@@ -56,7 +57,7 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => {
                 </button>
               </td>
             </tr>
-          </>
+          </React.Fragment>
         ))}
       </tbody>
     </table>
