@@ -1,43 +1,65 @@
 import React from 'react';
+import { Todo } from '../types/Todo';
+import { User } from '../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  user: User | null;
+  isLoading: boolean;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  isLoading,
+  onClose,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
-
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+      <div className="modal-background" onClick={onClose} />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Todo Details</p>
+          <button
+            className="delete"
+            aria-label="close"
+            onClick={onClose}
+            data-cy="modalClose"
+            type="button"
+          />
+        </header>
+        <section className="modal-card-body">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <p>
+                <b>Title:</b> {todo.title}
+              </p>
+              <p>
+                <b>Status:</b> {todo.completed ? 'Completed' : 'Active'}
+              </p>
+              {user && (
+                <>
+                  <p>
+                    <b>User:</b> {user.name}
+                  </p>
+                  <p>
+                    <b>Email:</b> {user.email}
+                  </p>
+                </>
+              )}
+            </>
+          )}
+        </section>
+        <footer className="modal-card-foot">
+          <button className="button" onClick={onClose} type="button">
+            Close
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };
