@@ -14,7 +14,7 @@ import { User } from './types/User';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [query, setQuery] = useState('');
