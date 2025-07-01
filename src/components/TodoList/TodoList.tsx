@@ -3,7 +3,7 @@ import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos?: Todo[];
-  onSelect?: (todo: Todo) => void;
+  onSelect?: (todo: Todo | null) => void;
   selectedTodoId?: number | null; // додано
 }
 
