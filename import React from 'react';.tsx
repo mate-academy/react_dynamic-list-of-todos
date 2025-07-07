@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 type Props = {
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={status}
-          title="Select status"
+          title="Filter by status"
           onChange={e => onStatusChange(e.target.value)}
         >
           <option value="all">All</option>
@@ -51,8 +51,8 @@ export const TodoFilter: React.FC<Props> = ({
           <button
             data-cy="clearSearchButton"
             type="button"
-            title="Clear search"
             className="delete"
+            title="Clear search"
             onClick={() => onQueryChange('')}
           />
         )}
