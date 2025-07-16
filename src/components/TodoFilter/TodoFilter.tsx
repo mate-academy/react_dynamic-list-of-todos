@@ -1,30 +1,76 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React from 'react';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+type Props = {
+  query: string;
+  onQueryChange: (value: string) => void;
+  onClearQuery: () => void;
+  status: string;
+  onStatusChange: (value: string) => void;
+};
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onQueryChange,
+  onClearQuery,
+  status,
+  onStatusChange,
+}) => {
+  return (
+    <div className="field is-grouped is-grouped-multiline">
+      {/* Search field */}
+      <div className="control has-icons-right is-expanded" data-cy="search">
+        <input
+          className="input"
+          type="text"
+          placeholder="Search todos..."
+          value={query}
+          onChange={e => onQueryChange(e.target.value)}
+          data-cy="searchInput"
+        />
+        {query !== '' && (
+          <button
+            type="button"
+            onClick={onClearQuery}
+            data-cy="clearSearchButton"
+            aria-label="Clear search"
+            style={{
+              position: 'absolute',
+              right: '0.75rem',
+              top: '0.65rem',
+              background: 'none',
+              border: 'none',
+              padding: '0.25rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <i className="fas fa-times" />
+          </button>
+        )}
+      </div>
+
+      {/* Status filter */}
+      <div className="control" data-cy="status">
+        <div className="select">
+          <select
+            value={status}
+            onChange={e => onStatusChange(e.target.value)}
+            data-cy="statusSelect"
+          >
+            <option value="all" data-cy="statusOptionAll">
+              All
+            </option>
+            <option value="active" data-cy="statusOptionActive">
+              Active
+            </option>
+            <option value="completed" data-cy="statusOptionCompleted">
+              Completed
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
