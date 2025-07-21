@@ -4,13 +4,13 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   onSelectedTodo: (v: Todo) => void;
-  selectTodo: Todo | null;
+  selectedTodo: Todo | null;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectedTodo,
-  selectTodo,
+  selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -52,7 +52,7 @@ export const TodoList: React.FC<Props> = ({
               onClick={() => onSelectedTodo(todo)}
             >
               <span className="icon">
-                {selectTodo === todo ? (
+                {selectedTodo === todo ? (
                   <i className="far fa-eye-slash" />
                 ) : (
                   <i className="far fa-eye" />
