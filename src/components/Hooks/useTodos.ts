@@ -64,12 +64,6 @@ export const useTodos = () => {
   }, [todos, query, filterStatus]);
 
   const handleSelectTodo = (todo: Todo) => {
-    // console.log('Selected todo:', todo);
-    setSelectedTodo(todo);
-    setIsLoadingUser(true);
-  };
-
-  const onSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
     setIsModalOpen(true);
     setSelectedTodoId(todo.id);
@@ -100,6 +94,5 @@ export const useTodos = () => {
     handleCloseModal,
     setSelectedTodoId,
     setIsModalOpen,
-    onSelectTodo,
   };
 };

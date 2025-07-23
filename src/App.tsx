@@ -46,7 +46,6 @@ export const App: React.FC<TodoFilterProps> = () => {
                 <TodoList
                   todos={todos}
                   onSelectTodo={handleSelectTodo}
-                  onSelect={handleSelectTodo}
                   isModalOpen={!!selectedTodo}
                   setIsModalOpen={() => handleCloseModal()}
                   selectedTodoId={selectedTodo ? selectedTodo.id : null}

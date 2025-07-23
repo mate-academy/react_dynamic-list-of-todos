@@ -6,5 +6,4 @@ export interface TodoModalProps {
   user: User | null;
   onClose: () => void;
   isLoading?: boolean;
-  isLoadingUser?: boolean;
 }

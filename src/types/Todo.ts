@@ -3,5 +3,4 @@ export interface Todo {
   title: string;
   completed: boolean;
   userId: number;
-  onSelectTodo: (todo: Todo) => void;
 }
