@@ -24,5 +24,10 @@ function get<T>(url: string): Promise<T> {
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
+export const getCompletedTodos = () =>
+  get<Todo[]>('/todos').then(todos => todos.filter(todo => todo.completed));
+
+export const getActiveTodos = () =>
+  get<Todo[]>('/todos').then(todos => todos.filter(todo => !todo.completed));
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
