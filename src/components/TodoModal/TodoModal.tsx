@@ -1,43 +1,73 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  todo: Todo | null;
+  user: User | null;
+  onClose: () => void;
+  isLoadingUser: boolean;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  todo,
+  user,
+  onClose,
+  isLoadingUser,
+}) => {
+  if (!todo) {
+    return null;
+  }
+
+  const statusText = todo.completed ? 'Done' : 'Planned';
+  const statusClass = todo.completed ? 'has-text-success' : 'has-text-danger';
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p
+            className="modal-card-title has-text-weight-medium"
+            data-cy="modal-header"
+          >
+            Todo #{todo.id}
+          </p>
+          <button
+            className="delete"
+            data-cy="modal-close"
+            aria-label="close"
+            onClick={onClose}
+          ></button>
+        </header>
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+        <section className="modal-card-body">
+          {isLoadingUser ? (
+            <Loader />
+          ) : (
+            <>
+              <p className="block" data-cy="modal-title">
+                {todo.title}
+              </p>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
+              <p className="block" data-cy="modal-user">
+                <strong className={statusClass}>{statusText}</strong>
+                {' by '}
+                {user ? (
+                  <a href={`mailto:${user.email}`}>{user.name}</a>
+                ) : (
+                  <span className="has-text-grey-light">
+                    Невідомий користувач
+                  </span>
+                )}
+              </p>
+            </>
+          )}
+        </section>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+        <footer className="modal-card-foot"></footer>
+      </div>
     </div>
   );
 };
