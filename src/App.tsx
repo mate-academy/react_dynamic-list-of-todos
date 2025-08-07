@@ -13,10 +13,10 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalActive, setIsModalActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  type FilterStatus = 'all' | 'active' | 'completed';
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [error, setError] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<
-    'all' | 'active' | 'completed'
-  >('all');
 
   const filteredTodos = todos.filter(todo => {
     const matchesQuery = searchQuery
