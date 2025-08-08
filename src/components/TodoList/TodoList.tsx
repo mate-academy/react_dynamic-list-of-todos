@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 interface TodoListProps {
   todos: Todo[];
@@ -33,7 +34,9 @@ export const TodoList: React.FC<TodoListProps> = ({
         <tr
           data-cy="todo"
           key={todo.id} // Додаємо key
-          className={todo.completed ? 'has-background-info-light' : ''} // Додаємо клас, якщо todo виконано
+          className={classNames({
+            'has-background-info-light': todo.completed,
+          })} // Додаємо клас, якщо todo виконано
         >
           <td className="is-vcentered">{todo.id}</td> {/* Відображаємо ID */}
           <td className="is-vcentered">
@@ -60,6 +63,9 @@ export const TodoList: React.FC<TodoListProps> = ({
               className="button"
               type="button"
               onClick={() => onTodoSelect(todo)}
+              aria-label={
+                selectedTodo?.id === todo.id ? 'Hide details' : 'Show details'
+              }
             >
               <span className="icon">
                 {selectedTodo?.id === todo.id ? (

@@ -30,7 +30,9 @@ export const App: React.FC = () => {
   }, []);
 
   const handleTodoSelect = (todo: Todo) => {
-    setSelectedTodo(todo);
+    setSelectedTodo(prevSelectedTodo =>
+      prevSelectedTodo?.id === todo.id ? null : todo,
+    );
   };
 
   const handleModalClose = () => {

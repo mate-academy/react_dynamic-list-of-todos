@@ -14,16 +14,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Встановлюємо userLoading у true перед початком завантаження
-    setUserLoading(true);
-    // 2. Викликаємо getUser, використовуючи userId з поточного todo
     getUser(todo.userId)
       .then(loadedUser => {
-        // 3. Коли користувач завантажений, оновлюємо стан user
         setUser(loadedUser);
       })
       .finally(() => {
-        // 4. Незалежно від результату, встановлюємо userLoading у false
         setUserLoading(false);
       });
   }, [todo.userId]);
@@ -44,12 +39,12 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
               Todo #{todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={onClose}
+              aria-label="Close modal"
             />
           </header>
 
@@ -59,7 +54,6 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
