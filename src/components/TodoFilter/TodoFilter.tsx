@@ -1,27 +1,29 @@
 import React from 'react';
 
-interface Props {
-  statusFilter: string;
-  onStatusFilter: (status: string) => void;
+interface TodoFilterProps {
+  status: 'all' | 'active' | 'completed';
   query: string;
+  onStatusChange: (status: 'all' | 'active' | 'completed') => void;
   onQueryChange: (query: string) => void;
-  onClearQuery: () => void;
+  onQueryClear: () => void;
 }
 
-export const TodoFilter: React.FC<Props> = ({
-  statusFilter,
-  onStatusFilter,
+export const TodoFilter: React.FC<TodoFilterProps> = ({
+  status,
   query,
+  onStatusChange,
   onQueryChange,
-  onClearQuery,
+  onQueryClear,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={statusFilter}
-          onChange={e => onStatusFilter(e.target.value)}
+          value={status}
+          onChange={e =>
+            onStatusChange(e.target.value as 'all' | 'active' | 'completed')
+          }
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -49,7 +51,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={onClearQuery}
+            onClick={onQueryClear}
           />
         </span>
       )}

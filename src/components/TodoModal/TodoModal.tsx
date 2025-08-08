@@ -3,19 +3,25 @@ import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 
-interface Props {
-  todo: Todo;
+interface TodoModalProps {
+  todo: Todo | null;
   user: User | null;
   isLoading: boolean;
   onClose: () => void;
+  userError?: string | null;
 }
 
-export const TodoModal: React.FC<Props> = ({
+export const TodoModal: React.FC<TodoModalProps> = ({
   todo,
   user,
   isLoading,
   onClose,
+  userError,
 }) => {
+  if (!todo) {
+    return null;
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -42,22 +48,28 @@ export const TodoModal: React.FC<Props> = ({
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              {todo.title.charAt(0).toUpperCase() + todo.title.slice(1)}
+              {todo.title}
             </p>
 
-            {user && (
-              <p className="block" data-cy="modal-user">
-                <strong
-                  className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }
-                >
-                  {todo.completed ? 'Done' : 'Planned'}
-                </strong>
-                {' by '}
+            <p className="block" data-cy="modal-user">
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
+
+              {' by '}
+
+              {userError ? (
+                <span className="has-text-danger" data-cy="errorUser">
+                  {userError}
+                </span>
+              ) : user ? (
                 <a href={`mailto:${user.email}`}>{user.name}</a>
-              </p>
-            )}
+              ) : (
+                'Loading user...'
+              )}
+            </p>
           </div>
         </div>
       )}

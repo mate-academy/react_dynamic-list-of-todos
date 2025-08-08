@@ -7,81 +7,68 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
+import { getTodos, getUser } from './api';
 import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [todosLoading, setTodosLoading] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalLoading, setIsModalLoading] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [query, setQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+  const [query, setQuery] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState(false);
+  const [todosError, setTodosError] = useState<string | null>(null);
+  const [userError, setUserError] = useState<string | null>(null);
+
+  const filteredTodos = todos.filter(todo => {
+    // filter by status
+    if (status === 'active' && todo.completed) {
+      return false;
+    }
+
+    if (status === 'completed' && !todo.completed) {
+      return false;
+    }
+
+    // filter by query (case insensitive in title)
+    if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
+      return false;
+    }
+
+    return true;
+  });
 
   useEffect(() => {
+    setTodosLoading(true);
+    setTodosError(null);
+
     getTodos()
-      .then(data => {
-        setTodos(data);
-        setFilteredTodos(data);
-        setIsLoading(false);
-      })
-      .catch(() => setIsLoading(false));
+      .then(setTodos)
+      .catch(() =>
+        setTodosError('Failed to load todos. Please try again later.'),
+      )
+      .finally(() => setTodosLoading(false));
   }, []);
 
   useEffect(() => {
-    let result = todos;
+    if (!selectedTodo) {
+      setUser(null);
+      setUserLoading(false);
+      setUserError(null);
 
-    if (statusFilter !== 'all') {
-      const isCompleted = statusFilter === 'completed';
-
-      result = result.filter(todo => todo.completed === isCompleted);
+      return;
     }
 
-    if (query) {
-      const normalizedQuery = query.toLowerCase();
+    setUserLoading(true);
+    setUserError(null);
 
-      result = result.filter(todo =>
-        todo.title.toLowerCase().includes(normalizedQuery),
-      );
-    }
-
-    setFilteredTodos(result);
-  }, [todos, statusFilter, query]);
-
-  const handleShowTodo = (todo: Todo) => {
-    setSelectedTodoId(todo.id);
-    setSelectedTodo(todo);
-    setIsModalLoading(true);
-
-    getUser(todo.userId)
-      .then(user => {
-        setSelectedUser(user);
-        setIsModalLoading(false);
-      })
-      .catch(() => setIsModalLoading(false));
-  };
-
-  const handleCloseModal = () => {
-    setSelectedTodoId(null);
-    setSelectedTodo(null);
-    setSelectedUser(null);
-  };
-
-  const handleStatusFilter = (status: string) => {
-    setStatusFilter(status);
-  };
-
-  const handleQueryChange = (newQuery: string) => {
-    setQuery(newQuery);
-  };
-
-  const handleClearQuery = () => {
-    setQuery('');
-  };
+    getUser(selectedTodo.userId)
+      .then(setUser)
+      .catch(() => setUserError('Failed to load user data.'))
+      .finally(() => setUserLoading(false));
+  }, [selectedTodo]);
 
   return (
     <>
@@ -92,22 +79,28 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                statusFilter={statusFilter}
-                onStatusFilter={handleStatusFilter}
+                status={status}
                 query={query}
-                onQueryChange={handleQueryChange}
-                onClearQuery={handleClearQuery}
+                onStatusChange={setStatus}
+                onQueryChange={setQuery}
+                onQueryClear={() => setQuery('')}
               />
             </div>
 
             <div className="block">
-              {isLoading ? (
+              {todosError && (
+                <p className="has-text-danger" data-cy="errorTodos">
+                  {todosError}
+                </p>
+              )}
+
+              {todosLoading ? (
                 <Loader />
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  onShowTodo={handleShowTodo}
-                  selectedTodoId={selectedTodoId}
+                  selectedTodoId={selectedTodo?.id}
+                  onSelect={setSelectedTodo}
                 />
               )}
             </div>
@@ -115,14 +108,13 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          user={selectedUser}
-          isLoading={isModalLoading}
-          onClose={handleCloseModal}
-        />
-      )}
+      <TodoModal
+        todo={selectedTodo}
+        user={user}
+        isLoading={userLoading}
+        onClose={() => setSelectedTodo(null)}
+        userError={userError}
+      />
     </>
   );
 };
