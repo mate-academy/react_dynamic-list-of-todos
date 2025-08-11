@@ -12,12 +12,17 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
+    setError(null);
 
     getUser(todo.userId)
       .then(setUser)
+      .catch(() => {
+        setError('Failed to load user details. Please try again.');
+      })
       .finally(() => setIsLoading(false));
   }, [todo.userId]);
 
@@ -27,6 +32,24 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
       {isLoading ? (
         <Loader />
+      ) : error ? (
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div className="modal-card-title">Ошибка</div>
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
+          </header>
+          <div
+            className="modal-card-body has-text-danger"
+            data-cy="modal-error"
+          >
+            {error}
+          </div>
+        </div>
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -36,8 +59,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             >
               Todo #{todo.id}
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -52,16 +73,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">
+              <strong
+                className={
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                }
+              >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
 
-              {user !== null && (
-                <a href={`mailto:${user.email}`}>{user.name}</a>
-              )}
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>
