@@ -79,7 +79,7 @@ export const App: React.FC = () => {
           <TodoModal
             todo={selectedTodo}
             userId={selectedTodo.userId}
-            onClose={setSelectedTodo}
+            onClose={() => setSelectedTodo(null)}
           />
         ))}
     </>
