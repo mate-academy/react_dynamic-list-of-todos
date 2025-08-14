@@ -1,11 +1,35 @@
-export const TodoFilter = () => (
+import { StatusFilter } from '../../App';
+
+interface Props {
+  query: string;
+  onChange: (arg: string) => void;
+  onClear: () => void;
+  defaultStatus: StatusFilter;
+  statusFilter: typeof StatusFilter;
+  onStatusChange: (arg: StatusFilter) => void;
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onChange,
+  onClear,
+  defaultStatus,
+  statusFilter,
+  onStatusChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={defaultStatus}
+          onChange={e => onStatusChange(e.target.value as StatusFilter)}
+        >
+          {Object.values(statusFilter).map(status => (
+            <option value={status} key={status}>
+              {status[0].toUpperCase() + status.slice(1)}
+            </option>
+          ))}
         </select>
       </span>
     </p>
@@ -16,15 +40,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={query}
+        onChange={e => onChange(e.currentTarget.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
+      {query && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            onClick={onClear}
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+          />
+        </span>
+      )}
     </p>
   </form>
 );

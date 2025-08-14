@@ -20,9 +20,25 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Failed to fetch!');
+      }
+
+      return res.json();
+    });
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = async () => {
+  const data = await get<Todo[]>('/todos');
+  const todoList = data;
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+  return todoList;
+};
+
+export const getUser = async (userId: number) => {
+  const data = await get<User>(`/users/${userId}`);
+  const user = data;
+
+  return user;
+};
