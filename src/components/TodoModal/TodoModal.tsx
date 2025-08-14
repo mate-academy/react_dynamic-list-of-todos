@@ -31,7 +31,7 @@ export const TodoModal: React.FC<Props> = ({
         setUser(data);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [infoForModal]);
 
   return (
     <div className="modal is-active" data-cy="modal">
