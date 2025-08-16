@@ -26,26 +26,26 @@ export const App: React.FC = () => {
   }, []);
 
   type Params = {
-    sf: string;
-    q: string;
+    sort: string;
+    filterQuery: string;
   };
 
   const preparedTodos = (
     items: Todo[],
-    { sf, q }: Params,
+    { sort, filterQuery }: Params,
   ): Todo[] => {
     let prepTodos = [...items];
 
-    if (sf === 'active') {
+    if (sort === 'active') {
       prepTodos = prepTodos.filter(todo => !todo.completed);
     }
 
-    if (sortField === 'completed') {
+    if (sort === 'completed') {
       prepTodos = prepTodos.filter(todo => todo.completed);
     }
 
-    if (q) {
-      const normalizedQuery = q.trim().toLowerCase();
+    if (filterQuery) {
+      const normalizedQuery = filterQuery.trim().toLowerCase();
 
       prepTodos = prepTodos.filter(todo =>
         todo.title.toLowerCase().includes(normalizedQuery),
@@ -75,7 +75,10 @@ export const App: React.FC = () => {
               {loading && <Loader />}
 
               <TodoList
-                todos={preparedTodos(todos, { sortField, query })}
+                todos={preparedTodos(todos, {
+                  filterQuery: query,
+                  sort: sortField,
+                })}
                 setSelectedTodo={setSelectedTodo}
                 selectedTodo={selectedTodo}
               />

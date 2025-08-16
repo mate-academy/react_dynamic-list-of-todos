@@ -19,11 +19,9 @@ const TodoModalComponent: React.FC<Props> = ({
   useEffect(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      getUser(selectedTodo.userId)
-        .then(setUser)
-        .finally(() => setLoading(false));
-    }, 5000);
+    getUser(selectedTodo.userId)
+      .then(setUser)
+      .finally(() => setLoading(false));
   }, [selectedTodo]);
 
   return (
