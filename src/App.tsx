@@ -77,7 +77,7 @@ export const App: React.FC = () => {
                 todos={filteredTodos}
                 onSelectedUserId={setSelectedUserId}
                 onSetTodo={setTodo}
-                onClose={setIsTodoModalVisible}
+                onShowTodoOfUser={setIsTodoModalVisible}
                 todoId={todoId}
                 onTodoId={setTodoId}
               />
@@ -86,12 +86,12 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {user && todo && isTodoModalVisible && (
+      {todo && isTodoModalVisible && (
         <TodoModal
           todo={todo}
           user={user}
           loadingUser={loadingUser}
-          onClose={setIsTodoModalVisible}
+          onShowTodoOfUser={setIsTodoModalVisible}
           onTodoId={setTodoId}
         />
       )}

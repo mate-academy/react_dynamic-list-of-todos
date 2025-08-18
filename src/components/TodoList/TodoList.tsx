@@ -6,7 +6,7 @@ interface Props {
   todoId: number;
   onSelectedUserId: (id: number) => void;
   onSetTodo: (todo: Todo) => void;
-  onClose: (isClose: boolean) => void;
+  onShowTodoOfUser: (isClose: boolean) => void;
   onTodoId: (todoId: number) => void;
 }
 
@@ -15,7 +15,7 @@ export const TodoList: React.FC<Props> = ({
   todoId,
   onSelectedUserId,
   onSetTodo,
-  onClose,
+  onShowTodoOfUser,
   onTodoId,
 }) => {
   return (
@@ -47,7 +47,7 @@ export const TodoList: React.FC<Props> = ({
             <td className="is-vcentered is-expanded">
               <p
                 className={
-                  todo.completed ? 'has-text-succes' : 'has-text-danger'
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
                 }
               >
                 {todo.title}
@@ -61,7 +61,7 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => {
                   onSelectedUserId(todo.userId);
                   onSetTodo(todo);
-                  onClose(true);
+                  onShowTodoOfUser(true);
                   onTodoId(todo.id);
                 }}
               >

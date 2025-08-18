@@ -4,10 +4,10 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 interface Props {
-  user: User;
+  user: User | undefined;
   todo: Todo;
   loadingUser: boolean;
-  onClose: (isClose: boolean) => void;
+  onShowTodoOfUser: (isClose: boolean) => void;
   onTodoId: (todoId: number) => void;
 }
 
@@ -15,14 +15,14 @@ export const TodoModal: React.FC<Props> = ({
   user,
   todo,
   loadingUser,
-  onClose,
+  onShowTodoOfUser,
   onTodoId,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {loadingUser ? (
+      {loadingUser || !user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onClose(false);
+                onShowTodoOfUser(false);
                 onTodoId(0);
               }}
             />
@@ -54,7 +54,7 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed ? (
-                <strong className="has-text-succes">Done</strong>
+                <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
