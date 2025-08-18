@@ -55,6 +55,17 @@ export const App: React.FC = () => {
     tod.title.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const handleOpenTodo = (tod: Todo) => {
+    setSelectedUserId(tod.userId);
+    setTodo(tod);
+    setIsTodoModalVisible(true);
+  };
+
+  const handleModuleVisible = () => {
+    setIsTodoModalVisible(false);
+    setTodoId(0);
+  };
+
   return (
     <>
       <div className="section">
@@ -75,10 +86,8 @@ export const App: React.FC = () => {
               {loadingTodos && <Loader />}
               <TodoList
                 todos={filteredTodos}
-                onSelectedUserId={setSelectedUserId}
-                onSetTodo={setTodo}
-                onShowTodoOfUser={setIsTodoModalVisible}
                 todoId={todoId}
+                handleOpenTodo={handleOpenTodo}
                 onTodoId={setTodoId}
               />
             </div>
@@ -91,8 +100,7 @@ export const App: React.FC = () => {
           todo={todo}
           user={user}
           loadingUser={loadingUser}
-          onShowTodoOfUser={setIsTodoModalVisible}
-          onTodoId={setTodoId}
+          handleModuleVisible={handleModuleVisible}
         />
       )}
     </>

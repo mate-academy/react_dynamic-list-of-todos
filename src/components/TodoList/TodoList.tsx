@@ -4,18 +4,14 @@ import { Todo } from '../../types/Todo';
 interface Props {
   todos: Todo[];
   todoId: number;
-  onSelectedUserId: (id: number) => void;
-  onSetTodo: (todo: Todo) => void;
-  onShowTodoOfUser: (isClose: boolean) => void;
+  handleOpenTodo: (todo: Todo) => void;
   onTodoId: (todoId: number) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
   todoId,
-  onSelectedUserId,
-  onSetTodo,
-  onShowTodoOfUser,
+  handleOpenTodo,
   onTodoId,
 }) => {
   return (
@@ -59,9 +55,7 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
                 onClick={() => {
-                  onSelectedUserId(todo.userId);
-                  onSetTodo(todo);
-                  onShowTodoOfUser(true);
+                  handleOpenTodo(todo);
                   onTodoId(todo.id);
                 }}
               >

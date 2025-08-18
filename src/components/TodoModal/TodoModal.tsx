@@ -7,16 +7,14 @@ interface Props {
   user: User | undefined;
   todo: Todo;
   loadingUser: boolean;
-  onShowTodoOfUser: (isClose: boolean) => void;
-  onTodoId: (todoId: number) => void;
+  handleModuleVisible: () => void;
 }
 
 export const TodoModal: React.FC<Props> = ({
   user,
   todo,
   loadingUser,
-  onShowTodoOfUser,
-  onTodoId,
+  handleModuleVisible,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,10 +37,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                onShowTodoOfUser(false);
-                onTodoId(0);
-              }}
+              onClick={handleModuleVisible}
             />
           </header>
 
