@@ -13,30 +13,45 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const [loader, setLoader] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(fetchedUser => {
-      setUser(fetchedUser);
-      setLoader(false);
-    });
-  });
+    let isMounted = true; // щоб уникнути setState після закриття модалки
+
+    setLoading(true);
+    getUser(selectedTodo.userId)
+      .then(fetchedUser => {
+        if (isMounted) {
+          setUser(fetchedUser);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false; // cleanup
+    };
+  }, [selectedTodo.userId]); // ✅ виконується тільки коли змінюється todo
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={() => setSelectedTodo(null)} />
 
-      {loader && <Loader />}
-      {!loader && (
+      {loading ? (
+        <Loader />
+      ) : (
         <div className="modal-card">
           <header className="modal-card-head">
-            <div
+            <p
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
               Todo #{selectedTodo.id}
-            </div>
+            </p>
 
             <button
               onClick={() => setSelectedTodo(null)}
@@ -63,8 +78,11 @@ export const TodoModal: React.FC<Props> = ({
               </strong>
 
               {' by '}
-
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              {user ? (
+                <a href={`mailto:${user.email}`}>{user.name}</a>
+              ) : (
+                'Unknown user'
+              )}
             </p>
           </div>
         </div>
