@@ -1,11 +1,32 @@
-export const TodoFilter = () => (
+import React from 'react';
+import { Status } from '../../types/Status';
+
+interface Props {
+  filterQuery: string;
+  setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
+  todoStatusToShow: Status;
+  setTodoStatusToShow: React.Dispatch<React.SetStateAction<Status>>;
+}
+
+export const TodoFilter: React.FC<Props> = ({
+  filterQuery,
+  setFilterQuery,
+  todoStatusToShow,
+  setTodoStatusToShow,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          value={todoStatusToShow}
+          onChange={e => {
+            setTodoStatusToShow(e.target.value as Status);
+          }}
+          data-cy="statusSelect"
+        >
+          <option value={Status.ALL}>All</option>
+          <option value={Status.ACTIVE}>Active</option>
+          <option value={Status.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,6 +37,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={filterQuery}
+        onChange={e => setFilterQuery(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -23,7 +46,14 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {filterQuery && (
+          <button
+            onClick={() => setFilterQuery('')}
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+          />
+        )}{' '}
       </span>
     </p>
   </form>

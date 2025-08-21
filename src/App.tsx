@@ -1,14 +1,60 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+
+import * as api from './api';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { Status } from './types/Status';
+
+const filterByStatus = (todos: Todo[], status: Status) => {
+  switch (status) {
+    case Status.ACTIVE:
+      return todos.filter(todo => !todo.completed);
+    case Status.COMPLETED:
+      return todos.filter(todo => todo.completed);
+    default:
+      return todos;
+  }
+};
+
+const filterByQuery = (todos: Todo[], query: string) => {
+  return todos.filter(todo =>
+    todo.title.toLowerCase().includes(query.toLowerCase()),
+  );
+};
+
+export type InfoForModal = {
+  todo: Todo;
+  userId: number;
+} | null;
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filterQuery, setFilterQuery] = useState('');
+  const [todoStatusToShow, setTodoStatusToShow] = useState<Status>(Status.ALL);
+  const [infoForModal, setInfoForModal] = useState<InfoForModal>(null);
+
+  const todosFilteredByStatus = filterByStatus(todos, todoStatusToShow);
+  const preparedTodos = filterByQuery(todosFilteredByStatus, filterQuery);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    api
+      .getTodos()
+      .then(data => {
+        setTodos(data);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +63,32 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                filterQuery={filterQuery}
+                setFilterQuery={setFilterQuery}
+                todoStatusToShow={todoStatusToShow}
+                setTodoStatusToShow={setTodoStatusToShow}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              <TodoList
+                todos={preparedTodos}
+                setInfoForModal={setInfoForModal}
+                infoForModal={infoForModal}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {infoForModal && (
+        <TodoModal
+          setInfoForModal={setInfoForModal}
+          infoForModal={infoForModal}
+        />
+      )}
     </>
   );
 };
