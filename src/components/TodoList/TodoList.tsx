@@ -1,17 +1,16 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { InfoForModal } from '../../App';
 
 interface Props {
   todos: Todo[];
-  setIsDetailsShown: React.Dispatch<React.SetStateAction<boolean>>;
   setInfoForModal: React.Dispatch<React.SetStateAction<InfoForModal>>;
   infoForModal: InfoForModal;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setIsDetailsShown,
   setInfoForModal,
   infoForModal,
 }) => (
@@ -42,9 +41,10 @@ export const TodoList: React.FC<Props> = ({
           </td>
           <td className="is-vcentered is-expanded">
             <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
+              className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
             >
               {todo.title}
             </p>
@@ -52,7 +52,6 @@ export const TodoList: React.FC<Props> = ({
           <td className="has-text-right is-vcentered">
             <button
               onClick={() => {
-                setIsDetailsShown(true);
                 setInfoForModal({ todo, userId: todo.userId });
               }}
               data-cy="selectButton"
@@ -61,11 +60,10 @@ export const TodoList: React.FC<Props> = ({
             >
               <span className="icon">
                 <i
-                  className={
-                    infoForModal?.todo.id === todo.id
-                      ? 'fas fa-eye-slash'
-                      : 'fas fa-eye'
-                  }
+                  className={classNames('fas', {
+                    'fa-eye-slash': infoForModal?.todo.id === todo.id,
+                    'fa-eye': infoForModal?.todo.id !== todo.id,
+                  })}
                 />
               </span>
             </button>

@@ -1,10 +1,11 @@
 import React from 'react';
+import { Status } from '../../types/Status';
 
 interface Props {
   filterQuery: string;
   setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
-  todoStatusToShow: string;
-  setTodoStatusToShow: React.Dispatch<React.SetStateAction<string>>;
+  todoStatusToShow: Status;
+  setTodoStatusToShow: React.Dispatch<React.SetStateAction<Status>>;
 }
 
 export const TodoFilter: React.FC<Props> = ({
@@ -19,13 +20,13 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           value={todoStatusToShow}
           onChange={e => {
-            setTodoStatusToShow(e.target.value);
+            setTodoStatusToShow(e.target.value as Status);
           }}
           data-cy="statusSelect"
         >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+          <option value={Status.ALL}>All</option>
+          <option value={Status.ACTIVE}>Active</option>
+          <option value={Status.COMPLETED}>Completed</option>
         </select>
       </span>
     </p>

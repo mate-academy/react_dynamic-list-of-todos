@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { InfoForModal } from '../../App';
 import * as api from '../../api';
 import { User } from '../../types/User';
 
 interface Props {
-  setIsDetailsShown: React.Dispatch<React.SetStateAction<boolean>>;
   setInfoForModal: React.Dispatch<React.SetStateAction<InfoForModal>>;
   infoForModal: InfoForModal;
 }
 
 export const TodoModal: React.FC<Props> = ({
-  setIsDetailsShown,
   setInfoForModal,
   infoForModal,
 }) => {
@@ -51,7 +50,6 @@ export const TodoModal: React.FC<Props> = ({
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               onClick={() => {
-                setIsDetailsShown(false);
                 setInfoForModal(null);
               }}
               type="button"
@@ -68,11 +66,12 @@ export const TodoModal: React.FC<Props> = ({
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
-                className={`has-text-${
-                  infoForModal && infoForModal.todo.completed
-                    ? 'success'
-                    : 'danger'
-                }`}
+                className={classNames({
+                  'has-text-success':
+                    infoForModal && infoForModal.todo.completed,
+                  'has-text-danger':
+                    infoForModal && !infoForModal.todo.completed,
+                })}
               >
                 {infoForModal && infoForModal.todo.completed
                   ? 'Done'

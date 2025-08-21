@@ -10,14 +10,15 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
+import { Status } from './types/Status';
 
-const filterByStatus = (todos: Todo[], status: string) => {
+const filterByStatus = (todos: Todo[], status: Status) => {
   switch (status) {
-    case 'active':
+    case Status.ACTIVE:
       return todos.filter(todo => !todo.completed);
-    case 'completed':
+    case Status.COMPLETED:
       return todos.filter(todo => todo.completed);
-    default: // 'all'
+    default:
       return todos;
   }
 };
@@ -37,8 +38,7 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterQuery, setFilterQuery] = useState('');
-  const [todoStatusToShow, setTodoStatusToShow] = useState('all');
-  const [isDetailsShown, setIsDetailsShown] = useState(false);
+  const [todoStatusToShow, setTodoStatusToShow] = useState<Status>(Status.ALL);
   const [infoForModal, setInfoForModal] = useState<InfoForModal>(null);
 
   const todosFilteredByStatus = filterByStatus(todos, todoStatusToShow);
@@ -75,7 +75,6 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
               <TodoList
                 todos={preparedTodos}
-                setIsDetailsShown={setIsDetailsShown}
                 setInfoForModal={setInfoForModal}
                 infoForModal={infoForModal}
               />
@@ -84,9 +83,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {isDetailsShown && (
+      {infoForModal && (
         <TodoModal
-          setIsDetailsShown={setIsDetailsShown}
           setInfoForModal={setInfoForModal}
           infoForModal={infoForModal}
         />
