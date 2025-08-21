@@ -5,12 +5,14 @@ type Props = {
   setFilterBy: (value: FilterBy) => void;
   setQuery: (query: string) => void;
   query: string;
+  filterBy: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   setFilterBy,
   query,
   setQuery,
+  filterBy,
 }) => {
   const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilterBy(event.target.value as FilterBy);
@@ -28,7 +30,11 @@ export const TodoFilter: React.FC<Props> = ({
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={onSelectChange}>
+          <select
+            data-cy="statusSelect"
+            onChange={onSelectChange}
+            value={filterBy}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>

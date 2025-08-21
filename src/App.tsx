@@ -63,6 +63,7 @@ export const App: React.FC = () => {
                 setFilterBy={setFilterBy}
                 query={query}
                 setQuery={setQuery}
+                filterBy={filterBy}
               />
             </div>
 

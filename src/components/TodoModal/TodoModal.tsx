@@ -20,7 +20,7 @@ export const TodoModal: React.FC<Props> = ({
     getUser(userId)
       .then(response => setUserData(response))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [userId]);
 
   const handleCloseClick = () => {
     setSelectedTodo(null);
@@ -65,7 +65,7 @@ export const TodoModal: React.FC<Props> = ({
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{userData?.name}</a>
+              <a href={`mailto:${userData?.email}`}>{userData?.name}</a>
             </p>
           </div>
         </div>
