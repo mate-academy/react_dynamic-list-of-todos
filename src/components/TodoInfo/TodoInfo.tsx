@@ -1,14 +1,19 @@
-import { use } from 'chai';
 import { Todo } from '../../types/Todo';
 import cn from 'classnames';
-import { useState } from 'react';
-import { title } from 'process';
 
 type Props = {
   todo: Todo;
+  handleChoosenDataTodo: (todo: Todo) => void;
+  showEyeButton: boolean;
+  clickedTodoId: number | null;
 };
 
-export const Todoinfo: React.FC<Props> = ({ todo, handleChoosenDataTodo }) => {
+export const Todoinfo: React.FC<Props> = ({
+  todo,
+  handleChoosenDataTodo,
+  showEyeButton,
+  clickedTodoId,
+}) => {
   return (
     <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
@@ -35,10 +40,22 @@ export const Todoinfo: React.FC<Props> = ({ todo, handleChoosenDataTodo }) => {
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => handleChoosenDataTodo(todo)}
+          onClick={() => {
+            handleChoosenDataTodo(todo);
+          }}
         >
           <span className="icon">
-            <i className="far fa-eye" />
+            {!showEyeButton && todo.id === clickedTodoId ? (
+              <i className="far fa-eye-slash" />
+            ) : (
+              <i className="far fa-eye" />
+            )}
+            {/* <i
+              className={cn('far', {
+                'fa-eye': showEyeButton && todo.id === idTodo,
+                'fa-eye-slash': !showEyeButton && todo.id === idTodo,
+              })}
+            /> */}
           </span>
         </button>
       </td>

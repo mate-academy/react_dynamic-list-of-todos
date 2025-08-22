@@ -3,9 +3,17 @@ import { Todo } from '../../types/Todo';
 import { Todoinfo } from '../TodoInfo/TodoInfo';
 type Props = {
   todos: Todo[];
+  handleChoosenDataTodo: (todo: Todo) => void;
+  showEyeButton: boolean;
+  clickedTodoId: number | null;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, handleChoosenDataTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  handleChoosenDataTodo,
+  showEyeButton,
+  clickedTodoId,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -28,6 +36,8 @@ export const TodoList: React.FC<Props> = ({ todos, handleChoosenDataTodo }) => {
               key={todo.id}
               todo={todo}
               handleChoosenDataTodo={handleChoosenDataTodo}
+              showEyeButton={showEyeButton}
+              clickedTodoId={clickedTodoId}
             />
           );
         })}

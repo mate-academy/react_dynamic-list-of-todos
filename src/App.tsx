@@ -36,7 +36,7 @@ function preperedData(
     const normalizedQuery = searchQuery.toLowerCase().trim();
 
     visibleTodos = visibleTodos.filter(todos => {
-      return todos.title.includes(normalizedQuery);
+      return todos.title.toLowerCase().includes(normalizedQuery);
     });
   }
 
@@ -47,32 +47,33 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [groupBy, setGroupBy] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
+  const [loadingStartWindow, setLoadingStartWindow] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [user, setUser] = useState<User>();
   const [choosenTodoData, setChoosenTodoData] = useState<Todo>();
+  const [error, setError] = useState<Error | null>(null);
+  const [showEyeButton, setShowEyeButton] = useState(true);
+  const [clickedTodoId, setClickedTodoId] = useState<number | null>(null);
 
   const visibleData = preperedData(todos, groupBy, searchQuery);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setTodos(todosFromServer);
-    });
+    setLoadingStartWindow(true);
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .catch((err: Error) => setError(err))
+      .finally(() => setLoadingStartWindow(false));
   }, []);
-  console.log(todos);
 
-  // const handleGetDataUser = () => {
-  //   getUser(choosenTodoData?.userId).then(userFromServer => {
-  //     setUser(userFromServer);
-  //     console.log(userFromServer);
-  //   });
-  // };
-
-  const handleOptionSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGroupBy(event.target.value);
+  const handleOptionSort = (event: string) => {
+    setGroupBy(event);
   };
 
-  const handleSetSearchQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+  const handleSetSearchQuery = (event: string) => {
+    setSearchQuery(event);
   };
 
   const handleResetQuery = () => {
@@ -80,11 +81,23 @@ export const App: React.FC = () => {
   };
 
   const handleChoosenDataTodo = (todo: Todo) => {
-    setChoosenTodoData(todo);
-    getUser(todo.userId).then(userFromServer => {
-      setUser(userFromServer);
-      console.log(userFromServer);
-    });
+    setClickedTodoId(todo.id);
+    setShowEyeButton(false);
+    setOpenModal(true);
+    setLoadingModal(true);
+    getUser(todo.userId)
+      .then(userFromServer => {
+        setUser(userFromServer);
+        setChoosenTodoData(todo);
+      })
+      .catch((err: Error) => setError(err))
+      .finally(() => setLoadingModal(false));
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setShowEyeButton(true);
+    setClickedTodoId(null);
   };
 
   return (
@@ -104,10 +117,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {/* <Loader /> */}
+              {loadingStartWindow && <Loader />}
               <TodoList
                 todos={visibleData}
                 handleChoosenDataTodo={handleChoosenDataTodo}
+                showEyeButton={showEyeButton}
+                clickedTodoId={clickedTodoId}
               />
             </div>
           </div>
@@ -115,10 +130,13 @@ export const App: React.FC = () => {
       </div>
 
       <TodoModal
-        showModal={showModal}
+        loadingModal={loadingModal}
+        openModal={openModal}
         user={user}
         choosenTodoData={choosenTodoData}
+        handleCloseModal={handleCloseModal}
       />
+      {error && <p style={{ color: 'red' }}>{error.message}</p>}
     </>
   );
 };

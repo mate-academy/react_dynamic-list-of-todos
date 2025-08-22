@@ -1,12 +1,12 @@
 import React from 'react';
 
 type Props = {
-  handleOptionSort: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleOptionSort: (event: string) => void;
   searchQuery: string;
-  handleSetSearchQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSetSearchQuery: (event: string) => void;
   handleResetQuery: () => void;
 };
-
+// React.ChangeEvent<HTMLInputElement
 export const TodoFilter: React.FC<Props> = ({
   handleOptionSort,
   searchQuery,
@@ -17,7 +17,12 @@ export const TodoFilter: React.FC<Props> = ({
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleOptionSort}>
+          <select
+            data-cy="statusSelect"
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+              handleOptionSort(event.target.value)
+            }
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -32,7 +37,9 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={handleSetSearchQuery}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleSetSearchQuery(event.target.value)
+          }
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
