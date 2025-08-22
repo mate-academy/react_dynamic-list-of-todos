@@ -47,6 +47,7 @@ export const App: React.FC = () => {
 
   const handleCloseModal = () => {
     setSelectedTodo(null);
+    setUser(null);
   };
 
   const visibleTodos = todos.filter(todo => {
@@ -102,7 +103,7 @@ export const App: React.FC = () => {
 
       {selectedTodo && (
         <TodoModal
-          handleCLosedModal={handleCloseModal}
+          handleCloseModal={handleCloseModal}
           selectedTodo={selectedTodo}
           loadingData={loadingData}
           user={user}

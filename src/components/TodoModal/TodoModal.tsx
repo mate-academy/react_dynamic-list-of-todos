@@ -5,14 +5,14 @@ import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  handleCLosedModal: () => void;
+  handleCloseModal: () => void;
   selectedTodo: Todo | null;
   loadingData: boolean;
   user: User | null;
 };
 
 export const TodoModal: React.FC<Props> = ({
-  handleCLosedModal: handleCloseModal,
+  handleCloseModal: handleCloseModal,
   selectedTodo,
   loadingData,
   user,
