@@ -12,10 +12,12 @@ type Props = {
 export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
   const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getUser(todo.userId)
       .then(setUser)
+      .catch(() => setErrorMessage('User fetch error'))
       .finally(() => setIsLoading(false));
   }, [todo]);
 
@@ -49,18 +51,22 @@ export const TodoModal: React.FC<Props> = ({ todo, onModalClose }) => {
               {todo.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+            {errorMessage ? (
+              <p>User error: {errorMessage}</p>
+            ) : (
+              <p className="block" data-cy="modal-user">
+                {/* <strong className="has-text-success">Done</strong> */}
+                {todo.completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-              {' by '}
+                {' by '}
 
-              <a href={`mailto:${user?.email}`}>{user?.name}</a>
-            </p>
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              </p>
+            )}
           </div>
         </div>
       )}

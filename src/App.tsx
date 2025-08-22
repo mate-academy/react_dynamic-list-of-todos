@@ -44,6 +44,7 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState(-1);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
   const preparedTodos = prepareTodos(todos, todosFilterOption, searchQuery);
@@ -51,6 +52,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(() => {
+        setErrorMessage('Loading data error');
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -74,8 +78,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading ? (
+              {errorMessage ? (
+                <p>{errorMessage}</p>
+              ) : isLoading ? (
                 <Loader />
+              ) : preparedTodos.length === 0 ? (
+                <p>No todos match your current filters.</p>
               ) : (
                 <TodoList
                   todos={preparedTodos}
