@@ -45,7 +45,7 @@ function preperedData(
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [groupBy, setGroupBy] = useState('All');
+  const [groupBy, setGroupBy] = useState<'all' | 'active' | 'completed'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [loadingModal, setLoadingModal] = useState(false);
   const [loadingStartWindow, setLoadingStartWindow] = useState(false);
@@ -68,7 +68,7 @@ export const App: React.FC = () => {
       .finally(() => setLoadingStartWindow(false));
   }, []);
 
-  const handleOptionSort = (event: string) => {
+  const handleOptionSort = (event: 'all' | 'active' | 'completed') => {
     setGroupBy(event);
   };
 
@@ -113,6 +113,7 @@ export const App: React.FC = () => {
                 searchQuery={searchQuery}
                 handleSetSearchQuery={handleSetSearchQuery}
                 handleResetQuery={handleResetQuery}
+                groupBy={groupBy}
               />
             </div>
 

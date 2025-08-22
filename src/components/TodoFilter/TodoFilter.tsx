@@ -1,10 +1,12 @@
 import React from 'react';
+import cn from 'classnames';
 
 type Props = {
   handleOptionSort: (event: string) => void;
   searchQuery: string;
   handleSetSearchQuery: (event: string) => void;
   handleResetQuery: () => void;
+  groupBy: string;
 };
 // React.ChangeEvent<HTMLInputElement
 export const TodoFilter: React.FC<Props> = ({
@@ -12,12 +14,14 @@ export const TodoFilter: React.FC<Props> = ({
   searchQuery,
   handleSetSearchQuery,
   handleResetQuery,
+  groupBy,
 }) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
+            value={groupBy}
             data-cy="statusSelect"
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
               handleOptionSort(event.target.value)
