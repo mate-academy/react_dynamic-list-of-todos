@@ -7,20 +7,28 @@ const BASE_URL =
 
 // This function creates a promise
 // that is resolved after a given delay
-function wait(delay: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
+async function wait(delay: number): Promise<void> {
+  try {
+    return await new Promise(resolve => {
+      setTimeout(resolve, delay);
+    });
+  } catch (e) {
+    throw e instanceof Error ? e : new Error(String(e));
+  }
 }
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+async function get<T>(url: string): Promise<T> {
+  try {
+    const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+    // we add some delay to see how the loader works
+    return await wait(300)
+      .then(() => fetch(fullURL))
+      .then(res => res.json());
+  } catch (e) {
+    throw e instanceof Error ? e : new Error(String(e));
+  }
+  // eslint-disable-next-line prefer-template
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
