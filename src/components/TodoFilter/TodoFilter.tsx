@@ -2,12 +2,14 @@ import React from 'react';
 import { FilterOptions } from '../../types/FilterOptions';
 
 type Props = {
+  filterOption: FilterOptions;
   searchQuery: string;
   onSearchQueryChanged: (query: string) => void;
   onFilterOptionSelected: (option: FilterOptions) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
+  filterOption,
   searchQuery,
   onSearchQueryChanged,
   onFilterOptionSelected,
@@ -17,6 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           data-cy="statusSelect"
+          value={filterOption}
           onChange={event =>
             onFilterOptionSelected(event.target.value as FilterOptions)
           }

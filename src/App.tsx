@@ -71,6 +71,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                filterOption={todosFilterOption}
                 searchQuery={searchQuery}
                 onSearchQueryChanged={setSearchQuery}
                 onFilterOptionSelected={setTodosFilterOption}
