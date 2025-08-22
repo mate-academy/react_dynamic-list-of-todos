@@ -1,43 +1,71 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import cn from 'classnames';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  loadingModal: boolean;
+  openModal: boolean;
+  user: User | undefined;
+  choosenTodoData: Todo | undefined;
+  handleCloseModal: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  loadingModal,
+  openModal,
+  user,
+  choosenTodoData,
+  handleCloseModal,
+}) => {
   return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+    <>
+      {openModal && (
+        <div className="modal is-active" data-cy="modal">
+          <div className="modal-background" />
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
+          {loadingModal ? (
+            <Loader />
+          ) : (
+            <div className="modal-card">
+              <header className="modal-card-head">
+                <div
+                  className="modal-card-title has-text-weight-medium"
+                  data-cy="modal-header"
+                >
+                  {`Todo #${choosenTodoData?.id}`}
+                </div>
+
+                <button
+                  type="button"
+                  className="delete"
+                  data-cy="modal-close"
+                  onClick={handleCloseModal}
+                />
+              </header>
+
+              <div className="modal-card-body">
+                <p className="block" data-cy="modal-title">
+                  {choosenTodoData?.title}
+                </p>
+
+                <p className="block" data-cy="modal-user">
+                  <strong
+                    className={cn('has-text-success', {
+                      'has-text-danger': !choosenTodoData?.completed,
+                    })}
+                  >
+                    {choosenTodoData?.completed ? 'Done' : 'Planned'}
+                  </strong>
+                  {' by '}
+                  <a href={`mailto:${user?.email}`}>{user?.name}</a>
+                </p>
+              </div>
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };

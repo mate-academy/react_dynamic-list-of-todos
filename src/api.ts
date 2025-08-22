@@ -13,14 +13,18 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-function get<T>(url: string): Promise<T> {
+async function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+  try {
+    const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+    // we add some delay to see how the loader works
+    return await wait(300)
+      .then(() => fetch(fullURL))
+      .then(res => res.json());
+  } catch (e) {
+    throw e instanceof Error ? e : new Error(String(e));
+  }
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
