@@ -5,53 +5,37 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { Todo } from './types/Todo';
-
-import { Loader } from './components/Loader';
-import { getTodos } from './api';
 import { TodoModal } from './components/TodoModal';
-
-export enum Filter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-}
-
-function filterTodo(selectedFilter: Filter, todo: Todo) {
-  switch (selectedFilter) {
-    case Filter.All:
-      return todo;
-    case Filter.Active:
-      return todo && !todo.completed;
-    case Filter.Completed:
-      return todo && todo.completed;
-    default:
-      return 0;
-  }
-}
+import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  const [loader, setLoader] = useState(false);
-  const [allTodos, setAllTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
+  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+  const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const [selectedFilter, setSelectedFilter] = useState<Filter>(Filter.All);
-  const [inputValue, setInputValue] = useState('');
-
   useEffect(() => {
-    setAllTodos([]);
-    setLoader(true);
-    getTodos().then(todosFromServer => {
-      setAllTodos(todosFromServer);
-      setLoader(false);
-    });
+    setIsLoadingTodos(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
-  const todos = allTodos.filter(
-    todo =>
-      filterTodo(selectedFilter, todo) &&
-      todo.title.toLowerCase().includes(inputValue.toLowerCase()),
-  );
+  const visibleTodos = todos.filter(todo => {
+    const matchesStatus =
+      status === 'all' ||
+      (status === 'completed' && todo.completed) ||
+      (status === 'active' && !todo.completed);
+
+    const matchesQuery = todo.title
+      .toLowerCase()
+      .includes(query.toLocaleLowerCase());
+
+    return matchesStatus && matchesQuery;
+  });
 
   return (
     <>
@@ -62,19 +46,23 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectFilter={setSelectedFilter}
-                input={inputValue}
-                setInputValue={setInputValue}
+                status={status}
+                onStatusChange={val =>
+                  setStatus(val as 'all' | 'active' | 'completed')
+                }
+                query={query}
+                onQueryChange={setQuery}
+                onClearQuery={() => setQuery('')}
               />
             </div>
 
             <div className="block">
-              {loader ? (
+              {isLoadingTodos ? (
                 <Loader />
               ) : (
                 <TodoList
-                  todos={todos}
-                  selectTodo={setSelectedTodo}
+                  todos={visibleTodos}
+                  onSelect={setSelectedTodo}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -82,9 +70,8 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {selectedTodo !== null && (
-        <TodoModal todo={selectedTodo} deleteTodo={setSelectedTodo} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
