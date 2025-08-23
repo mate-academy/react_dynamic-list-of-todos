@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,20 +6,23 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getActiveTodos, getcompletedTodos, getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo, FilterTypes } from './types/Todo';
-import { User } from './types/User';
+import { useFetch } from './hooks/useFetch';
+import { preparedTodos } from './hooks/preparedTodos';
 
 export const App: React.FC = () => {
-  const [preparedTodos, setPreparedTodos] = useState<Todo[]>([]);
   const [filterStatus, setFilterStatus] = useState<FilterTypes>(
     FilterTypes.All,
   );
   const [textInput, setTextInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [todoModalStatus, setTodoModalStatus] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [preparedUser, setPreparedUser] = useState<User | null>(null);
+  const [todos, isLoading] = useFetch<Todo[]>(getTodos);
+
+  const filteredTodos = useMemo(() => {
+    return todos ? preparedTodos(todos, filterStatus, textInput) : [];
+  }, [todos, filterStatus, textInput]);
 
   const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterStatus(event.target.value as FilterTypes);
@@ -44,44 +46,6 @@ export const App: React.FC = () => {
     setTodoModalStatus(false);
   };
 
-  useEffect(() => {
-    let todos: Promise<Todo[]>;
-
-    setIsLoading(true);
-
-    if (FilterTypes.All === filterStatus) {
-      todos = getTodos();
-    } else if (FilterTypes.Active === filterStatus) {
-      todos = getActiveTodos();
-    } else if (FilterTypes.Completed === filterStatus) {
-      todos = getcompletedTodos();
-    }
-
-    todos
-      .then(data => {
-        const filtered = data.filter(todo =>
-          todo.title
-            .toLowerCase()
-            .trim()
-            .includes(textInput.toLowerCase().trim()),
-        );
-
-        setPreparedTodos(filtered);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [filterStatus, textInput]);
-
-  useEffect(() => {
-    if (!selectedTodo) {
-      return;
-    }
-
-    setPreparedUser(null);
-    getUser(selectedTodo.userId).then(user => setPreparedUser(user));
-  }, [selectedTodo]);
-
   return (
     <>
       <div className="section">
@@ -104,7 +68,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  preparedTodos={preparedTodos}
+                  filteredTodos={filteredTodos}
                   handleOpenModal={handleOpenModal}
                   todoModalStatus={todoModalStatus}
                   selectedTodo={selectedTodo}
@@ -119,7 +83,6 @@ export const App: React.FC = () => {
         todoModalStatus={todoModalStatus}
         handleCloseModal={handleCloseModal}
         selectedTodo={selectedTodo}
-        preparedUser={preparedUser}
       />
     </>
   );

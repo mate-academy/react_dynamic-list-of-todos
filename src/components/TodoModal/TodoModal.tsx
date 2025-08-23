@@ -1,20 +1,31 @@
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { useEffect, useState } from 'react';
+import { getUser } from '../../api';
 
 type Props = {
   todoModalStatus: boolean;
   handleCloseModal: () => void;
   selectedTodo: Todo | null;
-  preparedUser: User | null;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todoModalStatus,
   handleCloseModal,
   selectedTodo,
-  preparedUser,
 }) => {
+  const [preparedUser, setPreparedUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!selectedTodo) {
+      return;
+    }
+
+    setPreparedUser(null);
+    getUser(selectedTodo.userId).then(user => setPreparedUser(user));
+  }, [selectedTodo]);
+
   if (!todoModalStatus || !selectedTodo) {
     return null;
   }
