@@ -21,7 +21,7 @@ export const TodoModal: React.FC<Props> = ({
       setUser(fetchedUser);
       setLoading(true);
     });
-  }, []);
+  }, [selectedTodoUserId]);
   const handleCloseButton = () => {
     setLoading(false);
     onIsOpen(false);

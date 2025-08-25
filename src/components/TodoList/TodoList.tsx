@@ -4,7 +4,7 @@ import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 type Props = {
   todos: Todo[];
-  onSelectedTodo: (todo: Todo) => void;
+  onSelectedTodo: (todo: Todo | undefined) => void;
   onSelectedTodoUserId: (userId: number) => void;
   onIsOpen: (value: boolean) => void;
   isOpen: boolean;
@@ -18,7 +18,7 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   const [selectedTodo, setSelectedTodo] = useState<number>(0);
 
-  function getTodo(id: number): Todo {
+  function getTodo(id: number): Todo | undefined {
     return [...todos].find(todo => todo.id === id);
   }
 
