@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 
 import cn from 'classnames';
@@ -22,7 +22,9 @@ export const TodoList: React.FC<Props> = ({
     return [...todos].find(todo => todo.id === id);
   }
 
-  onSelectedTodo(getTodo(selectedTodo));
+  useEffect(() => {
+    onSelectedTodo(getTodo(selectedTodo));
+  }, [selectedTodo, todos]);
 
   return (
     <table className="table is-narrow is-fullwidth">
