@@ -66,6 +66,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={getFiltered(todos)}
+                  selectedTodo={selectedTodo}
                   onSelectedTodo={setSelectedTodo}
                   onSelectedTodoUserId={setSelectedTodoUserId}
                   onIsOpen={setIsOpen}

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 
 import cn from 'classnames';
 type Props = {
   todos: Todo[];
   onSelectedTodo: (todo: Todo | undefined) => void;
+  selectedTodo: Todo | undefined;
   onSelectedTodoUserId: (userId: number) => void;
   onIsOpen: (value: boolean) => void;
   isOpen: boolean;
@@ -12,19 +13,14 @@ type Props = {
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectedTodo,
+  selectedTodo,
   onSelectedTodoUserId,
   onIsOpen,
   isOpen,
 }) => {
-  const [selectedTodo, setSelectedTodo] = useState<number>(0);
-
   function getTodo(id: number): Todo | undefined {
     return [...todos].find(todo => todo.id === id);
   }
-
-  useEffect(() => {
-    onSelectedTodo(getTodo(selectedTodo));
-  }, [selectedTodo, todos]);
 
   return (
     <table className="table is-narrow is-fullwidth">
@@ -70,12 +66,12 @@ export const TodoList: React.FC<Props> = ({
                   className="button"
                   type="button"
                   onClick={() => {
-                    setSelectedTodo(todo.id);
                     onSelectedTodoUserId(todo.userId);
                     onIsOpen(true);
+                    onSelectedTodo(getTodo(todo.id));
                   }}
                 >
-                  {isOpen && selectedTodo === todo.id ? (
+                  {isOpen && selectedTodo?.id === todo.id ? (
                     <span className="icon" data-cy="iconCompleted">
                       <i className="far fa-eye-slash" />
                     </span>
