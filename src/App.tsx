@@ -1,22 +1,22 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from "react";
-import "bulma/css/bulma.css";
-import "@fortawesome/fontawesome-free/css/all.css";
+import React, { useEffect, useMemo, useState } from 'react';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
-import { TodoList } from "./components/TodoList";
-import { TodoFilter } from "./components/TodoFilter";
-import { TodoModal } from "./components/TodoModal";
-import { Loader } from "./components/Loader";
-import { getTodos } from "./api";
-import { Todo } from "./types/Todo";
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { TodoModal } from './components/TodoModal';
+import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
-type Status = "all" | "active" | "completed";
+type Status = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [query, setQuery] = useState<string>("");
-  const [status, setStatus] = useState<Status>("all");
+  const [query, setQuery] = useState<string>('');
+  const [status, setStatus] = useState<Status>('all');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
@@ -25,12 +25,19 @@ export const App: React.FC = () => {
       try {
         setLoading(true);
         const data = await getTodos();
-        if (isMounted) setTodos(data);
+
+        if (isMounted) {
+          setTodos(data);
+        }
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     load();
+
     return () => {
       isMounted = false;
     };
@@ -38,19 +45,23 @@ export const App: React.FC = () => {
 
   const filteredTodos = useMemo(() => {
     let list = todos;
-    if (status === "completed") {
+
+    if (status === 'completed') {
       list = list.filter(t => t.completed);
-    } else if (status === "active") {
+    } else if (status === 'active') {
       list = list.filter(t => !t.completed);
     }
+
     const q = query.trim().toLowerCase();
+
     if (q) {
       list = list.filter(t => t.title.toLowerCase().includes(q));
     }
+
     return list;
   }, [todos, status, query]);
 
-  const handleClearQuery = () => setQuery("");
+  const handleClearQuery = () => setQuery('');
   const closeModal = () => setSelectedTodo(null);
 
   return (
@@ -76,7 +87,6 @@ export const App: React.FC = () => {
                 onShow={setSelectedTodo}
                 onHide={() => setSelectedTodo(null)}
               />
-
             </div>
           </div>
         </div>

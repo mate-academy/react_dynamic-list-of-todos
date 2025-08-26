@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Loader } from "../Loader";
-import { Todo } from "../../types/Todo";
-import { getUser } from "../../api";
-import { User } from "../../types/User";
+/* eslint-disable @typescript-eslint/indent, indent */
+import React, { useEffect, useState } from 'react';
+import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 type Props = {
   todo: Todo;
@@ -20,13 +21,14 @@ export const TodoModal: React.FC<Props> = ({ todo, clearHandler }) => {
       setLoading(true);
       try {
         const u = await getUser(todo.userId);
+
         if (isActive) {
-          setUser(u)
-        };
+          setUser(u);
+        }
       } finally {
         if (isActive) {
           setLoading(false);
-        };
+        }
       }
     };
 

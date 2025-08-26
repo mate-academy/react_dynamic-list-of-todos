@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent, indent */
 import React from 'react';
 import cn from 'classnames';
 import { Todo } from '../../types/Todo';
@@ -31,7 +32,7 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {todos.map((t) => {
+        {todos.map(t => {
           const isSelected = selectedId === t.id;
 
           return (

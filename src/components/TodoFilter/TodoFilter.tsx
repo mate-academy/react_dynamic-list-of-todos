@@ -1,4 +1,5 @@
-import React, { FormEvent } from "react";
+/* eslint-disable @typescript-eslint/indent, indent */
+import React, { FormEvent } from 'react';
 
 type Props = {
   query: string;
@@ -20,7 +21,7 @@ export const TodoFilter: React.FC<Props> = ({
   };
 
   const handleStatus = (e: FormEvent<HTMLSelectElement>) => {
-    onStatusChange(e.currentTarget.value as "all" | "active" | "completed");
+    onStatusChange(e.currentTarget.value as 'all' | 'active' | 'completed');
   };
 
   return (
@@ -49,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: "all" }}>
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
