@@ -7,14 +7,14 @@ type Props = {
   userLoading: boolean;
   currentTodo: Todo;
   currentUser: User | null;
-  onDeleteTodo?: (null1: null) => void;
+  onClose?: (null1: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   userLoading,
   currentTodo,
   currentUser,
-  onDeleteTodo = () => {},
+  onClose = () => {},
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
@@ -38,7 +38,7 @@ export const TodoModal: React.FC<Props> = ({
               className="delete"
               data-cy="modal-close"
               onClick={() => {
-                onDeleteTodo(null);
+                onClose(null);
               }}
             />
           </header>

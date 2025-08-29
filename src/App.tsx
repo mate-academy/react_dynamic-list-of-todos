@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
+    setErrorMessage('');
     setLoading(true);
 
     getTodos()
@@ -33,14 +34,14 @@ export const App: React.FC = () => {
   }, []);
 
   function getTodoByUserId(todo: Todo) {
+    setErrorMessage('');
     setUserLoading(true);
     setCurrentTodo(todo);
 
     getUser(todo.userId)
       .then(setCurrentUser)
-      .catch(error => setErrorMessage(error.message));
-
-    setTimeout(() => setUserLoading(false), 300);
+      .catch(error => setErrorMessage(error.message))
+      .finally(() => setUserLoading(false));
   }
 
   return (
@@ -82,7 +83,7 @@ export const App: React.FC = () => {
           currentTodo={currentTodo}
           currentUser={currentUser}
           userLoading={userLoading}
-          onDeleteTodo={setCurrentTodo}
+          onClose={setCurrentTodo}
         />
       )}
     </>
