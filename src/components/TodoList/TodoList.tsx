@@ -1,51 +1,102 @@
-import React from 'react';
+import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+type Props = {
+  todos: Todo[];
+  setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectTodo: React.Dispatch<React.SetStateAction<Todo | undefined>>;
+  modalIsOpen: boolean;
+   selectTodo?: Todo;
+};
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setModalIsOpen,
+  setSelectTodo,
+  modalIsOpen,
+   selectTodo
+}) => {
+
+
+
+  const handleShowTodo = (todo : Todo) => {
+    setModalIsOpen(true);
+    setSelectTodo(todo);
+  }
+
+
+
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>
             <span className="icon">
-              <i className="far fa-eye" />
+              <i className="fas fa-check" />
             </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+          </th>
+          <th>Title</th>
+          <th> </th>
+        </tr>
+      </thead>
 
-      <tr data-cy="todo" className="">
+      <tbody>
+       {todos.map(todo => (
+  <tr data-cy="todo" key={todo.id}>
+
+    <td className="is-vcentered">{todo.id}</td>
+
+
+    <td className="is-vcentered">
+      {todo.completed && (
+        <span className="icon" data-cy="iconCompleted">
+          <i className="fas fa-check" />
+        </span>
+      )}
+    </td>
+
+
+    <td className="is-vcentered is-expanded">
+      <p
+        className={classNames({
+          'has-text-success': todo.completed,
+          'has-text-danger': !todo.completed,
+        })}
+      >
+        {todo.title}
+      </p>
+    </td>
+
+
+    <td className="has-text-right is-vcentered">
+      <button
+        data-cy="selectButton"
+        className="button"
+        type="button"
+        onClick={() => handleShowTodo(todo)}
+      >
+        <span className="icon">
+          <i
+            className={classNames('far', {
+              'fa-eye-slash': modalIsOpen && selectTodo?.id === todo.id,
+              'fa-eye': !(modalIsOpen && selectTodo?.id === todo.id),
+            })}
+          />
+        </span>
+      </button>
+    </td>
+  </tr>
+))}
+      </tbody>
+    </table>
+  );
+};
+
+/*
+
+
+<tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -95,6 +146,23 @@ export const TodoList: React.FC = () => (
           </button>
         </td>
       </tr>
-    </tbody>
-  </table>
-);
+
+
+
+
+       <tr data-cy="todo" className="has-background-info-light">
+              <td className="is-vcentered">2</td>
+              <td className="is-vcentered" />
+              <td className="is-vcentered is-expanded">
+                <p className="has-text-danger">quis ut nam facilis et officia qui</p>
+              </td>
+              <td className="has-text-right is-vcentered">
+                <button data-cy="selectButton" className="button" type="button">
+                  <span className="icon">
+                    <i className="far fa-eye-slash" />
+                  </span>
+                </button>
+              </td>
+            </tr>
+
+      */
