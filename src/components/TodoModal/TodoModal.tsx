@@ -22,7 +22,6 @@ export const TodoModal = ({ todo, onClose }: TodoModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
   useEffect(() => {
     if (todo) {
       const fetchUser = async () => {

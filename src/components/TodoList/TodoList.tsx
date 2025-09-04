@@ -11,9 +11,14 @@ type Todo = {
 type Props = {
   todos: Todo[];
   onSelect: (todo: Todo) => void;
+  selectedTodoId: number | null;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect }: Props) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelect,
+  selectedTodoId,
+}: Props) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -30,7 +35,12 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }: Props) => (
 
     <tbody>
       {todos.map(todo => (
-        <TodoRow key={todo.id} todo={todo} onSelect={onSelect} />
+        <TodoRow
+          key={todo.id}
+          todo={todo}
+          onSelect={onSelect}
+          selectedTodoId={selectedTodoId}
+        />
       ))}
     </tbody>
   </table>

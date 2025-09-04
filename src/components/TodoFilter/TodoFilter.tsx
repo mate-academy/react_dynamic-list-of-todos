@@ -18,7 +18,9 @@ export const TodoFilter: React.FC<Props> = ({
       <span className="select">
         <select
           value={filter}
-          onChange={event => onFilterChange(event.target.value)}
+          onChange={event =>
+            onFilterChange(event.target.value as 'all' | 'active' | 'completed')
+          }
           data-cy="statusSelect"
         >
           <option value="all">All</option>
@@ -50,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
             type="button"
             className="delete"
           />
-          </span>
+        </span>
       )}
     </p>
   </form>

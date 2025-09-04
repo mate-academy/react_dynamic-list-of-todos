@@ -38,14 +38,19 @@ export const App: React.FC = () => {
     );
   
   const handleSelectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
+    setSelectedTodo(selectedTodo?.id === todo.id ? null : todo);
   };
 
   useEffect(() => {
     setIsLoading(true);
     getTodos()
-      .then(setTodos)
-      .catch(console.error)
+      .then(data => {
+        setTodos(data);
+        setError(null);
+      })
+      .catch(error => {
+        setError(error instanceof Error ? error.message : 'Failed to load todos');
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -71,7 +76,11 @@ export const App: React.FC = () => {
                {isLoading ? (
                  <Loader />
                ) : (
-                 <TodoList todos={filteredTodos} onSelect={handleSelectTodo} />
+                   <TodoList
+                     todos={filteredTodos}
+                     onSelect={handleSelectTodo}
+                     selectedTodoId={selectedTodo?.id ?? null}
+                   />
                )}
              </div>
            </div>
