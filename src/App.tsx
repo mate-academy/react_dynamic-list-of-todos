@@ -7,28 +7,89 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { useState } from 'react';
+import { Todo } from './types/Todo';
+import { useEffect } from 'react';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
-  return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [query, setQuery] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
-            <div className="block">
-              <TodoFilter />
-            </div>
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+  };
 
-            <div className="block">
-              <Loader />
-              <TodoList />
-            </div>
-          </div>
-        </div>
-      </div>
+  const clearQuery = () => setQuery('');
 
-      <TodoModal />
-    </>
-  );
+  const filteredTodos = todos
+    .filter(todo => {
+      if (filter === 'all') return true;
+      if (filter === 'active') return !todo.completed;
+      if (filter === 'completed') return todo.completed;
+      return true;
+    })
+    .filter(todo => 
+      todo.title.toLowerCase().includes(query.toLowerCase())
+    );
+  
+  const handleSelectTodo = (todo: Todo) => {
+    setSelectedTodo(selectedTodo?.id === todo.id ? null : todo);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(data => {
+        setTodos(data);
+        setError(null);
+      })
+      .catch(error => {
+        setError(error instanceof Error ? error.message : 'Failed to load todos');
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
+
+
+   return (
+     <>
+       <div className="section">
+         <div className="container">
+           <div className="box">
+             <h1 className="title">Todos:</h1>
+
+             <div className="block">
+               <TodoFilter
+                 filter={filter}
+                 onFilterChange={setFilter}
+                 query={query}
+                 onQueryChange={setQuery}
+                 onClearQuery={clearQuery}
+               />
+             </div>
+
+             <div className="block">
+               {isLoading ? (
+                 <Loader />
+               ) : (
+                   <TodoList
+                     todos={filteredTodos}
+                     onSelect={handleSelectTodo}
+                     selectedTodoId={selectedTodo?.id ?? null}
+                   />
+               )}
+             </div>
+           </div>
+         </div>
+       </div>
+
+       {selectedTodo && (
+         <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
+       )}
+     </>
+   );
 };
