@@ -9,7 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { useState } from 'react';
 import { Todo } from './types/Todo';
-
+import { useEffect } from 'react';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -39,6 +40,15 @@ export const App: React.FC = () => {
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  }, []);
+
 
    return (
      <>
