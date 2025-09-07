@@ -1,5 +1,5 @@
-/* eslint-disable max-len */
-import React from 'react';
+/* eslint-disable */
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,68 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
+type StringCompletedOptions = 'all' | 'active' | 'completed';
+
+type FilterProps = {
+  query: string;
+  completeQuery: StringCompletedOptions;
+};
+
+function prepareTodos(
+  todosFromServer: Todo[],
+  { query, completeQuery }: FilterProps,
+) {
+  return todosFromServer.filter(todo => {
+    const matchesQuery =
+      !query || todo.title.toLowerCase().includes(query.toLowerCase());
+    const matchesStatus =
+      completeQuery === 'all' ||
+      todo.completed === (completeQuery === 'completed');
+    return matchesQuery && matchesStatus;
+  });
+}
 
 export const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [query, setQuery] = useState('');
+  const [completeQuery, setCompleteQuery] =
+    useState<StringCompletedOptions>('all');
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSelectedTodoIdChange = (id: number) => {
+    setSelectedTodoId(id);
+  };
+
+  const handleWindowClose = () => {
+    setSelectedTodoId(null);
+  };
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleCompleteQueryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setCompleteQuery(event.target.value as StringCompletedOptions);
+  };
+
+  const handleFilterClear = () => {
+    setQuery('');
+  };
+
+  const visibleTodos = prepareTodos(todos, { query, completeQuery });
+
   return (
     <>
       <div className="section">
@@ -17,18 +77,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                onCompleteQuery={completeQuery}
+                onQueryChange={handleQueryChange}
+                onCompleteQueryChange={handleCompleteQueryChange}
+                onFilterClear={handleFilterClear}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  onTodoSelect={handleSelectedTodoIdChange}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodoId !== null && (
+        <TodoModal
+          todo={todos.find(todo => todo.id === selectedTodoId) as Todo}
+          onClose={handleWindowClose}
+        />
+      )}
     </>
   );
 };
