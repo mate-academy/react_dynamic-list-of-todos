@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -30,9 +31,9 @@ const TodoListComponent: React.FC<Props> = ({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={
-            todo.id === selectedTodoId ? 'has-background-info-light' : ''
-          }
+          className={cn({
+            'has-background-info-light': todo.id === selectedTodoId,
+          })}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
@@ -45,9 +46,10 @@ const TodoListComponent: React.FC<Props> = ({
           </td>
           <td className="is-vcentered is-expanded">
             <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
+              className={cn({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
             >
               {todo.title}
             </p>
@@ -61,7 +63,10 @@ const TodoListComponent: React.FC<Props> = ({
             >
               <span className="icon">
                 <i
-                  className={`far ${todo.id === selectedTodoId ? 'fa-eye-slash' : 'fa-eye'}`}
+                  className={cn('far', {
+                    'fa-eye-slash': todo.id === selectedTodoId,
+                    'fa-eye': todo.id !== selectedTodoId,
+                  })}
                 />
               </span>
             </button>

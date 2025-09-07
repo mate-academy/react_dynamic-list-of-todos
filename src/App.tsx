@@ -79,10 +79,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                completeQuery={completeQuery}
-                handleQueryChange={handleQueryChange}
-                handleCompleteQueryChange={handleCompleteQueryChange}
-                handleFilterClear={handleFilterClear}
+                onCompleteQuery={completeQuery}
+                onQueryChange={handleQueryChange}
+                onCompleteQueryChange={handleCompleteQueryChange}
+                onFilterClear={handleFilterClear}
               />
             </div>
 
@@ -104,7 +104,7 @@ export const App: React.FC = () => {
       {selectedTodoId !== null && (
         <TodoModal
           todo={todos.find(todo => todo.id === selectedTodoId) as Todo}
-          handleWindowClose={handleWindowClose}
+          onClose={handleWindowClose}
         />
       )}
     </>

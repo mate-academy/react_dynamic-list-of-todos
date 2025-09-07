@@ -1,27 +1,25 @@
 type Props = {
   query: string;
-  completeQuery: string;
-  handleQueryChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleCompleteQueryChange?: (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => void;
-  handleFilterClear?: () => void;
+  onCompleteQuery: string;
+  onQueryChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onCompleteQueryChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onFilterClear?: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  completeQuery,
-  handleQueryChange = () => {},
-  handleCompleteQueryChange = () => {},
-  handleFilterClear = () => {},
+  onCompleteQuery,
+  onQueryChange = () => {},
+  onCompleteQueryChange = () => {},
+  onFilterClear = () => {},
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          value={completeQuery}
-          onChange={handleCompleteQueryChange}
+          value={onCompleteQuery}
+          onChange={onCompleteQueryChange}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -37,7 +35,7 @@ export const TodoFilter: React.FC<Props> = ({
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={handleQueryChange}
+        onChange={onQueryChange}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -50,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => handleFilterClear()}
+            onClick={() => onFilterClear()}
           />
         )}
       </span>
