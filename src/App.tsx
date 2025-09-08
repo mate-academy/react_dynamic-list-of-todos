@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -8,7 +8,7 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getActiveTodos, getCompletedTodos, getTodos } from './api';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
   const [todosFromServer, setTodosFromServer] = useState<Todo[]>([]);
@@ -18,27 +18,29 @@ export const App: React.FC = () => {
   const [textFilter, setTextFilter] = useState('');
 
   useEffect(() => {
-    const loader =
-      filter === 'all'
-        ? getTodos
-        : filter === 'completed'
-          ? getCompletedTodos
-          : getActiveTodos;
-
-    loader()
-      .then(todos =>
-        todos.filter(todo =>
-          textFilter
-            ? todo.title.toLowerCase().includes(textFilter.toLowerCase())
-            : todo,
-        ),
-      )
+    getTodos()
       .then(setTodosFromServer)
       .catch(() => {
         setTodosFromServer([]);
       })
       .finally(() => setLoading(false));
-  }, [filter, textFilter]);
+  }, []);
+
+  const filteredTodos = useMemo(() => {
+    return todosFromServer
+      .filter(todo => {
+        return filter === 'all'
+          ? true
+          : filter === 'completed'
+            ? todo.completed
+            : !todo.completed;
+      })
+      .filter(todo =>
+        textFilter
+          ? todo.title.toLowerCase().includes(textFilter.toLowerCase())
+          : todo,
+      );
+  }, [filter, todosFromServer, textFilter]);
 
   return (
     <>
@@ -49,8 +51,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onSelect={value => setFilter(value)}
-                onPrint={query => {
+                onFilterChange={value => setFilter(value)}
+                onQueryChange={query => {
                   setTextFilter(query);
                 }}
               />
@@ -59,10 +61,10 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todosFromServer.length > 0 && (
+              {!loading && filteredTodos.length > 0 && (
                 <TodoList
-                  todos={todosFromServer}
-                  onSelect={todo => setActiveTodo(todo)}
+                  todos={filteredTodos}
+                  onFilterChange={todo => setActiveTodo(todo)}
                   activeTodo={activeTodo}
                 />
               )}

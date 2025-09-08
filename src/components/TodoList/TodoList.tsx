@@ -1,13 +1,18 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
-  onSelect: (todo: Todo) => void;
+  onFilterChange: (todo: Todo) => void;
   activeTodo?: Todo | undefined;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect, activeTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onFilterChange,
+  activeTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -27,7 +32,9 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect, activeTodo }) => {
         {todos.map(todo => (
           <tr
             data-cy="todo"
-            className={todo === activeTodo ? 'has-background-info-light' : ''}
+            className={classNames('', {
+              'has-background-info-light': todo === activeTodo,
+            })}
             key={todo.id}
           >
             <td className="is-vcentered">{todo.id}</td>
@@ -40,9 +47,10 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect, activeTodo }) => {
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
@@ -52,7 +60,7 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect, activeTodo }) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onSelect(todo)}
+                onClick={() => onFilterChange(todo)}
               >
                 <span className="icon">
                   <i
