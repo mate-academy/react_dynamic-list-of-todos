@@ -18,9 +18,15 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see how the loader works
-  return wait(300)
+  return wait(500)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`${res.status} ${res.statusText}`);
+      }
+
+      return res.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
