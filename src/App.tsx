@@ -27,14 +27,36 @@ export const App: React.FC = () => {
   const visibleTodos = useMemo(() => {
     return todos
       .filter(todo => {
-        if (statusFilter === 'active') return !todo.completed;
-        if (statusFilter === 'completed') return todo.completed;
+        if (statusFilter === 'active') {
+          return !todo.completed;
+        }
+
+        if (statusFilter === 'completed') {
+          return todo.completed;
+        }
+
         return true;
       })
       .filter(todo =>
         todo.title.toLowerCase().includes(searchFilter.toLowerCase()),
       );
   }, [todos, statusFilter, searchFilter]);
+
+  const handleStatusFilterChange = (value: FilterType) => {
+    setStatusFilter(value);
+  };
+
+  const handleSearchQueryChange = (value: string) => {
+    setSearchFilter(value);
+  };
+
+  const handleSelectTodo = (id: number) => {
+    setSelectedTodoId(id);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTodoId(0);
+  };
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
@@ -48,9 +70,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 statusFilter={statusFilter}
-                setStatusFilter={setStatusFilter}
+                onStatusChange={handleStatusFilterChange}
                 searchFilter={searchFilter}
-                setSearchFilter={setSearchFilter}
+                onQueryChange={handleSearchQueryChange}
               />
             </div>
 
@@ -59,7 +81,7 @@ export const App: React.FC = () => {
 
               <TodoList
                 todos={visibleTodos}
-                setSelectedTodoId={setSelectedTodoId}
+                onSelect={handleSelectTodo}
                 selectedTodoId={selectedTodoId}
               />
             </div>
@@ -67,11 +89,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && (
-        <TodoModal
-          selectedTodo={selectedTodo}
-          setSelectedTodoId={setSelectedTodoId}
-        />
+      {selectedTodoId && selectedTodo && (
+        <TodoModal selectedTodo={selectedTodo} onClose={handleCloseModal} />
       )}
     </>
   );

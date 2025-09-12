@@ -1,18 +1,31 @@
+import React, { ChangeEvent } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
   statusFilter: FilterType;
-  setStatusFilter: (value: FilterType) => void;
+  onStatusChange: (value: FilterType) => void;
   searchFilter: string;
-  setSearchFilter: (value: string) => void;
+  onQueryChange: (value: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   statusFilter,
-  setStatusFilter,
+  onStatusChange,
   searchFilter,
-  setSearchFilter,
+  onQueryChange,
 }) => {
+  const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    onStatusChange(e.target.value as FilterType);
+  };
+
+  const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(e.target.value);
+  };
+
+  const handleClearQuery = () => {
+    onQueryChange('');
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -20,7 +33,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value as FilterType)}
+            onChange={handleStatusChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -36,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={searchFilter}
-          onChange={e => setSearchFilter(e.target.value)}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -48,7 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setSearchFilter('')}
+              onClick={handleClearQuery}
             />
           </span>
         )}

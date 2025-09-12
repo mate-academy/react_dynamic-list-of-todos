@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
+
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
@@ -6,23 +8,39 @@ import { User } from '../../types/User';
 
 type Props = {
   selectedTodo: Todo;
-  setSelectedTodoId: (value: number) => void;
+  onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodoId,
-}) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     setLoading(true);
 
     getUser(selectedTodo.userId)
-      .then(setUser)
-      .finally(() => setLoading(false));
+      .then(fetchedUser => {
+        if (isMounted) {
+          setUser(fetchedUser);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [selectedTodo]);
+
+  const handleClose = () => {
+    onClose();
+    setUser(null);
+  };
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -44,10 +62,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => {
-                setSelectedTodoId(0);
-                setUser(null);
-              }}
+              onClick={handleClose}
             />
           </header>
 
@@ -58,11 +73,10 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  selectedTodo.completed
-                    ? 'has-text-success'
-                    : 'has-text-danger'
-                }
+                className={cn({
+                  'has-text-success': selectedTodo.completed,
+                  'has-text-danger': !selectedTodo.completed,
+                })}
               >
                 {selectedTodo.completed ? 'Done' : 'Planned'}
               </strong>
