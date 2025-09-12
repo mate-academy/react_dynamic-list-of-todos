@@ -11,7 +11,7 @@ type Props = {
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
+export const TodoModal = ({ selectedTodo, onClose }: Props) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -38,8 +38,8 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   }, [selectedTodo]);
 
   const handleClose = () => {
-    onClose();
-    setUser(null);
+    setUser(null); // сначала локальный сброс
+    onClose(); // потом уведомляем родителя
   };
 
   return (

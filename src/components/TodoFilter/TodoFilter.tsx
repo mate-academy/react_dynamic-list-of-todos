@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { FilterType } from '../../types/FilterType';
 
 type Props = {
@@ -8,12 +8,12 @@ type Props = {
   onQueryChange: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilter = ({
   statusFilter,
   onStatusChange,
   searchFilter,
   onQueryChange,
-}) => {
+}: Props) => {
   const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
     onStatusChange(e.target.value as FilterType);
   };
