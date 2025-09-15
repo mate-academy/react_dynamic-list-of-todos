@@ -1,100 +1,64 @@
 import React from 'react';
+import classNames from 'classnames';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+type Props = {
+  todos: Todo[];
+  selectedTodoId?: number | null;
+  onSelect: (todo: Todo | null) => void;
+};
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodoId = null,
+  onSelect,
+}) => {
+  if (todos.length === 0) {
+    return <p data-cy="todosEmpty">No todos found.</p>;
+  }
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  return (
+    <table className="table is-fullwidth is-hoverable" data-cy="todosTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Title</th>
+          <th>User</th>
+        </tr>
+      </thead>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+      <tbody>
+        {todos.map(todoItem => (
+          <tr
+            key={todoItem.id}
+            data-cy={`todo-${todoItem.id}`}
+            className={classNames({
+              'has-background-light': selectedTodoId === todoItem.id,
+            })}
+            onClick={() => onSelect(todoItem)}
+            style={{ cursor: 'pointer' }}
+          >
+            <td>{todoItem.id}</td>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+            <td className="has-text-centered" data-cy="todoStatus">
+              {todoItem.completed ? (
+                <span className="icon has-text-success">
+                  <i className="fas fa-check" />
+                </span>
+              ) : (
+                <span className="icon has-text-warning">
+                  <i className="fas fa-hourglass-half" />
+                </span>
+              )}
+            </td>
+
+            <td>{todoItem.title}</td>
+            {/* Aqui vai apenas o userId; o nome/e-mail aparece no modal */}
+            <td>{todoItem.userId}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
