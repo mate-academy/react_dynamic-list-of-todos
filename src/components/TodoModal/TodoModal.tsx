@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -25,7 +26,28 @@ export const TodoModal: React.FC<Props> = ({
       <div className="modal-background" />
 
       {loading || !user ? (
-        <Loader />
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <div
+              className="modal-card-title has-text-weight-medium"
+              data-cy="modal-header"
+            >
+              Loading…
+            </div>
+
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+              aria-label="Close modal"
+            />
+          </header>
+
+          <div className="modal-card-body">
+            <Loader />
+          </div>
+        </div>
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -36,12 +58,12 @@ export const TodoModal: React.FC<Props> = ({
               Todo #{todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
               data-cy="modal-close"
               onClick={onClose}
+              aria-label="Close modal"
             />
           </header>
 
@@ -51,11 +73,14 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 

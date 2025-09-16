@@ -1,33 +1,39 @@
 import React from 'react';
 
 type Props = {
-  selectChange: (change: string) => void;
-  inputChange: (change: string) => void;
+  statusValue: 'all' | 'active' | 'completed';
+  onStatusChange: (value: 'all' | 'active' | 'completed') => void;
+  onQueryChange: (value: string) => void;
   searchValue: string;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  selectChange,
-  inputChange,
+  statusValue,
+  onStatusChange,
+  onQueryChange,
   searchValue,
 }) => {
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    selectChange(event.target.value);
+    onStatusChange(event.target.value as 'all' | 'active' | 'completed');
   };
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    inputChange(event.target.value);
+    onQueryChange(event.target.value);
   };
 
   const handleDelete = () => {
-    inputChange('');
+    onQueryChange('');
   };
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleSelect}>
+          <select
+            data-cy="statusSelect"
+            onChange={handleSelect}
+            value={statusValue}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -55,6 +61,7 @@ export const TodoFilter: React.FC<Props> = ({
               type="button"
               className="delete"
               onClick={handleDelete}
+              aria-label="Clear search"
             />
           </span>
         )}

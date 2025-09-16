@@ -5,17 +5,21 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
-import { getTodos, getUser } from './api';
-import { Todo } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+
+import { getTodos, getUser } from './api';
+import { Todo } from './types/Todo';
 import { User } from './types/User';
+
+type Status = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loader, setLoader] = useState(false);
+  const [todosLoading, setTodosLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(false);
 
-  const [statusSelect, setStatusSelect] = useState('all');
+  const [statusSelect, setStatusSelect] = useState<Status>('all');
   const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState('');
 
@@ -23,45 +27,50 @@ export const App: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // carregar todos
   useEffect(() => {
-    setLoader(true);
+    setTodosLoading(true);
+
     getTodos()
       .then(setTodos)
-      .finally(() => setLoader(false));
+      .finally(() => setTodosLoading(false));
   }, []);
 
+  // aplicar filtros de status e busca
   useEffect(() => {
     let result = [...todos];
 
     if (statusSelect === 'active') {
-      result = result.filter(a => !a.completed);
+      result = result.filter(todo => !todo.completed);
     } else if (statusSelect === 'completed') {
-      result = result.filter(a => a.completed);
+      result = result.filter(todo => todo.completed);
     }
 
     if (query) {
-      result = result.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
+      const q = query.toLowerCase();
+
+      result = result.filter(todo => todo.title.toLowerCase().includes(q));
     }
 
+    // ⬇️ linha em branco acima é obrigatória pela regra padding-line-between-statements
     setFilteredTodos(result);
   }, [statusSelect, todos, query]);
 
   const handleSelectTodo = (todo: Todo) => {
-    setLoader(true);
     setSelectedTodo(todo);
     setIsModalOpen(true);
+    setUserLoading(true);
 
     getUser(todo.userId)
       .then(setSelectedUser)
-      .finally(() => setLoader(false));
+      .finally(() => setUserLoading(false));
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTodo(null);
     setSelectedUser(null);
+    setUserLoading(false);
   };
 
   return (
@@ -73,14 +82,15 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                selectChange={setStatusSelect}
-                inputChange={setQuery}
+                statusValue={statusSelect}
+                onStatusChange={setStatusSelect}
+                onQueryChange={setQuery}
                 searchValue={query}
               />
             </div>
 
             <div className="block">
-              {loader ? (
+              {todosLoading ? (
                 <Loader />
               ) : (
                 <TodoList
@@ -98,7 +108,7 @@ export const App: React.FC = () => {
         <TodoModal
           todo={selectedTodo}
           user={selectedUser}
-          loading={loader}
+          loading={userLoading}
           onClose={closeModal}
         />
       )}
