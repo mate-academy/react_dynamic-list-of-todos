@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
 
 export const App: React.FC = () => {
-  const [todoes, setTodoes] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
@@ -23,11 +23,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(setTodoes)
+      .then(setTodos)
       .finally(() => setLoading(false));
   }, []);
 
-  const visibleTodoes = todoes.filter(todo => {
+  const visibleTodos = todos.filter(todo => {
     const matchesQuery = todo.title
       .toLowerCase()
       .includes(query.toLocaleLowerCase());
@@ -52,9 +52,11 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-
-              <TodoList todoes={visibleTodoes} {...modalProps} />
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList todos={visibleTodos} {...modalProps} />
+              )}
             </div>
           </div>
         </div>

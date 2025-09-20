@@ -14,12 +14,27 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (todo) {
+      setUser(null);
       setLoading(true);
       getUser(todo.userId)
-        .then(setUser)
-        .finally(() => setLoading(false));
+        .then(fetchedUser => {
+          if (isMounted) {
+            setUser(fetchedUser);
+          }
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [todo]);
 
   if (!todo) {

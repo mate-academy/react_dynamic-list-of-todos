@@ -1,14 +1,16 @@
 import React from 'react';
+import classnames from 'classnames';
+
 import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
-  todoes: Todo[];
+  todos: Todo[];
   selectedTodo: Todo | null;
   setSelectedTodo: (todo: Todo | null) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
-  todoes,
+  todos: todos,
   selectedTodo,
   setSelectedTodo,
 }) => (
@@ -27,11 +29,13 @@ export const TodoList: React.FC<TodoListProps> = ({
     </thead>
 
     <tbody>
-      {todoes.map(todo => (
+      {todos.map(todo => (
         <tr
           key={todo.id}
           data-cy="todo"
-          className={todo.completed ? 'has-background-info-light' : undefined}
+          className={classnames({
+            'has-background-info-light': todo.completed,
+          })}
         >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered" />
