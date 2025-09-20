@@ -18,7 +18,15 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
 
-  const filterProps = { filter, query, setFilter, setQuery };
+  const handleFilterChange = (newFilter: Filter) => setFilter(newFilter);
+  const handleQueryChange = (newQuery: string) => setQuery(newQuery);
+
+  const filterProps = {
+    filter,
+    query,
+    onFilterChange: handleFilterChange,
+    onQueryChange: handleQueryChange,
+  };
   const modalProps = { selectedTodo, setSelectedTodo };
 
   useEffect(() => {
