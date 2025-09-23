@@ -21,12 +21,10 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
 
-  // Load todos on component mount
   useEffect(() => {
     const loadTodos = async () => {
       try {
         const todosFromServer = await getTodos();
-
         setTodos(todosFromServer);
       } catch (error) {
         console.error('Error loading todos:', error);
@@ -38,23 +36,19 @@ export const App: React.FC = () => {
     loadTodos();
   }, []);
 
-  // Filter todos based on query and status
   useEffect(() => {
     let result = todos;
 
-    // Filter by status
     if (status === 'active') {
       result = result.filter(todo => !todo.completed);
     } else if (status === 'completed') {
       result = result.filter(todo => todo.completed);
     }
 
-    // Filter by query
     if (query.trim()) {
       const lowerQuery = query.toLowerCase();
-
       result = result.filter(todo =>
-        todo.title.toLowerCase().includes(lowerQuery),
+        todo.title.toLowerCase().includes(lowerQuery)
       );
     }
 
@@ -62,13 +56,19 @@ export const App: React.FC = () => {
   }, [todos, query, status]);
 
   const handleTodoSelect = async (todo: Todo) => {
+    // Якщо клікаємо на вже обраний todo - закриваємо модалку
+    if (selectedTodo?.id === todo.id) {
+      setSelectedTodo(null);
+      setSelectedUser(null);
+      return;
+    }
+
     setSelectedTodo(todo);
     setUserLoading(true);
     setSelectedUser(null);
 
     try {
       const user = await getUser(todo.userId);
-
       setSelectedUser(user);
     } catch (error) {
       console.error('Error loading user:', error);

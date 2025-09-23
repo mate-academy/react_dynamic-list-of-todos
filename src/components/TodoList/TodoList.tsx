@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
-  onTodoSelect,
+  onTodoSelect
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -31,9 +32,9 @@ export const TodoList: React.FC<Props> = ({
         <tr
           key={todo.id}
           data-cy="todo"
-          className={
-            selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
-          }
+          className={classNames({
+            'has-background-info-light': selectedTodo?.id === todo.id
+          })}
         >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
@@ -44,25 +45,28 @@ export const TodoList: React.FC<Props> = ({
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
-            >
+            <p className={classNames({
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed
+            })}>
               {todo.title}
             </p>
           </td>
           <td className="has-text-right is-vcentered">
             <button
               data-cy="selectButton"
-              className={`button ${selectedTodo?.id === todo.id ? 'is-warning' : 'is-info'}`}
+              className={classNames('button', {
+                'is-warning': selectedTodo?.id === todo.id,
+                'is-info': selectedTodo?.id !== todo.id
+              })}
               type="button"
               onClick={() => onTodoSelect(todo)}
             >
               <span className="icon">
-                <i
-                  className={`far ${selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
-                />
+                <i className={classNames('far', {
+                  'fa-eye-slash': selectedTodo?.id === todo.id,
+                  'fa-eye': selectedTodo?.id !== todo.id
+                })} />
               </span>
             </button>
           </td>
