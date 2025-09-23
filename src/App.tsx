@@ -48,7 +48,7 @@ export const App: React.FC = () => {
     if (query.trim()) {
       const lowerQuery = query.toLowerCase();
       result = result.filter(todo =>
-        todo.title.toLowerCase().includes(lowerQuery)
+        todo.title.toLowerCase().includes(lowerQuery),
       );
     }
 

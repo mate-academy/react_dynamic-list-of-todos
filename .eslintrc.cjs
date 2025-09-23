@@ -41,7 +41,7 @@ module.exports = {
     'semi': 'off',
     '@typescript-eslint/semi': ['error', 'always'],
     'prefer-const': 2,
-    curly: [2, 'all'],
+    'curly': [2, 'all'],
     'max-len': ['error', {
       ignoreTemplateLiterals: true,
       ignoreComments: true,
@@ -61,7 +61,7 @@ module.exports = {
       { blankLine: 'always', prev: 'directive', next: '*' },
       { blankLine: 'always', prev: 'block-like', next: '*' },
     ],
-    'implicit-arrow-linebreak:': 0,
+    'implicit-arrow-linebreak': 0,
 
     // React
     'react/prop-types': 0,
@@ -86,11 +86,12 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
 
-    // Typescript
+    // Typescript - ВИПРАВЛЕННЯ КОНФЛІКТІВ З PRETTIER
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
-    '@typescript-eslint/indent': ['error', 2],
+    '@typescript-eslint/indent': 'off', // ВИМКНЕНО - конфліктує з Prettier
     '@typescript-eslint/ban-types': ['error', {
         extendDefaults: true,
         types: {
@@ -105,8 +106,4 @@ module.exports = {
       version: 'detect',
     },
   },
-   "rules": {
-    "@typescript-eslint/indent": "off",
-    "indent": "off"
-  }
 };
