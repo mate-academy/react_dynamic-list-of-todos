@@ -4,6 +4,9 @@
     "src"
   ],
   "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": false,
     "types": ["node", "cypress"]
   }

@@ -1,43 +1,68 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todo: Todo | null;
+  user: User | null;
+  isLoading: boolean;
+  error: string | null;
+  onClose: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  isLoading,
+  error,
+  onClose,
+}) => {
+  if (!todo) {
+    return null;
+  }
+
   return (
-    <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+    <div className="modal is-active">
+      <div className="modal-background" onClick={onClose} />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Todo Details</p>
+          <button
+            type="button"
+            className="delete"
+            aria-label="close"
+            onClick={onClose}
+          />
+        </header>
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
+        <section className="modal-card-body">
+          <h2 className="title is-5">{todo.title}</h2>
+          <p>
+            Status: <strong>{todo.completed ? 'Completed' : 'Pending'}</strong>
+          </p>
+
+          <hr />
+
+          {isLoading && <Loader />}
+
+          {!isLoading && user && (
+            <div>
+              <p>
+                <strong>User:</strong> {user.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {user.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {user.phone}
+              </p>
             </div>
+          )}
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+          {!isLoading && !user && <p className="has-text-danger">{error}</p>}
+        </section>
+      </div>
     </div>
   );
 };
