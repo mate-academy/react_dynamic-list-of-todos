@@ -29,11 +29,11 @@ export const App: React.FC = () => {
   const filteredTodos = todos
     .filter(todo => {
       if (statusFilter === 'completed') {
-        return todo.complet;
+        return todo.completed;
       }
 
       if (statusFilter === 'active') {
-        return !todo.complet;
+        return !todo.completed;
       }
 
       return true;
