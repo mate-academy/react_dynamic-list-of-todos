@@ -1,16 +1,17 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
   selectedTodo: Todo | null;
-  setSelectedTodo: (todo: Todo) => void;
+  onSelectTodo: (todo: Todo) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodo,
-  setSelectedTodo,
+  onSelectTodo,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -32,9 +33,9 @@ export const TodoList: React.FC<Props> = ({
           <tr
             key={todo.id}
             data-cy="todo"
-            className={
-              todo.id === selectedTodo?.id ? 'has-background-info-light' : ''
-            }
+            className={classNames({
+              'has-background-info-light': todo.id === selectedTodo?.id,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
@@ -46,9 +47,10 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
@@ -58,15 +60,14 @@ export const TodoList: React.FC<Props> = ({
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => setSelectedTodo(todo)}
+                onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
                   <i
-                    className={
-                      todo.id === selectedTodo?.id
-                        ? 'far fa-eye-slash'
-                        : 'far fa-eye'
-                    }
+                    className={classNames({
+                      'far fa-eye-slash': todo.id === selectedTodo?.id,
+                      'far fa-eye': todo.id !== selectedTodo?.id,
+                    })}
                   />
                 </span>
               </button>

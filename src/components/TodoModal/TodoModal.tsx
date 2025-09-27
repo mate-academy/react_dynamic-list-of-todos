@@ -1,28 +1,48 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
+import classNames from 'classnames';
 
 type Props = {
   selectedTodo: Todo | null;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({
-  selectedTodo,
-  setSelectedTodo,
-}) => {
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (selectedTodo) {
-      setLoading(true);
-      getUser(selectedTodo.userId)
-        .then(setUser)
-        .finally(() => setLoading(false));
+    if (!selectedTodo) {
+      return;
     }
+
+    let cancelled = false;
+
+    setUser(null);
+    setLoading(true);
+
+    getUser(selectedTodo.userId)
+      .then(userData => {
+        if (!cancelled) {
+          setUser(userData);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to load user:', err);
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedTodo]);
 
   if (!selectedTodo) {
@@ -46,7 +66,8 @@ export const TodoModal: React.FC<Props> = ({
             type="button"
             className="delete"
             data-cy="modal-close"
-            onClick={() => setSelectedTodo(null)}
+            aria-label="Close modal"
+            onClick={onClose}
           />
         </header>
 
@@ -61,11 +82,10 @@ export const TodoModal: React.FC<Props> = ({
             {!loading && user && (
               <>
                 <strong
-                  className={
-                    selectedTodo.completed
-                      ? 'has-text-success'
-                      : 'has-text-danger'
-                  }
+                  className={classNames({
+                    'has-text-success': selectedTodo.completed,
+                    'has-text-danger': !selectedTodo.completed,
+                  })}
                 >
                   {selectedTodo.completed ? 'Done' : 'Planned'}
                 </strong>

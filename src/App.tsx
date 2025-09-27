@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -20,6 +20,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
+      .catch(err => {
+        console.error('Failed to load todos:', err);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -48,9 +51,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setStatusFilter={setStatusFilter}
+                statusFilter={statusFilter}
+                onStatusChange={setStatusFilter}
                 searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
+                onSearchChange={setSearchQuery}
               />
             </div>
 
@@ -60,7 +64,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
-                  setSelectedTodo={setSelectedTodo}
+                  onSelectTodo={setSelectedTodo}
                 />
               )}
             </div>
@@ -70,7 +74,7 @@ export const App: React.FC = () => {
 
       <TodoModal
         selectedTodo={selectedTodo}
-        setSelectedTodo={setSelectedTodo}
+        onClose={() => setSelectedTodo(null)}
       />
     </>
   );

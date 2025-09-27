@@ -1,14 +1,25 @@
-export const TodoFilter = ({
-  setStatusFilter,
+import React from 'react';
+
+type Props = {
+  statusFilter: string;
+  onStatusChange: (value: string) => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  statusFilter,
+  onStatusChange,
   searchQuery,
-  setSearchQuery,
+  onSearchChange,
 }) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
         <select
           data-cy="statusSelect"
-          onChange={e => setStatusFilter(e.target.value)}
+          value={statusFilter}
+          onChange={e => onStatusChange(e.target.value)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -23,21 +34,22 @@ export const TodoFilter = ({
         type="text"
         className="input"
         placeholder="Search..."
-        value={searchQuery} // ← зробили контрольованим
-        onChange={e => setSearchQuery(e.target.value)}
+        value={searchQuery}
+        onChange={e => onSearchChange(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      {searchQuery && ( // ← рендеримо кнопку тільки якщо є текст
+      {searchQuery && (
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setSearchQuery('')}
+            aria-label="Clear search"
+            onClick={() => onSearchChange('')}
           />
         </span>
       )}
