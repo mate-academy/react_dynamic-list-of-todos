@@ -83,16 +83,16 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onClose }) => {
               <>
                 <strong
                   className={classNames({
-                    'has-text-success': selectedTodo.completed,
-                    'has-text-danger': !selectedTodo.completed,
+                    'has-text-success': selectedTodo.complet,
+                    'has-text-danger': !selectedTodo.complet,
                   })}
                 >
-                  {selectedTodo.completed ? 'Done' : 'Planned'}
+                  {selectedTodo.complet ? 'Done' : 'Planned'}
                 </strong>
 
                 {' by '}
 
-                <a href={`mailto:${user.email}`}>{user.name}</a>
+                <a href={`mailto:${user.mail}`}>{user.name}</a>
               </>
             )}
           </p>
