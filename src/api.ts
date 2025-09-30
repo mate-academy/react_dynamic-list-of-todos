@@ -1,28 +1,33 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
-// eslint-disable-next-line operator-linebreak
 const BASE_URL =
   'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
-// This function creates a promise
-// that is resolved after a given delay
-function wait(delay: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
+function wait(delay: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => resolve(), delay);
+
+    signal?.addEventListener('abort', () => {
+      clearTimeout(timer);
+      reject(new DOMException('Aborted', 'AbortError'));
+    });
   });
 }
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+async function get<T>(url: string, signal?: AbortSignal): Promise<T> {
+  await wait(300, signal);
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+  const res = await fetch(`${BASE_URL}${url}.json`, { signal });
+
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status} ${res.statusText}`);
+  }
+
+  return res.json() as Promise<T>;
 }
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getTodos = (signal?: AbortSignal) => get<Todo[]>('/todos', signal);
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+export const getUser = (userId: number, signal?: AbortSignal) =>
+  get<User>(`/users/${userId}`, signal);
