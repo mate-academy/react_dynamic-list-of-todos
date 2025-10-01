@@ -71,7 +71,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal todo={showTodo} onCloseModal={setShowTodo} />
+      <TodoModal todo={showTodo} onCloseModal={() => setShowTodo(null)} />
     </>
   );
 };
