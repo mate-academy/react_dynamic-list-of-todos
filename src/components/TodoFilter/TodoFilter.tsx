@@ -1,3 +1,4 @@
+import React from 'react';
 import { FilterTypes } from '../../types/FilterTypes';
 
 type Props = {

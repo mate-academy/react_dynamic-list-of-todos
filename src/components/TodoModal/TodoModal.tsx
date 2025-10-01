@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 type Props = {
   todo: Todo | null;
-  onCloseModal: (toso: null) => void;
+  onCloseModal: (todo: null) => void;
 };
 
 export const TodoModal: React.FC<Props> = ({ todo, onCloseModal }) => {
