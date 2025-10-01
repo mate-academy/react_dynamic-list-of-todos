@@ -14,7 +14,7 @@ import { FilterTypes } from './types/FilterTypes';
 export const App: React.FC = () => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<FilterTypes>(FilterTypes.All);
+  const [filter, setFilter] = useState<FilterTypes>(FilterTypes.all);
   const [query, setQuery] = useState('');
   const [showTodo, setShowTodo] = useState<Todo | null>(null);
   const selectedTodoId = showTodo?.id ?? null;
@@ -22,9 +22,9 @@ export const App: React.FC = () => {
   const filteredTodos = useMemo(() => {
     return allTodos.filter(todo => {
       const matchesFilter =
-        filter === FilterTypes.All ||
-        (filter === FilterTypes.Active && !todo.completed) ||
-        (filter === FilterTypes.Completed && todo.completed);
+        filter === FilterTypes.all ||
+        (filter === FilterTypes.active && !todo.completed) ||
+        (filter === FilterTypes.completed && todo.completed);
 
       const matchesQuery = todo.title
         .toLowerCase()

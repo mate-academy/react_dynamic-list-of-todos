@@ -32,9 +32,9 @@ export const TodoFilter: React.FC<Props> = ({
               handleFilterChange(event.target.value as FilterTypes)
             }
           >
-            <option value="All">{FilterTypes.All}</option>
-            <option value="Active">{FilterTypes.Active}</option>
-            <option value="Completed">{FilterTypes.Completed}</option>
+            <option value="all">{FilterTypes.all}</option>
+            <option value="active">{FilterTypes.active}</option>
+            <option value="completed">{FilterTypes.completed}</option>
           </select>
         </span>
       </p>
