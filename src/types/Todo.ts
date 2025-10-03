@@ -4,3 +4,10 @@ export interface Todo {
   completed: boolean;
   userId: number;
 }
+
+export enum TodoStatus {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+  Default = All,
+}

@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  todo: Todo;
+  onUnselectTodo: () => void;
+};
+
+const TodoModal: React.FC<Props> = ({ todo, onUnselectTodo }: Props) => {
+  const [userIsLoading, setUserIsLoading] = useState(false);
+  const [user, setUser] = useState<User | undefined>();
+  const [errMsg, setErrMsg] = useState('');
+
+  useEffect(() => {
+    setUserIsLoading(true);
+
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => setErrMsg('User is not found.'))
+      .finally(() => setUserIsLoading(false));
+  }, [todo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {userIsLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,29 +36,42 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{todo.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onUnselectTodo}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+            {errMsg ? (
+              <p className="has-text-danger">{errMsg}</p>
+            ) : (
+              <p className="block" data-cy="modal-user">
+                {/* <strong className="has-text-success">Done</strong> */}
+                <strong className="has-text-danger">
+                  {todo.completed ? 'Done' : 'Planned'}
+                </strong>
 
-              {' by '}
+                {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
+              </p>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 };
+
+export default React.memo(TodoModal);
