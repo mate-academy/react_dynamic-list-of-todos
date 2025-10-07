@@ -1,43 +1,52 @@
 import React from 'react';
+import { Todo, User } from '../../App';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  todo: Todo;
+  user: User | null;
+  loadingUser: boolean;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  todo,
+  user,
+  loadingUser,
+  onClose,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title" data-cy="modal-header">
+            Todo #{todo.id}
+          </p>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
+          <button
+            type="button"
+            className="delete"
+            data-cy="modal-close"
+            onClick={onClose}
+          />
+        </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+        <div className="modal-card-body">
+          <p className="block" data-cy="modal-title">
+            {todo.title}
+          </p>
 
+          {loadingUser ? (
+            <Loader />
+          ) : user ? (
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              {todo.completed ? 'Done' : 'Planned'} by {user.name}
             </p>
-          </div>
+          ) : null}
         </div>
-      )}
+      </div>
     </div>
   );
 };
