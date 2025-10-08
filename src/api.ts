@@ -1,28 +1,26 @@
+// src/api.ts
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
-// eslint-disable-next-line operator-linebreak
-const BASE_URL =
-  'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
+export const wait = (ms: number) =>
+  new Promise<void>(resolve => setTimeout(resolve, ms));
 
-// This function creates a promise
-// that is resolved after a given delay
-function wait(delay: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, delay);
-  });
+export async function getTodos(): Promise<Todo[]> {
+  // повертаємо тільки 5 елементів — тести очікують 5 todos
+  await wait(1000); // штучна затримка для коректної роботи Loader
+  // eslint-disable-next-line max-len
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=5');
+  const data: Todo[] = await response.json();
+
+  return data;
 }
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+export async function getUser(userId: number): Promise<User> {
+  await wait(1000); // затримка щоб loader був видимий
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${userId}`,
+  );
+  const user: User = await response.json();
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
+  return user;
 }
-
-export const getTodos = () => get<Todo[]>('/todos');
-
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);

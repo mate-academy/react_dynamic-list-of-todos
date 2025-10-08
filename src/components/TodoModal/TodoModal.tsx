@@ -1,5 +1,6 @@
 import React from 'react';
-import { Todo, User } from '../../App';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
 interface TodoModalProps {
@@ -17,7 +18,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" onClick={onClose} />
+      <div
+        className="modal-background"
+        data-cy="modal-background"
+        onClick={onClose}
+      />
 
       <div className="modal-card">
         <header className="modal-card-head">
@@ -39,7 +44,9 @@ export const TodoModal: React.FC<TodoModalProps> = ({
           </p>
 
           {loadingUser ? (
-            <Loader />
+            <div data-cy="modal-loader">
+              <Loader />
+            </div>
           ) : user ? (
             <p className="block" data-cy="modal-user">
               {todo.completed ? 'Done' : 'Planned'} by {user.name}

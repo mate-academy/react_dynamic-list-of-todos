@@ -1,118 +1,101 @@
-/* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
-
+import React, { useState, useEffect, useMemo } from 'react';
+import { Todo } from './types/Todo';
+import { User } from './types/User';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api'; // вместо getAllTodos и getUserById
-export interface Todo {
-  id: number;
-  userId: number;
-  title: string;
-  completed: boolean;
-}
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-type StatusFilter = 'all' | 'active' | 'completed';
+import { getTodos, getUser } from './api';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-  const [loadingTodos, setLoadingTodos] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [loadingUser, setLoadingUser] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState<User | null>(null);
+  const [loadingTodos, setLoadingTodos] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(false);
 
-  // Загрузка всех todos
+  // Filter state
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+
   useEffect(() => {
-    const fetchTodos = async () => {
-      setLoadingTodos(true);
-      const data = await getTodos(); // было getAllTodos
-
-      setTodos(data);
-      setFilteredTodos(data);
-      setLoadingTodos(false);
-    };
-
-    fetchTodos();
+    setLoadingTodos(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoadingTodos(false));
   }, []);
 
-  // Фильтрация todos по статусу и поиску
-  useEffect(() => {
-    let result = todos;
+  const handleSelectTodo = (todo: Todo) => {
+    // toggle selection: if same -> close
+    if (selectedTodo?.id === todo.id) {
+      handleCloseModal();
 
-    if (statusFilter !== 'all') {
-      result = result.filter(todo =>
-        statusFilter === 'completed' ? todo.completed : !todo.completed,
-      );
+      return;
     }
 
-    if (searchQuery) {
-      result = result.filter(todo =>
-        todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }
-
-    setFilteredTodos(result);
-  }, [todos, statusFilter, searchQuery]);
-
-  // Выбор todo и загрузка пользователя
-  const handleSelectTodo = async (todo: Todo) => {
     setSelectedTodo(todo);
+    setUser(null);
     setLoadingUser(true);
-    const userData = await getUser(todo.userId); // было getUserById
 
-    setUser(userData);
-    setLoadingUser(false);
+    // request user -> ensures fetch to /users/:id happens (cypress waits for it)
+    getUser(todo.userId)
+      .then(fetchedUser => {
+        setUser(fetchedUser);
+      })
+      .finally(() => {
+        setLoadingUser(false);
+      });
   };
 
-  // Закрытие модалки
   const handleCloseModal = () => {
     setSelectedTodo(null);
     setUser(null);
+    setLoadingUser(false);
   };
 
+  // Filtering logic (search + status)
+  const filteredTodos = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    return todos
+      .filter(todo => {
+        // status filter
+        // eslint-disable-next-line curly
+        if (status === 'active') return !todo.completed;
+        // eslint-disable-next-line curly
+        if (status === 'completed') return todo.completed;
+        // eslint-disable-next-line padding-line-between-statements
+        return true;
+      })
+      .filter(todo => {
+        // search query filter
+        // eslint-disable-next-line curly
+        if (!q) return true;
+
+        return todo.title.toLowerCase().includes(q);
+      });
+  }, [todos, query, status]);
+
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
+    <div className="section">
+      <h1 className="title has-text-centered">Todos App</h1>
 
-            <div className="block">
-              <TodoFilter
-                status={statusFilter}
-                onStatusChange={setStatusFilter}
-                query={searchQuery}
-                onQueryChange={setSearchQuery}
-                onClear={() => setSearchQuery('')}
-              />
-            </div>
+      <TodoFilter
+        filterStatus={status}
+        onFilterStatusChange={(s) => setStatus(s)}
+        query={query}
+        onQueryChange={setQuery}
+      />
 
-            <div className="block">
-              {loadingTodos ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  onSelect={handleSelectTodo}
-                  selectedTodoId={selectedTodo?.id}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      {loadingTodos ? (
+        <Loader />
+      ) : (
+        <TodoList
+          todos={filteredTodos}
+          onSelect={handleSelectTodo}
+          selectedTodoId={selectedTodo?.id ?? null}
+        />
+      )}
 
       {selectedTodo && (
         <TodoModal
@@ -122,6 +105,6 @@ export const App: React.FC = () => {
           onClose={handleCloseModal}
         />
       )}
-    </>
+    </div>
   );
 };
