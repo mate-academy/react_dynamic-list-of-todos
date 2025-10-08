@@ -1,30 +1,78 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React from 'react';
+import cn from 'classnames';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+interface TodoFilterProps {
+  filterStatus: 'all' | 'active' | 'completed';
+  onFilterStatusChange: (s: 'all' | 'active' | 'completed') => void;
+  query: string;
+  onQueryChange: (q: string) => void;
+}
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+export const TodoFilter: React.FC<TodoFilterProps> = ({
+  filterStatus,
+  onFilterStatusChange,
+  query,
+  onQueryChange,
+}) => {
+  return (
+    <div className="block">
+      <div className="field has-addons" style={{ justifyContent: 'center' }}>
+        <div className="control">
+          <input
+            data-cy="searchInput"
+            className="input"
+            placeholder="Search todos..."
+            value={query}
+            onChange={e => onQueryChange(e.target.value)}
+          />
+        </div>
+
+        {query && (
+          <div className="control">
+            <button
+              data-cy="clearButton"
+              type="button"
+              className="button"
+              onClick={() => onQueryChange('')}
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        <div className="control">
+          <div className="select">
+            <select
+              data-cy="statusSelect"
+              value={filterStatus}
+              onChange={e =>
+                onFilterStatusChange(
+                  e.target.value as 'all' | 'active' | 'completed'
+                )
+              }
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="buttons has-addons is-centered" data-cy="filterButtons">
+        {(['all', 'active', 'completed'] as const).map(f => (
+          <button
+            key={f}
+            type="button"
+            className={cn('button', { 'is-info': filterStatus === f })}
+            onClick={() => onFilterStatusChange(f)}
+            data-cy={`filter-${f}`}
+          >
+            {f[0].toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
