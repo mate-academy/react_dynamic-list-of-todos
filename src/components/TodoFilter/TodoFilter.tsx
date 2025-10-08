@@ -1,30 +1,58 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React from 'react';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+type FilterStatus = 'all' | 'completed' | 'active';
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+type Props = {
+  query: string;
+  onQueryChange: (value: string) => void;
+  onClearQuery: () => void;
+  filterStatus: FilterStatus;
+  onFilterChange: (status: FilterStatus) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  query,
+  onQueryChange,
+  onClearQuery,
+  filterStatus,
+  onFilterChange,
+}) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onFilterChange(e.target.value as FilterStatus);
+  };
+
+  return (
+    <div className="field is-grouped is-grouped-multiline">
+      <div className="control">
+        <div className="field has-addons">
+          <div className="control">
+            <input
+              className="input"
+              type="text"
+              placeholder="Filter by title"
+              value={query}
+              onChange={e => onQueryChange(e.target.value)}
+            />
+          </div>
+          {query && (
+            <div className="control">
+              <button className="button is-light" onClick={onClearQuery}>
+                x
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="control">
+        <div className="select">
+          <select value={filterStatus} onChange={handleFilterChange}>
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="active">Active</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
