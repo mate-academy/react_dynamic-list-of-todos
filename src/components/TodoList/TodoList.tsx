@@ -26,7 +26,7 @@ export const TodoList: React.FC<TodoListProps> = ({
       </thead>
 
       <tbody>
-        {todos.map((todo) => {
+        {todos.map(todo => {
           const isSelected = selectedTodoId === todo.id;
 
           return (

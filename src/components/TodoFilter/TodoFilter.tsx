@@ -23,31 +23,33 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
             className="input"
             placeholder="Search todos..."
             value={query}
-            onChange={(e) => onQueryChange(e.target.value)}
+            onChange={e => onQueryChange(e.target.value)}
           />
         </div>
 
-        <div className="control">
-          {query ? (
+        {query && (
+          <div className="control">
             <button
               data-cy="clearButton"
               type="button"
               className="button"
               onClick={() => onQueryChange('')}
+              aria-label="Clear search"
             >
-              Clear
+              ×
             </button>
-          ) : null}
-        </div>
+          </div>
+        )}
 
         <div className="control">
           <div className="select">
             <select
               data-cy="statusSelect"
               value={filterStatus}
-              onChange={(e) =>
-                // eslint-disable-next-line max-len
-                onFilterStatusChange(e.target.value as 'all' | 'active' | 'completed')
+              onChange={e =>
+                onFilterStatusChange(
+                  e.target.value as 'all' | 'active' | 'completed'
+                )
               }
             >
               <option value="all">All</option>
@@ -59,7 +61,7 @@ export const TodoFilter: React.FC<TodoFilterProps> = ({
       </div>
 
       <div className="buttons has-addons is-centered" data-cy="filterButtons">
-        {(['all', 'active', 'completed'] as const).map((f) => (
+        {(['all', 'active', 'completed'] as const).map(f => (
           <button
             key={f}
             type="button"

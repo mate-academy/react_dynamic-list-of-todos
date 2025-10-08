@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { TodoList } from './components/TodoList';
@@ -14,9 +14,11 @@ export const App: React.FC = () => {
   const [loadingTodos, setLoadingTodos] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
 
-  // Filter state
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+
+  // ref для унікального ID запиту користувача
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     setLoadingTodos(true);
@@ -26,10 +28,8 @@ export const App: React.FC = () => {
   }, []);
 
   const handleSelectTodo = (todo: Todo) => {
-    // toggle selection: if same -> close
     if (selectedTodo?.id === todo.id) {
       handleCloseModal();
-
       return;
     }
 
@@ -37,41 +37,46 @@ export const App: React.FC = () => {
     setUser(null);
     setLoadingUser(true);
 
-    // request user -> ensures fetch to /users/:id happens (cypress waits for it)
+    const currentRequestId = ++requestIdRef.current;
+
     getUser(todo.userId)
       .then(fetchedUser => {
-        setUser(fetchedUser);
+        // перевіряємо, чи запит ще актуальний
+        if (requestIdRef.current === currentRequestId) {
+          setUser(fetchedUser);
+        }
+      })
+      .catch(() => {
+        if (requestIdRef.current === currentRequestId) {
+          setUser(null);
+        }
       })
       .finally(() => {
-        setLoadingUser(false);
+        if (requestIdRef.current === currentRequestId) {
+          setLoadingUser(false);
+        }
       });
   };
 
   const handleCloseModal = () => {
+    // скидаємо стан і позначаємо старі запити як неактуальні
+    requestIdRef.current += 1;
     setSelectedTodo(null);
     setUser(null);
     setLoadingUser(false);
   };
 
-  // Filtering logic (search + status)
   const filteredTodos = useMemo(() => {
     const q = query.trim().toLowerCase();
 
     return todos
       .filter(todo => {
-        // status filter
-        // eslint-disable-next-line curly
         if (status === 'active') return !todo.completed;
-        // eslint-disable-next-line curly
         if (status === 'completed') return todo.completed;
-        // eslint-disable-next-line padding-line-between-statements
         return true;
       })
       .filter(todo => {
-        // search query filter
-        // eslint-disable-next-line curly
         if (!q) return true;
-
         return todo.title.toLowerCase().includes(q);
       });
   }, [todos, query, status]);
@@ -82,7 +87,7 @@ export const App: React.FC = () => {
 
       <TodoFilter
         filterStatus={status}
-        onFilterStatusChange={(s) => setStatus(s)}
+        onFilterStatusChange={setStatus}
         query={query}
         onQueryChange={setQuery}
       />
