@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -19,11 +19,9 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loadingUser, setLoadingUser] = useState(false);
 
-  // load todos
   useEffect(() => {
     setLoadingTodos(true);
     getTodos()
@@ -31,41 +29,43 @@ export const App: React.FC = () => {
       .finally(() => setLoadingTodos(false));
   }, []);
 
-  // set selectedTodo when selectedId changes
+  const selectedTodo = useMemo(
+    () =>
+      selectedId !== null
+        ? (todos.find(t => t.id === selectedId) ?? null)
+        : null,
+    [todos, selectedId],
+  );
+
   useEffect(() => {
-    if (selectedId) {
-      const todo = todos.find(t => t.id === selectedId) || null;
-
-      setSelectedTodo(todo);
-
+    if (selectedId !== null) {
+      const todo = todos.find(t => t.id === selectedId);
       if (todo) {
         setLoadingUser(true);
         getUser(todo.userId)
           .then(setUser)
           .finally(() => setLoadingUser(false));
+      } else {
+        setUser(null);
       }
     } else {
-      setSelectedTodo(null);
       setUser(null);
     }
   }, [selectedId, todos]);
 
-  // filtering
-  const filteredTodos = todos.filter(todo => {
-    if (status === 'completed' && !todo.completed) {
-      return false;
-    }
+  const filteredTodos = useMemo(() => {
+    const q = query.toLowerCase();
+    return todos.filter(todo => {
+      if (status === 'completed' && !todo.completed) return false;
+      if (status === 'active' && todo.completed) return false;
+      if (q && !todo.title.toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [todos, status, query]);
 
-    if (status === 'active' && todo.completed) {
-      return false;
-    }
-
-    if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
-      return false;
-    }
-
-    return true;
-  });
+  const handleSelect = useCallback((id: number) => {
+    setSelectedId(prev => (prev === id ? null : id));
+  }, []);
 
   return (
     <>
@@ -90,7 +90,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectedId={selectedId}
-                  onSelect={id => setSelectedId(selectedId === id ? null : id)}
+                  onSelect={handleSelect}
                 />
               )}
             </div>
