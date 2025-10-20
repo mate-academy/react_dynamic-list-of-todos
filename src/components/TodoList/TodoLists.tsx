@@ -3,8 +3,8 @@ import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  handleSelected: (todo: Todo | null) => void;
-  selectedTodo: Todo | null;
+  handleSelected: (todo: number | null) => void;
+  selectedTodo: number | null;
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -31,7 +31,7 @@ export const TodoList: React.FC<Props> = ({
         <tr
           data-cy="todo"
           className={
-            selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
+            selectedTodo === todo.id ? 'has-background-info-light' : ''
           }
           key={todo.id}
         >
@@ -57,14 +57,12 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => handleSelected(todo)}
+              onClick={() => handleSelected(todo.id)}
             >
               <span className="icon">
                 <i
                   className={
-                    selectedTodo?.id === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
+                    selectedTodo === todo.id ? 'far fa-eye-slash' : 'far fa-eye'
                   }
                 />
               </span>

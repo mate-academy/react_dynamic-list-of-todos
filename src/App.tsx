@@ -17,13 +17,13 @@ export const App: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [loadingUser, setLoadingUser] = useState(false);
-  const [selected, setSelected] = useState<Todo | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [query, setQuery] = useState('');
   const [optionFilterValue, setOptionFilterValue] = useState('all');
   const getVisibleTodos = () => {
     const byStatus = todos.filter(todo =>
-      optionFilterValue === 'All'
+      optionFilterValue === 'all'
         ? true
         : optionFilterValue === 'completed'
           ? todo.completed
@@ -42,9 +42,9 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (selected) {
       setLoadingUser(true);
-      getUser(selected.userId)
+      getUser(selected)
         .then(user => setSelectedUser(user))
-        .finally(() => setLoading(false));
+        .finally(() => setLoadingUser(false));
     }
   }, [selected]);
 
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   }, []);
 
   const getSelected = () => {
-    return todos.find(todo => selected === todo) || null;
+    return todos.find(todo => selected === todo.id) || null;
   };
 
   return (
