@@ -23,17 +23,16 @@ function getPreparedTodos(
   preparedTodos = preparedTodos.filter(todo => {
     switch (sortField) {
       case SortType.active:
-        return todo.completed === false;
+        return !todo.completed;
       case SortType.completed:
-        return todo.completed === true;
+        return todo.completed;
       case SortType.all:
         return true;
     }
   });
-
   if (query) {
     preparedTodos = preparedTodos.filter(todo =>
-      todo.title.includes(normalizeQuery),
+      todo.title.toLowerCase().includes(normalizeQuery),
     );
   }
 
