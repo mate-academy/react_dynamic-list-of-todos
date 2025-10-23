@@ -2,14 +2,14 @@ import React from 'react';
 
 type Props = {
   query: string;
-  onQuaryChange: (value: string) => void;
+  onQueryChange: (value: string) => void;
   status: 'all' | 'active' | 'completed';
   onStatusChange: (value: 'all' | 'active' | 'completed') => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  onQuaryChange,
+  onQueryChange,
   status,
   onStatusChange,
 }) => {
@@ -40,7 +40,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={element => onQuaryChange(element.target.value)}
+          onChange={element => onQueryChange(element.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -53,7 +53,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQuaryChange('')}
+              onClick={() => onQueryChange('')}
             />
           </span>
         )}

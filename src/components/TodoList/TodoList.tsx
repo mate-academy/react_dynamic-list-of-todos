@@ -2,12 +2,16 @@ import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
-  todos: Todo []
-  onShow: (todo: Todo) => void; 
-  selectedTodoId: number | null
-}
+  todos: Todo[];
+  onShow: (todo: Todo) => void;
+  selectedTodoId: number | null;
+};
 
-export const TodoList: React.FC<Props> = ({todos, onShow, selectedTodoId}) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onShow,
+  selectedTodoId,
+}) => {
   return (
     <div>
       <table className="table is-narrow is-fullwidth">
@@ -46,21 +50,22 @@ export const TodoList: React.FC<Props> = ({todos, onShow, selectedTodoId}) => {
                 </p>
               </td>
               <td className="has-text-right is-vcentered">
-                  <button
-                    data-cy="selectButton"
-                    className="button"
-                    type="button"
-                    onClick={() => onShow(todo)}
-                  >
-                    {selectedTodoId === todo.id ? (                    
+                <button
+                  data-cy="selectButton"
+                  className="button"
+                  type="button"
+                  onClick={() => onShow(todo)}
+                >
+                  {selectedTodoId === todo.id ? (
                     <span className="icon">
                       <i className="fas fa-eye-slash" />
-                    </span>) : (
-                    <span className="icon">
-                    <i className="far fa-eye" />
                     </span>
-                    )}
-                  </button>
+                  ) : (
+                    <span className="icon">
+                      <i className="far fa-eye" />
+                    </span>
+                  )}
+                </button>
               </td>
             </tr>
           ))}
