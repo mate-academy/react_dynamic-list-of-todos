@@ -56,7 +56,8 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .catch(() => {
-        throw new Error('Failed to load');
+        // eslint-disable-next-line no-console
+        console.error('Failed to load');
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -80,13 +81,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={filteredTodos}
-                onShowModal={setShowModal}
-                onSetCurrentTodo={setCurrentTodo}
-                currentTodo={currentTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  onShowModal={setShowModal}
+                  onSetCurrentTodo={setCurrentTodo}
+                  currentTodo={currentTodo}
+                />
+              )}
             </div>
           </div>
         </div>
