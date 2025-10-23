@@ -5,7 +5,7 @@ import cn from 'classnames';
 type Props = {
   todos: Todo[];
   onShowModal: (value: boolean) => void;
-  onSetCurrentTodo: (value: Todo) => void;
+  onSetCurrentTodo: (value: Todo | null) => void;
   currentTodo: Todo | null;
 };
 
@@ -16,11 +16,12 @@ export const TodoList: React.FC<Props> = ({
   currentTodo,
 }) => {
   const handleOnButtonClick = (todoId: number) => {
-    onSetCurrentTodo(
-      todos.find(todo => {
-        return todo.id === todoId;
-      }) as Todo,
-    );
+    const todoToSet = todos.find(todo => todo.id === todoId);
+
+    if (todoToSet) {
+      onSetCurrentTodo(todoToSet);
+    }
+
     onShowModal(true);
   };
 
