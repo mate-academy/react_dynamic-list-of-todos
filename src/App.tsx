@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
@@ -10,7 +11,6 @@ import { getTodos, getUser } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { User } from './types/User';
-import { error } from 'node:console';
 
 type Status = 'all' | 'active' | 'completed';
 
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
       .then(receivedTodos => {
         setTodos(receivedTodos);
       })
-      .catch(error)
+      .catch(console.error)
       .finally(() => {
         setIsLoading(false);
       });
@@ -70,7 +70,7 @@ export const App: React.FC = () => {
       .then(receivedUser => {
         setUser(receivedUser);
       })
-      .catch(error)
+      .catch(console.error)
       .finally(() => {
         setIsUserLoading(false);
       });
