@@ -10,6 +10,7 @@ import { getTodos, getUser } from './api';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { User } from './types/User';
+import { error } from 'node:console';
 
 type Status = 'all' | 'active' | 'completed';
 
@@ -25,10 +26,14 @@ export const App: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getTodos().then(receivedTodos => {
-      setTodos(receivedTodos);
-      setIsLoading(false);
-    });
+    getTodos()
+      .then(receivedTodos => {
+        setTodos(receivedTodos);
+      })
+      .catch(error)
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const filterTodos = todos
@@ -51,7 +56,6 @@ export const App: React.FC = () => {
 
   const onClearQuery = () => {
     setQuery('');
-    setStatus('all');
   };
 
   const onChangeStatus = (newStatus: Status) => {
@@ -62,10 +66,14 @@ export const App: React.FC = () => {
     setIsUserLoading(true);
     setSelectedTodo(todo);
 
-    getUser(todo.userId).then(receivedUser => {
-      setUser(receivedUser);
-      setIsUserLoading(false);
-    });
+    getUser(todo.userId)
+      .then(receivedUser => {
+        setUser(receivedUser);
+      })
+      .catch(error)
+      .finally(() => {
+        setIsUserLoading(false);
+      });
   };
 
   const handleCloseModal = () => {
