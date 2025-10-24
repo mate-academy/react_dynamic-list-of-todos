@@ -1,43 +1,107 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  selectedTodo: Todo;
+  handleModalClose: () => void;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  selectedTodo,
+  handleModalClose: onClose,
+}) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchUser = async () => {
+      try {
+        setIsUserLoading(true);
+        setError(null);
+
+        const fetchedUser = await getUser(selectedTodo.userId, {
+          signal: controller.signal,
+        });
+
+        setCurrentUser(fetchedUser);
+      } catch (err: unknown) {
+        if ((err as { name?: string }).name === 'AbortError') {
+          return;
+        }
+
+        setError('Failed to load user info.');
+      } finally {
+        setIsUserLoading(false);
+      }
+    };
+
+    fetchUser();
+
+    return () => {
+      controller.abort();
+    };
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} aria-hidden="true" />
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p
+            className="modal-card-title has-text-weight-medium"
+            data-cy="modal-header"
+          >
+            Todo #{selectedTodo.id}
+          </p>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            type="button"
+            className="delete"
+            data-cy="modal-close"
+            onClick={onClose}
+          />
+        </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+        <section className="modal-card-body">
+          {isUserLoading ? (
+            <Loader />
+          ) : error ? (
+            <p className="has-text-danger">{error}</p>
+          ) : (
+            <>
+              <p className="block" data-cy="modal-title">
+                <strong>{selectedTodo.title}</strong>
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <p className="block" data-cy="modal-user">
+                {selectedTodo.completed ? (
+                  <span className="has-text-success">Done</span>
+                ) : (
+                  <span className="has-text-danger">Planned</span>
+                )}
+                {' by '}
+                {currentUser && (
+                  <a href={`mailto:${currentUser.email}`}>{currentUser.name}</a>
+                )}
+              </p>
+            </>
+          )}
+        </section>
 
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+        <footer className="modal-card-foot">
+          <button className="button is-link" type="button" onClick={onClose}>
+            Close
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };
