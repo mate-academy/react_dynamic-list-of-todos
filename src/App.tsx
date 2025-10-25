@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,92 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[] | null>(null);
+  const [loader, setLoader] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [qwery, setQwery] = useState('');
+  const [category, setCategory] = useState('all');
+
+  useEffect(() => {
+    setLoader(true);
+
+    const loadData = async () => {
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch (error) {
+        throw new Error('Error was occured');
+      } finally {
+        setLoader(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const getVisibleTodos = (
+    todosToProcess: Todo[] | null,
+    categoryValue: string,
+    searchValue: string,
+  ): Todo[] => {
+    if (todosToProcess === null) {
+      return [];
+    }
+
+    let todosToProcessCopy = [...todosToProcess];
+
+    if (categoryValue) {
+      todosToProcessCopy = todosToProcessCopy.filter(todo => {
+        switch (categoryValue) {
+          case 'active':
+            return todo.completed === false;
+
+          case 'completed':
+            return todo.completed === true;
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    if (searchValue) {
+      todosToProcessCopy = todosToProcessCopy.filter(todo =>
+        todo.title.toLowerCase().includes(searchValue.toLowerCase().trim()),
+      );
+    }
+
+    return todosToProcessCopy;
+  };
+
+  const handleChangeSelectedTodo = (choosenTodo: Todo) => {
+    setSelectedTodo(choosenTodo);
+  };
+
+  const handleChooseCategory = (selectedCategory: string) => {
+    setCategory(selectedCategory);
+  };
+
+  const handelSearch = (searchValue: string) => {
+    setQwery(searchValue);
+  };
+
+  const handleResetSelectedTodo = () => {
+    setSelectedTodo(null);
+  };
+
+  const handleClearSearch = () => {
+    setQwery('');
+    setCategory('all');
+  };
+
+  const preparedTodos = getVisibleTodos(todos, category, qwery);
+
   return (
     <>
       <div className="section">
@@ -17,18 +101,36 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                valueCategory={category}
+                valueQwery={qwery}
+                onCategory={handleChooseCategory}
+                onQwery={handelSearch}
+                onClear={handleClearSearch}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {loader ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={preparedTodos}
+                  onChangeTodo={handleChangeSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal
+          selectedTodo={selectedTodo}
+          onCloseButton={handleResetSelectedTodo}
+        />
+      )}
     </>
   );
 };
