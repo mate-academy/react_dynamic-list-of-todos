@@ -24,9 +24,28 @@ loaded and show them using `TodoList` (check the code in the `api.ts`);
     - show the `x` button when the `query` is entered;
     - the `x` button should clear the `query` and reset the todos;
 
+Вам надано розмітку для компонентів `App`, `TodosList`, `TodoFilter`, `TodoModal`
+та `Loader`. Завантажте дані з API та відобразіть їх за допомогою заданих компонентів.
+
+1. Завантажте [todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) під час завантаження `App`
+та відобразіть їх за допомогою `TodoList` (перевірте код у `api.ts`);
+
+1. Відображайте `Loader` під час очікування будь-яких даних від сервера (перевірте папку `components`);
+
+1. Перевірте, як функція `wait` використовується у `api.ts`, щоб переконатися, що `Loader` працює належним чином;
+
+1. Після натискання кнопки `Show` відкрийте `TodoModal` з вибраним `todo`;
+1. Не забудьте завантажити [дані користувача](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (замініть `1` на фактичний `userId`);
+1. Показувати завантажувач під час очікування користувача;
+1. Кнопка `x` повинна закривати модальне вікно;
+1. `select` повинна фільтрувати завдання за статусом `завершено`: `all`, `completed` та `active`(незавершено) завдання;
+1. Використовуйте `input` у `TodoFilter` для фільтрації `todos` за `title`;
+- показувати кнопку `x`, коли введено `query`;
+- кнопка `x` повинна очистити `query` та скинути завдання;
+
 ## Instructions
 - Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
 - Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
 - Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
 - Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://https://ElinaMrachkovska.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
