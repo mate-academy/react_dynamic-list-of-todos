@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -15,12 +16,21 @@ export const TodoModal: React.FC<TodoModalProps> = ({
   user,
   isLoading,
 }) => {
+  const statusClass = classNames({
+    'has-text-success': todo.completed,
+    'has-text-danger': !todo.completed,
+  });
+
+  const statusText = todo.completed ? 'Done' : 'Planned';
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" onClick={onClose} />
 
       {isLoading ? (
-        <Loader />
+        <div className="modal-content">
+          <Loader />
+        </div>
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
@@ -46,11 +56,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong className={statusClass}>{statusText}</strong>
 
               {' by '}
 

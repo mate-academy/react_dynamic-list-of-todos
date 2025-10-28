@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 interface TodoListProps {
   todos: Todo[];
@@ -31,6 +32,19 @@ export const TodoList: React.FC<TodoListProps> = ({
       {todos.map(todo => {
         const isSelected = todo.id === selectedTodoId;
 
+        const buttonClasses = classNames('button', {
+          'is-danger': isSelected,
+        });
+
+        const iconClass = classNames({
+          'far fa-eye': !isSelected,
+          'far fa-eye-slash': isSelected,
+        });
+
+        const handleClick = isSelected ? onHideTodo : () => onTodoSelect(todo);
+
+        const dataCy = isSelected ? 'hideButton' : 'selectButton';
+
         return (
           <tr key={todo.id} data-cy="todo">
             <td>{todo.id}</td>
@@ -41,29 +55,15 @@ export const TodoList: React.FC<TodoListProps> = ({
             </td>
             <td>{todo.title}</td>
             <td className="has-text-right">
-              {!isSelected && (
-                <button
-                  onClick={() => onTodoSelect(todo)}
-                  className="button"
-                  data-cy="selectButton"
-                >
-                  <span className="icon">
-                    <i className="far fa-eye" />
-                  </span>
-                </button>
-              )}
-
-              {isSelected && (
-                <button
-                  onClick={onHideTodo}
-                  className="button is-danger"
-                  data-cy="hideButton"
-                >
-                  <span className="icon">
-                    <i className="far fa-eye-slash" />
-                  </span>
-                </button>
-              )}
+              <button
+                onClick={handleClick}
+                className={buttonClasses}
+                data-cy={dataCy}
+              >
+                <span className="icon">
+                  <i className={iconClass} />
+                </span>
+              </button>
             </td>
           </tr>
         );

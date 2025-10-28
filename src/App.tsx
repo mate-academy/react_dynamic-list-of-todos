@@ -15,7 +15,7 @@ import { User } from './types/User';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [user, setUser] = useState<User | null>(null);
-  const [isTodosLoading, setIsTodosLoading] = useState<boolean>(false);
+  const [isTodosLoading, setIsTodosLoading] = useState<boolean>(true);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -24,7 +24,6 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    setIsTodosLoading(true);
     getTodos()
       .then(todosData => {
         setTodos(todosData);
