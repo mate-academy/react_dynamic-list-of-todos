@@ -11,14 +11,17 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 import { TodoStatusFilter } from './types/Filter';
 
-function getFilteredTodos(todos: Todo[], query: string, status: TodoStatusFilter) {
+function getFilteredTodos(
+  todos: Todo[],
+  query: string,
+  status: TodoStatusFilter,
+) {
   let preparedTodos = todos;
   const normalizedQuery = query.trim().toLowerCase();
 
   if (normalizedQuery) {
-    preparedTodos = preparedTodos.filter(
-      todo =>
-        todo.title.toLowerCase().includes(normalizedQuery)
+    preparedTodos = preparedTodos.filter(todo =>
+      todo.title.toLowerCase().includes(normalizedQuery),
     );
   }
 
@@ -28,7 +31,6 @@ function getFilteredTodos(todos: Todo[], query: string, status: TodoStatusFilter
     preparedTodos = preparedTodos.filter(todo => !todo.completed);
   }
 
-
   return preparedTodos;
 }
 
@@ -36,16 +38,20 @@ export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>(TodoStatusFilter.All);
+  const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>(
+    TodoStatusFilter.All,
+  );
   const [query, setQuery] = useState('');
 
   useEffect(() => {
     setLoading(true);
 
-    getTodos().then(setTodos).finally(() => setLoading(false));
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   }, []);
 
-  const filteredTodos = getFilteredTodos(todos, query, statusFilter)
+  const filteredTodos = getFilteredTodos(todos, query, statusFilter);
 
   return (
     <>
@@ -60,13 +66,18 @@ export const App: React.FC = () => {
                 search={query}
                 onStatusChange={setStatusFilter}
                 onSearchChange={setQuery}
-                onClearSearch={() => setQuery('')} />
+                onClearSearch={() => setQuery('')}
+              />
             </div>
 
             <div className="block">
               {loading && <Loader />}
               {!loading && todos.length > 0 && (
-                <TodoList todos={filteredTodos} onSelect={setSelectedTodo} selectedTodo={selectedTodo} />
+                <TodoList
+                  todos={filteredTodos}
+                  onSelect={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
               )}
             </div>
           </div>
@@ -76,7 +87,6 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
-
     </>
   );
 };
