@@ -29,7 +29,7 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, onCloseButton }) => {
     };
 
     loadData();
-  }, []);
+  }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
