@@ -9,13 +9,14 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
+import { Categories } from './types/Categories';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [loader, setLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [qwery, setQwery] = useState('');
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState(Categories.All);
 
   useEffect(() => {
     setLoader(true);
@@ -49,6 +50,8 @@ export const App: React.FC = () => {
     if (categoryValue) {
       todosToProcessCopy = todosToProcessCopy.filter(todo => {
         switch (categoryValue) {
+          case 'all':
+            return true;
           case 'active':
             return todo.completed === false;
 
@@ -56,7 +59,7 @@ export const App: React.FC = () => {
             return todo.completed === true;
 
           default:
-            return true;
+            return;
         }
       });
     }
@@ -74,11 +77,11 @@ export const App: React.FC = () => {
     setSelectedTodo(choosenTodo);
   };
 
-  const handleChooseCategory = (selectedCategory: string) => {
+  const handleChooseCategory = (selectedCategory: Categories) => {
     setCategory(selectedCategory);
   };
 
-  const handelSearch = (searchValue: string) => {
+  const handleSearch = (searchValue: string) => {
     setQwery(searchValue);
   };
 
@@ -88,7 +91,7 @@ export const App: React.FC = () => {
 
   const handleClearSearch = () => {
     setQwery('');
-    setCategory('all');
+    // setCategory(Categories.all);
   };
 
   const preparedTodos = getVisibleTodos(todos, category, qwery);
@@ -105,7 +108,7 @@ export const App: React.FC = () => {
                 valueCategory={category}
                 valueQwery={qwery}
                 onCategory={handleChooseCategory}
-                onQwery={handelSearch}
+                onQwery={handleSearch}
                 onClear={handleClearSearch}
               />
             </div>

@@ -8,6 +8,8 @@ type Props = {
   selectedTodo: Todo | null;
 };
 
+// has-background-info-light
+
 export const TodoList: React.FC<Props> = ({
   todos,
   onChangeTodo,

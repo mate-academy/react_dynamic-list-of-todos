@@ -1,18 +1,13 @@
 import React, { ChangeEvent } from 'react';
+import { Categories } from '../../types/Categories';
 
 type Props = {
   valueCategory: string;
   valueQwery: string;
-  onCategory: (category: string) => void;
+  onCategory: (category: Categories) => void;
   onQwery: (qwery: string) => void;
   onClear: () => void;
 };
-
-enum Categories {
-  all = '',
-  active = 'active',
-  completed = 'completed',
-}
 
 export const TodoFilter: React.FC<Props> = ({
   onCategory,
@@ -29,12 +24,12 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={valueCategory}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-              onCategory(event.target.value);
+              onCategory(event.target.value as Categories);
             }}
           >
-            <option value={Categories.all}>All</option>
-            <option value={Categories.active}>Active</option>
-            <option value={Categories.completed}>Completed</option>
+            <option value={Categories.All}>All</option>
+            <option value={Categories.Active}>Active</option>
+            <option value={Categories.Completed}>Completed</option>
           </select>
         </span>
       </p>
