@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -19,6 +20,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
         setIsLoading(true);
         try {
           const userData = await getUser(todo.userId);
+
           setUser(userData);
         } catch {
           // Em caso de erro, não exibe informações do usuário
@@ -68,9 +70,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             {user && (
               <p className="block" data-cy="modal-user">
                 <strong
-                  className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
                 >
                   {todo.completed ? 'Done' : 'Planned'}
                 </strong>

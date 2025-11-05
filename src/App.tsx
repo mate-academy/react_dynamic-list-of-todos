@@ -22,6 +22,7 @@ export const App: React.FC = () => {
       setIsLoading(true);
       try {
         const loadedTodos = await getTodos();
+
         setTodos(loadedTodos);
       } catch {
         // Em caso de erro, mantém a lista vazia
