@@ -50,7 +50,6 @@ export const App: React.FC = () => {
         <TodoModal
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
-          userId={selectedTodo.userId}
           isLoading={modalLoading}
           setIsLoading={setModalLoading}
         />
