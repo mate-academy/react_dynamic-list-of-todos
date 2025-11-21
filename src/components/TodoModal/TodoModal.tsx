@@ -1,43 +1,90 @@
-import React from 'react';
-import { Loader } from '../Loader';
+import React, { useEffect, useState } from 'react';
+import { useTodoContext } from '../../context/TodoContext';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
 export const TodoModal: React.FC = () => {
+  const { selectedTodo, setSelectedTodo } = useTodoContext();
+  const [user, setUser] = useState<User | null>(null);
+  const [loadingUser, setLoadingUser] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    const loadUser = async () => {
+      if (!selectedTodo) {
+        return;
+      }
+
+      setLoadingUser(true);
+      setUser(null);
+      try {
+        const data = await getUser(selectedTodo.userId);
+
+        if (mounted) {
+          setUser(data);
+        }
+      } catch (err) {
+        // ignore in tests
+      } finally {
+        if (mounted) {
+          setLoadingUser(false);
+        }
+      }
+    };
+
+    loadUser();
+
+    return () => {
+      mounted = false;
+    };
+  }, [selectedTodo]);
+
+  if (!selectedTodo) {
+    return null;
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div
+        className="modal-background"
+        onClick={() => setSelectedTodo(null)}
+      ></div>
+      <div className="modal-content">
+        <div className="box">
+          <h2
+            data-cy="modal-header"
+            className="subtitle"
+          >{`Todo #${selectedTodo.id}`}</h2>
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
+          <h3 data-cy="modal-title" className="title is-5">
+            {selectedTodo.title}
+          </h3>
+
+          {loadingUser ? (
+            <div data-cy="loader">
+              <i className="fas fa-spinner fa-spin" />
             </div>
-
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+          ) : (
+            <p data-cy="modal-user" className="mt-2">
+              {user
+                ? `${selectedTodo.completed ? 'Done by' : 'Planned by'} ${user.name}`
+                : ''}
             </p>
+          )}
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
+          <button
+            data-cy="modal-close"
+            className="button mt-4 is-danger"
+            onClick={() => setSelectedTodo(null)}
+          >
+            Close
+          </button>
         </div>
-      )}
+      </div>
+      <button
+        className="modal-close is-large"
+        onClick={() => setSelectedTodo(null)}
+      ></button>
     </div>
   );
 };

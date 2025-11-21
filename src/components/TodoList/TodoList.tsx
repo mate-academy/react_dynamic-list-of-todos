@@ -1,100 +1,71 @@
 import React from 'react';
+import classNames from 'classnames';
+import { useTodoContext } from '../../context/TodoContext';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export const TodoList: React.FC = () => {
+  const { filteredTodos, setSelectedTodo, selectedTodo } = useTodoContext();
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  return (
+    <table className="table is-fullwidth">
+      <tbody>
+        {filteredTodos.map(todo => (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            className="box"
+            style={{ opacity: todo.completed ? 0.6 : 1 }}
+          >
+            <td style={{ width: 60 }}>{todo.id}</td>
+            <td>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <span
+                    style={{
+                      textDecoration: todo.completed ? 'line-through' : 'none',
+                    }}
+                  >
+                    {todo.title}
+                  </span>
+                </div>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  {/* completed icon */}
+                  {todo.completed && (
+                    <span data-cy="iconCompleted">
+                      <i className="fas fa-check" />
+                    </span>
+                  )}
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+                  {/* show / hide button */}
+                  <button
+                    data-cy="selectButton"
+                    className={classNames('button', 'is-small', {
+                      'is-danger': selectedTodo && selectedTodo.id === todo.id,
+                      'is-info': !selectedTodo || selectedTodo.id !== todo.id,
+                    })}
+                    onClick={() => setSelectedTodo(todo)}
+                  >
+                    <span className="icon">
+                      <i
+                        className={classNames({
+                          'fas fa-eye-slash': selectedTodo && selectedTodo.id === todo.id,
+                          'fas fa-eye': !selectedTodo || selectedTodo.id !== todo.id,
+                        })}
+                      />
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
