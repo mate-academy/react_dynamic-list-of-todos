@@ -63,7 +63,6 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  id={String(id)}
                   onClick={() => handleClick(todo)}
                 >
                   <span className="icon">

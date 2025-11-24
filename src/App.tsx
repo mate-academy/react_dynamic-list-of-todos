@@ -34,19 +34,19 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  function onSelected(todo: Todo) {
+  function handleSelected(todo: Todo) {
     setSelectedTodo(todo);
   }
 
-  function closeTodo() {
+  function handleCloseTodo() {
     setSelectedTodo(null);
   }
 
-  function onSelect(currentSelect: string) {
+  function handleSelect(currentSelect: string) {
     setSelect(currentSelect);
   }
 
-  function onQuery(currentQuery: string) {
+  function handleQuery(currentQuery: string) {
     setQuery(currentQuery);
   }
 
@@ -84,7 +84,7 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onSelect={onSelect} onQuery={onQuery} />
+              <TodoFilter onSelect={handleSelect} onQuery={handleQuery} />
             </div>
 
             <div className="block">
@@ -92,7 +92,7 @@ export const App: React.FC = () => {
               {!loading && !errorTodosMessage && todos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
-                  onSelected={onSelected}
+                  onSelected={handleSelected}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -108,7 +108,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal selectedTodo={selectedTodo} closeTodo={closeTodo} />
+        <TodoModal selectedTodo={selectedTodo} onCloseTodo={handleCloseTodo} />
       )}
     </>
   );
