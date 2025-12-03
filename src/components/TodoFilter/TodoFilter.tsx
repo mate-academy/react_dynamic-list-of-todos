@@ -1,30 +1,70 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+import React from 'react';
+import { FilterTodo } from '../../types/FilterTodo';
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-      />
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+type Props = {
+  selectedFilterTodo: FilterTodo;
+  onChangeFilter: (action: FilterTodo) => void;
+  currentQuery: string;
+  onChangeQuery: (text: string) => void;
+  resetQuery: () => void;
+};
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
-    </p>
-  </form>
-);
+const TodoFilterComponent: React.FC<Props> = ({
+  selectedFilterTodo,
+  onChangeFilter,
+  currentQuery,
+  onChangeQuery,
+  resetQuery,
+}) => {
+  const handleChangeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeFilter(event.target.value as FilterTodo);
+  };
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeQuery(event.target.value);
+  };
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            onChange={handleChangeFilter}
+            value={selectedFilterTodo}
+            data-cy="statusSelect"
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+        </span>
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          value={currentQuery}
+          onChange={handleChangeInput}
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+        />
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+        {currentQuery && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={resetQuery}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
+
+export const TodoFilter = React.memo(TodoFilterComponent);
