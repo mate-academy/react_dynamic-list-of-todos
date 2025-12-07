@@ -3,6 +3,8 @@ import React, {
   Dispatch,
   FormEvent,
   MouseEvent,
+  Ref,
+  RefObject,
   SetStateAction,
 } from 'react';
 import { StatusFilter } from '../../types/StatusFilter';
@@ -20,9 +22,7 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   query,
 }) => {
-  const handleChangeSelectValue = (
-    event: ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleChangeSelectValue = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
 
     if (value !== selectStatus) {
@@ -49,7 +49,11 @@ export const TodoFilter: React.FC<Props> = ({
     <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleChangeSelectValue} value={selectStatus}>
+          <select
+            data-cy="statusSelect"
+            onChange={handleChangeSelectValue}
+            value={selectStatus}
+          >
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>

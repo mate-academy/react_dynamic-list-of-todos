@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
@@ -13,9 +13,8 @@ export const TodoRow: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const handleSelected = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setSelectedTodo(todo);
+  const handleSelected = () => {
+    setSelectedTodo(prev => prev?.id === todo.id ? null : todo);
   };
 
   return (
@@ -23,7 +22,8 @@ export const TodoRow: React.FC<Props> = ({
       <tr
         data-cy="todo"
         className={classNames({
-          'has-background-info-light': selectedTodo && selectedTodo.id === todo.id
+          'has-background-info-light':
+            selectedTodo && selectedTodo.id === todo.id,
         })}
       >
         <td className="is-vcentered">{todo.id}</td>
@@ -40,7 +40,7 @@ export const TodoRow: React.FC<Props> = ({
           <p
             className={classNames({
               'has-text-success': todo.completed,
-              'has-text-danger': !todo.completed
+              'has-text-danger': !todo.completed,
             })}
           >
             {todo.title}
@@ -55,11 +55,10 @@ export const TodoRow: React.FC<Props> = ({
             onClick={handleSelected}
           >
             <span className="icon">
-              
               <i
                 className={classNames('far', {
                   'fa-eye-slash': selectedTodo && selectedTodo.id === todo.id,
-                  'fa-eye': !selectedTodo || selectedTodo.id !== todo.id
+                  'fa-eye': !selectedTodo || selectedTodo.id !== todo.id,
                 })}
               />
             </span>

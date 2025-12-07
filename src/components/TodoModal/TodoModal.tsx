@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -19,7 +13,7 @@ export const TodoModal: React.FC<Props> = ({
   selectedTodo,
   setSelectedTodo,
 }) => {
-  const handleModalClose = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleModalClose = (/*event: MouseEvent<HTMLButtonElement>*/) => {
     setSelectedTodo(null);
   };
 
@@ -27,26 +21,23 @@ export const TodoModal: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setLoading(true);
-
     if (!selectedTodo) {
       return;
     }
 
+    setLoading(true);
+
     const fetchUser = async () => {
       try {
         const userFetched = await getUser(selectedTodo.userId);
-        if(!userFetched) {
+
+        if (!userFetched) {
           throw new Error();
         }
-        setUser(userFetched);
-        
-      } 
-      
-      catch(error) {
-        setLoading(false);
-      }
 
+        setUser(userFetched);
+      }
+      
       finally {
         setLoading(false);
       }

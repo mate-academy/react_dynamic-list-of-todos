@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -17,52 +17,83 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectStatus, setSelectStatus] = useState<StatusFilter>('all');
   const [query, setQuery] = useState<string>('');
+  
+  const primeiraRenderizacaoSelect = useRef(true);
+  const primeiraRenderizacaoQuery = useRef(true);
 
+  type TypeFilter = 'filter' | 'without'
+
+  const getTodosProxy = async (filter: TypeFilter = 'without') => {
+    try {
+      setLoading(true);
+      const todos = filter === 'without' ? await getTodos() : await getTodos()
+                                                                      .then((todosNotFiltered: Todo[]) => {
+                                                                       return todosNotFiltered.filter(todo => {
+                                                                          switch (selectStatus) {
+                                                                            case 'active':
+                                                                              return !todo.completed;
+                                                                            case 'completed':
+                                                                              return todo.completed;
+                                                                            case 'all':
+                                                                              return true;
+                                                                          }
+                                                                        });
+                                                                      });
+      if(!todos) {
+        throw new Error();
+      }
+      return todos;
+    }
+
+    finally {
+      setLoading(false);
+    }  
+  }
+  
   useEffect(() => {
     const fecthTodos = async () => {
-      const todosFetched = await getTodos();
+      const todosFetched = await getTodosProxy();
 
       setTodos(todosFetched);
-      setLoading(false);
     };
-
-    setLoading(true);
 
     fecthTodos();
   }, []);
 
   const filterTodosBySelectStatus = async () => {
-    setLoading(true);
-    const todosFilteredBySelectStatus = 
-      await getTodos()
-        .then(
-          (todosFiltered: Todo[]) => {
-            return todosFiltered.filter(todo => {
-              switch (selectStatus) {
-                case 'active':
-                  return !todo.completed;
-                case 'completed':
-                  return todo.completed;
-                case 'all':
-                  return true;
-              }
-            });
-          },
-        )
-        .finally(() => {
-          setLoading(false);
-        })
+    const todosFilteredBySelectStatus = await getTodosProxy('filter');
 
     return todosFilteredBySelectStatus;
   };
 
   useEffect(() => {
+
+    if(primeiraRenderizacaoSelect.current) {
+      primeiraRenderizacaoSelect.current = false;
+      return;
+    }
+
     filterTodosBySelectStatus().then((todosFilteredBySelectStatus: Todo[]) => {
+      if(query !== '') {
+        setTodos(
+          todosFilteredBySelectStatus.filter((todoFiltered: Todo) => {
+            const {title} = todoFiltered;
+            return title.toLowerCase().includes(query);
+          })
+        )
+        return;
+      }
+
       setTodos(todosFilteredBySelectStatus);
     });
   }, [selectStatus]);
 
   useEffect(() => {
+    if(primeiraRenderizacaoQuery.current) {
+      primeiraRenderizacaoQuery.current = false;
+      return;
+    }
+
     const filterTodosByQuery = async () => {
       const todosByStatus = await filterTodosBySelectStatus();
       const todosFilteredByQuery = todosByStatus.filter((todo: Todo) => {
@@ -77,7 +108,7 @@ export const App: React.FC = () => {
     };
 
     filterTodosByQuery();
-  }, [query, selectStatus]);
+  }, [query]);
 
   return (
     <>
