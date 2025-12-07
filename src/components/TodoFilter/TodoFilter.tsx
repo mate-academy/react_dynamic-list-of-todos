@@ -1,43 +1,52 @@
-import React, { ChangeEvent, Dispatch, FormEvent, MouseEvent, SetStateAction } from "react";
-import { StatusFilter } from "../../types/StatusFilter";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  MouseEvent,
+  SetStateAction,
+} from 'react';
+import { StatusFilter } from '../../types/StatusFilter';
 
 type Props = {
   selectStatus: StatusFilter;
   setSelectStatus: Dispatch<SetStateAction<StatusFilter>>;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
-}
+};
 
 export const TodoFilter: React.FC<Props> = ({
   selectStatus,
   setSelectStatus,
   setQuery,
-  query
+  query,
 }) => {
+  const handleChangeSelectValue = async (
+    event: ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const { value } = event.target;
 
-  const handleChangeSelectValue = async (event: ChangeEvent<HTMLSelectElement>) => {
-    const {value} = event.target;
-    if(value !== selectStatus) {
+    if (value !== selectStatus) {
       setSelectStatus(value as StatusFilter);
     }
-  }
+  };
 
   const handleChangeQuery = async (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const {value} = event.target;
+    event.preventDefault();
+    const { value } = event.target;
+
     setQuery(value);
-  }
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  }
+  };
 
   const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setQuery('');
-  }
-  
-  return(
+  };
+
+  return (
     <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
@@ -62,11 +71,20 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button data-cy="clearSearchButton" type="button" className="delete" onClick={handleClearInput} />
-        </span>
+        {
+          query !== '' && (
+            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="clearSearchButton"
+                type="button"
+                className="delete"
+                onClick={handleClearInput}
+              />
+            </span>
+          )
+        } 
       </p>
     </form>
-);
-}
+  );
+};

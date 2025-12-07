@@ -7,18 +7,26 @@ type Props = {
   setSelectedTodo: Dispatch<SetStateAction<Todo | null>>;
 };
 
-export const TodoRow: React.FC<Props> = ({todo, selectedTodo, setSelectedTodo }) => {
-
+export const TodoRow: React.FC<Props> = ({
+  todo,
+  selectedTodo,
+  setSelectedTodo,
+}) => {
   const handleSelected = (event: MouseEvent<HTMLButtonElement>) => {
-      setSelectedTodo(todo);
-  }
+    event.preventDefault();
+    setSelectedTodo(todo);
+  };
 
   return (
     <>
       <tr
         key={todo.id}
         data-cy="todo"
-        className={selectedTodo && selectedTodo.id === todo.id ? 'has-background-info-light' : ''}
+        className={
+          selectedTodo && selectedTodo.id === todo.id
+            ? 'has-background-info-light'
+            : ''
+        }
       >
         <td className="is-vcentered">{todo.id}</td>
 
@@ -46,7 +54,9 @@ export const TodoRow: React.FC<Props> = ({todo, selectedTodo, setSelectedTodo })
             onClick={handleSelected}
           >
             <span className="icon">
-              <i className={`far fa-eye${selectedTodo && selectedTodo.id === todo.id ? '-slash' : ''}`} />
+              <i
+                className={`far fa-eye${selectedTodo && selectedTodo.id === todo.id ? '-slash' : ''}`}
+              />
             </span>
           </button>
         </td>

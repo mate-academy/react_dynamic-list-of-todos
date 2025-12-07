@@ -1,4 +1,10 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -7,17 +13,16 @@ import { getUser } from '../../api';
 type Props = {
   selectedTodo: Todo | null;
   setSelectedTodo: Dispatch<SetStateAction<Todo | null>>;
-}
+};
 
 export const TodoModal: React.FC<Props> = ({
   selectedTodo,
-  setSelectedTodo
+  setSelectedTodo,
 }) => {
-
   const handleModalClose = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setSelectedTodo(null);
-  }
+  };
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,25 +30,24 @@ export const TodoModal: React.FC<Props> = ({
   useEffect(() => {
     setLoading(true);
 
-    if(!selectedTodo) {
+    if (!selectedTodo) {
       return;
     }
 
     const fetchUser = async () => {
       await getUser(selectedTodo.userId)
-              .then((userFetched: User) => {
-                setUser(userFetched);
-              })
-              .finally(() => setLoading(false));
-    }
+        .then((userFetched: User) => {
+          setUser(userFetched);
+        })
+        .finally(() => setLoading(false));
+    };
 
     fetchUser();
-  }, [selectedTodo])
+  }, [selectedTodo]);
 
-  if(!selectedTodo) {
+  if (!selectedTodo) {
     return null;
   }
-
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -62,7 +66,12 @@ export const TodoModal: React.FC<Props> = ({
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" onClick={handleModalClose} />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleModalClose}
+            />
           </header>
 
           <div className="modal-card-body">
@@ -71,9 +80,11 @@ export const TodoModal: React.FC<Props> = ({
             </p>
 
             <p className="block" data-cy="modal-user">
-              {
-                selectedTodo?.completed ? <strong className="has-text-success">Done</strong> : <strong className="has-text-danger">Planned</strong>
-              }
+              {selectedTodo?.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
               {' by '}
               <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>

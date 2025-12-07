@@ -8,7 +8,11 @@ type Props = {
   todos: Todo[];
 };
 
-export const TodoList: React.FC<Props> = ({ todos, setSelectedTodo, selectedTodo }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  setSelectedTodo,
+  selectedTodo,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -28,6 +32,7 @@ export const TodoList: React.FC<Props> = ({ todos, setSelectedTodo, selectedTodo
         {todos.map((todo: Todo) => {
           return (
             <TodoRow
+              key={todo.id}
               todo={todo}
               selectedTodo={selectedTodo}
               setSelectedTodo={setSelectedTodo}

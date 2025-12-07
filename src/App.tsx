@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -20,9 +20,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     const fecthTodos = async () => {
-      const todos = await getTodos();
+      const todosFetched = await getTodos();
 
-      setTodos(todos);
+      setTodos(todosFetched);
       setLoading(false);
     };
 
@@ -31,50 +31,47 @@ export const App: React.FC = () => {
     fecthTodos();
   }, []);
 
-  const filterTodosBySelectStatus = async () => {      
-    const todosFilteredBySelectStatus = await getTodos()
-                                      .then((todos: Todo[]) => {
-                                        return todos.filter((todo) => {
-                                          switch(selectStatus) {
-                                            case 'active':
-                                              return !todo.completed;
-                                            case 'completed':
-                                              return todo.completed;
-                                            case 'all':
-                                              return todo;
-                                          }
-                                        })
-                                      });
+  const filterTodosBySelectStatus = async () => {
+    const todosFilteredBySelectStatus = await getTodos().then(
+      (todosFiltered: Todo[]) => {
+        return todosFiltered.filter(todo => {
+          switch (selectStatus) {
+            case 'active':
+              return !todo.completed;
+            case 'completed':
+              return todo.completed;
+            case 'all':
+              return todo;
+          }
+        });
+      },
+    );
+
     return todosFilteredBySelectStatus;
-  }
+  };
 
   useEffect(() => {
-
-    const todosFilteredBySelectStatus = filterTodosBySelectStatus()
-                                          .then((todosFilteredBySelectStatus: Todo[]) => {
-                                            setTodos(todosFilteredBySelectStatus);
-                                          })
-   
-
+    filterTodosBySelectStatus().then((todosFilteredBySelectStatus: Todo[]) => {
+      setTodos(todosFilteredBySelectStatus);
+    });
   }, [selectStatus]);
 
   useEffect(() => {
     const filterTodosByQuery = async () => {
       const todosByStatus = await filterTodosBySelectStatus();
       const todosFilteredByQuery = todosByStatus.filter((todo: Todo) => {
-
-        const {title} = todo;
+        const { title } = todo;
         const titleLowerCase = title.toLowerCase();
         const queryLowerCase = query.toLowerCase();
 
         return titleLowerCase.includes(queryLowerCase);
-      })
+      });
 
       setTodos(todosFilteredByQuery);
-    }
+    };
 
     filterTodosByQuery();
-  }, [query, selectStatus])
+  }, [query, selectStatus]);
 
   return (
     <>
@@ -84,18 +81,32 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter selectStatus={selectStatus} setSelectStatus={setSelectStatus} setQuery={setQuery} query={query} />
+              <TodoFilter
+                selectStatus={selectStatus}
+                setSelectStatus={setSelectStatus}
+                setQuery={setQuery}
+                query={query}
+              />
             </div>
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && <TodoList todos={todos} selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo}/>}
+              {!loading && (
+                <TodoList
+                  todos={todos}
+                  selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+      <TodoModal
+        selectedTodo={selectedTodo}
+        setSelectedTodo={setSelectedTodo}
+      />
     </>
   );
 };
