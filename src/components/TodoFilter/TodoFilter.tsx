@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
   setQuery,
   query,
 }) => {
-  const handleChangeSelectValue = async (
+  const handleChangeSelectValue = (
     event: ChangeEvent<HTMLSelectElement>,
   ) => {
     const { value } = event.target;
@@ -30,14 +30,13 @@ export const TodoFilter: React.FC<Props> = ({
     }
   };
 
-  const handleChangeQuery = async (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
+  const handleChangeQuery = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     setQuery(value);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
@@ -50,7 +49,7 @@ export const TodoFilter: React.FC<Props> = ({
     <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect" onChange={handleChangeSelectValue}>
+          <select data-cy="statusSelect" onChange={handleChangeSelectValue} value={selectStatus}>
             <option value="all">All</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
@@ -71,19 +70,17 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {
-          query !== '' && (
-            <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <button
-                data-cy="clearSearchButton"
-                type="button"
-                className="delete"
-                onClick={handleClearInput}
-              />
-            </span>
-          )
-        } 
+        {query !== '' && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={handleClearInput}
+            />
+          </span>
+        )}
       </p>
     </form>
   );

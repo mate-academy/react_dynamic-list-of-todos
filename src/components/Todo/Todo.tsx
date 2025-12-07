@@ -1,5 +1,6 @@
 import React, { Dispatch, MouseEvent, SetStateAction } from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -20,13 +21,10 @@ export const TodoRow: React.FC<Props> = ({
   return (
     <>
       <tr
-        key={todo.id}
         data-cy="todo"
-        className={
-          selectedTodo && selectedTodo.id === todo.id
-            ? 'has-background-info-light'
-            : ''
-        }
+        className={classNames({
+          'has-background-info-light': selectedTodo && selectedTodo.id === todo.id
+        })}
       >
         <td className="is-vcentered">{todo.id}</td>
 
@@ -40,7 +38,10 @@ export const TodoRow: React.FC<Props> = ({
 
         <td className="is-vcentered is-expanded">
           <p
-            className={todo.completed ? 'has-text-success' : 'has-text-danger'}
+            className={classNames({
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed
+            })}
           >
             {todo.title}
           </p>
@@ -54,8 +55,12 @@ export const TodoRow: React.FC<Props> = ({
             onClick={handleSelected}
           >
             <span className="icon">
+              
               <i
-                className={`far fa-eye${selectedTodo && selectedTodo.id === todo.id ? '-slash' : ''}`}
+                className={classNames('far', {
+                  'fa-eye-slash': selectedTodo && selectedTodo.id === todo.id,
+                  'fa-eye': !selectedTodo || selectedTodo.id !== todo.id
+                })}
               />
             </span>
           </button>

@@ -32,20 +32,26 @@ export const App: React.FC = () => {
   }, []);
 
   const filterTodosBySelectStatus = async () => {
-    const todosFilteredBySelectStatus = await getTodos().then(
-      (todosFiltered: Todo[]) => {
-        return todosFiltered.filter(todo => {
-          switch (selectStatus) {
-            case 'active':
-              return !todo.completed;
-            case 'completed':
-              return todo.completed;
-            case 'all':
-              return todo;
-          }
-        });
-      },
-    );
+    setLoading(true);
+    const todosFilteredBySelectStatus = 
+      await getTodos()
+        .then(
+          (todosFiltered: Todo[]) => {
+            return todosFiltered.filter(todo => {
+              switch (selectStatus) {
+                case 'active':
+                  return !todo.completed;
+                case 'completed':
+                  return todo.completed;
+                case 'all':
+                  return true;
+              }
+            });
+          },
+        )
+        .finally(() => {
+          setLoading(false);
+        })
 
     return todosFilteredBySelectStatus;
   };

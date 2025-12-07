@@ -20,7 +20,6 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const handleModalClose = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
     setSelectedTodo(null);
   };
 
@@ -35,11 +34,22 @@ export const TodoModal: React.FC<Props> = ({
     }
 
     const fetchUser = async () => {
-      await getUser(selectedTodo.userId)
-        .then((userFetched: User) => {
-          setUser(userFetched);
-        })
-        .finally(() => setLoading(false));
+      try {
+        const userFetched = await getUser(selectedTodo.userId);
+        if(!userFetched) {
+          throw new Error();
+        }
+        setUser(userFetched);
+        
+      } 
+      
+      catch(error) {
+        setLoading(false);
+      }
+
+      finally {
+        setLoading(false);
+      }
     };
 
     fetchUser();
