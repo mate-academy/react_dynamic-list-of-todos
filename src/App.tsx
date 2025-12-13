@@ -12,8 +12,8 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 export const App: React.FC = () => {
-  const [query, SetQuery] = useState('');
-  const [filter, SetFilter] = useState('all');
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('all');
   const [isLoadingTodos, setIsLoadingTodos] = useState(false);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
@@ -49,9 +49,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                SetQuery={SetQuery}
+                setQuery={setQuery}
                 query={query}
-                SetFilter={SetFilter}
+                setFilter={setFilter}
               />
             </div>
 

@@ -1,19 +1,19 @@
 import React from 'react';
 
 interface Props {
-  SetQuery: React.Dispatch<React.SetStateAction<string>>;
-  SetFilter: React.Dispatch<React.SetStateAction<string>>;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
   query: string;
 }
 
-export const TodoFilter: React.FC<Props> = ({ SetQuery, query, SetFilter }) => {
+export const TodoFilter: React.FC<Props> = ({ setQuery, query, setFilter }) => {
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
-            onChange={event => SetFilter(event.target.value)}
+            onChange={event => setFilter(event.target.value)}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -29,7 +29,7 @@ export const TodoFilter: React.FC<Props> = ({ SetQuery, query, SetFilter }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => SetQuery(event.target.value)}
+          onChange={event => setQuery(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -42,7 +42,7 @@ export const TodoFilter: React.FC<Props> = ({ SetQuery, query, SetFilter }) => {
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => SetQuery('')}
+              onClick={() => setQuery('')}
             />
           </span>
         )}

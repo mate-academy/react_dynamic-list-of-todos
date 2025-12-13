@@ -18,11 +18,10 @@ export const TodoModal: React.FC<Props> = ({
   todos,
   user,
 }) => {
-  // const selectedTodo = todosId - 1; // because id starts from 1, index starts from 0
   const selectedTodo = todos.find(todo => todo.id === todosId);
 
   if (!selectedTodo) {
-    return;
+    return null;
   }
 
   return (
@@ -57,11 +56,10 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={classNames(
-                  selectedTodo.completed
-                    ? 'has-text-success'
-                    : 'has-text-danger',
-                )}
+                className={classNames({
+                  'has-text-success': selectedTodo.completed,
+                  'has-text-danger': !selectedTodo.completed,
+                })}
               >
                 {selectedTodo.completed ? `Done` : `Planned`}
               </strong>
