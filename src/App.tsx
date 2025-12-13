@@ -14,8 +14,8 @@ import { User } from './types/User';
 export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
-  const [isLoadingTodos, setIsLoadingTodos] = useState(false);
-  const [isLoadingUser, setIsLoadingUser] = useState(false);
+  const [isLoadingTodos, setIsLoadingTodos] = useState(true);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [isOpened, setIsOpened] = useState(false);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todosId, setTodosId] = useState(0);
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .finally(() => setIsLoadingTodos(true));
+      .finally(() => setIsLoadingTodos(false));
   }, []);
 
   useEffect(() => {
@@ -33,11 +33,11 @@ export const App: React.FC = () => {
       return;
     }
 
-    setIsLoadingUser(false);
+    setIsLoadingUser(true);
 
     getUser(userId)
       .then(setUser)
-      .finally(() => setIsLoadingUser(true));
+      .finally(() => setIsLoadingUser(false));
   }, [userId]);
 
   return (
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {!isLoadingTodos ? (
+              {isLoadingTodos ? (
                 <Loader />
               ) : (
                 <TodoList
