@@ -1,19 +1,26 @@
-
-
 type Props = {
   filter: 'all' | 'completed' | 'active';
   onFilterChange: (value: 'all' | 'completed' | 'active') => void;
   query: string;
   onQueryChange: (value: string) => void;
-}
+};
 
-
-export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange, query, onQueryChange }) => (
+export const TodoFilter: React.FC<Props> = ({
+  filter,
+  onFilterChange,
+  query,
+  onQueryChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect" value={filter}
-        onChange={(event) => onFilterChange(event.target.value as 'all' | 'completed' | 'active')}>
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={event =>
+            onFilterChange(event.target.value as 'all' | 'completed' | 'active')
+          }
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -28,20 +35,22 @@ export const TodoFilter: React.FC<Props> = ({ filter, onFilterChange, query, onQ
         className="input"
         placeholder="Search..."
         value={query}
-        onChange={(event) => onQueryChange(event.target.value)}
+        onChange={event => onQueryChange(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       {query !== '' && (
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton"
-        type="button"
-        className="delete"
-        onClick={() => onQueryChange('')} />
-      </span>
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onQueryChange('')}
+          />
+        </span>
       )}
     </p>
   </form>
