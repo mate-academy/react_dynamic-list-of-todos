@@ -25,13 +25,15 @@ export const App: React.FC = () => {
   // }, []);
 
   useEffect(() => {
-    setLoading(true); // включили загрузку
+    setLoading(true);
 
-    getTodos().then(data => {
-      //запросили данные
-      setTodosFromServer(data); //сохранили данные в стейт
-      setLoading(false); //отключили загрузку
-    });
+    getTodos()
+      .then(data => {
+        setTodosFromServer(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const statusFilteredTodos = todosFromServer.filter(todo => {
