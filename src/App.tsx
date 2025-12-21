@@ -28,9 +28,8 @@ export const App: React.FC = () => {
     setLoading(true);
 
     getTodos()
-      .then(data => {
-        setTodosFromServer(data);
-      })
+      .then(setTodosFromServer)
+      .catch(() => {})
       .finally(() => {
         setLoading(false);
       });
