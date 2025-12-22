@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -41,13 +42,15 @@ export const TodoList: React.FC<Props> = ({
             </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
             </td>
+
             <td className="has-text-right is-vcentered">
               <button
                 onClick={() => onTodoClick(todo)}
@@ -55,11 +58,14 @@ export const TodoList: React.FC<Props> = ({
                 className="button"
                 type="button"
               >
-                <span className="icon">
-                  <i
-                    className={isSelected ? 'fas fa-eye-slash' : 'far fa-eye'}
-                  />
-                </span>
+  <span className="icon">
+    <i
+      className={classNames({
+        'fas fa-eye-slash': isSelected,
+        'far fa-eye': !isSelected,
+      })}
+    />
+  </span>
               </button>
             </td>
           </tr>
