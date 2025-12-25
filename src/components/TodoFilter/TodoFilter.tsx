@@ -4,7 +4,7 @@ type Props = {
   filterStatus: 'all' | 'active' | 'completed';
   onFilterChange: (status: 'all' | 'active' | 'completed') => void;
   searchQuery: string;
-  onSearchChange: (quyre: string) => void;
+  onSearchChange: (query: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
