@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5173/api';
+const BASE_URL = 'https://mate.academy/students-api';
 
 export function getData<T>(url: string): Promise<T> {
   return fetch(BASE_URL + url)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type Props = {
   onStatusChange: (status: string) => void;
@@ -10,6 +10,8 @@ export const TodoFilter: React.FC<Props> = ({
   onQueryChange,
   onStatusChange,
 }) => {
+  const [value, setValue] = useState('');
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -31,7 +33,11 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          onChange={event => onQueryChange(event.target.value)}
+          value={value}
+          onChange={event => {
+            onQueryChange(event.target.value);
+            setValue(event.target.value);
+          }}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -43,6 +49,10 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={() => {
+              onQueryChange('');
+              setValue('');
+            }}
           />
         </span>
       </p>
