@@ -1,4 +1,5 @@
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -9,14 +10,24 @@ export const TodoItem: React.FC<Props> = ({ todo, onSelect }) => {
   return (
     <tr data-cy="todo">
       <td className="is-vcentered">{todo.id}</td>
+
       <td className="is-vcentered" />
-      <td className={`is-vcentered ${todo.completed ? `is-expanded` : ''}`}>
+
+      <td
+        className={classNames('is-vcentered', {
+          'is-expanded': todo.completed,
+        })}
+      >
         <p
-          className={`${todo.completed ? `has-text-success` : 'has-text-danger'}`}
+          className={classNames({
+            'has-text-success': todo.completed,
+            'has-text-danger': !todo.completed,
+          })}
         >
           {todo.title}
         </p>
       </td>
+
       <td className="has-text-right is-vcentered">
         <button
           data-cy="selectButton"
