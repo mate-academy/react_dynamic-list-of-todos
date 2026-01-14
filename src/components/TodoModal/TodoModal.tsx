@@ -19,8 +19,7 @@ export const TodoModal: React.FC<Props> = ({
     setLoading(true);
     getUser(selectTodo.userId)
       .then(res => setUser(res))
-      .catch(error => {
-        console.error('Failed to load user:', error);
+      .catch(() => {
         setUser(null);
       })
       .finally(() => setLoading(false));

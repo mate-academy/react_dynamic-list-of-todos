@@ -1,43 +1,36 @@
-import React, { useState } from 'react';
+/* eslint-disable prettier/prettier */
 
 type Props = {
+  statusFilter: 'all' | 'active' | 'completed';
+  searchQuery: string;
   onChangeStatus: (status: 'all' | 'active' | 'completed') => void;
   onSearch: (query: string) => void;
 };
 export const TodoFilter: React.FC<Props> = ({
+  statusFilter,
+  searchQuery,
   onChangeStatus = () => {},
   onSearch = () => {},
 }) => {
-  const [choiceValue, setChoiceValue] = useState<
-  'all' | 'active' | 'completed'
-  >('all');
-  const [query, setQuery] = useState('');
 
   const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as 'all' | 'active' | 'completed';
-
-    setChoiceValue(value);
     onChangeStatus(value);
   };
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-
-    setQuery(value);
     onSearch(value);
   };
 
-  const cleanSearch = () => {
-    setQuery('');
-    onSearch('');
-  };
+  const cleanSearch = () => onSearch('');
 
   return (
     <form className="field has-addons">
       <p className="control">
         <span className="select">
           <select
-            value={choiceValue}
+            value={statusFilter}
             data-cy="statusSelect"
             onChange={handleStatus}
           >
@@ -54,23 +47,21 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={query}
+          value={searchQuery}
           onChange={handleQuery}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
         </span>
 
-        {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={cleanSearch}
             />
-          </span>
-        )}
+        </span>
       </p>
     </form>
   );

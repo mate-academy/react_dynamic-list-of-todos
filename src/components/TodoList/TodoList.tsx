@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -28,22 +29,21 @@ export const TodoList: React.FC<Props> = React.memo(
           <tr
             data-cy="todo"
             key={todo.id}
-            className={todo.completed ? 'has-background-success-light' : ''}
+            className={cn({ 'has-background-success-light': todo.completed })}
           >
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
-                <span className="icon has-text-success" data-cy="iconCompleted">
+                <span className={cn('icon', 'has-text-success')} data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
-              >
+              <p className={cn({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed
+              })}>
                 {todo.title}
               </p>
             </td>
@@ -78,3 +78,5 @@ export const TodoList: React.FC<Props> = React.memo(
     </table>
   ),
 );
+
+TodoList.displayName = 'TodoList';

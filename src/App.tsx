@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-disable prettier/prettier */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -22,14 +23,13 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(res => setTodos(res))
-      .catch(error => {
-        console.error('Failed to load todos:', error);
+      .catch(() => {
         setTodos([]);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  const watchSelectTodo = useCallback((todo: Todo) => {
+  const handleSelectTodo  = useCallback((todo: Todo) => {
     setSelectTodo(todo);
   }, []);
 
@@ -64,6 +64,8 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                statusFilter={statusFilter}
+                searchQuery={searchQuery}
                 onChangeStatus={setStatusFilter}
                 onSearch={setSearchQuery}
               />
@@ -74,7 +76,7 @@ export const App: React.FC = () => {
               {!isLoading && (
                 <TodoList
                   todos={filteredTodos}
-                  onSelect={watchSelectTodo}
+                  onSelect={handleSelectTodo }
                   selectedTodoId={selectTodo?.id ?? null}
                   onUnselect={() => setSelectTodo(null)}
                 />
