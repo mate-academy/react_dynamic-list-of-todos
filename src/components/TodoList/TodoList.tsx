@@ -34,16 +34,21 @@ export const TodoList: React.FC<Props> = React.memo(
             <td className="is-vcentered">{todo.id}</td>
             <td className="is-vcentered">
               {todo.completed && (
-                <span className={cn('icon', 'has-text-success')} data-cy="iconCompleted">
+                <span
+                  className={cn('icon', 'has-text-success')}
+                  data-cy="iconCompleted"
+                >
                   <i className="fas fa-check" />
                 </span>
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className={cn({
-                'has-text-success': todo.completed,
-                'has-text-danger': !todo.completed
-              })}>
+              <p
+                className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
                 {todo.title}
               </p>
             </td>

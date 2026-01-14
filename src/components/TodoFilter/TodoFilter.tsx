@@ -15,11 +15,13 @@ export const TodoFilter: React.FC<Props> = ({
 
   const handleStatus = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as 'all' | 'active' | 'completed';
+
     onChangeStatus(value);
   };
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
+
     onSearch(value);
   };
 
@@ -55,12 +57,14 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          {searchQuery && (
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
               onClick={cleanSearch}
             />
+          )}
         </span>
       </p>
     </form>
