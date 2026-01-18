@@ -9,10 +9,8 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { User } from './types/User';
 
 export const App: React.FC = () => {
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
   const [todoShow, setTodoShow] = useState<Todo | null>(null);
@@ -21,7 +19,9 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState('all');
 
   const filteredTodos = todos.filter(todo => {
-    const matchesSearch = todo.title.toLowerCase().includes(search.trim().toLowerCase());
+    const matchesSearch = todo.title
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
 
     let matchesStatus = true;
 
@@ -52,7 +52,10 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onSearchChange={setSearch} onStatusChange={setStatus} />
+              <TodoFilter
+                onSearchChange={setSearch}
+                onStatusChange={setStatus}
+              />
             </div>
 
             <div className="block">
@@ -70,7 +73,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoShow && <TodoModal todoShow={todoShow} onClose={() => setTodoShow(null)} />}
+      {todoShow && (
+        <TodoModal todoShow={todoShow} onClose={() => setTodoShow(null)} />
+      )}
     </>
   );
 };

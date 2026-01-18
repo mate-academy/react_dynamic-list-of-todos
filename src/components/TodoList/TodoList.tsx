@@ -5,9 +5,13 @@ type Props = {
   todos: Todo[];
   onShowTodo: (todo: Todo) => void;
   selectedTodoId: number | null;
-}
+};
 
-export const TodoList: React.FC<Props> = ({ todos, onShowTodo, selectedTodoId }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onShowTodo,
+  selectedTodoId,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -34,20 +38,34 @@ export const TodoList: React.FC<Props> = ({ todos, onShowTodo, selectedTodoId })
             )}
           </td>
           <td className="is-vcentered is-expanded">
-            <p className={todo.completed ? "has-text-success" : "has-text-danger"}>
+            <p
+              className={
+                todo.completed ? 'has-text-success' : 'has-text-danger'
+              }
+            >
               {todo.title}
             </p>
           </td>
           <td className="has-text-right is-vcentered">
-            <button data-cy="selectButton" className="button" type="button" onClick={() => onShowTodo(todo)}>
+            <button
+              data-cy="selectButton"
+              className="button"
+              type="button"
+              onClick={() => onShowTodo(todo)}
+            >
               <span className="icon">
-                <i className={selectedTodoId === todo.id ? "far fa-eye-slash" : "far fa-eye"} />
+                <i
+                  className={
+                    selectedTodoId === todo.id
+                      ? 'far fa-eye-slash'
+                      : 'far fa-eye'
+                  }
+                />
               </span>
             </button>
           </td>
         </tr>
       ))}
-
     </tbody>
   </table>
 );

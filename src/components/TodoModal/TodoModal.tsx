@@ -7,7 +7,7 @@ import { getUser } from '../../api';
 type Props = {
   todoShow: Todo;
   onClose: () => void;
-}
+};
 
 export const TodoModal: React.FC<Props> = ({ todoShow, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -18,8 +18,8 @@ export const TodoModal: React.FC<Props> = ({ todoShow, onClose }) => {
 
     getUser(todoShow.userId)
       .then(setUser)
-      .finally(() => setLoading(false))
-  }, [todoShow.userId])
+      .finally(() => setLoading(false));
+  }, [todoShow.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -38,7 +38,11 @@ export const TodoModal: React.FC<Props> = ({ todoShow, onClose }) => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" onClick={onClose}
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
             />
           </header>
 
@@ -48,7 +52,8 @@ export const TodoModal: React.FC<Props> = ({ todoShow, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todoShow.completed ? (<strong className="has-text-success">Done</strong>
+              {todoShow.completed ? (
+                <strong className="has-text-success">Done</strong>
               ) : (
                 <strong className="has-text-danger">Planned</strong>
               )}
