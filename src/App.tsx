@@ -23,10 +23,15 @@ export const App: React.FC = () => {
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
-      const todosFromServer = await getTodos();
 
-      setTodos(todosFromServer);
-      setIsLoading(false);
+      try {
+        const todosFromServer = await getTodos();
+
+        setTodos(todosFromServer);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchTodos();
@@ -36,11 +41,14 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
     setIsUserLoading(true);
 
-    const userFromServer = await getUser(todo.userId);
+    try {
+      const userFromServer = await getUser(todo.userId);
 
-    setUser(userFromServer);
-
-    setIsUserLoading(false);
+      setUser(userFromServer);
+    } catch (error) {
+    } finally {
+      setIsUserLoading(false);
+    }
   };
 
   const todoWithSelection = todos.map(todo => ({
