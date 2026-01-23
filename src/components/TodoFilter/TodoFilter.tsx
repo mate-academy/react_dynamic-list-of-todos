@@ -16,7 +16,7 @@ const TodoFilterComponent: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handlerClear = () => {
+  const handleClear = () => {
     onQueryChange('');
     inputRef.current?.focus();
   };
@@ -57,7 +57,7 @@ const TodoFilterComponent: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={handlerClear}
+              onClick={handleClear}
             />
           </span>
         )}
