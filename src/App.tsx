@@ -33,9 +33,7 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedTodo) {
-      return;
-    }
+    if (!selectedTodo) return;
 
     setLoadingUser(true);
 
@@ -46,14 +44,8 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos
     .filter(todo => {
-      if (status === 'active') {
-        return !todo.completed;
-      }
-
-      if (status === 'completed') {
-        return todo.completed;
-      }
-
+      if (status === 'active') return !todo.completed;
+      if (status === 'completed') return todo.completed;
       return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
@@ -76,9 +68,9 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-
-              {!loadingTodos && (
+              {loadingTodos ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
                   onSelect={setSelectedTodo}
