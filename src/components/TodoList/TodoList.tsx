@@ -31,13 +31,16 @@ export const TodoList: React.FC<Props> = ({
         const isSelected = todo.id === selectedTodoId;
 
         return (
-          <tr data-cy="todo" key={todo.id}>
+          <tr
+            data-cy="todo"
+            key={todo.id}
+            className={isSelected ? 'is-selected' : ''}
+          >
             <td className="is-vcentered">{todo.id}</td>
 
-            {/* 1. Show completed icon only if todo is completed */}
             <td className="is-vcentered">
               {todo.completed && (
-                <span className="icon" data-cy="completedIcon">
+                <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
                 </span>
               )}
@@ -54,13 +57,11 @@ export const TodoList: React.FC<Props> = ({
             </td>
 
             <td className="has-text-right is-vcentered">
-              {/* 2. Toggle between Show and Hide behavior */}
               <button
                 data-cy="selectButton"
                 className="button"
                 type="button"
                 onClick={() => {
-                  // If already selected, clicking "Hide" sets ID to 0
                   setClickedPostId(isSelected ? 0 : todo.id);
                 }}
               >
