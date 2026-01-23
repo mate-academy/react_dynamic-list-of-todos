@@ -14,16 +14,17 @@ export const TodoModal: React.FC<Props> = ({ todo, setClickedPostId }) => {
   const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {
-    getUser(todo.id)
+    setIsDataLoading(true);
+    getUser(todo.userId)
       .then(setUser)
       .finally(() => setIsDataLoading(false));
-  }, [todo.id]);
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={() => setClickedPostId(0)} />
 
-      {isDataLoading || !user ? (
+      {isDataLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -35,7 +36,6 @@ export const TodoModal: React.FC<Props> = ({ todo, setClickedPostId }) => {
               Todo #{todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -50,7 +50,6 @@ export const TodoModal: React.FC<Props> = ({ todo, setClickedPostId }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               {todo.completed ? (
                 <strong className="has-text-success">Done</strong>
               ) : (
@@ -59,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({ todo, setClickedPostId }) => {
 
               {' by '}
 
-              <a href={`mailto:${user.email}`}>{user.name}</a>
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>

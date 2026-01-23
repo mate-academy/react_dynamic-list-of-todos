@@ -10,10 +10,15 @@ import { Loader } from './components/Loader';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
+export type Status = 'all' | 'active' | 'completed';
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [clickedPostId, setClickedPostId] = useState(0);
+
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<Status>('all');
 
   useEffect(() => {
     getTodos()
@@ -26,6 +31,19 @@ export const App: React.FC = () => {
 
   const selectedTodo = getTodoById(clickedPostId);
 
+  const visibleTodos = todos.filter(todo => {
+    const matchesStatus =
+      status === 'all' ||
+      (status === 'completed' && todo.completed) ||
+      (status === 'active' && !todo.completed);
+
+    const matchesQuery = todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase().trim());
+
+    return matchesStatus && matchesQuery;
+  });
+
   return (
     <>
       <div className="section">
@@ -34,19 +52,32 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                status={status}
+                onQueryChange={setQuery}
+                onStatusChange={setStatus}
+              />
             </div>
 
             <div className="block">
               {isDataLoading && <Loader />}
-              <TodoList todos={todos} setClickedPostId={setClickedPostId} />
+              <TodoList
+                todos={visibleTodos}
+                setClickedPostId={setClickedPostId}
+                selectedTodoId={clickedPostId}
+              />
             </div>
           </div>
         </div>
       </div>
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} setClickedPostId={setClickedPostId} />
+        <TodoModal
+          key={selectedTodo.id}
+          todo={selectedTodo}
+          setClickedPostId={setClickedPostId}
+        />
       )}
     </>
   );
