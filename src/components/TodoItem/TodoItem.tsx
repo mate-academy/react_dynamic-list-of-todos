@@ -3,10 +3,15 @@ import { UsersTodo } from '../../types/Todo';
 
 interface Props {
   todo: UsersTodo;
+  selectedTodo: UsersTodo | null;
   onSelectTodo: (todo: UsersTodo) => void;
 }
 
-export const TodoItem: React.FC<Props> = ({ todo, onSelectTodo }) => {
+export const TodoItem: React.FC<Props> = ({
+  todo,
+  onSelectTodo,
+  selectedTodo,
+}) => {
   const { id, title, completed } = todo;
 
   return (
@@ -32,7 +37,13 @@ export const TodoItem: React.FC<Props> = ({ todo, onSelectTodo }) => {
           onClick={() => onSelectTodo(todo)}
         >
           <span className="icon">
-            <i className={completed ? 'far fa-eye' : 'far fa-eye-slash'} />
+            <i
+              className={
+                selectedTodo && selectedTodo.id === id
+                  ? 'far fa-eye-slash'
+                  : 'far fa-eye'
+              }
+            />
           </span>
         </button>
       </td>

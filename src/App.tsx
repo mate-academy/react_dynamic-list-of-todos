@@ -20,6 +20,7 @@ export const App: React.FC = () => {
   );
   const [selectedTodo, setSelectedTodo] = useState<UsersTodo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(false);
 
   useEffect(() => {
     getTodos()
@@ -42,22 +43,21 @@ export const App: React.FC = () => {
     criteria: TodoSelect,
     query: string,
   ) => {
-    let filtered = todos;
+    let filtered = (() => {
+      switch (criteria) {
+        case TodoSelect.ACTIVE:
+          return todos.filter(todo => !todo.completed);
 
-    // Apply status filter
-    switch (criteria) {
-      case TodoSelect.ACTIVE:
-        filtered = filtered.filter(todo => !todo.completed);
-        break;
-      case TodoSelect.COMPLETED:
-        filtered = filtered.filter(todo => todo.completed);
-        break;
-      case TodoSelect.ALL:
-      default:
-        break;
-    }
+        case TodoSelect.COMPLETED:
+          return todos.filter(todo => todo.completed);
 
-    // Apply search filter
+        case TodoSelect.ALL:
+        default:
+          return todos.slice();
+      }
+    })();
+
+    // search
     if (query.trim()) {
       filtered = filtered.filter(todo =>
         todo.title.toLowerCase().includes(query.toLowerCase()),
@@ -86,6 +86,15 @@ export const App: React.FC = () => {
   const handleSelectTodo = (todo: UsersTodo) => {
     setSelectedTodo(todo);
     setIsModalOpen(true);
+    setIsUserLoading(true);
+
+    getUser(todo.userId)
+      .then(user => {
+        setSelectedTodo(prev => (prev ? { ...prev, user } : null));
+      })
+      .finally(() => {
+        setIsUserLoading(false);
+      });
   };
 
   const handleCloseModal = () => {
@@ -111,7 +120,11 @@ export const App: React.FC = () => {
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList todos={visibleTodos} onSelectTodo={handleSelectTodo} />
+              <TodoList
+                todos={visibleTodos}
+                selectedTodo={selectedTodo}
+                onSelectTodo={handleSelectTodo}
+              />
             </div>
           </div>
         </div>
@@ -119,7 +132,7 @@ export const App: React.FC = () => {
 
       {isModalOpen && selectedTodo && (
         <TodoModal
-          isLoading={isLoading}
+          isLoading={isUserLoading}
           selectedTodo={selectedTodo}
           onClose={handleCloseModal}
         />

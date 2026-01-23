@@ -4,10 +4,15 @@ import { TodoItem } from '../TodoItem';
 
 interface Props {
   todos: UsersTodo[];
+  selectedTodo: UsersTodo | null;
   onSelectTodo: (todo: UsersTodo) => void;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, onSelectTodo }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelectTodo,
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -24,7 +29,12 @@ export const TodoList: React.FC<Props> = ({ todos, onSelectTodo }) => (
 
     <tbody>
       {todos.map(todo => (
-        <TodoItem key={todo.id} todo={todo} onSelectTodo={onSelectTodo} />
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          selectedTodo={selectedTodo}
+          onSelectTodo={onSelectTodo}
+        />
       ))}
     </tbody>
   </table>
