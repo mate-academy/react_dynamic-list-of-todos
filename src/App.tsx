@@ -11,16 +11,16 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 function filteredTodos(todos: Todo[], query: string, filterBy: string) {
-  let filtredArr = [...todos];
+  let filteredArr = [...todos];
 
   if (filterBy !== 'all') {
     switch (filterBy) {
       case 'active':
-        filtredArr = filtredArr.filter(todo => todo.completed === false);
+        filteredArr = filteredArr.filter(todo => todo.completed === false);
         break;
 
       case 'completed':
-        filtredArr = filtredArr.filter(todo => todo.completed === true);
+        filteredArr = filteredArr.filter(todo => todo.completed === true);
         break;
 
       default:
@@ -29,12 +29,12 @@ function filteredTodos(todos: Todo[], query: string, filterBy: string) {
   }
 
   if (query) {
-    filtredArr = filtredArr.filter(todo =>
+    filteredArr = filteredArr.filter(todo =>
       todo.title.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
-  return filtredArr;
+  return filteredArr;
 }
 
 export const App: React.FC = () => {
@@ -48,10 +48,11 @@ export const App: React.FC = () => {
   const visibleTodos = filteredTodos(todos, query, filterBy);
 
   useEffect(() => {
-    getTodos().then(setTodos);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
+    setIsLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
