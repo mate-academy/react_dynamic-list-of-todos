@@ -15,7 +15,7 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [filterTodos, setFilterTodos] = useState<Filter>('all');
+  const [filterTodos, setFilterTodos] = useState<string>('all');
   const [searchTodos, setSearchTodos] = useState<string>('');
 
   useEffect(() => {
