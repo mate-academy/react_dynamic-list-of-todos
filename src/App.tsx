@@ -55,7 +55,10 @@ export const App: React.FC = () => {
           setUserForModal(user);
         }
       })
-      .catch(error => setErrorMes(error));
+      .catch(error => {
+        setErrorMes(error);
+        setModal(false);
+      });
 
     return () => {
       isCancelled = true;
@@ -69,11 +72,7 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter(todo => {
-      if (query !== '') {
-        return todo.title.toLowerCase().includes(query);
-      } else {
-        return true;
-      }
+      return todo.title.toLowerCase().includes(query);
     })
     .filter(todo => {
       if (status === 'active') {
