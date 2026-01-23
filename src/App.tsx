@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,25 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [clickedPostId, setClickedPostId] = useState(0);
+
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsDataLoading(false));
+  }, []);
+
+  const getTodoById = (todoId: number) =>
+    todos.find(todo => todo.id === todoId);
+
+  const selectedTodo = getTodoById(clickedPostId);
+
   return (
     <>
       <div className="section">
@@ -21,14 +38,16 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isDataLoading && <Loader />}
+              <TodoList todos={todos} setClickedPostId={setClickedPostId} />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} setClickedPostId={setClickedPostId} />
+      )}
     </>
   );
 };
