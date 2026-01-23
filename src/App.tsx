@@ -12,6 +12,11 @@ import { Todo } from './types/Todo';
 import { User } from './types/User';
 
 export const App: React.FC = () => {
+  // #region ErrorMes
+  const [errorMes, setErrorMes] = useState('');
+
+  // #endregion
+
   // #region loading
   const [loadingTodos, setLoadingTodos] = useState(true);
   // #endregion
@@ -23,9 +28,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(setTodos)
-      .then(() => {
+      .finally(() => {
         setLoadingTodos(false);
-      });
+      })
+      .catch(error => setErrorMes(error));
   }, []);
   // #endregion
 
@@ -43,11 +49,13 @@ export const App: React.FC = () => {
 
     setUserForModal(undefined);
 
-    getUser(todoForModal.userId).then(user => {
-      if (!isCancelled) {
-        setUserForModal(user);
-      }
-    });
+    getUser(todoForModal.userId)
+      .then(user => {
+        if (!isCancelled) {
+          setUserForModal(user);
+        }
+      })
+      .catch(error => setErrorMes(error));
 
     return () => {
       isCancelled = true;
@@ -83,6 +91,8 @@ export const App: React.FC = () => {
       <div className="section">
         <div className="container">
           <div className="box">
+            {errorMes && <span>{errorMes}</span>}
+
             <h1 className="title">Todos:</h1>
 
             <div className="block">

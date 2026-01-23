@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
+import classNames from 'classnames';
 
 type Props = {
   todoData: Todo | undefined;
@@ -46,11 +47,14 @@ export const TodoModal: React.FC<Props> = memo(
               </p>
 
               <p className="block" data-cy="modal-user">
-                {todoData.completed ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
+                <strong
+                  className={classNames({
+                    'has-text-success': todoData.completed,
+                    'has-text-danger': !todoData.completed,
+                  })}
+                >
+                  {todoData.completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
 
