@@ -1,5 +1,5 @@
 import React from 'react';
-import { Todo } from '../../types/Todo'
+import { Todo } from '../../types/Todo';
 import cn from 'classnames';
 
 interface Props {
@@ -8,7 +8,11 @@ interface Props {
   selectedTodoId?: number | null;
 }
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect, selectedTodoId }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onSelect,
+  selectedTodoId,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -52,15 +56,17 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect, selectedTodoId }) =
               onClick={() => onSelect(todo)}
             >
               <span className="icon">
-                <i className={cn('far', {
-                  'fa-eye': todo.id !== selectedTodoId,
-                  'fa-eye-slash': todo.id === selectedTodoId,
-                })} />
+                <i
+                  className={cn('far', {
+                    'fa-eye': todo.id !== selectedTodoId,
+                    'fa-eye-slash': todo.id === selectedTodoId,
+                  })}
+                />
               </span>
             </button>
           </td>
         </tr>
       ))}
     </tbody>
-  </table >
+  </table>
 );

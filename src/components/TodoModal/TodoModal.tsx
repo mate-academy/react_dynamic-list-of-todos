@@ -4,7 +4,6 @@ import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { getUser } from '../../api';
 
-
 interface Props {
   todo: Todo;
   onClose: () => void;
@@ -19,7 +18,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
     getUser(todo.userId)
       .then(setUser)
-      .catch((error) => console.error('Error loading user:', error))
       .finally(() => setLoading(false));
   }, [todo.userId]);
 
@@ -44,7 +42,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={onClose} />
+              onClick={onClose}
+            />
           </header>
 
           <div className="modal-card-body">
@@ -53,15 +52,17 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              <strong className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
+              <strong
+                className={
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                }
+              >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}
 
-              {user && (
-                <a href={`mailto:${user.email}`}>{user.name}</a>
-              )}
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getTodos } from './api';
-import { Todo } from './types/Todo'
+import { Todo } from './types/Todo';
 
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -20,11 +20,14 @@ export const App: React.FC = () => {
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
-      const matchesStatus = status === 'all'
-        || (status === 'completed' && todo.completed)
-        || (status === 'active' && !todo.completed);
+      const matchesStatus =
+        status === 'all' ||
+        (status === 'completed' && todo.completed) ||
+        (status === 'active' && !todo.completed);
 
-      const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
+      const matchesQuery = todo.title
+        .toLowerCase()
+        .includes(query.toLowerCase());
 
       return matchesStatus && matchesQuery;
     });
@@ -35,7 +38,6 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch((error) => console.error(error))
       .finally(() => {
         setLoading(false);
       });
@@ -60,20 +62,20 @@ export const App: React.FC = () => {
             <div className="block">
               {loading && <Loader />}
 
-              {!loading && todos.length > 0 && <TodoList
-                todos={visibleTodos}
-                onSelect={setSelectedTodo}
-                selectedTodoId={selectedTodo?.id} />}
+              {!loading && todos.length > 0 && (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelect={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          onClose={() => setSelectedTodo(null)}
-        />
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
