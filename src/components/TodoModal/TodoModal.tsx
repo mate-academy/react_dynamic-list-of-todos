@@ -1,12 +1,23 @@
 import React from 'react';
 import { Loader } from '../Loader';
+import { UsersTodo } from '../../types/Todo';
 
-export const TodoModal: React.FC = () => {
+interface TodoModalProps {
+  isLoading: boolean;
+  selectedTodo: UsersTodo;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<TodoModalProps> = ({
+  isLoading,
+  selectedTodo,
+  onClose,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
 
-      {true ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +26,34 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{selectedTodo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {selectedTodo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {selectedTodo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${selectedTodo.user.email}`}>
+                {selectedTodo.user.name}
+              </a>
             </p>
           </div>
         </div>
