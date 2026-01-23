@@ -79,6 +79,7 @@ export const App: React.FC = () => {
                   isShown={isShown}
                   setIsShown={setIsShown}
                   setSelectedTodo={setSelectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               )}
             </div>

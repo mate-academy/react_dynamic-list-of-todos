@@ -7,6 +7,7 @@ type Props = {
   isShown: boolean;
   setIsShown: (show: boolean) => void;
   setSelectedTodo: (selectedTodo: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const TodoList: React.FC<Props> = ({
   isShown,
   setIsShown,
   setSelectedTodo,
+  selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
@@ -64,8 +66,8 @@ export const TodoList: React.FC<Props> = ({
                 <span className="icon">
                   <i
                     className={classNames('far', {
-                      'fa-eye-slash': isShown,
-                      'fa-eye': !isShown,
+                      'fa-eye-slash': isShown && selectedTodo?.id === todo.id,
+                      'fa-eye': !isShown || selectedTodo?.id !== todo.id,
                     })}
                   />
                 </span>
