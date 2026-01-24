@@ -32,7 +32,9 @@ export const TodoList: React.FC<TodoListProps> = ({
         <tr
           key={todo.id}
           data-cy="todo"
-          className={todo.completed ? 'has-background-info-light' : ''}
+          className={cn({
+            'has-background-info-light': todo.completed,
+          })}
         >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
@@ -61,11 +63,13 @@ export const TodoList: React.FC<TodoListProps> = ({
             >
               <span className="icon">
                 <i
-                  className={
-                    selectedTodoId === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
-                  }
+                  className={cn(
+                    'far',
+                    {
+                      'fa-eye-slash': selectedTodoId === todo.id,
+                      'fa-eye': selectedTodoId !== todo.id,
+                    },
+                  )}
                 />
               </span>
             </button>
