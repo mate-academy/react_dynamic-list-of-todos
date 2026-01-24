@@ -4,9 +4,9 @@ import { User } from '../../types/User';
 import { get } from './../../api';
 
 export const AddTodo: React.FC<{
-  todoLength?: number;
+  todos: Todo[];
   onAddTodo: (newTodo: Todo) => void;
-}> = ({ todoLength, onAddTodo }) => {
+}> = ({ todos, onAddTodo }) => {
   const [newTodoTitle, setNewTodoTitle] = React.useState('');
   const [selectedUser, setSelectedUser] = React.useState<number>(1);
   const [users, setUsers] = React.useState<User[]>([]);
@@ -25,7 +25,10 @@ export const AddTodo: React.FC<{
     });
   }, []);
 
-  const getNextId = () => (todoLength ? todoLength + 1 : 1);
+  const getNextId = () => {
+    if (todos.length === 0) return 1;
+    return Math.max(...todos.map(todo => todo.id)) + 1;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

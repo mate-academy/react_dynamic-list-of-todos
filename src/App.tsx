@@ -46,7 +46,7 @@ export const App: React.FC = () => {
         });
       }
     }
-  }, [selectedTodoId, todos]);
+  }, [selectedTodoId]);
 
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
 
@@ -94,7 +94,7 @@ export const App: React.FC = () => {
       <div className="section">
         <div className="container">
           <div className="box">
-            <AddTodo todoLength={todos.length} onAddTodo={handleAddTodo} />
+            <AddTodo todos={todos} onAddTodo={handleAddTodo} />
 
             <h1 className="title">Todos:</h1>
 
