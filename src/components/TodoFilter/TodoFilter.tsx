@@ -1,42 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Todo } from '../../types/Todo';
-// import { getTodos } from '../../api';
-
-enum Values {
-  all = 'all',
-  active = 'active',
-  completed = 'completed',
-}
-
 type Props = {
-  todos: Todo[];
-  onSelected: (todos: Todo[]) => void;
+  status: 'all' | 'active' | 'completed';
+  query: string;
+  onStatusChange: (value: 'all' | 'active' | 'completed') => void;
+  onQueryChange: (value: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ todos, onSelected }) => {
-  const [status, setStatus] = useState<Values>(Values.all);
-  const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    let filtered = [...todos];
-
-    if (status === Values.active) {
-      filtered = filtered.filter(todo => !todo.completed);
-    }
-
-    if (status === Values.completed) {
-      filtered = filtered.filter(todo => todo.completed);
-    }
-
-    if (query.trim()) {
-      filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
-      );
-    }
-
-    onSelected(filtered);
-  }, [todos, status, query, onSelected]);
-
+export const TodoFilter: React.FC<Props> = ({
+  status,
+  query,
+  onStatusChange,
+  onQueryChange,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -44,11 +18,13 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSelected }) => {
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={e => setStatus(e.target.value as Values)}
+            onChange={e =>
+              onStatusChange(e.target.value as 'all' | 'active' | 'completed')
+            }
           >
-            <option value={Values.all}>All</option>
-            <option value={Values.active}>Active</option>
-            <option value={Values.completed}>Completed</option>
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
           </select>
         </span>
       </p>
@@ -60,7 +36,7 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSelected }) => {
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => onQueryChange(e.target.value)}
         />
 
         <span className="icon is-left">
@@ -68,12 +44,12 @@ export const TodoFilter: React.FC<Props> = ({ todos, onSelected }) => {
         </span>
 
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className="icon is-right">
             <button
-              data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              data-cy="clearSearchButton"
+              onClick={() => onQueryChange('')}
             />
           </span>
         )}

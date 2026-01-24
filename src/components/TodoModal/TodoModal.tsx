@@ -6,10 +6,10 @@ import { User } from '../../types/User';
 
 type Props = {
   todo: Todo;
-  onDelete: (todo: Todo | undefined) => void;
+  onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onDelete }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onDelete(undefined)}
+              onClick={() => onClose()}
             />
           </header>
 

@@ -12,11 +12,34 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [todoSelected, setTodoSelected] = useState<Todo | undefined>(undefined);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getTodos().then(setTodos);
+    setIsLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
+
+  const filteredTodos = todos.filter(todo => {
+    if (status === 'active' && todo.completed) {
+      return false;
+    }
+
+    if (status === 'completed' && !todo.completed) {
+      return false;
+    }
+
+    if (query.trim()) {
+      return todo.title.toLowerCase().includes(query.toLowerCase());
+    }
+
+    return true;
+  });
 
   return (
     <>
@@ -26,23 +49,31 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter todos={todos} onSelected={setTodos} />
+              <TodoFilter
+                status={status}
+                query={query}
+                onStatusChange={setStatus}
+                onQueryChange={setQuery}
+              />
             </div>
 
             <div className="block">
-              {todos.length < 1 && <Loader />}
-              <TodoList
-                todos={todos}
-                selectedTodo={todoSelected}
-                onSelected={setTodoSelected}
-              />
+              {isLoading && <Loader />}
+
+              {!isLoading && (
+                <TodoList
+                  todos={filteredTodos}
+                  selectedTodo={selectedTodo}
+                  onSelected={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {todoSelected !== undefined && (
-        <TodoModal todo={todoSelected} onDelete={setTodoSelected} />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
