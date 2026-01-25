@@ -15,7 +15,7 @@ type Filter = 'all' | 'completed' | 'active';
 export const App: React.FC = () => {
   const [showedTodos, setShowedTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
+  const [selectedFilter, setSelectedFilter] = useState<Filter>('all');
   const [loader, setLoader] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
