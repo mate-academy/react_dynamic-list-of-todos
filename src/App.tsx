@@ -61,12 +61,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isDataLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                setClickedPostId={setClickedPostId}
-                selectedTodoId={clickedPostId}
-              />
+              {isDataLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  setClickedPostId={setClickedPostId}
+                  selectedTodoId={clickedPostId}
+                />
+              )}
             </div>
           </div>
         </div>
