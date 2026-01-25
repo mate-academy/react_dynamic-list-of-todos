@@ -1,24 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 interface TodoModalProps {
-  isLoading: boolean;
   selectedTodo: Todo;
-  selectedUser: User;
   onClose: () => void;
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({
-  isLoading,
   selectedTodo,
-  selectedUser,
   onClose,
 }) => {
+  const [isLoading, setIsUserLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    setIsUserLoading(true);
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .catch(() => {
+        throw new Error('Failed to load user');
+      })
+      .finally(() => {
+        setIsUserLoading(false);
+      });
+  }, [selectedTodo.userId]);
+
+  const handleClose = () => {
+    onClose();
+    setSelectedUser(null);
+  };
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" onClick={onClose} />
+      <div className="modal-background" onClick={handleClose} />
 
       {isLoading ? (
         <Loader />
@@ -45,17 +62,19 @@ export const TodoModal: React.FC<TodoModalProps> = ({
               {selectedTodo.title}
             </p>
 
-            <p className="block" data-cy="modal-user">
-              {selectedTodo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+            {selectedUser && (
+              <p className="block" data-cy="modal-user">
+                {selectedTodo.completed ? (
+                  <strong className="has-text-success">Done</strong>
+                ) : (
+                  <strong className="has-text-danger">Planned</strong>
+                )}
 
-              {' by '}
+                {' by '}
 
-              <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
-            </p>
+                <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
+              </p>
+            )}
           </div>
         </div>
       )}
