@@ -1,10 +1,10 @@
 import React from 'react';
-import { UsersTodo } from '../../types/Todo';
+import { Todo } from '../../types/Todo';
 
 interface Props {
-  todo: UsersTodo;
-  selectedTodo: UsersTodo | null;
-  onSelectTodo: (todo: UsersTodo) => void;
+  todo: Todo;
+  selectedTodo: Todo | null;
+  onSelectTodo: (todo: Todo) => void;
 }
 
 export const TodoItem: React.FC<Props> = ({
@@ -39,9 +39,7 @@ export const TodoItem: React.FC<Props> = ({
           <span className="icon">
             <i
               className={
-                selectedTodo && selectedTodo.id === id
-                  ? 'far fa-eye-slash'
-                  : 'far fa-eye'
+                selectedTodo?.id === id ? 'far fa-eye-slash' : 'far fa-eye'
               }
             />
           </span>

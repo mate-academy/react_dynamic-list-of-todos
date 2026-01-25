@@ -1,16 +1,19 @@
 import React from 'react';
 import { Loader } from '../Loader';
-import { UsersTodo } from '../../types/Todo';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 
 interface TodoModalProps {
   isLoading: boolean;
-  selectedTodo: UsersTodo;
+  selectedTodo: Todo;
+  selectedUser: User;
   onClose: () => void;
 }
 
 export const TodoModal: React.FC<TodoModalProps> = ({
   isLoading,
   selectedTodo,
+  selectedUser,
   onClose,
 }) => {
   return (
@@ -51,9 +54,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
               {' by '}
 
-              <a href={`mailto:${selectedTodo.user.email}`}>
-                {selectedTodo.user.name}
-              </a>
+              <a href={`mailto:${selectedUser.email}`}>{selectedUser.name}</a>
             </p>
           </div>
         </div>

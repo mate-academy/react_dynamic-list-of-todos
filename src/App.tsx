@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,65 +7,57 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { Loader } from './components/Loader';
 import { getTodos, getUser } from './api';
-import { TodoSelect, UsersTodo } from './types/Todo';
+import { Todo, TodoSelect } from './types/Todo';
 import { TodoModal } from './components/TodoModal';
+import { User } from './types/User';
 
 export const App: React.FC = () => {
-  const [usersTodos, setUsersTodos] = useState<UsersTodo[]>([]);
-  const [visibleTodos, setVisibleTodos] = useState<UsersTodo[]>([]);
+  const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<TodoSelect>(
     TodoSelect.ALL,
   );
-  const [selectedTodo, setSelectedTodo] = useState<UsersTodo | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUserLoading, setIsUserLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getTodos()
-      .then(todos =>
-        Promise.all(
-          todos.map(async todo => ({
-            ...todo,
-            user: await getUser(todo.userId),
-          })),
-        ),
-      )
-      .then(setUsersTodos)
+      .then(setAllTodos)
+      .catch(() => {
+        throw new Error('Failed to load todos:');
+      })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
-  const filterTodos = (
-    todos: UsersTodo[],
-    criteria: TodoSelect,
-    query: string,
-  ) => {
+  const visibleTodos = useMemo<Todo[]>(() => {
     let filtered = (() => {
-      switch (criteria) {
+      switch (selectedFilter) {
         case TodoSelect.ACTIVE:
-          return todos.filter(todo => !todo.completed);
+          return allTodos.filter(todo => !todo.completed);
 
         case TodoSelect.COMPLETED:
-          return todos.filter(todo => todo.completed);
+          return allTodos.filter(todo => todo.completed);
 
         case TodoSelect.ALL:
         default:
-          return todos.slice();
+          return allTodos.slice();
       }
     })();
 
-    // search
-    if (query.trim()) {
+    if (searchQuery.trim()) {
       filtered = filtered.filter(todo =>
-        todo.title.toLowerCase().includes(query.toLowerCase()),
+        todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
     return filtered;
-  };
+  }, [selectedFilter, searchQuery, allTodos]);
+
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState(false);
 
   const handleTodosFilter = (criteria: TodoSelect) => {
     setSelectedFilter(criteria);
@@ -75,31 +67,23 @@ export const App: React.FC = () => {
     setSearchQuery(query);
   };
 
-  const handleClearSearch = () => {
-    setSearchQuery('');
-  };
-
-  useEffect(() => {
-    setVisibleTodos(filterTodos(usersTodos, selectedFilter, searchQuery));
-  }, [usersTodos, selectedFilter, searchQuery]);
-
-  const handleSelectTodo = (todo: UsersTodo) => {
+  const handleSelectedTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setIsModalOpen(true);
     setIsUserLoading(true);
 
     getUser(todo.userId)
-      .then(user => {
-        setSelectedTodo(prev => (prev ? { ...prev, user } : null));
+      .then(setSelectedUser)
+      .catch(() => {
+        throw new Error('Failed to load user');
       })
       .finally(() => {
         setIsUserLoading(false);
       });
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleModalClose = () => {
     setSelectedTodo(null);
+    setSelectedUser(null);
   };
 
   return (
@@ -112,29 +96,33 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 onFilterSelect={handleTodosFilter}
+                selectedFilter={selectedFilter}
                 onSearch={handleSearch}
-                onClearSearch={handleClearSearch}
                 searchQuery={searchQuery}
               />
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              <TodoList
-                todos={visibleTodos}
-                selectedTodo={selectedTodo}
-                onSelectTodo={handleSelectTodo}
-              />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodo={selectedTodo}
+                  onSelectedTodo={handleSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {isModalOpen && selectedTodo && (
+      {selectedTodo && selectedUser && (
         <TodoModal
           isLoading={isUserLoading}
           selectedTodo={selectedTodo}
-          onClose={handleCloseModal}
+          selectedUser={selectedUser}
+          onClose={handleModalClose}
         />
       )}
     </>

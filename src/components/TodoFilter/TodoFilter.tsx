@@ -2,15 +2,15 @@ import { TodoSelect } from '../../types/Todo';
 
 interface Props {
   onFilterSelect: (v: TodoSelect) => void;
+  selectedFilter: TodoSelect;
   onSearch: (query: string) => void;
-  onClearSearch: () => void;
   searchQuery: string;
 }
 
 export const TodoFilter = ({
   onFilterSelect,
+  selectedFilter,
   onSearch,
-  onClearSearch,
   searchQuery,
 }: Props) => (
   <form className="field has-addons">
@@ -21,6 +21,7 @@ export const TodoFilter = ({
           onChange={e =>
             onFilterSelect((e.target.value as TodoSelect) ?? TodoSelect.ALL)
           }
+          value={selectedFilter}
         >
           <option value="all">All</option>
           <option value="active">Active</option>
@@ -48,7 +49,7 @@ export const TodoFilter = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={onClearSearch}
+            onClick={() => onSearch('')}
           />
         )}
       </span>
