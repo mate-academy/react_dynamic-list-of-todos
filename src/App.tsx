@@ -15,7 +15,6 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     getTodos()
       .then(setAllTodos)
       .catch(() => {
