@@ -23,18 +23,23 @@ export const App: React.FC = () => {
       .toLowerCase()
       .includes(search.trim().toLowerCase());
 
-    let filteredByOption;
+    let filteredByOption = false;
 
-    if (selectedOption === 'all') {
-      filteredByOption = todo;
-    }
+    switch (selectedOption) {
+      case 'all':
+        filteredByOption = true;
+        break;
 
-    if (selectedOption === 'active') {
-      filteredByOption = !todo.completed;
-    }
+      case 'active':
+        filteredByOption = !todo.completed;
+        break;
 
-    if (selectedOption === 'completed') {
-      filteredByOption = todo.completed;
+      case 'completed':
+        filteredByOption = todo.completed;
+        break;
+
+      default:
+        filteredByOption = true;
     }
 
     return filteredBySearch && filteredByOption;

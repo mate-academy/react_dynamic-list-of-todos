@@ -11,7 +11,7 @@ export const TodoFilter: React.FC<Props> = ({
 }) => {
   const [search, setSearch] = useState<string>('');
 
-  const searchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
     onSearchChange(event.target.value);
   };
@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={search}
-          onChange={searchChange}
+          onChange={handleSearchChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

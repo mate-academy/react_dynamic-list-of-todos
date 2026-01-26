@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 type Props = {
   todos: Todo[];
-  onSelected: (todos: Todo) => void;
+  onSelected: (todo: Todo) => void;
   selectedTodoId: number | null;
 };
 
