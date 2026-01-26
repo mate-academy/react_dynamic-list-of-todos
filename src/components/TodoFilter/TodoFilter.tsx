@@ -1,8 +1,28 @@
-export const TodoFilter = () => (
+import { TodoSelect } from '../../types/Todo';
+
+interface Props {
+  onFilterSelect: (v: TodoSelect) => void;
+  selectedFilter: TodoSelect;
+  onSearch: (query: string) => void;
+  searchQuery: string;
+}
+
+export const TodoFilter = ({
+  onFilterSelect,
+  selectedFilter,
+  onSearch,
+  searchQuery,
+}: Props) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          onChange={e =>
+            onFilterSelect((e.target.value as TodoSelect) ?? TodoSelect.ALL)
+          }
+          value={selectedFilter}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,14 +36,22 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={searchQuery}
+        onChange={e => onSearch(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {searchQuery && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onSearch('')}
+          />
+        )}
       </span>
     </p>
   </form>
