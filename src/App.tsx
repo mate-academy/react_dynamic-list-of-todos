@@ -10,50 +10,47 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getTodos, getUser } from './api';
+import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodoLoading, setIsTodoLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[] | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [user, setUser] = useState<User | null>(null);
-  const [isUserLoading, setIsUserLoading] = useState(false);
 
-  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+  const [status, setStatus] = useState<FilterStatus>(FilterStatus.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    setIsTodoLoading(true);
-
-    getTodos()
-      .then(setTodos)
-      .finally(() => setIsTodoLoading(false));
+    getTodos().then(setTodos);
   }, []);
 
   useEffect(() => {
     if (!selectedTodo) {
+      setUser(null);
+
       return;
     }
 
-    setIsUserLoading(true);
     setUser(null);
-
-    getUser(selectedTodo.userId)
-      .then(setUser)
-      .finally(() => setIsUserLoading(false));
+    getUser(selectedTodo.userId).then(setUser);
   }, [selectedTodo]);
 
-  const visibleTodos = todos.filter(todo => {
-    if (status === 'active' && todo.completed) {
-      return false;
-    }
+  const visibleTodos =
+    todos?.filter(todo => {
+      if (status === FilterStatus.Active && todo.completed) {
+        return false;
+      }
 
-    if (status === 'completed' && !todo.completed) {
-      return false;
-    }
+      if (status === FilterStatus.Completed && !todo.completed) {
+        return false;
+      }
 
-    return todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase());
-  });
+      return todo.title.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+    }) ?? [];
+
+  const isTodoLoading = todos === null;
+  const isUserLoading = selectedTodo !== null && user === null;
 
   return (
     <>

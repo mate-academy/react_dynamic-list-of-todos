@@ -1,11 +1,10 @@
 import React from 'react';
-
-type Status = 'all' | 'active' | 'completed';
+import { FilterStatus as Status } from '../../types/FilterStatus';
 
 type Props = {
   status: Status;
   query: string;
-  onStatusChange: (value: 'all' | 'active' | 'completed') => void;
+  onStatusChange: (value: Status) => void;
   onQueryChange: (value: string) => void;
   onClearQuery: () => void;
 };
