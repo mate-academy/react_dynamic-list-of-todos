@@ -13,16 +13,33 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-function get<T>(url: string): Promise<T> {
-  // eslint-disable-next-line prefer-template
-  const fullURL = BASE_URL + url + '.json';
+export const getTodos = (): Promise<Todo[]> => {
+  return fetch(BASE_URL + '/todos.json').then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to load todos');
+    }
 
-  // we add some delay to see how the loader works
-  return wait(300)
-    .then(() => fetch(fullURL))
-    .then(res => res.json());
-}
+    return response.json();
+  });
+};
 
-export const getTodos = () => get<Todo[]>('/todos');
+export const getUser = (userId: number): Promise<User> => {
+  return wait(500)
+    .then(() => fetch(`${BASE_URL}/users/${userId}.json`))
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
 
-export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+      throw new Error('Not found');
+    })
+    .catch(() => {
+      return fetch(`${BASE_URL}/users.json`)
+        .then(response => response.json())
+        .then((users: User[]) => {
+          const found = users.find(u => u.id === userId);
+
+          return found || Promise.reject('User not found');
+        });
+    });
+};
