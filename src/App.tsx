@@ -49,12 +49,33 @@ export const App: React.FC = () => {
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
-    setSelectedUser(null);
-
-    getUser(todo.userId)
-      .then(user => setSelectedUser(user))
-      .catch(() => setErrorMessage('Unable to load users'));
+    setSelectedUser(null); // Скидаємо юзера, щоб показати лоадер у модалці
+    setErrorMessage('');
   };
+
+  useEffect(() => {
+    if (!selectedTodo) {
+      return;
+    }
+
+    let isCurrent = true;
+
+    getUser(selectedTodo.userId)
+      .then(user => {
+        if (isCurrent) {
+          setSelectedUser(user);
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
+          setErrorMessage('Unable to load user');
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [selectedTodo]);
 
   const closeModal = () => {
     setSelectedTodo(null);

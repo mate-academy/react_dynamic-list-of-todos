@@ -13,7 +13,6 @@ function wait(delay: number): Promise<void> {
   });
 }
 
-
 export const getTodos = (): Promise<Todo[]> => {
   return fetch(BASE_URL + '/todos.json').then(response => {
     if (!response.ok) {
