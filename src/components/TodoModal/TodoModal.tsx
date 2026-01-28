@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -30,7 +31,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   }
 
   return (
-    <div className={`modal ${todo ? 'is-active' : ''}`} data-cy="modal">
+    <div
+      className={classNames('modal', { 'is-active': !!todo })}
+      data-cy="modal"
+    >
       <div className="modal-background" onClick={onClose} />
 
       {isLoading ? (
@@ -61,9 +65,10 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
@@ -78,3 +83,4 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     </div>
   );
 };
+
