@@ -14,8 +14,8 @@ import { filterTodos } from './filterTodos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>();
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [filterValue, setfilterValue] = useState<FilterState>(FilterState.All);
-  const [serchQuery, setSearchQuery] = useState<string>('');
+  const [filterValue, setFilterValue] = useState<FilterState>(FilterState.All);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     getTodos().then(serverTodos => setTodos(serverTodos));
@@ -25,21 +25,21 @@ export const App: React.FC = () => {
     setSelectedTodo(todo);
   }
 
-  function handleCloseModel() {
+  function handleCloseModal() {
     setSelectedTodo(undefined);
   }
 
-  function handleFilterChange(newFilterVlaue: FilterState) {
-    setfilterValue(newFilterVlaue);
+  function handleFilterChange(newFilterValue: FilterState) {
+    setFilterValue(newFilterValue);
   }
 
-  function handleSearchChanged(newQuert: string) {
-    setSearchQuery(newQuert);
+  function handleSearchChange(newQuery: string) {
+    setSearchQuery(newQuery);
   }
 
   const filteredTodos: Todo[] | undefined = useMemo(
-    () => filterTodos(filterValue, serchQuery, todos),
-    [filterValue, serchQuery, todos],
+    () => filterTodos(filterValue, searchQuery, todos),
+    [filterValue, searchQuery, todos],
   );
 
   return (
@@ -52,9 +52,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 filterValue={filterValue}
-                serchQuery={serchQuery}
+                searchQuery={searchQuery}
                 setFilterValue={handleFilterChange}
-                setSearchQuery={handleSearchChanged}
+                setSearchQuery={handleSearchChange}
               />
             </div>
 
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   selectTodo={handleSelectTodo}
-                  selectedTodo={selectedTodo}
+                  onSelectedTodo={selectedTodo}
                 />
               ) : (
                 <Loader />
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onModalClose={handleCloseModel} />
+        <TodoModal todo={selectedTodo} onModalClose={handleCloseModal} />
       )}
     </>
   );

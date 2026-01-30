@@ -3,7 +3,7 @@ import { Todo } from './types/Todo';
 
 export function filterTodos(
   filterState: FilterState,
-  serchQuvery: string,
+  searchQuery: string,
   todos?: Todo[],
 ) {
   let resTodos = todos;
@@ -16,9 +16,9 @@ export function filterTodos(
     );
   }
 
-  if (serchQuvery) {
+  if (searchQuery) {
     resTodos = resTodos?.filter(todo =>
-      todo.title.toLowerCase().includes(serchQuvery.toLocaleLowerCase()),
+      todo.title.toLowerCase().includes(searchQuery.toLocaleLowerCase()),
     );
   }
 

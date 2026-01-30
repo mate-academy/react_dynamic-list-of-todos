@@ -6,23 +6,23 @@ export enum FilterState {
 
 type Props = {
   filterValue: FilterState;
-  setFilterValue: (newVlaue: FilterState) => void;
-  serchQuery: string;
-  setSearchQuery: (newQuert: string) => void;
+  setFilterValue: (newValue: FilterState) => void;
+  searchQuery: string;
+  setSearchQuery: (newQuery: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterValue,
   setSearchQuery,
-  serchQuery,
+  searchQuery: searchQuery,
   setFilterValue,
 }) => {
-  function handleFilterChange(newFilterVlaue: string) {
-    setFilterValue(newFilterVlaue as FilterState);
+  function handleFilterChange(newFilterValue: string) {
+    setFilterValue(newFilterValue as FilterState);
   }
 
-  function handleSearchChanged(newQuert: string) {
-    setSearchQuery(newQuert);
+  function handleSearchChanged(newQuery: string) {
+    setSearchQuery(newQuery);
   }
 
   return (
@@ -47,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           type="text"
           className="input"
           placeholder="Search..."
-          value={serchQuery}
+          value={searchQuery}
           onChange={event => handleSearchChanged(event.target.value)}
         />
         <span className="icon is-left">
@@ -55,8 +55,7 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          {serchQuery && (
+          {searchQuery && (
             <button
               data-cy="clearSearchButton"
               type="button"

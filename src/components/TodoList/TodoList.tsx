@@ -5,13 +5,13 @@ import { TodoListItem } from '../TodoListItem/TodoListItem';
 type Props = {
   todos: Todo[];
   selectTodo: (todo: Todo) => void;
-  selectedTodo?: Todo;
+  onSelectedTodo?: Todo;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   selectTodo,
-  selectedTodo,
+  onSelectedTodo: selectedTodo,
 }) => {
   function handleSelectClick(todo: Todo) {
     selectTodo(todo);
@@ -37,7 +37,7 @@ export const TodoList: React.FC<Props> = ({
           <TodoListItem
             key={todo.id}
             todo={todo}
-            selectTodo={() => handleSelectClick(todo)}
+            onSelectTodo={() => handleSelectClick(todo)}
             isSelected={todo.id === selectedTodo?.id}
           />
         ))}

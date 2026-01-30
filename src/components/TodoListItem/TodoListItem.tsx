@@ -1,15 +1,16 @@
 import React from 'react';
+import cn from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  selectTodo: () => void;
+  onSelectTodo: () => void;
   isSelected: boolean;
 };
 
 export const TodoListItem: React.FC<Props> = ({
   todo,
-  selectTodo,
+  onSelectTodo: selectTodo,
   isSelected,
 }) => {
   function handleSelectClick() {
@@ -19,7 +20,9 @@ export const TodoListItem: React.FC<Props> = ({
   return (
     <tr
       data-cy="todo"
-      className={isSelected ? 'has-background-info-light' : ''}
+      className={cn({
+        'has-background-info-light': isSelected,
+      })}
     >
       <td className="is-vcentered">{todo.id}</td>
 
@@ -32,7 +35,12 @@ export const TodoListItem: React.FC<Props> = ({
       </td>
 
       <td className="is-vcentered is-expanded">
-        <p className={todo.completed ? `has-text-success` : `has-text-danger`}>
+        <p
+          className={cn({
+            'has-text-success': todo.completed,
+            'has-text-danger': !todo.completed,
+          })}
+        >
           {todo.title}
         </p>
       </td>
@@ -42,10 +50,15 @@ export const TodoListItem: React.FC<Props> = ({
           data-cy="selectButton"
           className="button"
           type="button"
-          onClick={() => handleSelectClick()}
+          onClick={handleSelectClick}
         >
           <span className="icon">
-            <i className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`} />
+            <i
+              className={cn('far', {
+                'fa-eye-slash': isSelected,
+                'fa-eye': !isSelected,
+              })}
+            />
           </span>
         </button>
       </td>
