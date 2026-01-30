@@ -62,7 +62,7 @@ export const App: React.FC = () => {
               {filteredTodos ? (
                 <TodoList
                   todos={filteredTodos}
-                  selectTodo={handleSelectTodo}
+                  onSelectTodo={handleSelectTodo}
                   onSelectedTodo={selectedTodo}
                 />
               ) : (
