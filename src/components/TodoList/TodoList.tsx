@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -26,14 +27,12 @@ const TodoListBase: React.FC<Props> = ({ todos, onSelect, selectedTodoId }) => (
       {todos.map(todo => (
         <tr
           key={todo.id}
-          // Прибираємо фонову підсвітку, якщо вона заважає сприйняттю кольорів
-          className={todo.completed ? 'has-background-light' : ''}
+          className={classNames({ 'has-background-light': todo.completed })}
           data-cy="todo"
         >
           <td data-cy="todoId">{todo.id}</td>
 
           <td>
-            {/* Тільки галочка для виконаних */}
             {todo.completed && (
               <span className="icon has-text-success" data-cy="iconCompleted">
                 <i className="fas fa-check" />
@@ -41,9 +40,11 @@ const TodoListBase: React.FC<Props> = ({ todos, onSelect, selectedTodoId }) => (
             )}
           </td>
 
-          {/* Зелений текст для виконаних, червоний для невиконаних */}
           <td
-            className={todo.completed ? 'has-text-success' : 'has-text-danger'}
+            className={classNames({
+              'has-text-success': todo.completed,
+              'has-text-danger': !todo.completed,
+            })}
           >
             {todo.title}
           </td>
@@ -57,7 +58,10 @@ const TodoListBase: React.FC<Props> = ({ todos, onSelect, selectedTodoId }) => (
             >
               <span className="icon">
                 <i
-                  className={`far ${selectedTodoId === todo.id ? 'fa-eye-slash' : 'fa-eye'}`}
+                  className={classNames('far', {
+                    'fa-eye-slash': selectedTodoId === todo.id,
+                    'fa-eye': selectedTodoId !== todo.id,
+                  })}
                 />
               </span>
             </button>
