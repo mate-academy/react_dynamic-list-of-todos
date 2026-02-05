@@ -17,18 +17,42 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [filterStatus, setFilterStatus] = useState<Status>('all');
   const [filterQuery, setFilterQuery] = useState('');
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     setLoading(true);
+    setLoadError(null);
+
     getTodos()
-      .then(todosFromServer => setTodos(todosFromServer))
+      .then(todosFromServer => {
+        if (isMounted) {
+          setTodos(todosFromServer);
+        }
+      })
       .catch(() => {
-        setTodos([]);
+        if (isMounted) {
+          setTodos([]);
+          setLoadError('Failed to load the todo list. Please try again.');
+        }
       })
       .finally(() => {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
+
+  useEffect(() => {
+    if (selectedTodo && !todos.some(todo => todo.id === selectedTodo.id)) {
+      setSelectedTodo(null);
+    }
+  }, [todos, selectedTodo]);
 
   const filteredTodos = useMemo(() => {
     let result = [...todos];
@@ -41,10 +65,12 @@ export const App: React.FC = () => {
       result = result.filter(todo => todo.completed);
     }
 
-    if (filterQuery.trim()) {
-      const q = filterQuery.trim().toLowerCase();
+    const normalizedQuery = filterQuery.trim().toLowerCase();
 
-      result = result.filter(todo => todo.title.toLowerCase().includes(q));
+    if (normalizedQuery) {
+      result = result.filter(todo =>
+        todo.title.toLowerCase().includes(normalizedQuery),
+      );
     }
 
     return result;
@@ -66,7 +92,13 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              {!loading && (
+              {!loading && loadError && (
+                <p className="has-text-danger">{loadError}</p>
+              )}
+              {!loading && !loadError && filteredTodos.length === 0 && (
+                <p className="has-text-grey">There are no todos to show.</p>
+              )}
+              {!loading && !loadError && filteredTodos.length > 0 && (
                 <TodoList
                   todos={filteredTodos}
                   onSelectTodo={setSelectedTodo}
