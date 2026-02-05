@@ -6,22 +6,22 @@ export enum FilterState {
 
 type Props = {
   filterValue: FilterState;
-  setFilterValue: (newValue: FilterState) => void;
+  onFilterValueChange: (newValue: FilterState) => void;
   searchQuery: string;
-  setSearchQuery: (newQuery: string) => void;
+  onSearchQueryChange: (newQuery: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterValue,
-  setSearchQuery,
+  onSearchQueryChange: setSearchQuery,
   searchQuery: searchQuery,
-  setFilterValue,
+  onFilterValueChange: setFilterValue,
 }) => {
   function handleFilterChange(newFilterValue: string) {
     setFilterValue(newFilterValue as FilterState);
   }
 
-  function handleSearchChanged(newQuery: string) {
+  function handleSearchChange(newQuery: string) {
     setSearchQuery(newQuery);
   }
 
@@ -48,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={searchQuery}
-          onChange={event => handleSearchChanged(event.target.value)}
+          onChange={event => handleSearchChange(event.target.value)}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -60,7 +60,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => handleSearchChanged('')}
+              onClick={() => handleSearchChange('')}
             />
           )}
         </span>

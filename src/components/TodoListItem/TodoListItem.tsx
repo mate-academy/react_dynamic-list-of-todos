@@ -10,11 +10,11 @@ type Props = {
 
 export const TodoListItem: React.FC<Props> = ({
   todo,
-  onSelectTodo: selectTodo,
+  onSelectTodo,
   isSelected,
 }) => {
   function handleSelectClick() {
-    selectTodo();
+    onSelectTodo();
   }
 
   return (

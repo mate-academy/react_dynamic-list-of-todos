@@ -14,8 +14,8 @@ import { filterTodos } from './filterTodos';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>();
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  const [filterValue, setFilterValue] = useState<FilterState>(FilterState.All);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filterChange, onFilterChange] = useState<FilterState>(FilterState.All);
+  const [searchChange, onSearchChange] = useState<string>('');
 
   useEffect(() => {
     getTodos().then(serverTodos => setTodos(serverTodos));
@@ -30,16 +30,16 @@ export const App: React.FC = () => {
   }
 
   function handleFilterChange(newFilterValue: FilterState) {
-    setFilterValue(newFilterValue);
+    onFilterChange(newFilterValue);
   }
 
   function handleSearchChange(newQuery: string) {
-    setSearchQuery(newQuery);
+    onSearchChange(newQuery);
   }
 
   const filteredTodos: Todo[] | undefined = useMemo(
-    () => filterTodos(filterValue, searchQuery, todos),
-    [filterValue, searchQuery, todos],
+    () => filterTodos(filterChange, searchChange, todos),
+    [filterChange, searchChange, todos],
   );
 
   return (
@@ -51,10 +51,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filterValue={filterValue}
-                searchQuery={searchQuery}
-                setFilterValue={handleFilterChange}
-                setSearchQuery={handleSearchChange}
+                filterValue={filterChange}
+                searchQuery={searchChange}
+                onFilterValueChange={handleFilterChange}
+                onSearchQueryChange={handleSearchChange}
               />
             </div>
 
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   onSelectTodo={handleSelectTodo}
-                  onSelectedTodo={selectedTodo}
+                  selectedTodo={selectedTodo}
                 />
               ) : (
                 <Loader />

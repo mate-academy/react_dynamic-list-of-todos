@@ -5,13 +5,13 @@ import { TodoListItem } from '../TodoListItem/TodoListItem';
 type Props = {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
-  onSelectedTodo?: Todo;
+  selectedTodo?: Todo;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
   onSelectTodo,
-  onSelectedTodo: selectedTodo,
+  selectedTodo: selectedTodo,
 }) => {
   function handleSelectClick(todo: Todo) {
     onSelectTodo(todo);
