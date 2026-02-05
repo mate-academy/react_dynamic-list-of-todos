@@ -26,7 +26,7 @@ export const TodoModal = ({ todo, onSelectTodo }: TodoModalProp) => {
     return () => {
       setActiveUser(null);
     };
-  }, []);
+  }, [todo.userId]);
 
   const handleClick = () => {
     onSelectTodo(null);
