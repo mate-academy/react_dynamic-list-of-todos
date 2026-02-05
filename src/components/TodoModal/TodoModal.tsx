@@ -63,11 +63,13 @@ export const TodoModal = ({ todo, onSelectTodo }: TodoModalProp) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <span
+                className={
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                }
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </span>
 
               {' by '}
 
