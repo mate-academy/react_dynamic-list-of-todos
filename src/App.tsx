@@ -11,14 +11,19 @@ import { getTodos } from './api';
 import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
-    getTodos().then(todosFromServer => {
-      setLoading(false);
-      setTodos(todosFromServer);
-    });
+    setLoading(true);
+    getTodos()
+      .then(todosFromServer => {
+        setTodos(todosFromServer);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -34,13 +39,17 @@ export const App: React.FC = () => {
 
             <div className="block">
               {loading && <Loader />}
-              <TodoList todos={todos} />
+              {!loading && (
+                <TodoList todos={todos} onSelectTodo={setSelectedTodo} />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onSelectTodo={setSelectedTodo} />
+      )}
     </>
   );
 };
