@@ -102,6 +102,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={filteredTodos}
                   onSelectTodo={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id ?? null}
                 />
               )}
             </div>

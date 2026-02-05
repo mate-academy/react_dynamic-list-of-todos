@@ -3,9 +3,14 @@ import { Todo } from '../../types/Todo';
 type TodoListTypes = {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
+  selectedTodoId: number | null;
 };
 
-export const TodoList = ({ todos, onSelectTodo }: TodoListTypes) => {
+export const TodoList = ({
+  todos,
+  onSelectTodo,
+  selectedTodoId,
+}: TodoListTypes) => {
   const handleClick = (todo: Todo) => {
     onSelectTodo(todo);
   };
@@ -53,7 +58,11 @@ export const TodoList = ({ todos, onSelectTodo }: TodoListTypes) => {
                 onClick={() => handleClick(todo)}
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  {selectedTodoId === todo.id ? (
+                    <i className="far fa-eye-slash" />
+                  ) : (
+                    <i className="far fa-eye" />
+                  )}
                 </span>
               </button>
             </td>
