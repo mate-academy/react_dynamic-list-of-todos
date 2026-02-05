@@ -63,12 +63,15 @@ export const TodoModal = ({ todo, onSelectTodo }: TodoModalProp) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">{activeUser?.name}</a>
+              <a href={'mailto:' + activeUser?.email}>{activeUser?.name}</a>
             </p>
           </div>
         </div>
