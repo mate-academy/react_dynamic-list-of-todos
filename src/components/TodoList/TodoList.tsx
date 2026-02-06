@@ -1,7 +1,23 @@
-import React from 'react';
+import React, { useContext, useState} from 'react';
+import classNames from 'classnames';
+import { TodoContext } from '../../context/todocontext';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
+export const TodoList: React.FC = () => {
+  const [todoEyeSelected, setTodoEyeSelected] = useState<number | null>(null)
+  const context = useContext(TodoContext)
+  const {filtred, handleIsLoading, handleModalClick, handleGetTodoId, handleUserId, showModal, todoId} = context
+
+  console.log('filtred', filtred)
+
+
+
+const handleSelectEye = (eye: number) => {
+  setTodoEyeSelected(eye)
+}
+
+  return (
+
+       <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
         <th>#</th>
@@ -15,86 +31,41 @@ export const TodoList: React.FC = () => (
       </tr>
     </thead>
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+      <tbody>
+           {filtred.map((f) =>
+          <tr data-cy="todo" key={f.id } className="">
+            <td className="is-vcentered">{f.id }</td>
+               <td className="is-vcentered">
+                 <span className='icon' data-cy="iconCompleted">
+                   <i className={classNames("fas", {"fa-check": f.completed === true})}></i>
+               </span>
+                 </td>
+               <td className="is-vcentered is-expanded">
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
+                 <p className={classNames({
+                   "has-text-danger": f.completed === false
+                 },
+              {"has-text-success": f.completed === true}
+           )}>{f.title}</p>
         </td>
         <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
+                 <button data-cy="selectButton" className="button" type="button" onClick={() => { handleIsLoading(true); handleModalClick(false); handleGetTodoId(f.id); handleUserId(f.userId);  handleSelectEye(f.id)}}>
+            <span className="icon" >
+                     <i className={classNames("far",  {
+                       "fa-eye": todoEyeSelected !== f.id || showModal, // se o olho que eu clicar tiver o id igual da tarefa(false)
+                        "fa-eye-slash": todoEyeSelected === f.id && !showModal,
+              })} />
             </span>
           </button>
         </td>
       </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+        )}
     </tbody>
   </table>
-);
+
+
+  )
+
+}
+
+;
