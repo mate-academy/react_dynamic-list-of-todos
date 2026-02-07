@@ -22,9 +22,10 @@ function get<T>(url: string): Promise<T> {
     .then(() => fetch(fullURL))
     .then(res => {
       if (!res.ok) {
-        throw new Error(`Error Http: ${res.status}`)
+        throw new Error(`Error Http: ${res.status}`);
       }
-      return res.json()
+
+      return res.json();
     });
 }
 

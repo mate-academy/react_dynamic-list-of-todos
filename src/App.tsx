@@ -15,16 +15,14 @@ import { TodoContext } from './context/todocontext';
 export const App: React.FC = () => {
   const { all, active, completed } = FILTERS;
 
-  const [showModal, setShowModal] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoadingModal, setIsLoadingModal] = useState<boolean>(false);
   const [todoId, setTodoId] = useState<number | null>(null);
-  const [userId, setUserId] = useState<number | null>(null)
+  const [userId, setUserId] = useState<number | null>(null);
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filtrar, setFiltrar] = useState<string>(all);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
   const [query, setQuery] = useState<string>('');
   /*- Mas nesse momento todos ainda
   é [] (porque o getTodos roda depois no useEffect).
@@ -38,24 +36,16 @@ Então, até digitar algo, filteredTodos nunca é atualizado.
     setQuery(newQuery);
   };
 
-  const onFiltered = (newFiltered: Todo[]) => {
-    setFilteredTodos(newFiltered);
-  };
-
   useEffect(() => {
     setIsLoading(true);
-
-    setTimeout(() => {
       getTodos()
         .then(setTodos)
         .finally(() => setIsLoading(false))
-        .catch(err => setError(err.message));
-    }, 1000);
+        .catch(() => 'Error');
+
   }, []);
 
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
+
 
   /*Use um useEffect no App para atualizar filteredTodos sempre que todos mudar:
   Assim, quando o getTodos terminar, filteredTodos recebe a lista completa e já renderiza.
@@ -77,6 +67,7 @@ Então, até digitar algo, filteredTodos nunca é atualizado.
     } else if (filtrar === completed) {
       return matchesQuery && t.completed;
     }
+
     return matchesQuery;
   });
 
@@ -87,7 +78,7 @@ Então, até digitar algo, filteredTodos nunca é atualizado.
   const handleCompleted = () => setFiltrar(completed);
 
   const handleModalClick = (show: boolean) => {
-    setShowModal(show);
+    setIsModalOpen(show);
   };
 
   const handleIsLoading = (loading: boolean) => {
@@ -97,18 +88,23 @@ Então, até digitar algo, filteredTodos nunca é atualizado.
   const handleGetTodoId = (id: number) => {
     setTodoId(id);
   };
+
   const handleUserId = (id: number) => {
-    setUserId(id)
+    setUserId(id);
+  };
+
+  const handleShowTodo = (todo: { id: number, userId: number }) => {
+    handleIsLoading(true);
+    handleModalClick(true);
+    handleGetTodoId(todo.id);
+    handleUserId(todo.userId);
   }
-  console.log('userid', userId)
 
   return (
     <>
       <TodoContext.Provider
         value={{
           todos,
-          onFiltered,
-          filteredTodos,
           handleFilterAll,
           handleActive,
           handleCompleted,
@@ -117,15 +113,14 @@ Então, até digitar algo, filteredTodos nunca é atualizado.
           query,
           filtrar,
           handleModalClick,
-          showModal,
+          isModalOpen,
           handleIsLoading,
           isLoadingModal,
           handleGetTodoId,
-          setTodoId,
           todoId,
           handleUserId,
           userId,
-
+          handleShowTodo,
         }}
       >
         <div className="section">
