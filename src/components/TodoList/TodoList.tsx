@@ -4,19 +4,15 @@ import { TodoListItem } from '../TodoListItem';
 
 type Props = {
   todos: Todo[];
-  selectTodo: (todo: Todo) => void;
+  onSelectTodo: (todo: Todo) => void;
   selectedTodoId: number | undefined;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  selectTodo,
+  onSelectTodo,
   selectedTodoId,
 }) => {
-  function handleSelectClick(todo: Todo) {
-    selectTodo(todo);
-  }
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -37,7 +33,7 @@ export const TodoList: React.FC<Props> = ({
           <TodoListItem
             key={todo.id}
             todo={todo}
-            selectTodo={() => handleSelectClick(todo)}
+            selectTodo={() => onSelectTodo(todo)}
             isSelected={todo.id === selectedTodoId}
           />
         ))}

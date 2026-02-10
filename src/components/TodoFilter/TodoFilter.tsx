@@ -6,24 +6,24 @@ export enum FilterState {
 
 type Props = {
   filterValue: FilterState;
-  setFilterValue: (newValue: FilterState) => void;
+  onFilterChange: (newValue: FilterState) => void;
 
   searchQuery: string;
-  setSearchQuery: (newQuery: string) => void;
+  onSearchChange: (newQuery: string) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   filterValue,
-  setFilterValue,
+  onFilterChange,
   searchQuery,
-  setSearchQuery,
+  onSearchChange,
 }) => {
   function handleFilterChange(newFilterValue: string) {
-    setFilterValue(newFilterValue as FilterState);
+    onFilterChange(newFilterValue as FilterState);
   }
 
   function handleSearchChanged(newQuery: string) {
-    setSearchQuery(newQuery);
+    onSearchChange(newQuery);
   }
 
   return (
