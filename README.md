@@ -1,32 +1,36 @@
-# React dynamic list of TODOs
+🔗 [DEMO LINK](https://Igor-hrm.github.io/react_dynamic-list-of-todos/)
 
-The goal of this task is to teach you:
-- how to work with a not detailed task description;
-- to learn the existing code before you start;
-- to understand tests and why they fail;
-- to try the working page and implement the same behaviour;
+📌 Sobre o projeto
+Este projeto é uma aplicação React que exibe e gerencia uma lista dinâmica de TODOs, construída com Hooks e TypeScript. O objetivo foi praticar a manipulação de dados de APIs, refatorar componentes e aplicar tipagem estática para tornar o código mais legível, organizado e seguro.
 
-> Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
+A aplicação permite filtrar TODOs por status e título, visualizar detalhes de cada tarefa em um modal e carregar dados de usuários relacionados.
 
-You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
-and `Loader` components. Load data from the API and show it using the given components.
+🛠️ Tecnologias utilizadas
 
-1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is
-loaded and show them using `TodoList` (check the code in the `api.ts`);
-1. Show the `Loader` when waiting any data from the server (check the `components` folder);
-1. Check how the `wait` function is used in the `api.ts` to ensure that `Loader` works as expected;
-1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
-1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);
-1. Show the Loader while waiting for the user;
-1. `x` button should close the modal;
-1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos;
-1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
-    - show the `x` button when the `query` is entered;
-    - the `x` button should clear the `query` and reset the todos;
+- React
+- TypeScript
+- CSS
+- Vite
+- Cypress (para testes e2e)
 
-## Instructions
-- Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
-- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
-- Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
-- Open one more terminal and run tests with `npm test` to ensure your solution is correct.
-- Replace `<your_account>` with your Github username in the [DEMO LINK](https://<your_account>.github.io/react_dynamic-list-of-todos/) and add it to the PR description.
+🚀 O que foi desenvolvido
+
+- Reimplementação da lógica usando Hooks (`useState`, `useEffect`, `useMemo`)
+- Filtragem de TODOs por status (`all`, `completed`, `active`)
+- Filtragem de TODOs por título
+- Modal com detalhes do TODO e informações do usuário
+- Loader exibido enquanto os dados são carregados
+- Tipagem de componentes e estados com TypeScript
+- Estrutura de código organizada e manutenível
+- Testes E2E automatizados
+- Deploy da aplicação utilizando GitHub Pages
+
+📚 Aprendizados
+Com este projeto, pratiquei:
+
+- Uso de Hooks no React
+- Consumo de APIs e manipulação de dados assíncronos
+- Criação de componentes reutilizáveis
+- Tipagem de estados e props com TypeScript
+- Organização de lógica de filtragem e exibição de dados
+- Escrita de código previsível, seguro e de fácil manutenção
