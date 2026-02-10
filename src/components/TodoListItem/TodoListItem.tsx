@@ -3,17 +3,17 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todo: Todo;
-  selectTodo: () => void;
+  onSelectTodo: () => void;
   isSelected: boolean;
 };
 
 export const TodoListItem: React.FC<Props> = ({
   todo,
-  selectTodo,
+  onSelectTodo,
   isSelected,
 }) => {
   function handleSelectClick() {
-    selectTodo();
+    onSelectTodo();
   }
 
   return (
