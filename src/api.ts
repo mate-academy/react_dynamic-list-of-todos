@@ -20,7 +20,13 @@ function get<T>(url: string): Promise<T> {
   // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${url}: ${response.status}`);
+      }
+
+      return response.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
