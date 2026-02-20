@@ -11,8 +11,7 @@ The goal of this task is to teach you:
 You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
 and `Loader` components. Load data from the API and show it using the given components.
 
-1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is
-loaded and show them using `TodoList` (check the code in the `api.ts`);
+1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is loaded and show them using `TodoList` (check the code in the `api.ts`);
 1. Show the `Loader` when waiting any data from the server (check the `components` folder);
 1. Check how the `wait` function is used in the `api.ts` to ensure that `Loader` works as expected;
 1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
