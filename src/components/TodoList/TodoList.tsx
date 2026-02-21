@@ -1,12 +1,18 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
-
+import classNames from 'classnames';
 type Props = {
   todos: Todo[];
   onShow: (todo: Todo) => void;
+  onHide: () => void;
+  selectedTodoId: number | null;
 };
-
-export const TodoList: React.FC<Props> = ({ todos, onShow }) => {
+export const TodoList: React.FC<Props> = ({
+  todos,
+  onShow,
+  onHide,
+  selectedTodoId,
+}) => {
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>
@@ -21,26 +27,29 @@ export const TodoList: React.FC<Props> = ({ todos, onShow }) => {
           <th> </th>
         </tr>
       </thead>
-
       <tbody>
-        {todos.map((todo, index) => (
+        {todos.map(todo => (
           <tr
             key={todo.id}
             data-cy="todo"
-            className={todo.completed ? '' : 'has-background-info-light'}
+            className={classNames({
+              'has-background-info-light': !todo.completed,
+            })}
           >
-            <td className="is-vcentered">{index + 1}</td>
-            <td className="is-vcentered" />
-            {todo.completed && (
-              <span data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
             <td className="is-vcentered is-expanded">
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
@@ -50,10 +59,17 @@ export const TodoList: React.FC<Props> = ({ todos, onShow }) => {
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => onShow(todo)}
+                onClick={() =>
+                  selectedTodoId === todo.id ? onHide() : onShow(todo)
+                }
               >
                 <span className="icon">
-                  <i className="far fa-eye" />
+                  <i
+                    className={classNames('far', {
+                      'fa-eye-slash': selectedTodoId === todo.id,
+                      'fa-eye': selectedTodoId !== todo.id,
+                    })}
+                  />
                 </span>
               </button>
             </td>

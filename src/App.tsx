@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { getTodos, getUser } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
@@ -9,7 +8,6 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { User } from './types/User';
 import { Todo } from './types/Todo';
-
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
@@ -26,34 +24,40 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(data => {
-        if (mounted) {setTodos(data);}
+        if (mounted) {
+          setTodos(data);
+        }
       })
+      // eslint-disable-next-line no-console
       .catch(console.error)
       .finally(() => {
- if (mounted) {setLoading(false);}
-});
+        if (mounted) {
+          setLoading(false);
+        }
+      });
 
     return () => {
- mounted = false;
-};
+      mounted = false;
+    };
   }, []);
-
   const filtered = todos
     .filter(todo =>
       filter === 'all'
-    ? true
+        ? true
         : filter === 'completed'
-      ? todo.completed :
-      !todo.completed)
+          ? todo.completed
+          : !todo.completed,
+    )
     .filter(t => t.title.toLowerCase().includes(query.toLowerCase()));
-
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const handleShow = (todo: Todo) => {
+    setSelectedUser(null);
     setSelectedTodo(todo);
     setIsModalOpen(true);
     setUserLoading(true);
     getUser(todo.userId)
       .then(u => setSelectedUser(u))
+      // eslint-disable-next-line no-console
       .catch(console.error)
       .finally(() => setUserLoading(false));
   };
@@ -70,7 +74,6 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-
             <div className="block">
               <TodoFilter
                 filter={filter}
@@ -80,25 +83,30 @@ export const App: React.FC = () => {
                 onClearQuery={() => setQuery('')}
               />
             </div>
-
             <div className="block">
               {loading ? (
                 <Loader />
               ) : (
-                <TodoList todos={filtered} onShow={handleShow} />
-                )}
+                <TodoList
+                  todos={filtered}
+                  onShow={handleShow}
+                  onHide={handleClose}
+                  selectedTodoId={selectedTodo?.id ?? null}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-
-      <TodoModal
-        isOpen={isModalOpen}
-        todo={selectedTodo}
-        user={selectedUser}
-        loading={userLoading}
-        onClose={handleClose}
-      />
+      {isModalOpen && (
+        <TodoModal
+          isOpen={isModalOpen}
+          todo={selectedTodo}
+          user={selectedUser}
+          loading={userLoading}
+          onClose={handleClose}
+        />
+      )}
     </>
   );
 };
