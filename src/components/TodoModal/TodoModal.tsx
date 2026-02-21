@@ -20,7 +20,6 @@ export const TodoModal: React.FC<Props> = ({
   if (!isOpen) {
     return null;
   }
-
   return (
     <div
       className={classNames('modal', { 'is-active': isOpen })}
@@ -55,9 +54,9 @@ export const TodoModal: React.FC<Props> = ({
                 {user && (
                   <>
                     <strong
-                      className={
+                      className={classNames(
                         todo?.completed ? 'has-text-success' : 'has-text-danger'
-                      }
+                      )}
                     >
                       {todo?.completed ? 'Done' : 'Planned'}
                     </strong>
