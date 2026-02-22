@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -69,13 +70,18 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
             {/* Status + nome do usuário */}
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                // Verde = tarefa concluída
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                // Vermelho = tarefa pendente
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              {/* Usa classnames para aplicar a cor condicionalmente:
+                  verde (has-text-success) = concluído,
+                  vermelho (has-text-danger) = pendente.
+                  Segue a recomendação do checklist item #5. */}
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
