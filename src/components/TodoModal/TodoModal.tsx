@@ -16,7 +16,6 @@ export const TodoModal: React.FC<Props> = ({
   loading,
   closeTodo,
 }) => {
-
   if (!loading && !todo && !user) {
     return null;
   }

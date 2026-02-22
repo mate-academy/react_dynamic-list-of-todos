@@ -1,3 +1,4 @@
+import React from 'react';
 import { Filter, Filters } from '../../types/Filters';
 
 type Props = {
@@ -37,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({ filters, setFilters }) => {
           onChange={event =>
             setFilters({
               ...filters,
-              search: event.target.value as Filter,
+              search: event.target.value,
             })
           }
         />

@@ -27,7 +27,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const loadTodos = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
 
         const todosFromServer = await getTodos();
 
@@ -56,6 +56,7 @@ export const App: React.FC = () => {
   const closeTodo = () => {
     setTodo(null);
     setUser(null);
+    setLoading(false);
   };
 
   const filteredTodos = () => {
@@ -89,7 +90,7 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {todos.length === 0 ? (
+              {loading ? (
                 <Loader />
               ) : (
                 <TodoList todos={filteredTodos()} openTodo={openTodo} />
