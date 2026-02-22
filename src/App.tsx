@@ -27,6 +27,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     const loadTodos = async () => {
       try {
+        setLoading(true)
+
         const todosFromServer = await getTodos();
 
         setTodos(todosFromServer);
@@ -41,7 +43,7 @@ export const App: React.FC = () => {
   const openTodo = async (selectedTodo: Todo) => {
     try {
       setLoading(true);
-      setTodo(todo);
+      setTodo(selectedTodo);
 
       const userFromServer = await getUser(selectedTodo.userId);
 
