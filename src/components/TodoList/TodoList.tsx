@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import cn from 'classnames';
 
 type TodoListProps = {
   todos: Todo[];
@@ -28,11 +29,13 @@ export const TodoList: React.FC<TodoListProps> = ({
 
     <tbody>
       {todos.map((todo, index) => {
-        const rowClass =
-          todo === selectedTodo ? 'has-background-info-light' : '';
-        const titleClass = todo.completed
-          ? 'has-text-success'
-          : 'has-text-danger';
+        const rowClass = cn({
+          'has-background-info-light': todo === selectedTodo,
+        });
+        const titleClass = cn({
+          'has-text-success': todo.completed,
+          'has-text-danger': !todo.completed,
+        });
 
         return (
           <tr data-cy="todo" key={todo.id} className={rowClass}>

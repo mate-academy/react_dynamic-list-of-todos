@@ -22,12 +22,12 @@ export const App: React.FC = () => {
   >('all');
 
   const visibleTodos = todos.filter(todo => {
-    if (statusFilter === 'active') {
-      return !todo.completed;
+    if (statusFilter === 'active' && todo.completed) {
+      return false;
     }
 
-    if (statusFilter === 'completed') {
-      return todo.completed;
+    if (statusFilter === 'completed' && !todo.completed) {
+      return false;
     }
 
     if (query && !todo.title.toLowerCase().includes(query.toLowerCase())) {
