@@ -59,7 +59,10 @@ export const TodoList: React.FC<TodoListProps> = ({
               >
                 <span className="icon">
                   <i
-                    className={`far ${todo === selectedTodo ? 'fa-eye-slash' : 'fa-eye'}`}
+                    className={cn('far', {
+                      'fa-eye-slash': todo === selectedTodo,
+                      'fa-eye': todo !== selectedTodo,
+                    })}
                   />
                 </span>
               </button>
