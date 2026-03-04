@@ -21,9 +21,11 @@ export const TodoModal: React.FC<Props> = ({
   const userId = selectedTodo?.userId;
 
   useEffect(() => {
-    getUser(userId!)
-      .then(setUser)
-      .finally(() => setDataHasFinished(true));
+    if (userId) {
+      getUser(userId)
+        .then(setUser)
+        .finally(() => setDataHasFinished(true));
+    }
   }, [userId]);
 
   return (
