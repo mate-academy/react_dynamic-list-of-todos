@@ -1,13 +1,14 @@
-import { useState } from 'react';
-
 type Props = {
   onSearch: React.Dispatch<React.SetStateAction<string>>;
   onStatus: React.Dispatch<React.SetStateAction<string>>;
+  searchQuery: string;
 };
 
-export const TodoFilter: React.FC<Props> = ({ onSearch, onStatus }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
+export const TodoFilter: React.FC<Props> = ({
+  onSearch,
+  onStatus,
+  searchQuery,
+}) => {
   return (
     <form className="field has-addons">
       <p className="control">
@@ -26,7 +27,6 @@ export const TodoFilter: React.FC<Props> = ({ onSearch, onStatus }) => {
       <p className="control is-expanded has-icons-left has-icons-right">
         <input
           onChange={event => {
-            setSearchQuery(event.target.value);
             onSearch(event.target.value);
           }}
           value={searchQuery}
@@ -45,7 +45,6 @@ export const TodoFilter: React.FC<Props> = ({ onSearch, onStatus }) => {
             <button
               data-cy="clearSearchButton"
               onClick={() => {
-                setSearchQuery('');
                 onSearch('');
               }}
               type="button"

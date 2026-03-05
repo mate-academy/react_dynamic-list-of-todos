@@ -42,9 +42,9 @@ export const App: React.FC = () => {
     setLoader(true);
     getTodos()
       .then(setTodos)
-      .catch(error => setErrorMessage(error))
+      .catch((error: Error) => setErrorMessage(error.message))
       .finally(() => setLoader(false));
-  }, [searchQuery, todosStatus]);
+  }, []);
 
   return (
     <>
@@ -54,7 +54,11 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onSearch={setSearchQuery} onStatus={setTodosStatus} />
+              <TodoFilter
+                onSearch={setSearchQuery}
+                onStatus={setTodosStatus}
+                searchQuery={searchQuery}
+              />
             </div>
 
             <div className="block">
@@ -80,11 +84,6 @@ export const App: React.FC = () => {
           setSelectedTodo={setSelectedTodo}
           selectedTodo={selectedTodo}
         />
-      )}
-      {errorMessage !== '' && (
-        <div className="error">
-          <p>{errorMessage}</p>
-        </div>
       )}
     </>
   );

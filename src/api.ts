@@ -21,7 +21,9 @@ function get<T>(url: string): Promise<T> {
   return wait(300)
     .then(() => fetch(fullURL))
     .then(res => res.json())
-    .catch(() => new Error('Try again later'));
+    .catch(() => {
+      throw new Error('Try again later');
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

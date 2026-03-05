@@ -14,18 +14,24 @@ export const TodoModal: React.FC<Props> = ({
   setSelectedTodo,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    getUser(selectedTodo.userId).then(setUser);
+    getUser(selectedTodo.userId)
+      .then(setUser)
+      .catch((error: Error) => setErrorMessage(error.message));
   }, [selectedTodo]);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
-
-      {user === null ? (
-        <Loader />
-      ) : (
+      {user === null && errorMessage === '' && <Loader />}
+      {errorMessage !== '' && (
+        <div className="error">
+          <p>{errorMessage}</p>
+        </div>
+      )}
+      {errorMessage === '' && user !== null && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div

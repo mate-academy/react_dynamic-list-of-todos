@@ -40,7 +40,14 @@ export const TodoList: React.FC<Props> = React.memo(function showTodoList({
               )}
             </td>
             <td className="is-vcentered is-expanded">
-              <p className="has-text-danger">{todo.title}</p>
+              <p
+                className={classNames({
+                  'has-text-danger': !todo.completed,
+                  'has-text-success': todo.completed,
+                })}
+              >
+                {todo.title}
+              </p>
             </td>
             <td className="has-text-right is-vcentered">
               <button
