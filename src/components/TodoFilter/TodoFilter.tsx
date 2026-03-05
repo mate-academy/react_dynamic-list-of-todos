@@ -15,7 +15,7 @@ export const TodoFilter: React.FC<Props> = ({
   onChangeQuery,
   onChangeStatus,
 }) => {
-  function handleSubmit(event: SubmitEvent) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
   }
 
@@ -23,16 +23,18 @@ export const TodoFilter: React.FC<Props> = ({
     onChangeQuery(event.target.value);
   }
 
+  function handleStatusChange(event: ChangeEvent<HTMLSelectElement>) {
+    onChangeStatus(event.target.value as Props['status']);
+  }
+
   return (
-    <form className="field has-addons" onSubmit={() => handleSubmit}>
+    <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
           <select
             data-cy="statusSelect"
             value={status}
-            onChange={event =>
-              onChangeStatus(event.target.value as Props['status'])
-            }
+            onChange={handleStatusChange}
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -48,7 +50,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => handleQueryChange(event)}
+          onChange={handleQueryChange}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type Props = {
   todos: Todo[] | [];
   modalId: number | null;
-  onSelectModalId: (userId: number) => void;
+  onSelectModalId: (userId: number | null) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -59,6 +59,9 @@ export const TodoList: React.FC<Props> = ({
                 type="button"
                 onClick={() => {
                   onSelectModalId(todo.id);
+                  if (todo.id === modalId) {
+                    onSelectModalId(null);
+                  }
                 }}
               >
                 <span className="icon">
