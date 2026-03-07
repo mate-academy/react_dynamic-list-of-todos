@@ -1,4 +1,6 @@
 import React from 'react';
+import classNames from 'classnames'; // ← добавили
+
 import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
@@ -27,39 +29,57 @@ export const TodoList: React.FC<TodoListProps> = ({
     </thead>
 
     <tbody>
-      {todos.map((todo) => (
-        <tr
-          key={todo.id}
-          data-cy="todo"
-          className={selectedTodoId === todo.id ? 'has-background-info-light' : ''}
-        >
-          <td className="is-vcentered">{todo.id}</td>
-          <td className="is-vcentered">
-            {todo.completed && (
-              <span className="icon" data-cy="iconCompleted">
-                <i className="fas fa-check" />
-              </span>
-            )}
-          </td>
-          <td className="is-vcentered is-expanded">
-            <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
-              {todo.title}
-            </p>
-          </td>
-          <td className="has-text-right is-vcentered">
-            <button
-              data-cy="selectButton"
-              className="button"
-              type="button"
-              onClick={() => onSelect(todo.id)}
-            >
-              <span className="icon">
-                <i className={selectedTodoId === todo.id ? 'far fa-eye-slash' : 'far fa-eye'} />
-              </span>
-            </button>
-          </td>
-        </tr>
-      ))}
+      {todos.map(todo => {
+        const isSelected = selectedTodoId === todo.id;
+
+        return (
+          <tr
+            key={todo.id}
+            data-cy="todo"
+            // ← здесь было тернарное выражение, теперь classnames
+            className={classNames({
+              'has-background-info-light': isSelected,
+            })}
+          >
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check" />
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                // можно тоже через classnames, если захотим быть последовательными
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => onSelect(todo.id)}
+              >
+                <span className="icon">
+                  <i
+                    className={classNames({
+                      'far fa-eye': !isSelected,
+                      'far fa-eye-slash': isSelected,
+                    })}
+                  />
+                </span>
+              </button>
+            </td>
+          </tr>
+        );
+      })}
     </tbody>
   </table>
 );

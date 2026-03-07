@@ -37,6 +37,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (selectedTodoId === null) {
       setSelectedUser(null);
+
       return;
     }
 
@@ -58,7 +59,9 @@ export const App: React.FC = () => {
   const selectedTodo = todos.find(todo => todo.id === selectedTodoId) || null;
 
   const visibleTodos = todos.filter(todo => {
-    const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase().trim());
+    const matchesQuery = todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase().trim());
 
     if (status === 'active') {
       return matchesQuery && !todo.completed;
@@ -96,9 +99,7 @@ export const App: React.FC = () => {
               {isLoading && <Loader />}
 
               {errorMessage && (
-                <div className="notification is-danger">
-                  {errorMessage}
-                </div>
+                <div className="notification is-danger">{errorMessage}</div>
               )}
 
               {!isLoading && !errorMessage && (
