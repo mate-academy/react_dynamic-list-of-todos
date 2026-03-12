@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -20,7 +21,12 @@ export const TodoRecord: React.FC<Props> = ({ todo, selectedId, onClick }) => {
         )}
       </td>
       <td className="is-vcentered is-expanded">
-        <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>
+        <p
+          className={classNames({
+            'has-text-success': todo.completed,
+            'has-text-danger': !todo.completed,
+          })}
+        >
           {todo.title}
         </p>
       </td>
@@ -33,7 +39,10 @@ export const TodoRecord: React.FC<Props> = ({ todo, selectedId, onClick }) => {
         >
           <span className="icon">
             <i
-              className={`far ${todo.id === selectedId ? 'fa-eye-slash' : 'fa-eye'}`}
+              className={classNames('far', {
+                'fa-eye-slash': todo.id === selectedId,
+                'fa-eye': todo.id !== selectedId,
+              })}
             />
           </span>
         </button>
