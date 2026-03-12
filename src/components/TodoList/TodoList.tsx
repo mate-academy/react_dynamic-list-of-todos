@@ -1,100 +1,96 @@
-import React from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Todo } from '../../types/Todo';
+import { getTodos } from '../../api';
+import { TodoModal } from '../TodoModal';
+import { Loader } from '../Loader';
+import { TodoItem } from '../TodoItem';
 
-export const TodoList: React.FC = () => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
+export interface TodoListProps {
+  todoQuery: string;
+  todoSearchQuery: string;
+}
 
-    <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+enum StatusQuery {
+  Completed = 'completed',
+  Active = 'active',
+}
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+export const TodoList: React.FC<TodoListProps> = ({
+  todoQuery,
+  todoSearchQuery,
+}) => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [selectTodo, setSelectTodo] = useState<Todo | null>(null);
+  const [loading, setLoading] = useState(false);
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+  useEffect(() => {
+    setLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
+  }, []);
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+  const filterTodos = (
+    allTodos: Todo[],
+    query: string,
+    searchInput: string,
+  ) => {
+    let filteredTodos = [...allTodos];
+
+    if (query === StatusQuery.Completed) {
+      filteredTodos = filteredTodos.filter(todo => todo.completed);
+    } else if (query === StatusQuery.Active) {
+      filteredTodos = filteredTodos.filter(todo => !todo.completed);
+    }
+
+    if (searchInput) {
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.title.toLowerCase().includes(searchInput.toLowerCase()),
+      );
+    }
+
+    return filteredTodos;
+  };
+
+  const visibleTodos = useMemo(
+    () => filterTodos(todos, todoQuery, todoSearchQuery),
+    [todos, todoQuery, todoSearchQuery],
+  );
+
+  return (
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <table className="table is-narrow is-fullwidth">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>
+                <span className="icon">
+                  <i className="fas fa-check" />
+                </span>
+              </th>
+              <th>Title</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {visibleTodos.map(todo => (
+              <TodoItem
+                todoItem={todo}
+                setSelectTodo={setSelectTodo}
+                selectTodo={selectTodo}
+                key={todo.id}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
+      {selectTodo && (
+        <TodoModal selectedTodo={selectTodo} setSelectTodo={setSelectTodo} />
+      )}
+    </>
+  );
+};
