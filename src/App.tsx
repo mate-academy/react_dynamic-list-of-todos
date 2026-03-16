@@ -75,7 +75,8 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 handleStatusFilterChange={handleStatusFilterChange}
-                handleFilterChange={handleQueryChange}
+                onQueryChange={handleQueryChange}
+                query={query}
               />
             </div>
 

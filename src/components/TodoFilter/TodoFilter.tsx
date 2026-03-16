@@ -3,26 +3,21 @@ import React from 'react';
 
 type Props = {
   handleStatusFilterChange: (value: string) => void;
-  handleFilterChange: (value: string) => void;
+  onQueryChange: (value: string) => void;
+  query: string;
 };
 
 export const TodoFilter = React.memo(
-  ({ handleStatusFilterChange, handleFilterChange }: Props) => {
+  ({ handleStatusFilterChange, onQueryChange, query }: Props) => {
     const [selectFilter, setSelectFilter] = React.useState('all');
-    const [query, setQuery] = React.useState('');
 
     const debouncedFilterChange = React.useMemo(
       () =>
         debounce((value: string) => {
-          handleFilterChange(value);
+          onQueryChange(value);
         }, 300),
-      [handleFilterChange],
+      [onQueryChange],
     );
-
-    const handleQueryChange = (value: string) => {
-      setQuery(value);
-      debouncedFilterChange(value);
-    };
 
     return (
       <form className="field has-addons">
@@ -50,7 +45,7 @@ export const TodoFilter = React.memo(
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={event => handleQueryChange(event.target.value)}
+            onChange={event => debouncedFilterChange(event.target.value)}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />
@@ -63,7 +58,7 @@ export const TodoFilter = React.memo(
                 data-cy="clearSearchButton"
                 type="button"
                 className="delete"
-                onClick={() => handleQueryChange('')}
+                onClick={() => debouncedFilterChange('')}
               />
             </span>
           )}
