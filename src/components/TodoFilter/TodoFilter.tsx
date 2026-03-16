@@ -50,7 +50,7 @@ export const TodoFilter = React.memo(
             className="input"
             placeholder="Search..."
             value={query}
-            onChange={(event) => handleQueryChange(event.target.value)}
+            onChange={event => handleQueryChange(event.target.value)}
           />
           <span className="icon is-left">
             <i className="fas fa-magnifying-glass" />
