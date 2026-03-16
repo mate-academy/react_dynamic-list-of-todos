@@ -5,11 +5,11 @@ import React from 'react';
 type Props = {
   todos: Todo[];
   selectedTodoId: number | undefined;
-  handleSelectTodo: (todo: Todo) => void;
+  onSelectTodo: (todo: Todo) => void;
 };
 
 export const TodoList = React.memo(
-  ({ todos, selectedTodoId, handleSelectTodo }: Props) => (
+  ({ todos, selectedTodoId, onSelectTodo }: Props) => (
     <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -56,13 +56,13 @@ export const TodoList = React.memo(
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => handleSelectTodo(todo)}
+                onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
                   <i
                     className={classNames('fas', {
                       'fa-eye': todo.id !== selectedTodoId,
-                      'fa-eye-slash': todo.id == selectedTodoId,
+                      'fa-eye-slash': todo.id === selectedTodoId,
                     })}
                   />
                 </span>

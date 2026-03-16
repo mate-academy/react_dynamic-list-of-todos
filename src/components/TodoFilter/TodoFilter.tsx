@@ -2,15 +2,14 @@ import debounce from 'lodash.debounce';
 import React from 'react';
 
 type Props = {
-  handleStatusFilterChange: (value: string) => void;
+  onStatusFilterChange: (value: string) => void;
   onQueryChange: (value: string) => void;
   query: string;
+  selectFilter: string;
 };
 
 export const TodoFilter = React.memo(
-  ({ handleStatusFilterChange, onQueryChange, query }: Props) => {
-    const [selectFilter, setSelectFilter] = React.useState('all');
-
+  ({ onStatusFilterChange, onQueryChange, query, selectFilter }: Props) => {
     const debouncedFilterChange = React.useMemo(
       () =>
         debounce((value: string) => {
@@ -27,8 +26,7 @@ export const TodoFilter = React.memo(
               data-cy="statusSelect"
               value={selectFilter}
               onChange={e => {
-                setSelectFilter(e.target.value);
-                handleStatusFilterChange(e.target.value);
+                onStatusFilterChange(e.target.value);
               }}
             >
               <option value="all">All</option>

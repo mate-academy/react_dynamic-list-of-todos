@@ -74,9 +74,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                handleStatusFilterChange={handleStatusFilterChange}
+                onStatusFilterChange={handleStatusFilterChange}
                 onQueryChange={handleQueryChange}
                 query={query}
+                selectFilter={statusFilter}
               />
             </div>
 
@@ -85,7 +86,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={visibleTodos}
                 selectedTodoId={selectedTodo?.id}
-                handleSelectTodo={handleSelect}
+                onSelectTodo={handleSelect}
               />
             </div>
           </div>
