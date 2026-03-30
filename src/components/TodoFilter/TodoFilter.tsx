@@ -1,8 +1,26 @@
-export const TodoFilter = () => (
+import { Status } from '../../types/Status';
+
+type Props = {
+  sortedStatus: Status;
+  byStatus?: (v: Status) => void;
+  sortedQuery: string;
+  byQuery?: (v: string) => void;
+};
+
+export const TodoFilter: React.FC<Props> = ({
+  sortedStatus,
+  byStatus = () => {},
+  sortedQuery,
+  byQuery = () => {},
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={sortedStatus}
+          onChange={event => byStatus(event.target.value as Status)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -13,9 +31,11 @@ export const TodoFilter = () => (
     <p className="control is-expanded has-icons-left has-icons-right">
       <input
         data-cy="searchInput"
+        value={sortedQuery}
         type="text"
         className="input"
         placeholder="Search..."
+        onChange={event => byQuery(event.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -23,7 +43,14 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {sortedQuery && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => byQuery(Status.Default)}
+          />
+        )}
       </span>
     </p>
   </form>
