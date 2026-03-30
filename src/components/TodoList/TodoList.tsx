@@ -1,6 +1,15 @@
 import React from 'react';
-
-export const TodoList: React.FC = () => (
+import { Todo } from '../../types/Todo';
+interface Props {
+  todo: Todo[];
+  onShow: (
+    userNumber: number,
+    comment: string,
+    completedTrue: boolean,
+    todo: Todo | null,
+  ) => void;
+}
+export const TodoList: React.FC<Props> = ({ todo, onShow }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,85 +25,33 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+      {todo.map((item, index) => (
+        <tr data-cy="todo" className="" key={index}>
+          <td className="is-vcentered">{item.userId}</td>
+          <td className="is-vcentered" />
+          <td className="is-vcentered  is-expanded">
+            <p className={`has-text-${!item.completed ? 'danger' : 'success'}`}>
+              {item.title}
+            </p>
+          </td>
+          <td className="has-text-right is-vcentered">
+            <button
+              data-cy="selectButton"
+              className="button"
+              type="button"
+              onClick={() => {
+                onShow(item.userId, item.title, item.completed, item);
+              }}
+            >
+              <span className="icon">
+                <i
+                  className={item.completed ? 'far fa-eye' : 'far fa-eye-slash'}
+                />
+              </span>
+            </button>
+          </td>
+        </tr>
+      ))}
     </tbody>
   </table>
 );
