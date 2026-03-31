@@ -48,7 +48,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => byQuery(Status.Default)}
+            onClick={() => byQuery('')}
           />
         )}
       </span>

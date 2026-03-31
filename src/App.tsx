@@ -45,7 +45,7 @@ export const App: React.FC = () => {
   const [loader, setLoader] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState<Status>(Status.Default);
+  const [status, setStatus] = useState<Status>(Status.All);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const App: React.FC = () => {
       .then(setTodos)
       .catch(error => error.message)
       .finally(() => setLoader(false));
-  }, [todos]);
+  }, []);
 
   const visibleGoods = getPreparedTodos(todos, { status, query });
 
