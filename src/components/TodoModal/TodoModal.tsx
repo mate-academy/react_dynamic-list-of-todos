@@ -2,8 +2,9 @@ import React from 'react';
 import { Loader } from '../Loader';
 import { User } from '../../types/User';
 import { Todo } from '../../types/Todo';
+
 interface Props {
-  user: User;
+  user: User | undefined;
   isLoading: boolean;
   onShow: (
     userNumber: number,
@@ -13,19 +14,22 @@ interface Props {
   ) => void;
   todoComment: string;
   completed: boolean | null;
+  todo: Todo | null;
 }
+
 export const TodoModal: React.FC<Props> = ({
   user,
   isLoading,
   onShow,
   todoComment,
   completed,
+  todo,
 }) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {isLoading || !user || !todo ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -34,10 +38,9 @@ export const TodoModal: React.FC<Props> = ({
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              {user.name}
+              {`Todo #${todo.id}`}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -55,7 +58,7 @@ export const TodoModal: React.FC<Props> = ({
               <strong
                 className={`has-text-${!completed ? 'danger' : 'success'}`}
               >
-                {`${completed ? 'Done' : 'Planned'}`}
+                {completed ? 'Done' : 'Planned'}
               </strong>
 
               {' by '}

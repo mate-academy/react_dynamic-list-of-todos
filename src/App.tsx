@@ -10,83 +10,114 @@ import { Loader } from './components/Loader';
 import * as apiMetodos from './api';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
-// import { todo } from 'node:test';
-// import { todo } from 'node:test';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [users, setUsers] = useState<User>();
+  const [originalTodo, setOriginalTodo] = useState<Todo[]>([]);
+  const [users, setUsers] = useState<User | undefined>(undefined);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [loader, isLoader] = useState(false);
-  const [originalTodo, setOrinalTodo] = useState<Todo[]>([]);
+  const [loader, setLoader] = useState(false);
+
   const [numberSet, setNumber] = useState(0);
   const [todoComment, setTodoComment] = useState('');
   const [completed, setCompleted] = useState<boolean | null>(null);
 
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
+
+  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
   useEffect(() => {
-    setTimeout(() => {
-      isLoader(true);
-      apiMetodos.getTodos().then(r => {
+    const loadTodos = async () => {
+      try {
+        setLoader(true);
+        const r = await apiMetodos.getTodos();
+
         setTodos(r);
-        setOrinalTodo(r);
-      });
-    }, 1000);
+        setOriginalTodo(r);
+      } catch (error) {
+        throw new Error('erro no get');
+      } finally {
+        setLoader(false);
+      }
+    };
+
+    loadTodos();
   }, []);
 
+  useEffect(() => {
+    if (originalTodo.length === 0) {
+      return;
+    }
+
+    let filtered = originalTodo;
+
+    if (search.trim() !== '') {
+      filtered = filtered.filter(t =>
+        t.title.toLowerCase().includes(search.toLowerCase()),
+      );
+    }
+
+    if (status !== 'all') {
+      filtered = filtered.filter(t =>
+        status === 'active' ? !t.completed : t.completed,
+      );
+    }
+
+    if (search === '' && status === 'all') {
+      setTodos(originalTodo);
+    } else {
+      setTodos(filtered);
+    }
+  }, [search, status, originalTodo]);
+
   const seeComent = (todo: Todo) => {
-    const newArrTodo = todos.map(item => {
-      if (item.id === todo.id) {
-        return {
-          id: todo.id,
-          title: todo.title,
-          completed: true,
-          userId: todo.userId,
-        };
-      }
+    const update = (arr: Todo[]) =>
+      arr.map(item =>
+        item.id === todo.id ? { ...item, completed: true } : item,
+      );
 
-      return item;
-    });
-    const newArrOriginal = originalTodo.map(item => {
-      if (item.id === todo.id) {
-        return {
-          id: todo.id,
-          title: todo.title,
-          completed: true,
-          userId: todo.userId,
-        };
-      }
-
-      return item;
-    });
-
-    setTodos(newArrTodo);
-    setOrinalTodo(newArrOriginal);
+    setTodos(prev => update(prev));
+    setOriginalTodo(prev => update(prev));
   };
 
-  const onShow = (
+  const onShow = async (
     userNumber: number,
     comment: string,
-    completedTrue: boolean,
+    completedTrue: boolean | null,
     todo: Todo | null,
   ) => {
-    apiMetodos.getUser(userNumber).then(r => {
+    if (userNumber === 0) {
+      setNumber(0);
+      setUsers(undefined);
+      setSelectedTodoId(null);
+      setSelectedTodo(null);
+
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setNumber(userNumber);
+      setSelectedTodoId(todo ? todo.id : null);
+      setSelectedTodo(todo);
+
+      const r = await apiMetodos.getUser(userNumber);
+
       setUsers(r);
-    });
-    setCompleted(completedTrue);
-    setTodoComment(comment);
-    setNumber(userNumber);
-    setIsLoading(true);
 
-    setTimeout(() => {
+      setCompleted(completedTrue);
+      setTodoComment(comment);
+    } catch (error) {
+      throw new Error('ERRO NO GET USERS');
+    } finally {
       setIsLoading(false);
-    }, 2500);
-    if (todo !== null && !todo.completed) {
-      const updatedTodo = {
-        ...todo,
-        completed: true,
-      };
+    }
 
-      seeComent(updatedTodo);
+    if (todo !== null && !todo.completed) {
+      seeComent({ ...todo, completed: true });
     }
   };
 
@@ -96,13 +127,23 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
+
             <div className="block">
-              <TodoFilter todo={originalTodo} setTodo={setTodos} />
+              <TodoFilter
+                search={search}
+                setSearch={setSearch}
+                setStatus={setStatus}
+                status={status}
+              />
             </div>
 
             <div className="block">
-              {!loader && <Loader />}
-              {loader && <TodoList todo={todos} onShow={onShow} />}
+              {loader && <Loader />}
+              <TodoList
+                todo={todos}
+                onShow={onShow}
+                selectedTodoId={selectedTodoId}
+              />
             </div>
           </div>
         </div>
@@ -115,6 +156,7 @@ export const App: React.FC = () => {
           onShow={onShow}
           todoComment={todoComment}
           completed={completed}
+          todo={selectedTodo}
         />
       )}
     </>
