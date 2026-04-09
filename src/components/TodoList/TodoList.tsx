@@ -6,9 +6,14 @@ import { Todo } from '../../types/Todo';
 type Props = {
   todos: Todo[];
   onShowTodo?: (todo: Todo) => void;
+  selectedTodo: Todo | null;
 };
 
-const TodoListBase: React.FC<Props> = ({ todos, onShowTodo = () => {} }) => (
+const TodoListBase: React.FC<Props> = ({
+  todos,
+  onShowTodo = () => {},
+  selectedTodo,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -25,7 +30,13 @@ const TodoListBase: React.FC<Props> = ({ todos, onShowTodo = () => {} }) => (
 
     <tbody>
       {todos.map(todo => (
-        <tr data-cy="todo" className="" key={todo.id}>
+        <tr
+          data-cy="todo"
+          className={cn({
+            '': selectedTodo?.id === todo.id,
+          })}
+          key={todo.id}
+        >
           <td className="is-vcentered">{todo.id}</td>
           <td className="is-vcentered">
             {todo.completed && (
@@ -52,7 +63,10 @@ const TodoListBase: React.FC<Props> = ({ todos, onShowTodo = () => {} }) => (
               onClick={() => onShowTodo(todo)}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                {selectedTodo?.id !== todo.id && <i className="far fa-eye" />}
+                {selectedTodo?.id === todo.id && (
+                  <i className="far fa-eye-slash" />
+                )}
               </span>
             </button>
           </td>

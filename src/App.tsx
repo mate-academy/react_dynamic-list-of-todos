@@ -86,6 +86,7 @@ export const App: React.FC = () => {
               )}
               {!isLoading && !errorMessage && visibleTodos.length > 0 && (
                 <TodoList
+                  selectedTodo={selectedTodo}
                   todos={visibleTodos}
                   onShowTodo={handleShowTodoModal}
                 />
