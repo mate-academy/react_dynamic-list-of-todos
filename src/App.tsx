@@ -10,6 +10,8 @@ import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
+
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -20,8 +22,14 @@ export const App: React.FC = () => {
 
   const filteredTodos = todos
     .filter(todo => {
-      if (status === 'completed') return todo.completed;
-      if (status === 'active') return !todo.completed;
+      if (status === 'completed') {
+        return todo.completed;
+      }
+
+      if (status === 'active') {
+        return !todo.completed;
+      }
+
       return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));

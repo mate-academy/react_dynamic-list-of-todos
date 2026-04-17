@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cn from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -17,12 +18,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     setLoading(true);
 
     getUser(todo.userId)
-      .then(data => {
-        setUser(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then(setUser)
+      .finally(() => setLoading(false));
   }, [todo]);
 
   return (
@@ -41,7 +38,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               Todo #{todo.id}
             </div>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
               className="delete"
@@ -56,11 +52,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
               <strong
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={cn({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
