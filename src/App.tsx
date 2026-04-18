@@ -63,7 +63,11 @@ export const App: React.FC = () => {
   };
 
   const restoreTodos = () => {
-    getTodos().then(setTodos);
+    setLoading(true);
+
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoading(false));
   };
 
   return (

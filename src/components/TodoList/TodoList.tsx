@@ -58,7 +58,7 @@ export const TodoList: React.FC<Props> = ({
                 type="button"
                 onClick={() => setActiveTodo(todo)}
               >
-                {activeTodo === todo ? (
+                {activeTodo?.id === todo.id ? (
                   <span className="icon">
                     <i className="far fa-eye-slash" />
                   </span>
