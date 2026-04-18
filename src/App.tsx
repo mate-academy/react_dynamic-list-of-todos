@@ -21,6 +21,8 @@ export const App: React.FC = () => {
   const [activeUser, setActiveUser] = useState<User | null>(null);
 
   useEffect(() => {
+    setLoading(true);
+
     getTodos()
       .then(setTodos)
       .finally(() => setLoading(false));
@@ -60,6 +62,10 @@ export const App: React.FC = () => {
     }
   };
 
+  const restoreTodos = () => {
+    getTodos().then(setTodos);
+  };
+
   return (
     <>
       <div className="section">
@@ -73,6 +79,7 @@ export const App: React.FC = () => {
                 setQuery={setQuery}
                 handleInput={handleInput}
                 handleSelect={handleSelect}
+                restoreTodos={restoreTodos}
               />
             </div>
 

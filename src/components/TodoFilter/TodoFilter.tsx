@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Todo } from '../../types/Todo';
 // import { getTodos } from '../../api';
 
 type Props = {
@@ -7,6 +6,7 @@ type Props = {
   setQuery: (str: string) => void;
   handleInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  restoreTodos: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -14,6 +14,7 @@ export const TodoFilter: React.FC<Props> = ({
   handleInput,
   setQuery,
   handleSelect,
+  restoreTodos,
 }) => {
   return (
     <form className="field has-addons">
@@ -47,7 +48,10 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setQuery('')}
+              onClick={() => {
+                setQuery('');
+                restoreTodos();
+              }}
             />
           )}
         </span>
