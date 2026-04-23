@@ -44,17 +44,19 @@ export const App: React.FC = () => {
     setSelectedUser(null);
   };
 
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') {
-      return !todo.completed;
-    }
+  const filteredTodos = todos
+    .filter(todo => {
+      if (filter === 'active') {
+        return !todo.completed;
+      }
 
-    if (filter === 'completed') {
-      return todo.completed;
-    }
+      if (filter === 'completed') {
+        return todo.completed;
+      }
 
-    return true;
-  });
+      return true;
+    })
+    .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <>
