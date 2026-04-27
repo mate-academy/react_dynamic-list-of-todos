@@ -1,11 +1,13 @@
 import type { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 interface TodoListProps {
   todos: Todo[];
   showModal: (item: Todo) => void;
+  selected: Todo | null;
 }
 
-export const TodoList = ({ todos, showModal }: TodoListProps) => (
+export const TodoList = ({ todos, showModal, selected }: TodoListProps) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -36,9 +38,10 @@ export const TodoList = ({ todos, showModal }: TodoListProps) => (
 
           <td className="is-vcentered is-expanded">
             <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
+              className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
             >
               {todo.title}
             </p>
@@ -53,7 +56,12 @@ export const TodoList = ({ todos, showModal }: TodoListProps) => (
               }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i
+                  className={classNames({
+                    'far fa-eye': selected?.id !== todo.id,
+                    'fas fa-eye-slash': selected?.id === todo.id,
+                  })}
+                />
               </span>
             </button>
           </td>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
 import type { Todo } from '../../types/Todo';
 import type { User } from '../../types/User';
-import { getUsers } from '../../servises/getUsers';
+// import { getUsers } from '../../servises/getUsers';
 
 interface TodoModalProps {
   selected: Todo;
@@ -16,37 +16,30 @@ export const TodoModal = ({ selected, closeModal }: TodoModalProps) => {
 
   const user = users.find(userItem => userItem.id === selected.userId);
 
-  // useEffect(() => {
-  //   setLoadingModal(true);
-  //   getUsers()
-  //     .then(data => {
-  //       setLoadingModal(false);
-  //       setUsers(data);
-  //     })
-  //     .catch(err => {
-  //       setLoadingModal(false);
-  //       setError(err);
-  //     });
-  // }, []);
-
   useEffect(() => {
     setLoadingModal(true);
 
-    getUsers()
-      .then(data => {
-        // 👇 залишаємо тільки потрібного юзера
-        const filteredUser = data.filter(
-          userItem => userItem.id === selected.userId,
+    const loadUser = async () => {
+      try {
+        const response = await fetch(
+          `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${selected.userId}.json`,
         );
 
-        setUsers(filteredUser);
+        const userItem = await response.json();
+
+        // 👇 даємо React шанс відрендерити loader
+        setTimeout(() => {
+          setUsers([userItem]);
+          setLoadingModal(false);
+        }, 0);
+      } catch (err) {
+        setError(err as Error);
         setLoadingModal(false);
-      })
-      .catch(err => {
-        setError(err);
-        setLoadingModal(false);
-      });
-  }, [selected]);
+      }
+    };
+
+    loadUser();
+  }, [selected.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">

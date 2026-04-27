@@ -1,4 +1,5 @@
 //.. TodoFilter
+import classNames from 'classnames';
 
 interface TodoFilterProps {
   handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -29,7 +30,9 @@ export const TodoFilter = ({
         <input
           data-cy="searchInput"
           type="text"
-          className="input"
+          className={classNames('input', {
+            'is-danger': search,
+          })}
           placeholder="Search..."
           value={search}
           onChange={handleSearch}

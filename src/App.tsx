@@ -21,6 +21,7 @@ export const App: React.FC = () => {
   const [selected, setSelected] = useState<Todo | null>(null); // стан для обраного рядка з ліста
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all'); // стан для фільтрації
   const [search, setSearch] = useState<string>('');
+  const [query, setQuery] = useState('');
 
   const debouncedSearch = useMemo(() => {
     return debounce((value: string) => {
@@ -28,13 +29,21 @@ export const App: React.FC = () => {
     }, 300);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const clearSearch = () => {
+    setQuery('');
     setSearch('');
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const current = event.target.value;
 
+    setQuery(current);
     debouncedSearch(current);
   };
 
@@ -53,7 +62,7 @@ export const App: React.FC = () => {
       filtered = filtered.filter(todo => todo.completed);
     }
 
-    const normalizedSearch = search.trim().toLowerCase();
+    const normalizedSearch = search.toLowerCase();
 
     if (normalizedSearch !== '') {
       filtered = filtered.filter(todo =>
@@ -65,12 +74,18 @@ export const App: React.FC = () => {
   }, [todos, filter, search]);
 
   const showModal = (item: Todo): void => {
-    setSelected(item);
-    setIsModal(true);
+    if (selected?.id === item.id) {
+      setSelected(null);
+      setIsModal(false);
+    } else {
+      setSelected(item);
+      setIsModal(true);
+    }
   };
 
   const closeModal = () => {
     setIsModal(false);
+    setSelected(null);
   };
 
   useEffect(() => {
@@ -96,7 +111,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 handleChange={handleChange}
-                search={search}
+                search={query}
                 handleSearch={handleSearch}
                 clearSearch={clearSearch}
               />
@@ -106,7 +121,11 @@ export const App: React.FC = () => {
               {loading && <Loader />}
               {!loading && error && <p>{error.message}</p>}
               {!loading && !error && (
-                <TodoList todos={visibleTodos} showModal={showModal} />
+                <TodoList
+                  todos={visibleTodos}
+                  showModal={showModal}
+                  selected={selected}
+                />
               )}
             </div>
           </div>
