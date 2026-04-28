@@ -1,6 +1,12 @@
 import React from 'react';
 import { StatusSelect } from '../../App';
 
+enum FilterType {
+  All = 'all',
+  Active = 'active',
+  Completed = 'completed',
+}
+
 type Props = {
   onStatusSelect?: (status: StatusSelect) => void;
   onQueryChange?: (query: string) => void;
@@ -39,9 +45,9 @@ const TodoFilterBase: React.FC<Props> = ({
             data-cy="statusSelect"
             onChange={handleSelectOption}
           >
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+            <option value={FilterType.All}>All</option>
+            <option value={FilterType.Active}>Active</option>
+            <option value={FilterType.Completed}>Completed</option>
           </select>
         </span>
       </p>

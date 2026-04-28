@@ -58,6 +58,10 @@ export const App: React.FC = () => {
     return filteredTodos;
   }, [todosFromServer, status, query]);
 
+  const isTodoListNotEmpty =
+    !isLoading && !errorMessage && visibleTodos.length > 0;
+  const isNoTodos = !isLoading && !errorMessage && visibleTodos.length === 0;
+
   return (
     <>
       <div className="section">
@@ -79,12 +83,12 @@ export const App: React.FC = () => {
               {!isLoading && errorMessage && (
                 <div className="notification is-danger">{errorMessage}</div>
               )}
-              {!isLoading && !errorMessage && visibleTodos.length === 0 && (
+              {isNoTodos && (
                 <div className="notification is-danger is-light">
                   There are no todos.
                 </div>
               )}
-              {!isLoading && !errorMessage && visibleTodos.length > 0 && (
+              {isTodoListNotEmpty && (
                 <TodoList
                   selectedTodo={selectedTodo}
                   todos={visibleTodos}
