@@ -1,8 +1,12 @@
 import React from 'react';
 import './Loader.scss';
 
-export const Loader: React.FC = () => (
-  <div className="Loader" data-cy="loader">
+interface Props {
+  isLoaded: boolean;
+}
+
+export const Loader: React.FC<Props> = ({ isLoaded }) => (
+  <div className="Loader" data-cy="loader" hidden={isLoaded}>
     <div className="Loader__content" />
   </div>
 );
