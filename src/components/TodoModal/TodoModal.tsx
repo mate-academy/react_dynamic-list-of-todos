@@ -53,10 +53,7 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               <strong
-                className={classNames({
-                  'has-text-success': todo.completed,
-                  'has-text-danger': !todo.completed,
-                })}
+
               >
                 {todo.completed ? 'Done' : 'Planned'}
               </strong>
