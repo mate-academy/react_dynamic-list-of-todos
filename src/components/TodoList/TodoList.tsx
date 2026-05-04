@@ -63,11 +63,10 @@ const TodoListBase: React.FC<Props> = ({
               onClick={() => onShowTodo(todo)}
             >
               <span className="icon">
-                {selectedTodo?.id === todo.id ? (
-                  <i className="far fa-eye-slash" />
-                ) : (
-                  <i className="far fa-eye" />
-                )}
+                {selectedTodo?.id === todo.id 
+                  ? <i className="far fa-eye-slash" />
+                  : <i className="far fa-eye" />
+                }
               </span>
             </button>
           </td>
