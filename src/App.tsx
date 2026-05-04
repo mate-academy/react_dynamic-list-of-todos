@@ -29,6 +29,8 @@ export const App: React.FC = () => {
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     const loadTodos = async () => {
       try {
@@ -37,8 +39,9 @@ export const App: React.FC = () => {
 
         setTodos(r);
         setOriginalTodo(r);
+        setIsLoaded(true);
       } catch (error) {
-        throw new Error('erro no get');
+        throw new Error('Erro LoadTodos');
       } finally {
         setLoader(false);
       }
@@ -48,13 +51,19 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (originalTodo.length === 0) {
+    if (!isLoaded) {
       return;
     }
 
-    let filtered = originalTodo;
+    if (search === '' && status === 'all') {
+      setTodos(originalTodo);
 
-    if (search.trim() !== '') {
+      return;
+    }
+
+    let filtered = [...originalTodo];
+
+    if (search.trim()) {
       filtered = filtered.filter(t =>
         t.title.toLowerCase().includes(search.toLowerCase()),
       );
@@ -66,12 +75,8 @@ export const App: React.FC = () => {
       );
     }
 
-    if (search === '' && status === 'all') {
-      setTodos(originalTodo);
-    } else {
-      setTodos(filtered);
-    }
-  }, [search, status, originalTodo]);
+    setTodos(filtered);
+  }, [search, status, originalTodo, isLoaded]);
 
   const seeComent = (todo: Todo) => {
     const update = (arr: Todo[]) =>
@@ -111,7 +116,7 @@ export const App: React.FC = () => {
       setCompleted(completedTrue);
       setTodoComment(comment);
     } catch (error) {
-      throw new Error('ERRO NO GET USERS');
+      throw new Error('Erro Onshow');
     } finally {
       setIsLoading(false);
     }
