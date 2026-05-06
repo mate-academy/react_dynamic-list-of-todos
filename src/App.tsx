@@ -21,14 +21,14 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const filteredTodos = toDo.filter(todo => {
-    const matchesStatus =
+    const matchStatus =
       filterStatus === 'all' ||
       (filterStatus === 'completed' && todo.completed) ||
       (filterStatus === 'active' && !todo.completed);
 
     const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
-    return matchesStatus && matchesQuery;
+    return matchStatus && matchesQuery;
   });
 
   useEffect(() => {
