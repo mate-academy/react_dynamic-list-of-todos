@@ -1,4 +1,3 @@
-import React from 'react';
 import { Todo } from '../../types/Todo';
 
 export const TodoList: React.FC<{
@@ -6,31 +5,50 @@ export const TodoList: React.FC<{
   onTodoSelect: (todo: Todo) => void;
   selectedTodo: Todo | null;
 }> = ({ todos, onTodoSelect, selectedTodo }) => (
-  <tbody>
-    {todos.map(({ id, title, completed }) => (
-      <tr key={id} data-cy="todo">
-        <td data-cy="todo-id">{id}</td>
-        {completed && (
-          <td data-cy="iconCompleted">
-            <span className="icon has-text-success">
-              <i className="fas fa-check" />
-            </span>
-          </td>
-        )}
-        <td data-cy="todo-title">{title}</td>
-        <td className="has-text-right">
-          <button
-            type="button"
-            className="button is-small"
-            data-cy="selectButton"
-            onClick={() => onTodoSelect(todos.find(t => t.id === id)!)}
-          >
-            <i
-              className={`fas ${selectedTodo?.id === id ? 'fa-eye-slash' : 'fa-eye'}`}
-            />
-          </button>
-        </td>
+  <table className="table is-narrow is-fullwidth">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>
+          <span className="icon">
+            <i className="fas fa-check" />
+          </span>
+        </th>
+        <th>Title</th>
+        <th> </th>
       </tr>
-    ))}
-  </tbody>
+    </thead>
+    <tbody>
+      {todos.map(todo => (
+        <tr key={todo.id} data-cy="todo">
+          <td data-cy="todo-id">{todo.id}</td>
+
+          <td>
+            {todo.completed && (
+              <span data-cy="iconCompleted" className="icon has-text-success">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
+
+          <td data-cy="todo-title">{todo.title}</td>
+
+          <td className="has-text-right">
+            <button
+              type="button"
+              className="button is-small"
+              data-cy="selectButton"
+              onClick={() => onTodoSelect(todo)}
+            >
+              <i
+                className={`fas ${
+                  selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'
+                }`}
+              />
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 );
