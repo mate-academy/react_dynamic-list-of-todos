@@ -1,6 +1,10 @@
-import React from 'react';
+import { Todo } from '../../types/Todo';
 
-export const TodoList: React.FC = () => (
+export const TodoList: React.FC<{
+  todos: Todo[];
+  onTodoSelect: (todo: Todo) => void;
+  selectedTodo: Todo | null;
+}> = ({ todos, onTodoSelect, selectedTodo }) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -14,87 +18,37 @@ export const TodoList: React.FC = () => (
         <th> </th>
       </tr>
     </thead>
-
     <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
-        <td className="is-vcentered">2</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">quis ut nam facilis et officia qui</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye-slash" />
-            </span>
-          </button>
-        </td>
-      </tr>
+      {todos.map(todo => (
+        <tr key={todo.id} data-cy="todo">
+          <td data-cy="todo-id">{todo.id}</td>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+          <td>
+            {todo.completed && (
+              <span data-cy="iconCompleted" className="icon has-text-success">
+                <i className="fas fa-check" />
+              </span>
+            )}
+          </td>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">6</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">
-            qui ullam ratione quibusdam voluptatem quia omnis
-          </p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+          <td data-cy="todo-title">{todo.title}</td>
 
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">8</td>
-        <td className="is-vcentered">
-          <span className="icon" data-cy="iconCompleted">
-            <i className="fas fa-check" />
-          </span>
-        </td>
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-success">quo adipisci enim quam ut ab</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
+          <td className="has-text-right">
+            <button
+              type="button"
+              className="button is-small"
+              data-cy="selectButton"
+              onClick={() => onTodoSelect(todo)}
+            >
+              <i
+                className={`fas ${
+                  selectedTodo?.id === todo.id ? 'fa-eye-slash' : 'fa-eye'
+                }`}
+              />
+            </button>
+          </td>
+        </tr>
+      ))}
     </tbody>
   </table>
 );
