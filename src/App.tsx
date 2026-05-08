@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,28 +6,69 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
+import classNames from 'classnames';
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const visibleTodos = todos
+    .filter(todo => {
+      switch (status) {
+        case 'active':
+          return !todo.completed;
+        case 'completed':
+          return todo.completed;
+        default:
+          return true;
+      }
+    })
+    .filter(todo => todo.title.toLowerCase().includes(query.toLowerCase()));
+
   return (
     <>
-      <div className="section">
+      <div className={classNames('section', { 'is-loading': isLoading })}>
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
-
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                query={query}
+                setQuery={setQuery}
+                status={status}
+                setStatus={setStatus}
+              />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading && <Loader />}
+              {!isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  onSelect={setSelectedTodo}
+                  selectedTodoId={selectedTodo?.id}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
+      )}
     </>
   );
 };
