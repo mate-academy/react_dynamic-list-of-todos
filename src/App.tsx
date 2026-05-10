@@ -32,7 +32,7 @@ export const App: React.FC = () => {
     setSelectedTodos(todo);
     setLoadingUser(true);
     getUser(todo.userId)
-      .then(user => setUser(user))
+      .then(userDetail => setUser(userDetail))
       .then(() => setLoadingUser(false));
   }
 
