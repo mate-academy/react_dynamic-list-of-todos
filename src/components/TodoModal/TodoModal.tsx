@@ -1,12 +1,49 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
+import { useFetch } from '../../hooks/useFetch';
 
-export const TodoModal: React.FC = () => {
+type Props = {
+  selectedTodo: Todo | null;
+  onOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+type AggregateTodo = Todo & {
+  user: User;
+};
+export const TodoModal: React.FC<Props> = ({ selectedTodo, onOpen }) => {
+  const { data: user, loading } = useFetch<User>({
+    fun: () => {
+      return getUser(selectedTodo!.userId);
+    },
+  });
+
+  const aggregateTodo: AggregateTodo | null = useMemo(() => {
+    if (!selectedTodo || !user) {
+      return null;
+    }
+
+    return {
+      ...selectedTodo,
+      user,
+    };
+  }, [user, selectedTodo]);
+
+  function handleCloseModal() {
+    onOpen(false);
+  }
+
+  if (!selectedTodo) {
+    return null;
+  }
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +52,36 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{aggregateTodo?.id}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={handleCloseModal}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {aggregateTodo?.title}
             </p>
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {aggregateTodo?.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${aggregateTodo?.user?.email}`}>
+                {aggregateTodo?.user?.name}
+              </a>
             </p>
           </div>
         </div>
