@@ -7,7 +7,7 @@ const BASE_URL =
 
 // This function creates a promise
 // that is resolved after a given delay
-function wait(delay: number): Promise<void> {
+export function wait(delay: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });
@@ -24,5 +24,23 @@ function get<T>(url: string): Promise<T> {
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
+export const getActiveTodos = () => {
+  return get<Todo[]>('/todos').then(todos =>
+    todos.filter(todo => !todo.completed),
+  );
+};
+
+export const getCompletedTodos = () => {
+  return get<Todo[]>('/todos').then(todos =>
+    todos.filter(todo => todo.completed),
+  );
+};
 
 export const getUser = (userId: number) => get<User>(`/users/${userId}`);
+
+export function minDelay<T>(promise: Promise<T>, delay = 300): Promise<T> {
+  return Promise.all([
+    promise,
+    new Promise(resolve => setTimeout(resolve, delay)),
+  ]).then(([result]) => result);
+}
