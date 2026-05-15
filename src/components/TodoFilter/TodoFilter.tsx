@@ -1,8 +1,10 @@
+type FilterStatus = 'all' | 'completed' | 'active';
+
 type Props = {
   searchQuery: string;
   onSearchChange: (newQuery: string) => void;
-  selectedFilter: 'all' | 'completed' | 'active';
-  onFilterChange: (newFilter: 'all' | 'completed' | 'active') => void;
+  selectedFilter: FilterStatus;
+  onFilterChange: (newFilter: FilterStatus) => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
@@ -17,9 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <select
           data-cy="statusSelect"
           value={selectedFilter}
-          onChange={event =>
-            onFilterChange(event.target.value as 'all' | 'completed' | 'active')
-          }
+          onChange={event => onFilterChange(event.target.value as FilterStatus)}
         >
           <option value="all">All</option>
           <option value="active">Active</option>

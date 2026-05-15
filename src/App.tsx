@@ -28,7 +28,7 @@ export const App: React.FC = () => {
 
     if (query.length > 0) {
       filteredTodos = filteredTodos.filter(todo =>
-        todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
+        todo.title.toLowerCase().includes(query.toLowerCase()),
       );
     }
 
