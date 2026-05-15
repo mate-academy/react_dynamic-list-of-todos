@@ -1,11 +1,29 @@
-export const TodoFilter = () => (
+import { Status, StatusMap } from '../../types/Status';
+
+interface Props {
+  status: Status;
+  onChangeStatus: (status: Status) => void;
+  search: string;
+  onChangeSearch: (search: string) => void;
+}
+
+export const TodoFilter = ({
+  status,
+  onChangeStatus,
+  search,
+  onChangeSearch,
+}: Props) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
+        <select
+          data-cy="statusSelect"
+          value={status}
+          onChange={event => onChangeStatus(event.target.value as Status)}
+        >
+          <option value={StatusMap.All}>All</option>
+          <option value={StatusMap.Active}>Active</option>
+          <option value={StatusMap.Completed}>Completed</option>
         </select>
       </span>
     </p>
@@ -16,6 +34,8 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={search}
+        onChange={event => onChangeSearch(event.target.value.trimStart())}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
@@ -23,7 +43,14 @@ export const TodoFilter = () => (
 
       <span className="icon is-right" style={{ pointerEvents: 'all' }}>
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
+        {search && (
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            onClick={() => onChangeSearch('')}
+          />
+        )}
       </span>
     </p>
   </form>
