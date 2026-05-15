@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -7,8 +7,34 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 
 export const App: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+  const [viewTodoModal, setViewTodoModal] = useState<Todo | null>(null);
+
+  const handleViewModal = (todo: Todo) => {
+    setViewTodoModal(todo);
+  };
+
+  const handleCloseTodoModal = () => {
+    setViewTodoModal(null);
+  };
+
+  const handleFilterChange = useCallback((filtered: Todo[]) => {
+    setFilteredTodos(filtered);
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getTodos()
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <>
       <div className="section">
@@ -17,18 +43,30 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter todos={todos} onFilterChange={handleFilterChange} />
             </div>
 
             <div className="block">
-              <Loader />
-              <TodoList />
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={filteredTodos}
+                  handleViewModal={handleViewModal}
+                  viewTodoModal={viewTodoModal}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {viewTodoModal && (
+        <TodoModal
+          todo={viewTodoModal}
+          handleCloseTodoModal={handleCloseTodoModal}
+        />
+      )}
     </>
   );
 };
