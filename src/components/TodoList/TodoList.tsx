@@ -1,6 +1,15 @@
+/* eslint-disable max-len */
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
-export const TodoList: React.FC = () => (
+type TodoListProps = {
+  todos: Todo[];
+  selectedTodo: Todo | null;
+  openModal: (todo: Todo) => void;
+};
+
+export const TodoList = ({ todos, openModal, selectedTodo }: TodoListProps) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -16,21 +25,48 @@ export const TodoList: React.FC = () => (
     </thead>
 
     <tbody>
-      <tr data-cy="todo" className="">
-        <td className="is-vcentered">1</td>
-        <td className="is-vcentered" />
-        <td className="is-vcentered is-expanded">
-          <p className="has-text-danger">delectus aut autem</p>
-        </td>
-        <td className="has-text-right is-vcentered">
-          <button data-cy="selectButton" className="button" type="button">
-            <span className="icon">
-              <i className="far fa-eye" />
-            </span>
-          </button>
-        </td>
-      </tr>
-      <tr data-cy="todo" className="has-background-info-light">
+      {todos.map(todo => {
+        return (
+          <tr data-cy="todo" className="" key={todo.id}>
+            <td className="is-vcentered">{todo.id}</td>
+            <td className="is-vcentered">
+              {todo.completed && (
+                <span className="icon" data-cy="iconCompleted">
+                  <i className="fas fa-check"></i>
+                </span>
+              )}
+            </td>
+            <td className="is-vcentered is-expanded">
+              <p
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.title}
+              </p>
+            </td>
+            <td className="has-text-right is-vcentered">
+              <button
+                data-cy="selectButton"
+                className="button"
+                type="button"
+                onClick={() => openModal(todo)}
+              >
+                <span className="icon">
+                  {selectedTodo !== null ? (
+                    <i className="far fa-eye-slash" />
+                  ) : (
+                    <i className="far fa-eye" />
+                  )}
+                </span>
+              </button>
+            </td>
+          </tr>
+        );
+      })}
+
+      {/* <tr data-cy="todo" className="has-background-info-light">
         <td className="is-vcentered">2</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -43,9 +79,9 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
 
-      <tr data-cy="todo" className="">
+      {/* <tr data-cy="todo" className="">
         <td className="is-vcentered">1</td>
         <td className="is-vcentered" />
         <td className="is-vcentered is-expanded">
@@ -94,7 +130,7 @@ export const TodoList: React.FC = () => (
             </span>
           </button>
         </td>
-      </tr>
+      </tr> */}
     </tbody>
   </table>
 );
