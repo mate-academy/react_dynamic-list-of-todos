@@ -2,14 +2,14 @@ import React, { Dispatch } from 'react';
 
 type TodoFilterProps = {
   search: string;
-  setFilter: (filter: 'all' | 'active' | 'completed') => void;
-  setSearch: Dispatch<React.SetStateAction<string>>;
+  onFilter: (filter: 'all' | 'active' | 'completed') => void;
+  onSearch: Dispatch<React.SetStateAction<string>>;
 };
 
 export const TodoFilter = ({
-  setFilter,
+  onFilter,
   search,
-  setSearch,
+  onSearch,
 }: TodoFilterProps) => (
   <form className="field has-addons">
     <p className="control">
@@ -17,7 +17,7 @@ export const TodoFilter = ({
         <select
           data-cy="statusSelect"
           onChange={event =>
-            setFilter(event.target.value as 'all' | 'active' | 'completed')
+            onFilter(event.target.value as 'all' | 'active' | 'completed')
           }
         >
           <option value="all">All</option>
@@ -34,7 +34,7 @@ export const TodoFilter = ({
         className="input"
         placeholder="Search..."
         value={search}
-        onChange={event => setSearch(event.target.value)}
+        onChange={event => onSearch(event.target.value)}
       />
 
       <span className="icon is-left">
@@ -48,7 +48,7 @@ export const TodoFilter = ({
             data-cy="clearSearchButton"
             type="button"
             className="delete"
-            onClick={() => setSearch('')}
+            onClick={() => onSearch('')}
           />
         </span>
       )}

@@ -71,9 +71,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                setFilter={setFilter}
+                onFilter={setFilter}
                 search={search}
-                setSearch={setSearch}
+                onSearch={setSearch}
               />
             </div>
 
@@ -83,7 +83,7 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={fiteredTodos}
-                  openModal={openModal}
+                  onSelectTodo={openModal}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -95,7 +95,7 @@ export const App: React.FC = () => {
       {selectedTodo !== null && (
         <TodoModal
           todo={selectedTodoModal!}
-          setSelectedTodo={setSelectedTodo}
+          onCloseModal={setSelectedTodo}
         />
       )}
     </>

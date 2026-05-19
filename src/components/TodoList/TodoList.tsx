@@ -6,10 +6,10 @@ import classNames from 'classnames';
 type TodoListProps = {
   todos: Todo[];
   selectedTodo: Todo | null;
-  openModal: (todo: Todo) => void;
+  onSelectTodo: (todo: Todo) => void;
 };
 
-export const TodoList = ({ todos, openModal, selectedTodo }: TodoListProps) => (
+export const TodoList = ({ todos, onSelectTodo, selectedTodo }: TodoListProps) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -51,7 +51,7 @@ export const TodoList = ({ todos, openModal, selectedTodo }: TodoListProps) => (
                 data-cy="selectButton"
                 className="button"
                 type="button"
-                onClick={() => openModal(todo)}
+                onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
                   {selectedTodo !== null ? (

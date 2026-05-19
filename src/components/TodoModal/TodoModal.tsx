@@ -6,15 +6,15 @@ import { User } from '../../types/User';
 
 type TodoModalProps = {
   todo: Todo;
-  setSelectedTodo: (todo: Todo | null) => void;
+  onCloseModal: (todo: Todo | null) => void;
 };
 
-export const TodoModal = ({ todo, setSelectedTodo }: TodoModalProps) => {
+export const TodoModal = ({ todo, onCloseModal }: TodoModalProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const closeModal = () => {
-    setSelectedTodo(null);
+    onCloseModal(null);
   };
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const TodoModal = ({ todo, setSelectedTodo }: TodoModalProps) => {
 
                 {' by '}
 
-                <a href="mailto:Sincere@april.biz">{user?.name}</a>
+                <a href={`mailto:${user?.email}`}>{user?.name}</a>
               </p>
             )}
           </div>
