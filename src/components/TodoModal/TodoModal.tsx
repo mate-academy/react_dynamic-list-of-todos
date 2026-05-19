@@ -1,12 +1,36 @@
 import React from 'react';
-import { Loader } from '../Loader';
+import classNames from 'classnames';
 
-export const TodoModal: React.FC = () => {
+import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+
+type Props = {
+  isOpen: boolean;
+  todo: Todo | null;
+  user: User | null;
+  isLoading: boolean;
+  onClose: () => void;
+};
+
+export const TodoModal: React.FC<Props> = ({
+  isOpen,
+  todo,
+  user,
+  isLoading,
+  onClose,
+}) => {
+  if (!isOpen || todo === null) {
+    return null;
+  }
+
+  const title = todo.completed ? 'Done' : 'Planned';
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {isLoading || user === null ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +39,36 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              {`Todo #${todo.id}`}
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {title}
+              </strong>
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
         </div>
