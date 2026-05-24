@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 
 type Props = {
   status: string;
@@ -28,7 +29,11 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
     </p>
 
-    <p className="control is-expanded has-icons-left has-icons-right">
+    <p
+      className={cn('control', 'is-expanded', 'has-icons-left', {
+        'has-icons-right': !!query,
+      })}
+    >
       <input
         data-cy="searchInput"
         type="text"
