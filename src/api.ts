@@ -1,7 +1,7 @@
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 
-// eslint-disable-next-line operator-linebreak
+// // eslint-disable-next-line operator-linebreak
 const BASE_URL =
   'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
