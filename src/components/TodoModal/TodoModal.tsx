@@ -10,6 +10,7 @@ type TodoModalProps = {
 export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     getUser(todo.userId)
       .then(userFromServer => {
@@ -20,6 +21,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({ todo, onClose }) => {
         setLoading(false);
       });
   }, [todo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

@@ -14,12 +14,14 @@ const getFilteredTodos = (
 ) => {
   let filteredTodos = todos;
   const preparedSearch = filters.search.trim().toLowerCase();
+
   // Filter by search
   if (preparedSearch !== '') {
     filteredTodos = filteredTodos.filter(todo =>
       todo.title.toLowerCase().includes(preparedSearch),
     );
   }
+
   // Filter by completed
   if (filters.completed !== CompletedFilter.All) {
     filteredTodos = filteredTodos.filter(todo => {
@@ -33,14 +35,17 @@ const getFilteredTodos = (
       }
     });
   }
+
   return filteredTodos;
 };
+
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [search, setSearch] = useState('');
   const [completedFilter, setCompletedFilter] = useState(CompletedFilter.All);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
   useEffect(() => {
     getTodos()
       .then(todosFromServer => {
@@ -55,6 +60,7 @@ export const App: React.FC = () => {
     search,
     completed: completedFilter,
   });
+
   return (
     <>
       <div className="section">
