@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type Props = {
@@ -19,38 +20,51 @@ export const TodoList: React.FC<Props> = ({
           const isSelected = selectedTodoId === todo.id;
 
           return (
-            <tr key={todo.id} data-cy="todo">
-              {/* ID */}
+            <tr
+              key={todo.id}
+              data-cy="todo"
+              className={classNames({
+                'is-selected': isSelected,
+              })}
+            >
               <td className="is-narrow">{todo.id}</td>
 
-              {/* TITLE */}
               <td className="is-expanded">{todo.title}</td>
 
-              {/* COMPLETED ICON (CYPRESS NEEDS THIS EXACT ID) */}
               <td className="is-narrow">
                 {todo.completed && (
-                  <span data-cy="iconCompleted" className="icon">
-                    <i className="fas fa-check-circle has-text-success" />
+                  <span
+                    data-cy="iconCompleted"
+                    className={classNames('icon')}
+                  >
+                    <i
+                      className={classNames(
+                        'fas',
+                        'fa-check-circle',
+                        'has-text-success',
+                      )}
+                    />
                   </span>
                 )}
               </td>
 
-              {/* ACTION */}
               <td className="has-text-right is-vcentered">
                 {!isSelected ? (
                   <button
+                    type="button"
                     data-cy="selectButton"
-                    className="button"
+                    className={classNames('button')}
                     onClick={() => onSelect(todo)}
                   >
-                    <i className="fas fa-eye" />
+                    <i className={classNames('fas', 'fa-eye')} />
                   </button>
                 ) : (
                   <button
+                    type="button"
                     data-cy="selectedButton"
-                    className="button is-primary"
+                    className={classNames('button', 'is-primary')}
                   >
-                    <i className="fas fa-eye-slash" />
+                    <i className={classNames('fas', 'fa-eye-slash')} />
                   </button>
                 )}
               </td>

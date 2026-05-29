@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import classNames from 'classnames';
 
 import { getTodos, getUser } from './api';
 import { Todo } from './types/Todo';
@@ -30,7 +31,9 @@ export const App: React.FC = () => {
   }, []);
 
   const filteredTodos = todos.filter(todo => {
-    const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
+    const matchesQuery = todo.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
 
     const matchesStatus =
       status === 'all'
@@ -59,7 +62,11 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="section">
+    <div
+      className={classNames('section', {
+        'is-loading': loading,
+      })}
+    >
       <div className="container">
         <div className="box">
           <h1 className="title">Todos:</h1>
@@ -80,7 +87,7 @@ export const App: React.FC = () => {
               <TodoList
                 todos={filteredTodos}
                 onSelect={openTodo}
-                selectedTodoId={selectedTodo?.id}
+                selectedTodoId={selectedTodo?.id || null}
               />
             )}
           </div>
