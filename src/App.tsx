@@ -30,7 +30,9 @@ export const App: React.FC = () => {
     let filteredTodos = [...allTodos];
 
     if (query) {
-      filteredTodos = allTodos.filter(todo => todo.title.includes(query));
+      filteredTodos = allTodos.filter(todo =>
+        todo.title.toLowerCase().includes(query.toLowerCase()),
+      );
     }
 
     switch (status) {
@@ -66,10 +68,12 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoading && <Loader />}
-              {!isLoading && (
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <TodoList
                   todos={visibleTodos}
+                  selectedTodo={selectedTodo}
                   setSelectedTodo={setSelectedTodo}
                   setIsModalOpen={setIsModalOpen}
                 />
@@ -83,6 +87,7 @@ export const App: React.FC = () => {
         <TodoModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
+          setSelectedTodo={setSelectedTodo}
           todo={selectedTodo}
         />
       )}

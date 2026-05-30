@@ -4,12 +4,14 @@ import { TodoInfo } from '../TodoInfo/TodoInfo';
 
 type Props = {
   todos: Todo[];
+  selectedTodo: Todo | null;
   setSelectedTodo: (todo: Todo | null) => void;
   setIsModalOpen: (isOpen: boolean) => void;
 };
 
 export const TodoList: React.FC<Props> = ({
   todos,
+  selectedTodo,
   setSelectedTodo,
   setIsModalOpen,
 }) => (
@@ -32,6 +34,7 @@ export const TodoList: React.FC<Props> = ({
         <TodoInfo
           todo={todo}
           key={todo.id}
+          selectedTodo={selectedTodo}
           setSelectedTodo={setSelectedTodo}
           setIsModalOpen={setIsModalOpen}
         />

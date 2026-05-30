@@ -8,12 +8,14 @@ import { getUser } from '../../api';
 type Props = {
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
+  setSelectedTodo: (todo: Todo | null) => void;
   todo: Todo | null;
 };
 
 export const TodoModal: React.FC<Props> = ({
   isModalOpen,
   setIsModalOpen,
+  setSelectedTodo,
   todo,
 }) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -21,11 +23,17 @@ export const TodoModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (todo?.userId) {
-      getUser(todo.userId).then(user => setSelectedUser(user));
+      getUser(todo.userId).then(user => {
+        setSelectedUser(user);
+        setIsLoading(false);
+      });
     }
+  }, []);
 
-    setIsLoading(false);
-  }, [todo]);
+  function handleModalClose() {
+    setIsModalOpen(false);
+    setSelectedTodo(null);
+  }
 
   return (
     <div
@@ -51,7 +59,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setIsModalOpen(false)}
+              onClick={handleModalClose}
             />
           </header>
 
@@ -62,7 +70,9 @@ export const TodoModal: React.FC<Props> = ({
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <strong className="has-text-danger">
+                {todo?.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
