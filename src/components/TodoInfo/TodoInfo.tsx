@@ -20,11 +20,11 @@ export const TodoInfo: React.FC<Props> = ({
   }
 
   return (
-    <tr data-cy="todo" className="" key={todo.id}>
+    <tr data-cy="todo" className="">
       <td className="is-vcentered">{todo.id}</td>
       <td className="is-vcentered">
         {todo.completed && (
-          <span className="icon">
+          <span className="icon" data-cy="iconCompleted">
             <i className="fas fa-check" />
           </span>
         )}
