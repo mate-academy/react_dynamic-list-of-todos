@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 

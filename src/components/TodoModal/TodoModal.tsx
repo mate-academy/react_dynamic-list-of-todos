@@ -28,7 +28,7 @@ export const TodoModal: React.FC<Props> = ({
         setIsLoading(false);
       });
     }
-  }, []);
+  }, [todo]);
 
   function handleModalClose() {
     setIsModalOpen(false);
