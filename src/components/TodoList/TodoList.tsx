@@ -1,9 +1,10 @@
 import React from 'react';
+import classNames from 'classnames'; // Додаємо імпорт
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
-  selectedTodoId: number | null; // Додаємо ID вибраної задачі
+  selectedTodoId: number | null;
   onSelectTodo: (todo: Todo) => void;
 }
 
@@ -13,6 +14,7 @@ export const TodoList: React.FC<Props> = ({
   onSelectTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
+    {/* ... thead залишається без змін ... */}
     <thead>
       <tr>
         <th>#</th>
@@ -28,19 +30,20 @@ export const TodoList: React.FC<Props> = ({
 
     <tbody>
       {todos.map(todo => {
-        // Перевіряємо, чи є поточна задача вибраною
         const isSelected = todo.id === selectedTodoId;
 
         return (
           <tr
             key={todo.id}
             data-cy="todo"
-            className={isSelected ? 'has-background-info-light' : ''}
+            // Використовуємо classNames для підсвічування рядка
+            className={classNames({
+              'has-background-info-light': isSelected,
+            })}
           >
             <td className="is-vcentered">{todo.id}</td>
 
             <td className="is-vcentered">
-              {/* Показуємо галочку тільки якщо задача виконана */}
               {todo.completed && (
                 <span className="icon" data-cy="iconCompleted">
                   <i className="fas fa-check" />
@@ -49,18 +52,18 @@ export const TodoList: React.FC<Props> = ({
             </td>
 
             <td className="is-vcentered is-expanded">
-              {/* Колір тексту залежить від статусу */}
+              {/* Використовуємо classNames для кольору тексту */}
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
             </td>
 
             <td className="has-text-right is-vcentered">
-              {/* При кліку передаємо об'єкт задачі наверх */}
               <button
                 data-cy="selectButton"
                 className="button"
@@ -68,9 +71,12 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
-                  {/* Змінюємо іконку ока, якщо задача вибрана */}
+                  {/* Використовуємо classNames для іконок */}
                   <i
-                    className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`}
+                    className={classNames('far', {
+                      'fa-eye-slash': isSelected,
+                      'fa-eye': !isSelected,
+                    })}
                   />
                 </span>
               </button>

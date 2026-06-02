@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames'; // Додаємо імпорт
 
 interface Props {
   query: string;
@@ -13,18 +14,12 @@ export const TodoFilter: React.FC<Props> = ({
   status,
   setStatus,
 }) => {
-  // 1. Виносимо обробник сабміту в окрему функцію
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
-  // 2. Додаємо return, оскільки тепер у нас є тіло функції {}
   return (
-    <form
-      className="field has-addons"
-      onSubmit={handleSubmit} // <--- Просто передаємо функцію сюди
-    >
-      {/* ... весь твій попередній код всередині форми залишається без змін ... */}
+    <form className="field has-addons" onSubmit={handleSubmit}>
       <p className="control">
         <span className="select">
           <select
@@ -39,7 +34,12 @@ export const TodoFilter: React.FC<Props> = ({
         </span>
       </p>
 
-      <p className="control is-expanded has-icons-left has-icons-right">
+      {/* Динамічно додаємо has-icons-right через classNames */}
+      <p
+        className={classNames('control is-expanded has-icons-left', {
+          'has-icons-right': query.length > 0,
+        })}
+      >
         <input
           data-cy="searchInput"
           type="text"

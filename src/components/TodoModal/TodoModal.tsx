@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import classNames from 'classnames'; // Додаємо імпорт
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -10,11 +11,9 @@ interface Props {
 }
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  // Стан для збереження даних юзера та статусу завантаження
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Відправляємо запит щоразу, коли змінюється вибрана задача (її userId)
   useEffect(() => {
     setIsLoading(true);
     getUser(todo.userId)
@@ -26,7 +25,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {/* Показуємо лоадер, поки вантажиться або якщо юзера ще немає */}
       {isLoading || !user ? (
         <Loader />
       ) : (
@@ -39,7 +37,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               Todo #{todo.id}
             </div>
 
-            {/* Додаємо обробник кліку для закриття модалки */}
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               type="button"
@@ -55,16 +52,18 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* Динамічно рендеримо статус залежно від todo.completed */}
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              {/* Використовуємо classNames для статусу */}
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              {/* Динамічно підставляємо пошту та ім'я */}
               <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
