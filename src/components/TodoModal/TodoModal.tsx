@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader } from '../Loader';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+  // Стан для збереження даних юзера та статусу завантаження
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Відправляємо запит щоразу, коли змінюється вибрана задача (її userId)
+  useEffect(() => {
+    setIsLoading(true);
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => setIsLoading(false));
+  }, [todo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {/* Показуємо лоадер, поки вантажиться або якщо юзера ще немає */}
+      {isLoading || !user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -15,25 +36,36 @@ export const TodoModal: React.FC = () => {
               className="modal-card-title has-text-weight-medium"
               data-cy="modal-header"
             >
-              Todo #2
+              Todo #{todo.id}
             </div>
 
+            {/* Додаємо обробник кліку для закриття модалки */}
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
           </header>
 
           <div className="modal-card-body">
             <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
+              {todo.title}
             </p>
 
             <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              {/* Динамічно рендеримо статус залежно від todo.completed */}
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              {/* Динамічно підставляємо пошту та ім'я */}
+              <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
         </div>
