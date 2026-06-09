@@ -7,7 +7,7 @@ const BASE_URL =
 
 // This function creates a promise
 // that is resolved after a given delay
-function wait(delay: number): Promise<void> {
+export function wait(delay: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
   });

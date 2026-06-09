@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { getUser, wait } from '../../api';
 
 type Props = {
   todo: Todo;
@@ -17,7 +17,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   useEffect(() => {
     setIsUserLoading(true);
 
-    getUser(todo.userId)
+    wait(300)
+      .then(() => getUser(todo.userId))
       .then(setUser)
       .finally(() => setIsUserLoading(false));
   }, [todo.userId]);

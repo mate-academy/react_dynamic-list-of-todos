@@ -63,8 +63,12 @@ export const TodoList: React.FC<Props> = ({
                 onClick={() => onSelectTodo(todo)}
               >
                 <span className="icon">
+                  {/* СТАЛО: */}
                   <i
-                    className={`far ${isCurrent ? 'fa-eye-slash' : 'fa-eye'}`}
+                    className={classNames('far', {
+                      'fa-eye-slash': isCurrent,
+                      'fa-eye': !isCurrent,
+                    })}
                   />
                 </span>
               </button>
