@@ -59,8 +59,8 @@ export const App: React.FC = () => {
               {!loading && (
                 <TodoList
                   todos={filteredTodos}
-                  setSelectedTodo={setSelectedTodo}
                   selectedTodo={selectedTodo}
+                  setSelectedTodo={setSelectedTodo}
                 />
               )}
             </div>

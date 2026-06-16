@@ -3,6 +3,7 @@ import { getUser } from '../../api';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
 import { Loader } from '../Loader';
+import classNames from 'classnames';
 
 type Props = {
   selectedTodo: Todo | null;
@@ -36,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
             className="modal-card-title has-text-weight-medium"
             data-cy="modal-header"
           >
-            Todo #{selectedTodo?.id}
+            Todo #{selectedTodo.id}
           </div>
 
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -50,7 +51,7 @@ export const TodoModal: React.FC<Props> = ({
 
         <div className="modal-card-body">
           <p className="block" data-cy="modal-title">
-            {selectedTodo?.title}
+            {selectedTodo.title}
           </p>
 
           <p className="block" data-cy="modal-user">
@@ -58,11 +59,14 @@ export const TodoModal: React.FC<Props> = ({
               <Loader />
             ) : (
               <>
-                {selectedTodo?.completed === true ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
+                <strong
+                  className={classNames({
+                    'has-text-success': selectedTodo.completed,
+                    'has-text-danger': !selectedTodo.completed,
+                  })}
+                >
+                  {selectedTodo.completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
 
