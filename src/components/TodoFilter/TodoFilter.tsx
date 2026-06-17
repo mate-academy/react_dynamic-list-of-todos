@@ -1,4 +1,4 @@
-import { Filter } from '../../types/Filter';
+type Filter = 'all' | 'active' | 'completed';
 
 export interface Props {
   setFilter: (filter: Filter) => void;
