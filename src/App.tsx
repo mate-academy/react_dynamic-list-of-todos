@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
-/* eslint-disable no-console */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
@@ -9,20 +8,39 @@ import { TodoFilter } from './components/TodoFilter';
 import { getTodos } from './api';
 import { Todo } from './types/Todo';
 import { Loader } from './components/Loader';
-import { TodoModal } from './components/TodoModal';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
+
+type Status = 'all' | 'active' | 'completed';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [status, setStatus] = useState<Status>('all');
+  const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTodos()
-      .then(setTodos);
+      .then(setTodos)
+      .finally(() => setIsLoading(false));
   }, []);
 
-  const handleSelectingTodo = useCallback((todo: Todo) => {
-    setSelectedTodo(todo);
-  }, []);
+  const visibleTodos = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    return todos.filter(todo => {
+      const matchesStatus = status === 'all'
+        || (status === 'completed' && todo.completed)
+        || (status === 'active' && !todo.completed);
+
+      const matchesQuery = todo.title.toLowerCase().includes(normalizedQuery);
+
+      return matchesStatus && matchesQuery;
+    });
+  }, [todos, status, query]);
 
   return (
     <>
@@ -32,19 +50,24 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                status={status}
+                query={query}
+                onStatusChange={setStatus}
+                onQueryChange={setQuery}
+              />
             </div>
 
             <div className="block">
-              {todos.length > 0
-                ? (
-                  <TodoList
-                    todos={todos}
-                    selectedTodoId={selectedTodo?.id}
-                    onSelectTodo={handleSelectingTodo}
-                  />
-                )
-                : <Loader />}
+              {isLoading && <Loader />}
+
+              {!isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodo?.id}
+                  onSelectTodo={setSelectedTodo}
+                />
+              )}
             </div>
           </div>
         </div>
