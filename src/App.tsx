@@ -29,13 +29,18 @@ export const App: React.FC = () => {
 
   const handleSelectTodo = (todo: Todo) => {
     setSelectedTodo(todo);
+    setUser(null); // Очищаємо попереднього юзера перед новим запитом
     setIsUserLoading(true);
+
     getUser(todo.userId)
       .then(setUser)
       .finally(() => setIsUserLoading(false));
   };
 
-  const handleCloseModal = () => setSelectedTodo(null);
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+    setUser(null); // Очищаємо юзера при закритті модалки
+  };
 
   const visibleTodos = useMemo(() => {
     return todos.filter(todo => {
