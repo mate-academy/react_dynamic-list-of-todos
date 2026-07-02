@@ -1,43 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
+import { getUser } from '../../api';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsUserLoading(true);
+    getUser(todo.userId)
+      .then(setUser)
+      .catch(() => {})
+      .finally(() => setIsUserLoading(false));
+  }, [todo.userId]);
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
+      <div className="modal-card">
+        <header className="modal-card-head" data-cy="modal-header">
+          <p className="modal-card-title" data-cy="modal-title">
+            {todo.title}
+          </p>
+          <button
+            type="button"
+            className="delete"
+            data-cy="modal-close"
+            aria-label="close"
+            onClick={onClose}
+          />
+        </header>
+        <section className="modal-card-body">
+          <p>
+            <strong>Title:</strong> {todo.title}
+          </p>
+          <p>
+            <strong>Status:</strong> {todo.completed ? 'Completed' : 'Active'}
+          </p>
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+          <hr />
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
-
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
-
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+          {isUserLoading ? (
+            <Loader />
+          ) : (
+            user && (
+              <div>
+                <p>
+                  <strong>User:</strong> {user.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
+                </p>
+              </div>
+            )
+          )}
+        </section>
+        <footer className="modal-card-foot">
+          <button type="button" className="button" onClick={onClose}>
+            Close
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };
