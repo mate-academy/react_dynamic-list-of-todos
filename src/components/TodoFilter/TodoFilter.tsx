@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 interface Props {
   filterTitle: string;
@@ -14,28 +15,28 @@ export const TodoFilter: React.FC<Props> = ({
   onFilterStatusChange,
 }) => {
   return (
-    <div className="field is-grouped">
-      <div className="control is-expanded has-icons-right">
-        <input
-          type="text"
-          className="input"
-          placeholder="Filter by title"
-          data-cy="searchInput"
-          value={filterTitle}
-          onChange={e => onFilterTitleChange(e.target.value)}
-        />
-
-        {filterTitle && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+    <div className="field is-grouped is-grouped-multiline">
+      <div className="control is-expanded">
+        <div className="input-container">
+          <input
+            type="text"
+            data-cy="searchInput"
+            className="input"
+            placeholder="Search todo..."
+            value={filterTitle}
+            onChange={e => onFilterTitleChange(e.target.value)}
+          />
+          {filterTitle && (
             <button
               type="button"
-              className="delete"
               data-cy="clearSearchButton"
-              aria-label="clear filter"
+              className="clear-button"
               onClick={() => onFilterTitleChange('')}
-            />
-          </span>
-        )}
+            >
+              x
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="control">
@@ -44,6 +45,7 @@ export const TodoFilter: React.FC<Props> = ({
             data-cy="statusSelect"
             value={filterStatus}
             onChange={e => onFilterStatusChange(e.target.value)}
+            className={classNames({ 'is-danger': false })}
           >
             <option value="all">All</option>
             <option value="active">Active</option>

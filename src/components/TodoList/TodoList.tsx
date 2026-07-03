@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -46,7 +47,10 @@ export const TodoList: React.FC<Props> = ({
                 >
                   <span className="icon">
                     <i
-                      className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={classNames('far', {
+                        'fa-eye-slash': isSelected,
+                        'fa-eye': !isSelected,
+                      })}
                     />
                   </span>
                   <span>{isSelected ? 'Hide' : 'Show'}</span>
