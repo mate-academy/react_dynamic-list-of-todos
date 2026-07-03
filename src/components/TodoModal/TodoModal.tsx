@@ -15,6 +15,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
   useEffect(() => {
     setIsUserLoading(true);
+    setUser(null);
     getUser(todo.userId)
       .then(setUser)
       .catch(() => {})
@@ -22,13 +23,16 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   }, [todo.userId]);
 
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div
+      className="modal is-active"
+      data-cy="modal"
+      style={{ display: 'flex' }}
+    >
       <div className="modal-background" onClick={onClose} />
       <div className="modal-card">
-        <header className="modal-card-head" data-cy="modal-header">
-          <p className="modal-card-title" data-cy="modal-title">
+        <header className="modal-card-head">
+          <p className="modal-card-title" data-cy="modal-header">
             Todo #{todo.id}
-            {todo.title}
           </p>
           <button
             type="button"
@@ -38,10 +42,11 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             onClick={onClose}
           />
         </header>
+
         <section className="modal-card-body">
-          <p>
-            <strong>Status:</strong> {todo.completed ? 'Completed' : 'Active'}
-          </p>
+          <div data-cy="modal-title">
+            <p>{todo.title}</p>
+          </div>
 
           <hr />
 
@@ -49,17 +54,13 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             <Loader />
           ) : (
             user && (
-              <div>
-                <p>
-                  <strong>User:</strong> {user.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {user.email}
-                </p>
+              <div data-cy="modal-user">
+                {todo.completed ? 'Done' : 'Planned'} by {user.name}
               </div>
             )
           )}
         </section>
+
         <footer className="modal-card-foot">
           <button type="button" className="button" onClick={onClose}>
             Close

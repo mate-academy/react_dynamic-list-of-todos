@@ -1,59 +1,70 @@
 import React from 'react';
-import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
+  selectedTodoId: number | null;
   onSelectTodo: (todo: Todo) => void;
-  selectedTodoId?: number | null;
+  onClearSelection: () => void;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  onSelectTodo,
   selectedTodoId,
+  onSelectTodo,
+  onClearSelection,
 }) => {
   return (
-    <table className="todo-list table is-fullwidth is-striped is-hoverable">
+    <table className="table is-narrow is-fullwidth">
       <thead>
         <tr>
           <th>#</th>
+          <th>
+            <span className="icon">
+              <i className="fas fa-check" />
+            </span>
+          </th>
           <th>Title</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th> </th>
         </tr>
       </thead>
       <tbody>
         {todos.map(todo => {
-          const isSelected = selectedTodoId === todo.id;
+          const isSelected = todo.id === selectedTodoId;
 
           return (
-            <tr key={todo.id} data-cy="todo">
-              <td>{todo.id}</td>
-              <td>{todo.title}</td>
-              <td>
+            <tr
+              key={todo.id}
+              className={isSelected ? 'has-background-info-light' : ''}
+              data-cy="todo"
+            >
+              <td className="is-vcentered">{todo.id}</td>
+              <td className="is-vcentered">
                 {todo.completed && (
                   <span className="icon" data-cy="iconCompleted">
                     <i className="fas fa-check" />
                   </span>
                 )}
               </td>
-              <td>
+              <td
+                className={`is-vcentered ${
+                  todo.completed ? 'has-text-success' : 'has-text-danger'
+                }`}
+              >
+                {todo.title}
+              </td>
+              <td className="is-vcentered has-text-right">
                 <button
                   type="button"
-                  className="button is-link is-small"
+                  className="button is-link is-inverted"
                   data-cy="selectButton"
-                  onClick={() => onSelectTodo(todo)}
+                  onClick={() =>
+                    isSelected ? onClearSelection() : onSelectTodo(todo)
+                  }
                 >
                   <span className="icon">
-                    <i
-                      className={classNames('far', {
-                        'fa-eye-slash': isSelected,
-                        'fa-eye': !isSelected,
-                      })}
-                    />
+                    <i className={`fas fa-eye${isSelected ? '-slash' : ''}`} />
                   </span>
-                  <span>{isSelected ? 'Hide' : 'Show'}</span>
                 </button>
               </td>
             </tr>

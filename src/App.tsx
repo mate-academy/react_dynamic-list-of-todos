@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import 'bulma/css/bulma.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import { Todo } from './types/Todo';
+import { getTodos } from './api';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-
-import { getTodos } from './api';
-import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -27,18 +23,10 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const handleSelectTodo = (todo: Todo) => {
-    if (selectedTodo?.id === todo.id) {
-      setSelectedTodo(null);
-    } else {
-      setSelectedTodo(todo);
-    }
-  };
-
-  const visibleTodos = todos.filter(todo => {
+  const filteredTodos = todos.filter(todo => {
     const matchesTitle = todo.title
       .toLowerCase()
-      .includes(filterTitle.toLowerCase().trim());
+      .includes(filterTitle.toLowerCase());
 
     if (filterStatus === 'active') {
       return matchesTitle && !todo.completed;
@@ -54,24 +42,27 @@ export const App: React.FC = () => {
   return (
     <div className="section">
       <div className="container">
-        <h1 className="title">Dynamic list of todos</h1>
-
         <div className="box">
-          <TodoFilter
-            filterTitle={filterTitle}
-            onFilterTitleChange={setFilterTitle}
-            filterStatus={filterStatus}
-            onFilterStatusChange={setFilterStatus}
-          />
+          <h1 className="title is-3">Dynamic List of Todos</h1>
+
+          <div className="block">
+            <TodoFilter
+              query={filterTitle}
+              onQueryChange={setFilterTitle}
+              status={filterStatus}
+              onStatusChange={setFilterStatus}
+            />
+          </div>
 
           <div className="block">
             {isLoading ? (
               <Loader />
             ) : (
               <TodoList
-                todos={visibleTodos}
-                onSelectTodo={handleSelectTodo}
-                selectedTodoId={selectedTodo?.id}
+                todos={filteredTodos}
+                selectedTodoId={selectedTodo?.id || null}
+                onSelectTodo={setSelectedTodo}
+                onClearSelection={() => setSelectedTodo(null)}
               />
             )}
           </div>
