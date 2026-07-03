@@ -27,6 +27,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       <div className="modal-card">
         <header className="modal-card-head" data-cy="modal-header">
           <p className="modal-card-title" data-cy="modal-title">
+            Todo #{todo.id}
             {todo.title}
           </p>
           <button
