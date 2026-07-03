@@ -26,11 +26,9 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
       <div className="modal-background" onClick={onClose} />
       <div className="modal-card">
         <header className="modal-card-head" data-cy="modal-header">
-          {/* Переносимо селектор title безпосередньо на контейнер або окремий тег,
-            щоб тест знайшов і номер, і назву, якщо він шукає їх всередині */}
-          <div className="modal-card-title" data-cy="modal-title">
-            Todo #{todo.id}
-          </div>
+          <p className="modal-card-title" data-cy="modal-title">
+            {todo.title}
+          </p>
           <button
             type="button"
             className="delete"
@@ -40,10 +38,6 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
           />
         </header>
         <section className="modal-card-body">
-          {/* Додаємо чіткий дата-атрибут для назви справи, якщо тест шукає title саме тут */}
-          <p data-cy="todo-title">
-            <strong>Title:</strong> {todo.title}
-          </p>
           <p>
             <strong>Status:</strong> {todo.completed ? 'Completed' : 'Active'}
           </p>
