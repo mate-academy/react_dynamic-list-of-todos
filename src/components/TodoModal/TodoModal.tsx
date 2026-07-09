@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+interface UserProps {
+  user: User;
+}
+
+export const TodoModal: React.FC<UserProps> = ({ user }: UserProps) => {
+  const [loader, setLoader] = useState(true);
+
+  useEffect(() => {
+    setLoader(false);
+  }, []);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {loader ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -33,7 +44,7 @@ export const TodoModal: React.FC = () => {
 
               {' by '}
 
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
+              <a href={`mailto:${user.email}`}>{user.name}</a>
             </p>
           </div>
         </div>
