@@ -7,9 +7,8 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos, getUser } from './api';
+import { getTodos } from './api';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 
 enum FilterType {
   all = 'all',
@@ -19,19 +18,12 @@ enum FilterType {
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [chouseUser, setChouseUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filter, setFilter] = useState<FilterType>(FilterType.all);
   const [querry, setQuerry] = useState('');
 
   const [loader, setLoader] = useState(true);
-
-  const [userId, setUserId] = useState(0);
 
   useEffect(() => {
     getTodos().then(todo => {
@@ -39,12 +31,6 @@ export const App: React.FC = () => {
       setLoader(false);
     });
   }, []);
-
-  useEffect(() => {
-    getUser(userId).then(user => {
-      setChouseUser(user);
-    });
-  }, [userId]);
 
   const visibleTodos = todos
     .filter(item => {
@@ -82,13 +68,25 @@ export const App: React.FC = () => {
               {loader ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} onModal={setUserId} />
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodo?.id ?? 0}
+                  onModal={id => {
+                    const todo = todos.find(item => item.id === id);
+
+                    if (todo) {
+                      setSelectedTodo(todo);
+                    }
+                  }}
+                />
               )}
             </div>
           </div>
         </div>
       </div>
-      {userId && <TodoModal user={chouseUser} />}
+      {selectedTodo && (
+        <TodoModal post={selectedTodo} onClick={() => setSelectedTodo(null)} />
+      )}
     </>
   );
 };
