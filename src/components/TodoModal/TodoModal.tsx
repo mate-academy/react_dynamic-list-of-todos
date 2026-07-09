@@ -13,21 +13,17 @@ export const TodoModal: React.FC<TodoProps> = ({
   post,
   onClick = () => {},
 }: TodoProps) => {
-  const [user, setUser] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
+  const [user, setUser] = useState<User | null>(null);
 
   const { id, title, completed, userId } = post;
-  const { name, email } = user;
 
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
+    setLoader(true);
+
     getUser(userId)
-      .then(findUser => setUser(findUser))
+      .then(setUser)
       .finally(() => setLoader(false));
   }, [userId]);
 
@@ -70,7 +66,7 @@ export const TodoModal: React.FC<TodoProps> = ({
 
               {' by '}
 
-              <a href={`mailto:${email}`}>{name}</a>
+              <a href={`mailto:${user?.email}`}>{user?.name}</a>
             </p>
           </div>
         </div>

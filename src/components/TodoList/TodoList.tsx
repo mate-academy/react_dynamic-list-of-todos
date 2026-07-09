@@ -5,13 +5,13 @@ import { Todo } from '../../types/Todo';
 interface TodoListProps {
   todos: Todo[];
   selectedTodoId: number;
-  onModal: (id: number) => void;
+  onTodoSelect: (id: number) => void;
 }
 
 export const TodoList: React.FC<TodoListProps> = ({
   todos,
   selectedTodoId,
-  onModal,
+  onTodoSelect,
 }) => {
   return (
     <table className="table is-narrow is-fullwidth">
@@ -63,7 +63,7 @@ export const TodoList: React.FC<TodoListProps> = ({
                 type="button"
                 className="button"
                 data-cy="selectButton"
-                onClick={() => onModal(todo.id)}
+                onClick={() => onTodoSelect(todo.id)}
               >
                 <span className="icon">
                   <i

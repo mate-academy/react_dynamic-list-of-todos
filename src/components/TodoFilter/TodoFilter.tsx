@@ -15,8 +15,8 @@ export const TodoFilter = ({
     onFilterValue(filter.target.value);
   };
 
-  const handleQuery = (querry: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryValue(querry.target.value);
+  const handleQuery = (query: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryValue(query.target.value);
   };
 
   const resetQuery = () => {

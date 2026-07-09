@@ -70,7 +70,7 @@ export const App: React.FC = () => {
                 <TodoList
                   todos={visibleTodos}
                   selectedTodoId={selectedTodo?.id ?? 0}
-                  onModal={id => {
+                  onTodoSelect={id => {
                     setSelectedTodo(todos.find(todo => todo.id === id) ?? null);
                   }}
                 />
