@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 interface TodoFilterType {
   onFilterValue: (value: string) => void;
-  onQuerryValue?: (value: string) => void;
+  onQueryValue?: (value: string) => void;
 }
 
 export const TodoFilter = ({
   onFilterValue,
-  onQuerryValue = () => {},
+  onQueryValue = () => {},
 }: TodoFilterType) => {
   const [value, setValue] = useState('');
 
@@ -15,12 +15,12 @@ export const TodoFilter = ({
     onFilterValue(filter.target.value);
   };
 
-  const handleQuerry = (querry: React.ChangeEvent<HTMLInputElement>) => {
-    onQuerryValue(querry.target.value);
+  const handleQuery = (querry: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryValue(querry.target.value);
   };
 
-  const resetQuerry = () => {
-    onQuerryValue('');
+  const resetQuery = () => {
+    onQueryValue('');
     setValue('');
   };
 
@@ -44,7 +44,7 @@ export const TodoFilter = ({
           placeholder="Search..."
           value={value}
           onChange={input => {
-            handleQuerry(input);
+            handleQuery(input);
             setValue(input.target.value);
           }}
         />
@@ -59,7 +59,7 @@ export const TodoFilter = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={resetQuerry}
+              onClick={resetQuery}
             />
           </span>
         )}

@@ -21,15 +21,14 @@ export const App: React.FC = () => {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [filter, setFilter] = useState<FilterType>(FilterType.all);
-  const [querry, setQuerry] = useState('');
+  const [query, setQuery] = useState('');
 
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
-    getTodos().then(todo => {
-      setTodos(todo);
-      setLoader(false);
-    });
+    getTodos()
+      .then(setTodos)
+      .finally(() => setLoader(false));
   }, []);
 
   const visibleTodos = todos
@@ -45,7 +44,7 @@ export const App: React.FC = () => {
       }
     })
     .filter(newItem => {
-      return newItem.title.toLowerCase().includes(querry.toLowerCase());
+      return newItem.title.toLowerCase().includes(query.toLowerCase());
     });
 
   return (
@@ -60,7 +59,7 @@ export const App: React.FC = () => {
                 onFilterValue={itemFromFilter => {
                   setFilter(itemFromFilter as FilterType);
                 }}
-                onQuerryValue={querryFromFilter => setQuerry(querryFromFilter)}
+                onQueryValue={queryFromFilter => setQuery(queryFromFilter)}
               />
             </div>
 
@@ -72,11 +71,7 @@ export const App: React.FC = () => {
                   todos={visibleTodos}
                   selectedTodoId={selectedTodo?.id ?? 0}
                   onModal={id => {
-                    const todo = todos.find(item => item.id === id);
-
-                    if (todo) {
-                      setSelectedTodo(todo);
-                    }
+                    setSelectedTodo(todos.find(todo => todo.id === id) ?? null);
                   }}
                 />
               )}
