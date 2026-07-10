@@ -1,5 +1,6 @@
 // TodoModal.tsx
 import React from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User'; // Імпортуємо тип User для пропсів
@@ -23,7 +24,10 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 }) => {
   return (
     // Клас is-active додається, тільки якщо є вибране завдання
-    <div className={`modal ${selectedTodo ? 'is-active' : ''}`} data-cy="modal">
+    <div
+      className={classNames('modal', { 'is-active': selectedTodo })}
+      data-cy="modal"
+    >
       {/* Фон модалки, при кліку на який вона закривається */}
       <div className="modal-background" onClick={onClose} />
 
@@ -48,26 +52,26 @@ export const TodoModal: React.FC<TodoModalProps> = ({
         {/* Лоадер переносимо СЮДИ — всередину тіла модалки */}
         <div className="modal-card-body">
           {isModalLoading ? (
-            // Поки йде запит до API, показуємо крутилку всередині модалки
             <Loader />
           ) : (
-            // Коли дані завантажилися, показуємо текст завдання та користувача
             <>
               <p className="block" data-cy="modal-title">
                 {selectedTodo?.title}
               </p>
 
+              {/* Ось тут додаємо відкриваючий тег p */}
               <p className="block" data-cy="modal-user">
-                {/* Динамічно показуємо статус виконання таски */}
-                {selectedTodo?.completed ? (
-                  <strong className="has-text-success">Done</strong>
-                ) : (
-                  <strong className="has-text-danger">Planned</strong>
-                )}
+                <strong
+                  className={classNames({
+                    'has-text-success': selectedTodo?.completed,
+                    'has-text-danger': !selectedTodo?.completed,
+                  })}
+                >
+                  {selectedTodo?.completed ? 'Done' : 'Planned'}
+                </strong>
 
                 {' by '}
 
-                {/* Виводимо email та ім'я завантаженого користувача */}
                 <a href={`mailto:${selectedUser?.email}`}>
                   {selectedUser?.name || 'Unknown User'}
                 </a>

@@ -7,7 +7,7 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { getTodos } from './api';
+import { getTodos, getUser } from './api';
 import { User } from './types/User';
 import { Todo } from './types/Todo';
 
@@ -63,19 +63,16 @@ export const App: React.FC = () => {
   });
 
   const handleSelectTodo = async (todo: Todo) => {
-    setIsModalLoading(true); // Вмикаємо лоадер модалки
-    setSelectedTodo(todo); // Відкриваємо модалку з вибраною таскою
+    setIsModalLoading(true);
+    setSelectedTodo(todo);
 
     try {
-      // Робимо запит до API за деталями користувача
-      const userResponse = await fetch(
-        `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${todo.userId}.json`,
-      );
-      const userData = await userResponse.json();
+      const userData = await getUser(todo.userId); // Використання хелпера
 
-      // Записуємо отримані дані користувача в стейт
       setSelectedUser(userData);
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Помилка:', error);
     } finally {
       setIsModalLoading(false);
     }
