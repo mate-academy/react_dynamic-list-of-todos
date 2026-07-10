@@ -1,18 +1,16 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
-
 
 type Props = {
   todos: Todo[];
-  setOnShowModal: (todo: Todo | null) => void;
-  onClose: (bool: boolean) => void;
+  onSelectTodo: (todo: Todo) => void;
   selectedTodoId?: number;
-}
+};
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setOnShowModal: onShowModal,
-  onClose: onClose,
+  onSelectTodo,
   selectedTodoId,
 }) => {
   return (
@@ -31,46 +29,53 @@ export const TodoList: React.FC<Props> = ({
       </thead>
 
       <tbody>
-        {
-          todos.map((todo) => {
-            const isSelected = todo.id === selectedTodoId;
+        {todos.map(todo => {
+          const isSelected = todo.id === selectedTodoId;
 
-            return (<tr data-cy="todo" className="" key={todo.id}>
+          return (
+            <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
               <td className="is-vcentered">
                 {todo.completed && (
-                  <span className="icon has-text-success">
+                  <span
+                    className="icon has-text-success"
+                    data-cy="iconCompleted"
+                  >
                     <i className="fas fa-check" />
                   </span>
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={todo.completed ? 'has-text-success' : 'has-text-danger'}>{todo.title}</p>
+                <p
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
+                >
+                  {todo.title}
+                </p>
               </td>
               <td className="has-text-right is-vcentered">
                 <button
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => {
-                    if (isSelected) {
-                      onShowModal(null);
-                      onClose(false);
-                    } else {
-                      onShowModal(todo);
-                      onClose(true);
-                    }
-                  }}
+                  onClick={() => onSelectTodo(todo)}
                 >
                   <span className="icon">
-                    <i className={isSelected ? 'fas fa-eye-slash' : 'far fa-eye'} />
+                    <i
+                      className={classNames({
+                        'fas fa-eye-slash': isSelected,
+                        'far fa-eye': !isSelected,
+                      })}
+                    />
                   </span>
                 </button>
               </td>
-            </tr>);
-          })
-        }
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
-}
+};

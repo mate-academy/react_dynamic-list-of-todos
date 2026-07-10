@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
@@ -6,8 +7,8 @@ import { getUser } from '../../api';
 
 type Props = {
   todo: Todo;
-  onClose: (bool: boolean) => void;
-}
+  onClose: () => void;
+};
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -37,7 +38,12 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               Todo #{todo.id}
             </div>
 
-            <button type="button" className="delete" data-cy="modal-close" onClick={() => onClose(false)} />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={onClose}
+            />
           </header>
 
           <div className="modal-card-body">
@@ -46,17 +52,18 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
-              {user && (
-                <a href={`mailto:${user.email}`}>{user.name}</a>
-              )}
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>

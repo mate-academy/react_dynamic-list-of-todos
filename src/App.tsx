@@ -13,36 +13,46 @@ import { getTodos } from './api';
 export const App: React.FC = () => {
   const [selectStatus, setSelectStatus] = React.useState('all');
   const [inputValue, setInputValue] = React.useState('');
-  const [onShowModal, setOnShowModal] = React.useState<Todo | null>(null);
+  const [selectedTodo, setSelectedTodo] = React.useState<Todo | null>(null);
   const [todos, setTodos] = React.useState<Todo[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  const [onClose,setOnClose] = React.useState(false);
-
-  const handleModalClose = (shouldClose: boolean) => {
-    setOnClose(shouldClose);
-    if (!shouldClose) {
-      setOnShowModal(null);
+  const handleSelectTodo = (todo: Todo) => {
+    if (selectedTodo?.id === todo.id) {
+      setIsModalOpen(false);
+      setSelectedTodo(null);
+    } else {
+      setSelectedTodo(todo);
+      setIsModalOpen(true);
     }
   };
 
-  const filteredTodos = todos.filter((todo) => {
-    if (selectStatus === 'active') {
-      return !todo.completed;
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
-    if (selectStatus === 'completed') {
-      return todo.completed;
-    }
+  const filteredTodos = todos
+    .filter(todo => {
+      if (selectStatus === 'active') {
+        return !todo.completed;
+      }
 
-    return true;
-  }).filter((todo) => todo.title.toLowerCase().includes(inputValue.toLowerCase()));
+      if (selectStatus === 'completed') {
+        return todo.completed;
+      }
+
+      return true;
+    })
+    .filter(todo =>
+      todo.title.toLowerCase().includes(inputValue.toLowerCase()),
+    );
 
   useEffect(() => {
     setIsLoading(true); // Вмикаємо лоадер перед запитом
 
     getTodos()
-      .then((data) => {
+      .then(data => {
         setTodos(data); // Записуємо отримані завдання в стан todos
       })
       // (Опціонально) можна додати .catch для обробки помилок
@@ -73,9 +83,8 @@ export const App: React.FC = () => {
               ) : (
                 <TodoList
                   todos={filteredTodos}
-                  setOnShowModal={setOnShowModal}
-                  onClose={setOnClose}
-                  selectedTodoId={onShowModal?.id}
+                  onSelectTodo={handleSelectTodo}
+                  selectedTodoId={selectedTodo?.id}
                 />
               )}
             </div>
@@ -83,8 +92,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {onClose && onShowModal && (
-        <TodoModal todo={onShowModal} onClose={handleModalClose} />
+      {isModalOpen && selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
       )}
     </>
   );
