@@ -43,6 +43,7 @@ export const App: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedTodo(null);
   };
 
   const filteredTodos = todos
