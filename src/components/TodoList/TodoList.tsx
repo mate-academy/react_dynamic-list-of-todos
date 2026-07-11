@@ -32,6 +32,11 @@ export const TodoList: React.FC<Props> = ({
         {todos.map(todo => {
           const isSelected = todo.id === selectedTodoId;
 
+          // Іменована функція замість інлайн стрілочної
+          const handleSelectClick = () => {
+            onSelectTodo(todo);
+          };
+
           return (
             <tr data-cy="todo" className="" key={todo.id}>
               <td className="is-vcentered">{todo.id}</td>
@@ -60,7 +65,7 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onSelectTodo(todo)}
+                  onClick={handleSelectClick} // Викликаємо іменовану функцію
                 >
                   <span className="icon">
                     <i

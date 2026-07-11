@@ -18,6 +18,19 @@ export const App: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
+  // Створюємо іменовані обробники замість передачі setState напряму
+  const handleStatusChange = (status: string) => {
+    setSelectStatus(status);
+  };
+
+  const handleQueryChange = (query: string) => {
+    setInputValue(query);
+  };
+
+  const handleClearQuery = () => {
+    setInputValue('');
+  };
+
   const handleSelectTodo = (todo: Todo) => {
     if (selectedTodo?.id === todo.id) {
       setIsModalOpen(false);
@@ -49,15 +62,14 @@ export const App: React.FC = () => {
     );
 
   useEffect(() => {
-    setIsLoading(true); // Вмикаємо лоадер перед запитом
+    setIsLoading(true);
 
     getTodos()
       .then(data => {
-        setTodos(data); // Записуємо отримані завдання в стан todos
+        setTodos(data);
       })
-      // (Опціонально) можна додати .catch для обробки помилок
       .finally(() => {
-        setIsLoading(false); // Вимикаємо лоадер, коли запит завершився
+        setIsLoading(false);
       });
   }, []);
 
@@ -71,9 +83,10 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectStatus={selectStatus}
-                setSelectStatus={setSelectStatus}
+                onStatusChange={handleStatusChange}
                 inputValue={inputValue}
-                setInputValue={setInputValue}
+                onQueryChange={handleQueryChange}
+                onClearQuery={handleClearQuery}
               />
             </div>
 

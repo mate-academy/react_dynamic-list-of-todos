@@ -1,16 +1,29 @@
+import React from 'react';
+
 type Props = {
   selectStatus: string;
-  setSelectStatus: (status: string) => void;
+  onStatusChange: (status: string) => void;
   inputValue: string;
-  setInputValue: (value: string) => void;
+  onQueryChange: (query: string) => void;
+  onClearQuery: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   selectStatus,
-  setSelectStatus,
+  onStatusChange,
   inputValue,
-  setInputValue,
+  onQueryChange,
+  onClearQuery,
 }) => {
+  // Виносимо логіку в іменовані хендлери
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onStatusChange(e.target.value);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onQueryChange(e.target.value);
+  };
+
   return (
     <form className="field has-addons">
       <p className="control">
@@ -18,7 +31,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={selectStatus}
-            onChange={e => setSelectStatus(e.target.value)}
+            onChange={handleSelectChange} // Без інлайну
           >
             <option value="all">All</option>
             <option value="active">Active</option>
@@ -34,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={inputValue}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={handleInputChange} // Без інлайну
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -47,7 +60,7 @@ export const TodoFilter: React.FC<Props> = ({
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => setInputValue('')}
+              onClick={onClearQuery} // Без інлайну
             />
           )}
         </span>
