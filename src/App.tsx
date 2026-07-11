@@ -103,7 +103,7 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading ? (
                 // Якщо завантаження триває, показуємо лоадер
-                <Loader />
+                <Loader data-cy="loader" />
               ) : (
                 // Якщо завантаження завершено, показуємо наш список справ
                 <TodoList
