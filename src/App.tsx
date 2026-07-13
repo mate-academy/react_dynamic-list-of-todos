@@ -22,15 +22,15 @@ export const App: React.FC = () => {
     TodosFilter.ALL,
   );
 
-  const handleSelect = useCallback((todo: Todo | undefined) => {
+  const handleSelectTodo = useCallback((todo: Todo | undefined) => {
     setSelectedTodo(todo);
   }, []);
 
-  const handleChange = useCallback((value: string) => {
+  const handleFilterQueryChange = useCallback((value: string) => {
     setTodoFilterValue(value);
   }, []);
 
-  const handleStatusChange = useCallback((status: FilterValue) => {
+  const handleFilterStatusChange = useCallback((status: FilterValue) => {
     setTodoStatusFilter(status);
   }, []);
 
@@ -58,9 +58,10 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                onQueryChange={handleChange}
+                onQueryChange={handleFilterQueryChange}
                 filterValue={todoFilterValue}
-                onStatusChange={handleStatusChange}
+                onStatusChange={handleFilterStatusChange}
+                statusValue={todoStatusFilter}
               />
             </div>
 
@@ -72,7 +73,7 @@ export const App: React.FC = () => {
               ) : todos.length > 0 ? (
                 <TodoList
                   todos={visibleTodos}
-                  onSelect={handleSelect}
+                  onSelect={handleSelectTodo}
                   selectedId={selectedTodo?.id}
                 />
               ) : (
@@ -83,7 +84,9 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {selectedTodo && <TodoModal onClose={handleSelect} todo={selectedTodo} />}
+      {selectedTodo && (
+        <TodoModal onClose={handleSelectTodo} todo={selectedTodo} />
+      )}
     </>
   );
 };

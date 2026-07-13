@@ -1,19 +1,25 @@
 import { debounce } from 'lodash';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FilterValue, TodosFilter } from '../../types/TodoFilter';
 
 interface Props {
   onQueryChange: (value: string) => void;
   filterValue: string;
   onStatusChange: (value: FilterValue) => void;
+  statusValue: FilterValue;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   filterValue,
   onQueryChange,
   onStatusChange,
+  statusValue,
 }) => {
   const [localValue, setLocalValue] = useState(filterValue);
+
+  useEffect(() => {
+    setLocalValue(filterValue);
+  }, [filterValue]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -40,6 +46,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            value={statusValue}
             onChange={e => onStatusChange(e.target.value as FilterValue)}
           >
             <option value={TodosFilter.ALL}>{TodosFilter.ALL}</option>
