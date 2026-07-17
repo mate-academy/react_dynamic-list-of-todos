@@ -12,7 +12,7 @@ type Props = {
   onClearSearch: () => void;
 };
 
-export const TodoFilteComponent: React.FC<Props> = ({
+export const TodoFilterComponent: React.FC<Props> = ({
   filter,
   onFilterChange,
   query,
@@ -78,4 +78,4 @@ export const TodoFilteComponent: React.FC<Props> = ({
   );
 };
 
-export const TodoFilter = React.memo(TodoFilteComponent);
+export const TodoFilter = React.memo(TodoFilterComponent);
