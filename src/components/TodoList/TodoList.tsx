@@ -1,10 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
   todos: Todo[];
   selectedTodo?: Todo | null;
-  onSelect: (todo: Todo) => void;
+  onSelect: (todo: Todo | null) => void;
 }
 
 export const TodoList: React.FC<Props> = ({
@@ -42,7 +43,11 @@ export const TodoList: React.FC<Props> = ({
                 )}
               </td>
               <td className="is-vcentered is-expanded">
-                <p className={todo.completed ? '' : 'has-text-danger'}>
+                <p
+                  className={classNames({
+                    'has-text-danger': !todo.completed,
+                  })}
+                >
                   {todo.title}
                 </p>
               </td>
@@ -51,11 +56,14 @@ export const TodoList: React.FC<Props> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => onSelect(todo)}
+                  onClick={() => onSelect(isSelected ? null : todo)}
                 >
                   <span className="icon">
                     <i
-                      className={`far ${isSelected ? 'fa-eye-slash' : 'fa-eye'}`}
+                      className={classNames('far', {
+                        'fa-eye-slash': isSelected,
+                        'fa-eye': !isSelected,
+                      })}
                     />
                   </span>
                 </button>

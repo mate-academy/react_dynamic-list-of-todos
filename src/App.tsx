@@ -13,7 +13,9 @@ function getTodos(): Promise<Todo[]> {
   return fetch(
     'https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json',
   ).then(response => {
+    // ВАЖНО: выбросить ошибку, если запрос завершился неудачей
     if (!response.ok) {
+      throw new Error('Failed to load todos');
     }
 
     return response.json();
@@ -25,6 +27,9 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
+
   useEffect(() => {
     setLoading(true);
 
@@ -32,9 +37,6 @@ export const App: React.FC = () => {
       .then(loadedTodos => setTodos(loadedTodos))
       .finally(() => setLoading(false));
   }, []);
-
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
 
   const visibleTodos = todos.filter(todo => {
     const matchesQuery = todo.title
@@ -71,8 +73,8 @@ export const App: React.FC = () => {
               {!loading && (
                 <TodoList
                   todos={visibleTodos}
-                  onSelect={setSelectedTodo}
                   selectedTodo={selectedTodo}
+                  onSelect={setSelectedTodo}
                 />
               )}
             </div>
