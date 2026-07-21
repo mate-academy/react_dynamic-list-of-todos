@@ -1,8 +1,28 @@
-export const TodoFilter = () => (
-  <form className="field has-addons">
+type Props = {
+  filter: string;
+  setFilter: (filter: string) => void;
+  searchString: string;
+  setSearchString: (searchString: string) => void;
+};
+
+export const TodoFilter = ({
+  filter,
+  setFilter,
+  searchString,
+  setSearchString,
+}: Props) => (
+  <form
+    className="field has-addons"
+    data-cy="todoFilterForm"
+    onSubmit={e => e.preventDefault()}
+  >
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect">
+        <select
+          data-cy="statusSelect"
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -16,15 +36,24 @@ export const TodoFilter = () => (
         type="text"
         className="input"
         placeholder="Search..."
+        value={searchString}
+        onChange={e => setSearchString(e.target.value)}
       />
       <span className="icon is-left">
         <i className="fas fa-magnifying-glass" />
       </span>
 
-      <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button data-cy="clearSearchButton" type="button" className="delete" />
-      </span>
+      {searchString && (
+        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <button
+            data-cy="clearSearchButton"
+            type="button"
+            className="delete"
+            aria-label="Clear search"
+            onClick={() => setSearchString('')}
+          />
+        </span>
+      )}
     </p>
   </form>
 );
