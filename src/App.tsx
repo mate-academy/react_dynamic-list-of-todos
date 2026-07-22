@@ -73,10 +73,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          onClose={() => setSelectedTodo(null)}
-        />
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
