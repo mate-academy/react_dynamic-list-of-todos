@@ -17,10 +17,15 @@ function get<T>(url: string): Promise<T> {
   // eslint-disable-next-line prefer-template
   const fullURL = BASE_URL + url + '.json';
 
-  // we add some delay to see how the loader works
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(res => res.json());
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`Failed to load data from '${url}'`);
+      }
+
+      return res.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
