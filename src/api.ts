@@ -5,6 +5,8 @@ import { User } from './types/User';
 const BASE_URL =
   'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
+// This function creates a promise
+// that is resolved after a given delay
 function wait(delay: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, delay);
@@ -17,17 +19,15 @@ function get<T>(url: string): Promise<T> {
 
   return wait(300)
     .then(() => fetch(fullURL))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to load data');
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`Failed to load data from '${url}'`);
       }
 
-      return response.json();
+      return res.json();
     });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');
 
-export const getUser = (userId: number) => {
-  return get<User>(`/users/${userId}`);
-};
+export const getUser = (userId: number) => get<User>(`/users/${userId}`);

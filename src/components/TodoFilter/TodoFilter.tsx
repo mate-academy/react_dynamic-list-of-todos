@@ -1,70 +1,81 @@
 import React from 'react';
 
-export type Status = 'all' | 'active' | 'completed';
+import { TodoFilterType, isTodoFilterType } from '../../types/TodoFilter';
 
 type Props = {
+  filter: TodoFilterType;
+  onFilterChange: (filter: TodoFilterType) => void;
+
   query: string;
-  status: Status;
   onQueryChange: (query: string) => void;
-  onStatusChange: (status: Status) => void;
-  onQueryClear: () => void;
+
+  onClearSearch: () => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({
+export const TodoFilterComponent: React.FC<Props> = ({
+  filter,
+  onFilterChange,
   query,
-  status,
   onQueryChange,
-  onStatusChange,
-  onQueryClear,
-}) => (
-  <form
-    className="field has-addons"
-    onSubmit={event => event.preventDefault()}
-  >
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={status}
-          onChange={event => {
-            onStatusChange(event.target.value as Status);
-          }}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
+  onClearSearch,
+}) => {
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
 
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={event => onQueryChange(event.target.value)}
-      />
+    if (!isTodoFilterType(value)) {
+      return;
+    }
 
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
+    onFilterChange(value);
+  };
 
-      {query !== '' && (
-        <span
-          className="icon is-right"
-          style={{ pointerEvents: 'all' }}
-        >
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={onQueryClear}
-          />
+  /* eslint-disable no-console */
+  console.log('render TodoFilter');
+
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filter}
+            onChange={handleStatusChange}
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={e => onQueryChange(e.target.value)}
+        />
+
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={onClearSearch}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
+
+export const TodoFilter = React.memo(TodoFilterComponent);

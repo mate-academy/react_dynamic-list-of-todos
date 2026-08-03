@@ -1,62 +1,50 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import { getTodos } from './api';
-import { Loader } from './components/Loader';
-import {
-  TodoFilter,
-  type Status,
-} from './components/TodoFilter';
-import { TodoList } from './components/TodoList';
-import { TodoModal } from './components/TodoModal';
 import { Todo } from './types/Todo';
+import { TodoFilterType } from './types/TodoFilter';
+
+import { useVisibleTodos } from './hooks/useVisibleTodos';
+import { useTodos } from './hooks/useTodos';
+import { useUser } from './hooks/useUser';
+
+import { TodoList } from './components/TodoList';
+import { TodoFilter } from './components/TodoFilter';
+import { Loader } from './components/Loader';
+import { TodoModal } from './components/TodoModal';
+import { ErrorModal } from './components/ErrorModal';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<Status>('all');
-
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [todoFilter, setTodoFilter] = useState<TodoFilterType>('all');
+  const [query, setQuery] = useState('');
 
-  useEffect(() => {
-    setIsLoading(true);
+  const { todos, isLoading, todosErrorMessage, resetTodosError, loadTodos } =
+    useTodos();
+  const {
+    user: selectedUser,
+    isUserLoading,
+    userErrorMessage,
+  } = useUser(selectedTodo);
+  const visibleTodos = useVisibleTodos(todos, todoFilter, query);
 
-    getTodos()
-      .then(loadedTodos => {
-        setTodos(loadedTodos);
-      })
-      .catch(() => {
-        setTodos([]);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+  const handleSelectTodo = useCallback((todo: Todo) => {
+    setSelectedTodo(todo);
   }, []);
 
-  const visibleTodos = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+  const handleCloseModalTodo = useCallback(() => {
+    setSelectedTodo(null);
+  }, []);
 
-    return todos.filter(todo => {
-      const matchesQuery = todo.title
-        .toLowerCase()
-        .includes(normalizedQuery);
+  const handleClearSearch = useCallback(() => {
+    setQuery('');
+  }, []);
 
-      const matchesStatus =
-        status === 'all'
-        || (status === 'active' && !todo.completed)
-        || (status === 'completed' && todo.completed);
-
-      return matchesQuery && matchesStatus;
-    });
-  }, [todos, query, status]);
-
-  const handleTodoSelect = (todo: Todo) => {
-    setSelectedTodo(todo);
-  };
+  /* eslint-disable no-console */
+  console.log('---');
+  console.log('App render');
 
   return (
     <>
@@ -67,24 +55,21 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                filter={todoFilter}
+                onFilterChange={setTodoFilter}
                 query={query}
-                status={status}
                 onQueryChange={setQuery}
-                onStatusChange={setStatus}
-                onQueryClear={() => setQuery('')}
+                onClearSearch={handleClearSearch}
               />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-
-              {!isLoading && (
-                <TodoList
-                  todos={visibleTodos}
-                  selectedTodoId={selectedTodo?.id ?? null}
-                  onTodoSelect={handleTodoSelect}
-                />
-              )}
+              <TodoList
+                todos={visibleTodos}
+                selectedTodoId={selectedTodo?.id}
+                onSelectTodo={handleSelectTodo}
+              />
             </div>
           </div>
         </div>
@@ -93,7 +78,21 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          onClose={() => setSelectedTodo(null)}
+          user={selectedUser}
+          isLoading={isUserLoading}
+          onClose={handleCloseModalTodo}
+        />
+      )}
+
+      {userErrorMessage && (
+        <ErrorModal error={userErrorMessage} onClose={handleCloseModalTodo} />
+      )}
+
+      {todosErrorMessage && (
+        <ErrorModal
+          error={todosErrorMessage}
+          onClose={resetTodosError}
+          onReload={loadTodos}
         />
       )}
     </>
