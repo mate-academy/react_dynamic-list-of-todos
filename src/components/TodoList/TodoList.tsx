@@ -14,7 +14,7 @@ export const TodoList: React.FC<Props> = ({
   onSelectTodo,
 }) => {
   return (
-    <table className="table is-narrow is-fullwidth">
+    <table className="table is-narrow is-fullwidth" data-cy="todoList">
       <thead>
         <tr>
           <th>#</th>
@@ -24,47 +24,53 @@ export const TodoList: React.FC<Props> = ({
         </tr>
       </thead>
       <tbody>
-        {todos.map(todo => (
-          // 1. Stable key using todo.id
-          <tr key={todo.id}>
-            <td>{todo.id}</td>
-            <td
-              className={classNames({
-                'has-text-success': todo.completed,
-                'has-text-danger': !todo.completed,
-              })}
-            >
-              {todo.title}
-            </td>
-            <td>
-              <span
-                className={classNames('icon', {
+        {todos.map(todo => {
+          const isSelected = selectedTodoId === todo.id;
+
+          return (
+            <tr key={todo.id} data-cy="todo">
+              <td>{todo.id}</td>
+              <td
+                className={classNames({
                   'has-text-success': todo.completed,
                   'has-text-danger': !todo.completed,
                 })}
               >
-                <i
-                  className={classNames('fas', {
-                    'fa-check': todo.completed,
-                    'fa-xmark': !todo.completed,
+                {todo.title}
+              </td>
+              <td>
+                {todo.completed && (
+                  <span
+                    className="icon has-text-success"
+                    data-cy="iconCompleted"
+                  >
+                    <i className="fas fa-check" />
+                  </span>
+                )}
+              </td>
+              <td>
+                {/* ОСЬ ЦЯ КНОПКА ПОТАЙНА/СИНЯ В ACTION */}
+                <button
+                  type="button"
+                  data-cy="selectButton"
+                  className={classNames('button', 'is-link', {
+                    'is-outlined': !isSelected,
                   })}
-                />
-              </span>
-            </td>
-            <td>
-              <button
-                type="button"
-                className={classNames('button', 'is-link', {
-                  'is-outlined': selectedTodoId !== todo.id,
-                })}
-                // 2. Passing the full todo object back to App
-                onClick={() => onSelectTodo(todo)}
-              >
-                Show
-              </button>
-            </td>
-          </tr>
-        ))}
+                  onClick={() => onSelectTodo(todo)}
+                >
+                  <span className="icon">
+                    <i
+                      className={classNames('fas', {
+                        'fa-eye': !isSelected,
+                        'fa-eye-slash': isSelected,
+                      })}
+                    />
+                  </span>
+                </button>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
