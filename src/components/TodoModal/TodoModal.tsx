@@ -1,69 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { Loader } from '../Loader';
+import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
-import { getUser } from '../../api';
+import { Loader } from '../Loader';
 
 interface Props {
   todo: Todo;
+  user: User | null;
+  isLoading: boolean;
   onClose: () => void;
 }
 
-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsUserLoading(true);
-
-    getUser(todo.userId)
-      .then(setUser)
-      .finally(() => setIsUserLoading(false));
-  }, [todo.userId]);
-
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  isLoading,
+  onClose,
+}) => {
   return (
-    <div className="modal is-active" data-cy="modal">
+    <div className="modal is-active">
       <div className="modal-background" onClick={onClose} />
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Todo #{todo.id}</p>
+          <button
+            type="button"
+            className="delete"
+            aria-label="close"
+            onClick={onClose}
+          />
+        </header>
 
-      {isUserLoading ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #{todo.id}
-            </div>
+        <section className="modal-card-body">
+          {/* 1. Show Loader while fetching user details */}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <p className="block">
+                <strong>Title:</strong> {todo.title}
+              </p>
 
-            <button
-              type="button"
-              className="delete"
-              data-cy="modal-close"
-              onClick={onClose}
-            />
-          </header>
+              <p className="block">
+                <strong>Status:</strong>{' '}
+                {/* 2. Replaced ternary classes with classNames */}
+                <span
+                  className={classNames('tag', {
+                    'is-success': todo.completed,
+                    'is-danger': !todo.completed,
+                  })}
+                >
+                  {todo.completed ? 'Done' : 'Planned'}
+                </span>
+              </p>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              {todo.title}
-            </p>
-
-            <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
+              {user && (
+                <p className="block">
+                  <strong>Assigned to:</strong> {user.name} ({user.email})
+                </p>
               )}
+            </>
+          )}
+        </section>
 
-              {' by '}
-
-              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
-            </p>
-          </div>
-        </div>
-      )}
+        <footer className="modal-card-foot">
+          <button type="button" className="button" onClick={onClose}>
+            Close
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };

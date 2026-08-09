@@ -1,83 +1,53 @@
 /* eslint-disable max-len */
 /* eslint-disable max-len */
-import React, { useEffect, useState, useMemo } from 'react';
-import 'bulma/css/bulma.css';
-import '@fortawesome/fontawesome-free/css/all.css';
-
-import { TodoList } from './components/TodoList';
-import { TodoFilter } from './components/TodoFilter';
-import { TodoModal } from './components/TodoModal';
-import { Loader } from './components/Loader';
+import React, { useState, useEffect } from 'react';
 import { Todo } from './types/Todo';
-import { getTodos } from './api';
+import { User } from './types/User';
+import { getTodos } from './api'; // Якщо завантажуєте todos з API
+import { getUser } from './api'; // Додано розширення .ts
+import { TodoList } from './components/TodoList';
+import { TodoModal } from './components/TodoModal';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
-  const [status, setStatus] = useState<'all' | 'active' | 'completed'>('all');
-  const [query, setQuery] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
 
-  const filteredTodos = useMemo(() => {
-    return todos.filter(todo => {
-      const matchesStatus =
-        status === 'all' ||
-        (status === 'completed' && todo.completed) ||
-        (status === 'active' && !todo.completed);
-
-      const matchesQuery = todo.title
-        .toLowerCase()
-        .includes(query.trim().toLowerCase());
-
-      return matchesStatus && matchesQuery;
-    });
-  }, [todos, status, query]);
-
+  // Використовуємо setTodos для завантаження початкових todos
   useEffect(() => {
-    setIsLoading(true);
-    getTodos()
-      .then(loadedTodos => {
-        setTodos(loadedTodos);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    getTodos().then(setTodos);
   }, []);
 
+  const handleSelectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+    setIsUserLoading(true);
+    setUser(null);
+
+    getUser(todo.userId)
+      .then(setUser)
+      .finally(() => {
+        setIsUserLoading(false);
+      }); // Прибрано console.error
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTodo(null);
+    setUser(null);
+  };
+
   return (
-    <>
-      <div className="section">
-        <div className="container">
-          <div className="box">
-            <h1 className="title">Todos:</h1>
-
-            <div className="block">
-              <TodoFilter
-                status={status}
-                onStatusChange={setStatus}
-                query={query}
-                onQueryChange={setQuery}
-              />
-            </div>
-
-            <div className="block">
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <TodoList
-                  todos={filteredTodos}
-                  selectedTodoId={selectedTodo?.id}
-                  onSelectTodo={setSelectedTodo}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="section">
+      <TodoList todos={todos} onSelectTodo={handleSelectTodo} />
 
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
+        <TodoModal
+          todo={selectedTodo}
+          user={user}
+          isLoading={isUserLoading}
+          onClose={handleCloseModal}
+        />
       )}
-    </>
+    </div>
   );
 };

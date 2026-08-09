@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 interface Props {
@@ -11,65 +12,60 @@ export const TodoList: React.FC<Props> = ({
   todos,
   selectedTodoId,
   onSelectTodo,
-}) => (
-  <table className="table is-narrow is-fullwidth">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>
-          <span className="icon">
-            <i className="fas fa-check" />
-          </span>
-        </th>
-        <th>Title</th>
-        <th> </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {todos.map(todo => {
-        const isSelected = todo.id === selectedTodoId;
-
-        return (
-          <tr
-            key={todo.id}
-            data-cy="todo"
-            className={isSelected ? 'has-background-info-light' : ''}
-          >
-            <td className="is-vcentered">{todo.id}</td>
-            <td className="is-vcentered">
-              {todo.completed && (
-                <span className="icon" data-cy="iconCompleted">
-                  <i className="fas fa-check" />
-                </span>
-              )}
+}) => {
+  return (
+    <table className="table is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {todos.map(todo => (
+          // 1. Stable key using todo.id
+          <tr key={todo.id}>
+            <td>{todo.id}</td>
+            <td
+              className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
+            >
+              {todo.title}
             </td>
-            <td className="is-vcentered is-expanded">
-              <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+            <td>
+              <span
+                className={classNames('icon', {
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
-                {todo.title}
-              </p>
+                <i
+                  className={classNames('fas', {
+                    'fa-check': todo.completed,
+                    'fa-xmark': !todo.completed,
+                  })}
+                />
+              </span>
             </td>
-            <td className="has-text-right is-vcentered">
+            <td>
               <button
-                data-cy="selectButton"
-                className="button"
                 type="button"
+                className={classNames('button', 'is-link', {
+                  'is-outlined': selectedTodoId !== todo.id,
+                })}
+                // 2. Passing the full todo object back to App
                 onClick={() => onSelectTodo(todo)}
               >
-                <span className="icon">
-                  <i
-                    className={isSelected ? 'far fa-eye-slash' : 'far fa-eye'}
-                  />
-                </span>
+                Show
               </button>
             </td>
           </tr>
-        );
-      })}
-    </tbody>
-  </table>
-);
+        ))}
+      </tbody>
+    </table>
+  );
+};
