@@ -15,13 +15,16 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const filteredTodos = todos.filter(todo => {
-    const matchesQuery = todo.title.toLocaleLowerCase().includes(query.trim().toLowerCase());
-    const matchesStatus = status === 'all'
-      || (status === 'completed' && todo.completed)
-      || (status === 'active' && !todo.completed);
+    const matchesQuery = todo.title
+      .toLocaleLowerCase()
+      .includes(query.trim().toLowerCase());
+    const matchesStatus =
+      status === 'all' ||
+      (status === 'completed' && todo.completed) ||
+      (status === 'active' && !todo.completed);
 
     return matchesQuery && matchesStatus;
   });
@@ -50,26 +53,26 @@ export const App: React.FC = () => {
                 status={status}
                 query={query}
                 setStatus={setStatus}
-                setQuery={setQuery} />
+                setQuery={setQuery}
+              />
             </div>
 
             <div className="block">
-              {loading ? <Loader />
-                : <TodoList
+              {loading ? (
+                <Loader />
+              ) : (
+                <TodoList
                   todos={filteredTodos}
                   onTodoSelect={handleSelectTodo}
                   selectedTodo={selectedTodo}
                 />
-              }
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal
-        todo={selectedTodo}
-        onClose={() => setSelectedTodo(null)}
-      />
+      <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
     </>
   );
 };
