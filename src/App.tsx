@@ -27,6 +27,14 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const handleSelectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const handleCloseModal = () => {
+     setSelectedTodo(null);
+  };
+
   const visibleTodos = todos.filter(todo => {
     const matchesStatus =
       status === 'all' ||
@@ -64,9 +72,9 @@ export const App: React.FC = () => {
               {!isLoading && !errorMessage && visibleTodos.length > 0 && (
                 <TodoList
                   todos={visibleTodos}
-                  onSelect={setSelectedTodo}
+                  onSelect={handleSelectTodo}
                   selectedTodo={selectedTodo}
-                  />
+                />
               )}
             </div>
           </div>
@@ -75,7 +83,7 @@ export const App: React.FC = () => {
 
       <TodoModal
         todo={selectedTodo}
-        onClose={() => setSelectedTodo(null)}
+        onClose={handleCloseModal}
       />
     </>
   );
