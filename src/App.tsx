@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
 import { getTodos, getUser } from './api';
@@ -90,13 +92,14 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Модалка рендериться ЗАВЖДИ (без умови selectedTodo &&) */}
-      <TodoModal
-        todo={selectedTodo}
-        user={user}
-        isLoading={isUserLoading}
-        onClose={handleCloseModal}
-      />
+      {selectedTodo && (
+        <TodoModal
+          todo={selectedTodo}
+          user={user}
+          isLoading={isUserLoading}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };
