@@ -1,43 +1,65 @@
 import React from 'react';
+import { Todo } from '../../types/Todo';
+import { User } from '../../types/User';
 import { Loader } from '../Loader';
 
-export const TodoModal: React.FC = () => {
+interface Props {
+  todo: Todo;
+  user: User | null;
+  isLoading: boolean;
+  onClose: () => void;
+}
+
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  isLoading,
+  onClose,
+}) => {
+  const statusText = todo.completed ? 'Done' : 'Planned';
+
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
 
-      {true ? (
-        <Loader />
-      ) : (
-        <div className="modal-card">
-          <header className="modal-card-head">
-            <div
-              className="modal-card-title has-text-weight-medium"
-              data-cy="modal-header"
-            >
-              Todo #2
-            </div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title" data-cy="modal-header">
+            {`Todo #${todo.id}`}
+          </p>
 
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
-          </header>
+          <button
+            type="button"
+            className="delete"
+            aria-label="close"
+            data-cy="modal-close"
+            onClick={onClose}
+          />
+        </header>
 
-          <div className="modal-card-body">
-            <p className="block" data-cy="modal-title">
-              quis ut nam facilis et officia qui
-            </p>
+        <section className="modal-card-body">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <p className="title is-4" data-cy="modal-title">
+                {todo.title}
+              </p>
 
-            <p className="block" data-cy="modal-user">
-              {/* <strong className="has-text-success">Done</strong> */}
-              <strong className="has-text-danger">Planned</strong>
+              <p className="block" data-cy="modal-user">
+                {statusText}
+                {user && ` by ${user.name}`}
+              </p>
+            </>
+          )}
+        </section>
 
-              {' by '}
-
-              <a href="mailto:Sincere@april.biz">Leanne Graham</a>
-            </p>
-          </div>
-        </div>
-      )}
+        <footer className="modal-card-foot">
+          <button type="button" className="button" onClick={onClose}>
+            Close
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };
