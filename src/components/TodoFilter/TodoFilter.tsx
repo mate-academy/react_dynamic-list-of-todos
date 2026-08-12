@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 interface Props {
   status: string;
@@ -46,7 +47,7 @@ export const TodoFilter: React.FC<Props> = ({
           <button
             data-cy="clearSearchButton"
             type="button"
-            className="delete"
+            className={classNames('delete')}
             onClick={() => onQueryChange('')}
           />
         </span>
