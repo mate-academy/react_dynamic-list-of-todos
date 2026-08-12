@@ -5,7 +5,7 @@ import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  todo: Todo;
+  todo?: Todo;
   onClose: () => void;
 };
 
@@ -14,19 +14,31 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (!todo) {
+      return;
+    }
+
+    setLoading(true);
     getUser(todo.userId)
       .then(owner => {
         setUser(owner);
       })
-      .catch()
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch user details:', error);
+      })
       .finally(() => setLoading(false));
-  }, [todo.userId]);
+  }, [todo]);
+
+  if (!todo) {
+    return null;
+  }
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" />
+      <div className="modal-background" onClick={onClose} />
 
-      {loading ? (
+      {loading || !user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -43,7 +55,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => onClose()}
+              onClick={onClose}
             />
           </header>
 

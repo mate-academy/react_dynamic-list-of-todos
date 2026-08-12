@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
@@ -11,17 +10,17 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 const prepareTodos = (todos: Todo[], filterParam: string, query: string) => {
-  const preparedTodos = todos;
-
-  return preparedTodos
+  return todos
     .filter(item => {
-      return filterParam !== 'all'
-        ? filterParam === 'active'
-          ? item.completed === false
-          : filterParam === 'completed'
-            ? item.completed === true
-            : true
-        : true;
+      if (filterParam === 'active') {
+        return !item.completed;
+      }
+
+      if (filterParam === 'completed') {
+        return item.completed;
+      }
+
+      return true;
     })
     .filter(item => {
       return query
@@ -34,13 +33,17 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
-  const [filterParam, setFilterParam] = useState('');
+  const [filterParam, setFilterParam] = useState('all');
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
+    setLoading(true);
     getTodos()
       .then(todos => setVisibleTodos(prepareTodos(todos, filterParam, query)))
-      .catch()
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch todos:', error);
+      })
       .finally(() => setLoading(false));
   }, [filterParam, query]);
 
@@ -53,6 +56,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
+                filterParam={filterParam}
                 onChoose={param => setFilterParam(param)}
                 onType={param => setQuery(param)}
               />

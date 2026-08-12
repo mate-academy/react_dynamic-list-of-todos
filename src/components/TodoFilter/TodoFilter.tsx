@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 type Props = {
+  filterParam: string;
   onChoose: (filterParam: string) => void;
   onType: (query: string) => void;
 };
 
-export const TodoFilter: React.FC<Props> = ({ onChoose, onType }) => {
+export const TodoFilter: React.FC<Props> = ({
+  filterParam,
+  onChoose,
+  onType,
+}) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   return (
@@ -14,6 +19,7 @@ export const TodoFilter: React.FC<Props> = ({ onChoose, onType }) => {
         <span className="select">
           <select
             data-cy="statusSelect"
+            value={filterParam}
             onChange={selectEvent => onChoose(selectEvent.target.value)}
           >
             <option value="all">All</option>
