@@ -12,7 +12,7 @@ type Props = {
 
 export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -22,15 +22,15 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
     setUser(null);
     setErrorMessage('');
-    setIsLoading(true);
+    setIsUserLoading(true);
 
     getUser(todo.userId)
       .then(setUser)
       .catch(error => {
         setErrorMessage(error.message);
       })
-      .finally(() => setIsLoading(false));
-  }, [todo]);
+      .finally(() => setIsUserLoading(false));
+  }, [todo?.userId]);
 
   if (!todo) {
     return null;
@@ -40,7 +40,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {isLoading ? (
+      {isUserLoading ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -74,8 +74,8 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
                   {/* <strong className="has-text-success">Done</strong> */}
                   <strong
                     className={classNames({
-                     'has-text-success': todo.completed,
-                     'has-text-danger': !todo.completed,
+                      'has-text-success': todo.completed,
+                      'has-text-danger': !todo.completed,
                     })}
                   >
                     {todo.completed ? 'Done' : 'Planned'}

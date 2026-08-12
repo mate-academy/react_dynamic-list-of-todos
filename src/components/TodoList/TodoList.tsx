@@ -46,7 +46,7 @@ export const TodoList: React.FC<Props> = ({
                 className={classNames({
                   'has-text-success': todo.completed,
                   'has-text-danger': !todo.completed,
-               })}
+                })}
               >
                 {todo.title}
               </p>

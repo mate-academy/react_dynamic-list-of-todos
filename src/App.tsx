@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   };
 
   const handleCloseModal = () => {
-     setSelectedTodo(null);
+    setSelectedTodo(null);
   };
 
   const visibleTodos = todos.filter(todo => {
@@ -81,10 +81,7 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      <TodoModal
-        todo={selectedTodo}
-        onClose={handleCloseModal}
-      />
+      <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
     </>
   );
 };
