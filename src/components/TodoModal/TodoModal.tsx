@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
-import { getUser } from '../../api';
 import { User } from '../../types/User';
 
 type Props = {
-  todo?: Todo;
+  todo: Todo;
+  user: User | null;
+  loading: boolean;
   onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (!todo) {
-      return;
-    }
-
-    setLoading(true);
-    getUser(todo.userId)
-      .then(owner => {
-        setUser(owner);
-      })
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch user details:', error);
-      })
-      .finally(() => setLoading(false));
-  }, [todo]);
-
-  if (!todo) {
-    return null;
-  }
-
+export const TodoModal: React.FC<Props> = ({
+  todo,
+  user,
+  loading,
+  onClose,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" onClick={onClose} />

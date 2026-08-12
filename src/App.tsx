@@ -7,7 +7,8 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { getTodos } from './api';
+import { User } from './types/User';
+import { getTodos, getUser } from './api';
 
 const prepareTodos = (todos: Todo[], filterParam: string, query: string) => {
   return todos
@@ -30,22 +31,58 @@ const prepareTodos = (todos: Todo[], filterParam: string, query: string) => {
 };
 
 export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [todoId, setTodoId] = useState(0);
   const [query, setQuery] = useState('');
   const [filterParam, setFilterParam] = useState('all');
-  const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState('');
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     getTodos()
-      .then(todos => setVisibleTodos(prepareTodos(todos, filterParam, query)))
-      .catch(error => {
+      .then(fetchedTodos => {
+        setTodos(fetchedTodos);
+      })
+      .catch(err => {
+        setError('Failed to load todos.');
         // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos:', error);
+        console.error(err);
       })
       .finally(() => setLoading(false));
-  }, [filterParam, query]);
+  }, []);
+
+  useEffect(() => {
+    if (!todoId) {
+      setSelectedUser(null);
+
+      return;
+    }
+
+    const currentTodo = todos.find(item => item.id === todoId);
+
+    if (!currentTodo) {
+      return;
+    }
+
+    setUserLoading(true);
+    getUser(currentTodo.userId)
+      .then(user => {
+        setSelectedUser(user);
+      })
+      .catch(err => {
+        setError('Failed to load user details.');
+        // eslint-disable-next-line no-console
+        console.error(err);
+      })
+      .finally(() => setUserLoading(false));
+  }, [todoId, todos]);
+
+  const visibleTodos = prepareTodos(todos, filterParam, query);
+  const selectedTodo = todos.find(item => item.id === todoId);
 
   return (
     <>
@@ -53,6 +90,8 @@ export const App: React.FC = () => {
         <div className="container">
           <div className="box">
             <h1 className="title">Todos:</h1>
+
+            {error && <div className="notification is-danger">{error}</div>}
 
             <div className="block">
               <TodoFilter
@@ -77,9 +116,11 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {todoId !== 0 && (
+      {todoId !== 0 && selectedTodo && (
         <TodoModal
-          todo={visibleTodos.find(item => item.id === todoId)}
+          todo={selectedTodo}
+          user={selectedUser}
+          loading={userLoading}
           onClose={() => setTodoId(0)}
         />
       )}
