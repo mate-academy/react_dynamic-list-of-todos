@@ -1,13 +1,17 @@
+type Status = 'all' | 'active' | 'completed';
+
 interface Props {
   setSelectedStatus: (status: 'all' | 'active' | 'completed') => void;
   setQuery: (query: string) => void;
   query: string;
+  selectedStatus: Status;
 }
 
 export const TodoFilter: React.FC<Props> = ({
   setSelectedStatus,
   setQuery,
   query,
+  selectedStatus
 }) => {
   return (
     <form className="field has-addons">
@@ -15,6 +19,7 @@ export const TodoFilter: React.FC<Props> = ({
         <span className="select">
           <select
             data-cy="statusSelect"
+            value={selectedStatus}
             onChange={event =>
               setSelectedStatus(
                 event.target.value as 'all' | 'active' | 'completed',

@@ -5,14 +5,14 @@ import { User } from '../../types/User';
 
 interface Props {
   todo: Todo;
-  setSelectedTodo: (selected: Todo | null) => void;
+  handleSelectTodo: (selected: Todo | null) => void;
   user: User | null;
   loadingUsers: boolean;
 }
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  setSelectedTodo,
+  handleSelectTodo,
   user,
   loadingUsers,
 }) => {
@@ -37,7 +37,7 @@ export const TodoModal: React.FC<Props> = ({
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={() => setSelectedTodo(null)}
+              onClick={() => handleSelectTodo(null)}
             />
           </header>
 

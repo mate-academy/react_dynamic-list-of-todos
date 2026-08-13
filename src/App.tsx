@@ -23,7 +23,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
 
   const [selectedStatus, setSelectedStatus] = useState<Status>('all');
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedTodo, handleSelectTodo] = useState<Todo | null>(null);
 
   const filteredTodos = todos.filter(todo => {
     const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
@@ -76,6 +76,7 @@ export const App: React.FC = () => {
                 setSelectedStatus={setSelectedStatus}
                 setQuery={setQuery}
                 query={query}
+                selectedStatus={selectedStatus}
               />
             </div>
 
@@ -84,7 +85,7 @@ export const App: React.FC = () => {
               {!loadingTodos && (
                 <TodoList
                   todos={filteredTodos}
-                  setSelectedTodo={setSelectedTodo}
+                  handleSelectTodo={handleSelectTodo}
                   selectedTodo={selectedTodo}
                 />
               )}
@@ -96,7 +97,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
+          handleSelectTodo={handleSelectTodo}
           user={user}
           loadingUsers={loadingUsers}
         />

@@ -1,15 +1,16 @@
 import React from 'react';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 interface Props {
   todos: Todo[];
-  setSelectedTodo: (selected: Todo | null) => void;
+  handleSelectTodo: (selected: Todo | null) => void;
   selectedTodo: Todo | null;
 }
 
 export const TodoList: React.FC<Props> = ({
   todos,
-  setSelectedTodo,
+  handleSelectTodo,
   selectedTodo,
 }) => (
   <table className="table is-narrow is-fullwidth">
@@ -30,9 +31,9 @@ export const TodoList: React.FC<Props> = ({
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={
-            selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
-          }
+          className={classNames({
+            'has-background-info-light': selectedTodo?.id === todo.id,
+          })}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>
@@ -47,9 +48,10 @@ export const TodoList: React.FC<Props> = ({
 
           <td className="is-vcentered is-expanded">
             <p
-              className={
-                todo.completed ? 'has-text-success' : 'has-text-danger'
-              }
+              className={classNames({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
             >
               {todo.title}
             </p>
@@ -59,15 +61,14 @@ export const TodoList: React.FC<Props> = ({
               data-cy="selectButton"
               className="button"
               type="button"
-              onClick={() => setSelectedTodo(todo)}
+              onClick={() => handleSelectTodo(todo)}
             >
               <span className="icon">
                 <i
-                  className={
-                    selectedTodo?.id === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
-                  }
+                  className={classNames('far', {
+                    'fa-eye-slash': selectedTodo?.id === todo.id,
+                    'fa-eye': selectedTodo?.id !== todo.id,
+                  })}
                 />
               </span>
             </button>
