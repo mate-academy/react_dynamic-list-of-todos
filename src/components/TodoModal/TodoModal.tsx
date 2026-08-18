@@ -19,6 +19,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
     getUser(todo.userId)
       .then(setUser)
+      // eslint-disable-next-line no-console
       .catch(console.error)
       .finally(() => setUserLoading(false));
   }, [todo.userId]);
@@ -62,9 +63,7 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
 
               {' by '}
 
-              {user && (
-                <a href={`mailto:${user.email}`}>{user.name}</a>
-              )}
+              {user && <a href={`mailto:${user.email}`}>{user.name}</a>}
             </p>
           </div>
         </div>

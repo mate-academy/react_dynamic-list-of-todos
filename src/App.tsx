@@ -23,6 +23,7 @@ export const App: React.FC = () => {
     setLoading(true);
     getTodos()
       .then(setTodos)
+      // eslint-disable-next-line no-console
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
