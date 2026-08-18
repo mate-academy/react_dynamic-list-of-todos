@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Loader.scss';
 
 export const Loader: React.FC = () => (
