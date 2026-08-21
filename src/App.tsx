@@ -57,7 +57,11 @@ export const App: React.FC = () => {
               {isLoading ? (
                 <Loader />
               ) : (
-                <TodoList todos={visibleTodos} onSelect={setSelectedTodo} selectedTodo={selectedTodo}/>
+                <TodoList
+                  todos={visibleTodos}
+                  onSelect={setSelectedTodo}
+                  selectedTodo={selectedTodo}
+                />
               )}
             </div>
           </div>
