@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
@@ -26,8 +25,8 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
+        setTodos([]);
       })
       .finally(() => setIsLoading(false));
   }, []);
