@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
@@ -15,10 +16,7 @@ import { Loader } from './components/Loader';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(
-    null,
-  );
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
@@ -28,6 +26,9 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
+      .catch(error => {
+        console.error(error);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
