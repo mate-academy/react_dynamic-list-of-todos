@@ -51,6 +51,7 @@ export const App: React.FC = () => {
   const handleClose = () => {
     setIsModalOpen(false);
     setSelectedTodo(null);
+    setSelectedUser(null);
   };
 
   const handleFiltering = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -95,7 +96,7 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                filter={handleFiltering}
+                onFilterChange={handleFiltering}
                 inputValue={query}
                 onInputChange={handleInput}
                 onDelete={handleDeleteButton}

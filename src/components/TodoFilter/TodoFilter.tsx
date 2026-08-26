@@ -1,14 +1,14 @@
 import React from 'react';
 
 type Props = {
-  filter: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   inputValue: string;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onDelete: () => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
-  filter,
+  onFilterChange,
   inputValue,
   onInputChange,
   onDelete,
@@ -16,7 +16,7 @@ export const TodoFilter: React.FC<Props> = ({
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect" onChange={filter}>
+        <select data-cy="statusSelect" onChange={onFilterChange}>
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
