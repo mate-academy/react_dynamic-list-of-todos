@@ -11,25 +11,26 @@ import { Todo } from './types/Todo';
 import { getTodos } from './api';
 
 export const App: React.FC = () => {
-
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('all');
 
   const handleSelectTodo = useCallback((todo: Todo) => {
-    setSelectedTodo(todo)
+    setSelectedTodo(todo);
   }, []);
   const handleCloseTodo = useCallback(() => {
     setSelectedTodo(null);
   }, []);
-  const onQueryChange = useCallback((query: string) => {
-    setQuery(query);
-  }, [])
-  const onStatusChange = useCallback((status: string) => {
-    setStatus(status);
-  }, [])
+
+  const onQueryChange = useCallback((changedQuery: string) => {
+    setQuery(changedQuery);
+  }, []);
+
+  const onStatusChange = useCallback((changedStatus: string) => {
+    setStatus(changedStatus);
+  }, []);
 
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
@@ -41,16 +42,17 @@ export const App: React.FC = () => {
       const matchesQuery = todo.title
         .toLowerCase()
         .includes(query.trim().toLowerCase());
+
       return matchesStatus && matchesQuery;
-    }, [todos, query, status]);
-  })
+    });
+  }, [todos, query, status]);
 
   useEffect(() => {
     setIsLoading(true);
 
     getTodos()
       .then(data => setTodos(data))
-      .catch(error => console.error(error))
+      .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -62,18 +64,29 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter onQueryChange={onQueryChange} onStatusChange={onStatusChange} query={query} status={status} />
+              <TodoFilter
+                onQueryChange={onQueryChange}
+                onStatusChange={onStatusChange}
+                query={query}
+                status={status}
+              />
             </div>
 
             <div className="block">
               {isLoading && <Loader />}
-              <TodoList todos={filteredTodos} selectedTodo={selectedTodo} onSelect={handleSelectTodo} />
+              <TodoList
+                todos={filteredTodos}
+                selectedTodo={selectedTodo}
+                onSelect={handleSelectTodo}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedTodo && <TodoModal todo={selectedTodo} onClose={handleCloseTodo} />}
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={handleCloseTodo} />
+      )}
     </>
   );
 };

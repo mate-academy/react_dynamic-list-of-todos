@@ -5,8 +5,8 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 
 interface Props {
-  todo: Todo,
-  onClose: () => void
+  todo: Todo;
+  onClose: () => void;
 }
 
 export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
@@ -18,9 +18,9 @@ export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
 
     getUser(todo.userId)
       .then(setUser)
-      .catch(console.error)
-      .finally(() => setIsLoading(false))
-  }, [todo.userId])
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [todo.userId]);
 
   return (
     <div className="modal is-active" data-cy="modal">
@@ -39,7 +39,12 @@ export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" onClick={() => onClose()} />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => onClose()}
+            />
           </header>
 
           <div className="modal-card-body">
@@ -48,7 +53,11 @@ export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? <strong className="has-text-success">Done</strong> : <strong className="has-text-danger">Planned</strong>}
+              {todo.completed ? (
+                <strong className="has-text-success">Done</strong>
+              ) : (
+                <strong className="has-text-danger">Planned</strong>
+              )}
 
               {' by '}
 
@@ -59,4 +68,6 @@ export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
       )}
     </div>
   );
-})
+});
+
+TodoModal.displayName = 'TodoModal';
