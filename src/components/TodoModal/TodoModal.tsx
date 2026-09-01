@@ -70,4 +70,4 @@ export const TodoModal = React.memo<Props>(({ todo, onClose }) => {
   );
 });
 
-TodoModal.displayName = 'TodoModal';
+TodoModal.displayName = 'Todo-Modal';
