@@ -14,6 +14,7 @@ import { Filter } from './types/Filter';
 export const App: React.FC = () => {
   const [filterBy, setFilterBy] = useState<Filter>('all');
   const [query, setQuery] = useState<string>('');
+  const [AllTodos, setAllTodos] = useState<Todo[]>([]);
   const [visibleTodos, setVisibleTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<null | number>(null);
   const [firstRendering, setFirstRendering] = useState(true);
@@ -22,6 +23,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     getTodos()
       .then(todos => {
+        setAllTodos(todos);
+
         let list: Todo[] = [];
 
         switch (filterBy) {
@@ -45,14 +48,14 @@ export const App: React.FC = () => {
         setVisibleTodos(list);
         setFirstRendering(false);
       })
-      .catch(setError);
+      .catch(() => setError('Failed to fetch posts'));
   }, [filterBy, query]);
 
   const getTodoById = useCallback(
     (id: number): Todo | null => {
-      return visibleTodos.find(todo => todo.id === id) || null;
+      return AllTodos.find(todo => todo.id === id) || null;
     },
-    [visibleTodos],
+    [AllTodos],
   );
 
   return (
