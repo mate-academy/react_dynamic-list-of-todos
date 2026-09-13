@@ -27,7 +27,10 @@ export const TodoModal: React.FC<Props> = React.memo(function TodoModal({
           setRendering(false);
           setUser(author);
         })
-        .catch(() => onError('Failed to fetch the user'));
+        .catch(() => {
+          onError('Failed to fetch the user');
+          setRendering(false);
+        });
     } else {
       setRendering(false);
     }
