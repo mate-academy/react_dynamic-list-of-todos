@@ -33,9 +33,9 @@ export const TodoList: React.FC<Props> = ({
           return (
             <tr
               data-cy="todo"
-              className={
-                selectedTodo?.id === todo.id ? 'has-background-info-light' : ''
-              }
+              className={classNames({
+                'has-background-info-light': selectedTodo?.id === todo.id,
+              })}
               key={todo.id}
             >
               <td className="is-vcentered">{todo.id}</td>
@@ -48,9 +48,10 @@ export const TodoList: React.FC<Props> = ({
               </td>
               <td className="is-vcentered is-expanded">
                 <p
-                  className={
-                    todo.completed ? 'has-text-success' : 'has-text-danger'
-                  }
+                  className={classNames({
+                    'has-text-success': todo.completed,
+                    'has-text-danger': !todo.completed,
+                  })}
                 >
                   {todo.title}
                 </p>
