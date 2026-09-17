@@ -6,10 +6,10 @@ import { getUser } from '../../api';
 
 type Props = {
   todo: Todo;
-  OnClose: () => void;
+  onClose: () => void;
 };
 
-export const TodoModal: React.FC<Props> = ({ todo, OnClose }) => {
+export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -33,7 +33,7 @@ export const TodoModal: React.FC<Props> = ({ todo, OnClose }) => {
 
   return (
     <div className="modal is-active" data-cy="modal">
-      <div className="modal-background" onClick={OnClose} />
+      <div className="modal-background" onClick={onClose} />
 
       {isLoading ? (
         <Loader />
@@ -52,7 +52,7 @@ export const TodoModal: React.FC<Props> = ({ todo, OnClose }) => {
               type="button"
               className="delete"
               data-cy="modal-close"
-              onClick={OnClose}
+              onClick={onClose}
             />
           </header>
 

@@ -70,8 +70,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 statusFilter={statusFilter}
                 searchQuery={searchQuery}
-                OnSetStatusFiler={setStatusFilter}
-                OnSetSearchQuery={setSearchQuery}
+                onSetStatusFilter={setStatusFilter}
+                onSetSearchQuery={setSearchQuery}
               />
             </div>
 
@@ -89,7 +89,7 @@ export const App: React.FC = () => {
         </div>
       </div>
       {selectedTodo && (
-        <TodoModal todo={selectedTodo} OnClose={() => setSelectedTodo(null)} />
+        <TodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
       )}
     </>
   );
