@@ -8,7 +8,7 @@ import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { getTodos } from './api';
-import { TodoFilterStatrs } from './types/TodoFilterStatrs';
+import { TodoFilterStatus } from './types/TodoFilterStatus';
 
 function todoFilter<T>(
   items: T[],
@@ -26,10 +26,10 @@ function todoFilter<T>(
 }
 
 export const App: React.FC = () => {
-  const [todoFilterState, setTodoFilterState] = useState<TodoFilterStatrs>(
-    TodoFilterStatrs.All,
+  const [todoFilterState, setTodoFilterState] = useState<TodoFilterStatus>(
+    TodoFilterStatus.All,
   );
-  const [query, setQeury] = useState<string>('');
+  const [query, setQuery] = useState<string>('');
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
@@ -41,11 +41,11 @@ export const App: React.FC = () => {
       todos,
       ({ completed }: Todo) => {
         switch (todoFilterState) {
-          case TodoFilterStatrs.All:
+          case TodoFilterStatus.All:
             return true;
-          case TodoFilterStatrs.Active:
+          case TodoFilterStatus.Active:
             return completed === false;
-          case TodoFilterStatrs.Complited:
+          case TodoFilterStatus.Completed:
             return completed === true;
         }
       },
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const handleSetTodoFilterState = (newState: TodoFilterStatrs) => {
+  const handleSetTodoFilterState = (newState: TodoFilterStatus) => {
     setTodoFilterState(newState);
   };
 
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                setQuery={setQeury}
+                setQuery={setQuery}
                 setTodoFilter={value => handleSetTodoFilterState(value)}
               />
             </div>
