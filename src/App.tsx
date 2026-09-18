@@ -29,14 +29,14 @@ export const App: React.FC = () => {
   const [todoFilterState, setTodoFilterState] = useState<TodoFilterStatrs>(
     TodoFilterStatrs.All,
   );
-  const [qeury, setQeury] = useState<string>('');
+  const [query, setQeury] = useState<string>('');
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
   const [isLoadingTodos, setIsLoadingTodos] = useState<boolean>(false);
 
-  const filtratedTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     return todoFilter<Todo>(
       todos,
       ({ completed }: Todo) => {
@@ -50,9 +50,9 @@ export const App: React.FC = () => {
         }
       },
       ({ title }: Todo) =>
-        title.toLowerCase().includes(qeury.trim().toLowerCase()),
+        title.toLowerCase().includes(query.trim().toLowerCase()),
     );
-  }, [qeury, todoFilterState, todos]);
+  }, [query, todoFilterState, todos]);
 
   useEffect(() => {
     setIsLoadingTodos(true);
@@ -63,7 +63,7 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const hendlSetTodoFilterState = (newState: TodoFilterStatrs) => {
+  const handleSetTodoFilterState = (newState: TodoFilterStatrs) => {
     setTodoFilterState(newState);
   };
 
@@ -76,9 +76,9 @@ export const App: React.FC = () => {
 
             <div className="block">
               <TodoFilter
-                query={qeury}
+                query={query}
                 setQuery={setQeury}
-                setTodoFilter={value => hendlSetTodoFilterState(value)}
+                setTodoFilter={value => handleSetTodoFilterState(value)}
               />
             </div>
 
@@ -87,7 +87,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filtratedTodos}
+                  todos={filteredTodos}
                   selectedId={selectedTodo?.id || -1}
                   onDetalClic={setSelectedTodo}
                 />
