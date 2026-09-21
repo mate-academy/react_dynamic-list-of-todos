@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 type Status = 'all' | 'active' | 'completed';
 
@@ -32,7 +33,11 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
     </p>
 
-    <p className="control is-expanded has-icons-left has-icons-right">
+    <p
+      className={classNames('control is-expanded has-icons-left', {
+        'has-icons-right': query,
+      })}
+    >
       <input
         data-cy="searchInput"
         type="text"
@@ -47,7 +52,7 @@ export const TodoFilter: React.FC<Props> = ({
       </span>
 
       {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+        <span className="icon is-right icon-pointer-all">
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <button
             data-cy="clearSearchButton"
