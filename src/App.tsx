@@ -66,9 +66,7 @@ export const App: React.FC = () => {
       (status === 'active' && !todo.completed) ||
       (status === 'completed' && todo.completed);
 
-    const matchesQuery = todo.title
-      .toLowerCase()
-      .includes(query.toLowerCase());
+    const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
     return matchesStatus && matchesQuery;
   });
