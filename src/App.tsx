@@ -15,23 +15,27 @@ import { FilterOptions } from './types/FilterOptions';
 
 export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showTodoModal, setShowTodoModal] = useState(false);
 
   const [toDoList, setToDoList] = useState<Todo[]>([]);
 
   const [filterOption, setFilterOption] = useState<FilterOptions>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
-    getTodos().then(list => {
-      setToDoList(list);
+
+    const fetchTodos = async () => {
+      const result = await getTodos();
+
+      setToDoList(result);
       setIsLoading(false);
-    });
+    };
+
+    fetchTodos();
   }, []);
 
-  const handleList = (list: Todo[]) => {
+  const getFilteredTodo = (list: Todo[]) => {
     let result: Todo[] = [];
 
     switch (filterOption) {
@@ -70,22 +74,19 @@ export const App: React.FC = () => {
             <div className="block">
               {isLoading && <Loader />}
               <TodoList
-                toDoList={handleList(toDoList)}
-                selectedTodoId={selectedTodoId}
-                setSelectedTodoId={setSelectedTodoId}
-                setShowTodoModal={setShowTodoModal}
+                toDoList={getFilteredTodo(toDoList)}
+                selectedTodo={selectedTodo}
+                setSelectedTodo={setSelectedTodo}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {showTodoModal && (
+      {selectedTodo !== null && (
         <TodoModal
-          todoList={toDoList}
-          todoId={selectedTodoId}
-          setShowTodoModal={setShowTodoModal}
-          setSelectedTodoId={setSelectedTodoId}
+          selectedTodo={selectedTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </>
