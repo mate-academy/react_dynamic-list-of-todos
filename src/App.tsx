@@ -10,7 +10,6 @@ import { Loader } from './components/Loader';
 import { Todo, TodoStatus } from './types/Todo';
 import { getTodos } from './api';
 import { getFilteredTodos } from './utils/getFilteredTodos';
-import { stat } from 'fs';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

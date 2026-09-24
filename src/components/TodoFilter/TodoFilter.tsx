@@ -1,4 +1,4 @@
-import { Todo, TodoStatus } from '../../types/Todo';
+import { TodoStatus } from '../../types/Todo';
 
 type TodoFilterProps = {
   status: TodoStatus;
