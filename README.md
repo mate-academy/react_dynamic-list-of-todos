@@ -1,21 +1,32 @@
 # React dynamic list of TODOs
-- Replace `<your_account>` with your Github username in the
-  [DEMO LINK](https://nkgrand.github.io/react_dynamic-list-of-todos/)
-- Follow the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline)
-- Use [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript)
 
-## Description
-You are given a basic markup for the App, TodosList and CurrentUser components and [the API](https://mate-academy.github.io/fe-students-api/).
+The goal of this task is to teach you:
+- how to work with a not detailed task description;
+- to learn the existing code before you start;
+- to understand tests and why they fail;
+- to try the working page and implement the same behaviour;
 
-Add the data loading, so the App works as described below:
+> Here is [the working page](https://mate-academy.github.io/react_dynamic-list-of-todos/)
 
-1. Create a separate file `api.ts` to put all the API call there.
-1. Todos are fetched on page load from [GET todos endpoint](https://mate.academy/students-api/todos). (Use `componentDidMount`)
-1. Each todo has a button to select a user but `selectedUserId` is stored in the `App`. (pass a callback to the `TodoList`)
-1. `CurrentUser` component receives `userId` as a prop and loads user details from [GET user endpoint](https://mate.academy/students-api/users/1) (replace 1 with a given `userId`).
-1. If I select another user the details should be updated. (use `componentDidUpdate`).
-1. If I select the same user there should not be a request to the server.
-1. Add a button `Clear` into the `CurrentUser` to clear the selectedUser in the `App`
-1. Add an `<input>` to the `TodoList` to filter the todos by title
-1. Add a `<select>` to the `TodoList` to show `all`, `active`(not completed) or `completed` todos.
-1. (*) Add `Randomize` button to the `TodoList` to show the todos in a random order.
+You are given the markup for the `App`, `TodosList`, `TodoFilter`, `TodoModal`
+and `Loader` components. Load data from the API and show it using the given components.
+
+1. Load [the todos](https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json) when the `App` is
+loaded and show them using `TodoList` (check the code in the `api.ts`);
+1. Show the `Loader` when waiting any data from the server (check the `components` folder);
+1. Check how the `wait` function is used in the `api.ts` to ensure that `Loader` works as expected;
+1. When the `Show` button is clicked open the `TodoModal` with a selected `todo`;
+1. Don't forget to load [user details](https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/1.json) (replace `1` with the actual `userId`);
+1. Show the Loader while waiting for the user;
+1. `x` button should close the modal;
+1. The `select` should filter todos by the `completed` status: `all`, `completed` and `active`(not completed) todos;
+1. Use the `input` in the `TodoFilter` to filter the `todos` by `title`;
+    - show the `x` button when the `query` is entered;
+    - the `x` button should clear the `query` and reset the todos;
+
+## Instructions
+- Install Prettier Extention and use this [VSCode settings](https://mate-academy.github.io/fe-program/tools/vscode/settings.json) to enable format on save.
+- Implement a solution following the [React task guideline](https://github.com/mate-academy/react_task-guideline#react-tasks-guideline).
+- Use the [React TypeScript cheat sheet](https://mate-academy.github.io/fe-program/js/extra/react-typescript).
+- Open one more terminal and run tests with `npm test` to ensure your solution is correct.
+- Replace `<your_account>` with your Github username in the [DEMO LINK](https://nkgrand.github.io/react_dynamic-list-of-todos/) and add it to the PR description.

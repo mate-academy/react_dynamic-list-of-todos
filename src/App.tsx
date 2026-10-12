@@ -1,75 +1,98 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import 'bulma/css/bulma.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import { TodoFilter } from './components/TodoFilter';
 import { TodoList } from './components/TodoList';
-import { CurrentUser } from './components/CurrentUser';
-import { getTodos } from './api/api';
+import { TodoModal } from './components/TodoModal';
+import { Loader } from './components/Loader';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
-import './App.scss';
-import './styles/general.scss';
+type Status = 'all' | 'active' | 'completed';
 
-interface State {
-  selectedUserId: number;
-  todos: [],
-  todoError: boolean,
-}
+export const App: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedTodoId, setSelectedTodoId] = useState(0);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<Status>('all');
 
-class App extends React.Component<{}, State> {
-  state: State = {
-    selectedUserId: 0,
-    todos: [],
-    todoError: false,
-  };
+  useEffect(() => {
+    getTodos()
+      .then(setTodos)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
-  async componentDidMount() {
-    try {
-      const todos = await getTodos();
+  const visibleTodos = todos.filter(todo => {
+    const normalizedTitle = todo.title.toLowerCase();
+    const normalizedQuery = query.toLowerCase();
+    const matchesQuery = normalizedTitle.includes(normalizedQuery);
 
-      this.setState({ todos });
-    } catch (error) {
-      this.setState({ todoError: true });
+    switch (status) {
+      case 'active':
+        return matchesQuery && !todo.completed;
+
+      case 'completed':
+        return matchesQuery && todo.completed;
+
+      default:
+        return matchesQuery;
     }
-  }
+  });
 
-  userSelected = (userId: number) => {
-    if (this.state.selectedUserId !== userId) {
-      this.setState({ selectedUserId: userId });
+  const selectedTodo = todos.find(todo => todo.id === selectedTodoId);
+
+  const handleStatusChange = (value: string) => {
+    if (value === 'all' || value === 'active' || value === 'completed') {
+      setStatus(value);
     }
   };
 
-  clearUser = () => {
-    this.setState({ selectedUserId: 0 });
+  const handleSelectTodo = (todoId: number) => {
+    setSelectedTodoId(currentId => (currentId === todoId ? 0 : todoId));
   };
 
-  render() {
-    const { selectedUserId, todos, todoError } = this.state;
+  const handleCloseModal = () => {
+    setSelectedTodoId(0);
+  };
 
-    return (
-      <div className="App">
-        <div className="App__sidebar">
-          {todoError ? (
-            <p>Cannot load data from server</p>
-          ) : (
-            <TodoList
-              todos={todos}
-              userSelected={this.userSelected}
-              selectedUserId={selectedUserId}
-            />
-          )}
-        </div>
+  return (
+    <>
+      <div className="section">
+        <div className="container">
+          <div className="box">
+            <h1 className="title">Todos:</h1>
 
-        <div className="App__content">
-          <div className="App__content-container">
-            {selectedUserId ? (
-              <CurrentUser
-                userSelected={this.userSelected}
-                selectedUserId={selectedUserId}
-                clearUser={this.clearUser}
+            <div className="block">
+              <TodoFilter
+                query={query}
+                status={status}
+                onQueryChange={setQuery}
+                onStatusChange={handleStatusChange}
               />
-            ) : 'No user selected'}
+            </div>
+
+            <div className="block">
+              {isLoading && <Loader />}
+
+              {!isLoading && (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodoId}
+                  onSelect={handleSelectTodo}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    );
-  }
-}
 
-export default App;
+      {selectedTodo && (
+        <TodoModal todo={selectedTodo} onClose={handleCloseModal} />
+      )}
+    </>
+  );
+};
