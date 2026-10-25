@@ -61,8 +61,7 @@ module.exports = {
       { blankLine: 'always', prev: 'directive', next: '*' },
       { blankLine: 'always', prev: 'block-like', next: '*' },
     ],
-    'implicit-arrow-linebreak:': 0,
-
+    'implicit-arrow-linebreak': 0,
     // React
     'react/prop-types': 0,
     'react/require-default-props': 0,
@@ -85,24 +84,22 @@ module.exports = {
     }],
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
-
     // Typescript
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/ban-types': ['error', {
-        extendDefaults: true,
-        types: {
-          '{}': false,
-        },
+      extendDefaults: true,
+      types: {
+        '{}': false,
       },
-    ],
+    }],
   },
   ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts', 'src/vite-env.d.ts', 'cypress'],
   settings: {
     react: {
-      version: 'detect',
+      version: '18.2',
     },
   },
 };
