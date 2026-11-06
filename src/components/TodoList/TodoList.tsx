@@ -3,10 +3,15 @@ import { Todo } from '../../types/Todo';
 
 type Props = {
   todos: Todo[];
-  onSelect: (todo: Todo) => void;
+  selectedTodo: Todo | null;
+  onSelect: (todo: Todo | null) => void;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, onSelect }) => (
+export const TodoList: React.FC<Props> = ({
+  todos,
+  selectedTodo,
+  onSelect,
+}) => (
   <table className="table is-narrow is-fullwidth">
     <thead>
       <tr>
@@ -49,10 +54,22 @@ export const TodoList: React.FC<Props> = ({ todos, onSelect }) => (
               type="button"
               className="button"
               data-cy="selectButton"
-              onClick={() => onSelect(todo)}
+              onClick={() => {
+                if (selectedTodo?.id === todo.id) {
+                  onSelect(null);
+                } else {
+                  onSelect(todo);
+                }
+              }}
             >
               <span className="icon">
-                <i className="far fa-eye" />
+                <i
+                  className={
+                    selectedTodo?.id === todo.id
+                      ? 'far fa-eye-slash'
+                      : 'far fa-eye'
+                  }
+                />
               </span>
             </button>
           </td>
