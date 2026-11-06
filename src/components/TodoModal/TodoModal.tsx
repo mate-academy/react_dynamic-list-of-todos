@@ -2,15 +2,21 @@ import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import classNames from 'classnames';
 
 type Props = {
   selectedTodo: Todo;
   selectedUser: User | null;
   isLoading: boolean;
   onClose: () => void;
-}
+};
 
-export const TodoModal: React.FC<Props> = ({ selectedTodo, selectedUser, isLoading, onClose}) => {
+export const TodoModal: React.FC<Props> = ({
+  selectedTodo,
+  selectedUser,
+  isLoading,
+  onClose,
+}) => {
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
@@ -43,7 +49,14 @@ export const TodoModal: React.FC<Props> = ({ selectedTodo, selectedUser, isLoadi
 
             <p className="block" data-cy="modal-user">
               {/* <strong className="has-text-success">Done</strong> */}
-              <strong className={selectedTodo.completed ? 'has-text-success' : 'has-text-danger'}>{selectedTodo.completed ? 'Done' : 'Planned'}</strong>
+              <strong
+                className={classNames({
+                  "has-text-success": selectedTodo.completed,
+                  "has-text-danger": !selectedTodo.completed,
+                })}
+              >
+                  {selectedTodo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {` by `}
 

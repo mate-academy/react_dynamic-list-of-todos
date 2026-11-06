@@ -1,17 +1,26 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
-  filterStatus : string;
+  filterStatus: string;
   query: string;
   onStatusChange: (status: string) => void;
   onQueryChange: (query: string) => void;
-}
+};
 
-export const TodoFilter: React.FC<Props> = ({filterStatus, query, onStatusChange, onQueryChange})=> (
+export const TodoFilter: React.FC<Props> = ({
+  filterStatus,
+  query,
+  onStatusChange,
+  onQueryChange,
+}) => (
   <form className="field has-addons">
     <p className="control">
       <span className="select">
-        <select data-cy="statusSelect" value={filterStatus} onChange={event => onStatusChange(event.target.value)}>
+        <select
+          data-cy="statusSelect"
+          value={filterStatus}
+          onChange={event => onStatusChange(event.target.value)}
+        >
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>

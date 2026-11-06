@@ -12,7 +12,7 @@ import { User } from './types/User';
 import { getTodos, getUser } from './api';
 
 export const App: React.FC = () => {
-  const [todos , setTodos] = useState<Todo []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -25,36 +25,34 @@ export const App: React.FC = () => {
     getTodos()
       .then(setTodos)
       .finally(() => setIsLoading(false));
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!selectedTodo) {
       return;
     }
-    setIsUserLoading(true)
+
+    setIsUserLoading(true);
     setSelectedUser(null);
     getUser(selectedTodo.userId)
       .then(setSelectedUser)
       .finally(() => setIsUserLoading(false));
-  }, [selectedTodo])
+  }, [selectedTodo]);
 
   const handleClose = () => {
     setSelectedTodo(null);
     setSelectedUser(null);
-  }
+  };
 
   const visibleTodos = todos.filter(todo => {
     const matchesStatus =
       filterStatus === 'all' ||
       (filterStatus === 'completed' && todo.completed) ||
       (filterStatus === 'active' && !todo.completed);
-    const matchesQuery =
-      todo.title
-      .toLowerCase()
-      .includes(query.toLowerCase());
+    const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
     return matchesStatus && matchesQuery;
-  })
+  });
 
   return (
     <>
@@ -88,10 +86,10 @@ export const App: React.FC = () => {
       </div>
       {selectedTodo && (
         <TodoModal
-          selectedTodo = {selectedTodo}
-          selectedUser = {selectedUser}
-          isLoading = {isUserLoading}
-          onClose = {handleClose}
+          selectedTodo={selectedTodo}
+          selectedUser={selectedUser}
+          isLoading={isUserLoading}
+          onClose={handleClose}
         />
       )}
     </>
