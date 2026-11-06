@@ -51,11 +51,11 @@ export const TodoModal: React.FC<Props> = ({
               {/* <strong className="has-text-success">Done</strong> */}
               <strong
                 className={classNames({
-                  "has-text-success": selectedTodo.completed,
-                  "has-text-danger": !selectedTodo.completed,
+                  'has-text-success': selectedTodo.completed,
+                  'has-text-danger': !selectedTodo.completed,
                 })}
               >
-                  {selectedTodo.completed ? 'Done' : 'Planned'}
+                {selectedTodo.completed ? 'Done' : 'Planned'}
               </strong>
 
               {` by `}
