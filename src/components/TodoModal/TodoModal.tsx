@@ -3,6 +3,7 @@ import { User } from '../../types/User';
 import { getUser } from '../../api';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   todo: Todo;
@@ -13,11 +14,19 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     setUser(null);
 
     getUser(todo.userId).then(userFromServer => {
-      setUser(userFromServer);
+      if (!cancelled) {
+        setUser(userFromServer);
+      }
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [todo.userId]);
 
   return (
@@ -51,11 +60,14 @@ export const TodoModal: React.FC<Props> = ({ todo, onClose }) => {
             </p>
 
             <p className="block" data-cy="modal-user">
-              {todo.completed ? (
-                <strong className="has-text-success">Done</strong>
-              ) : (
-                <strong className="has-text-danger">Planned</strong>
-              )}
+              <strong
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
+              >
+                {todo.completed ? 'Done' : 'Planned'}
+              </strong>
 
               {' by '}
 
