@@ -15,7 +15,7 @@ import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isTodosLoading, setTodosLoading] = useState<boolean>(false);
+  const [isTodosLoading, setTodosLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null); // Modal state
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
@@ -55,10 +55,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     setTodosLoading(true);
     getTodos()
-      .then(newTodos => {
-        setTodos(newTodos);
-        setTodosLoading(false);
-      })
+      .then(setTodos)
       .catch(() => {})
       .finally(() => {
         setTodosLoading(false);
