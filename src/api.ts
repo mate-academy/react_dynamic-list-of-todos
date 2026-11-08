@@ -3,7 +3,7 @@ import { User } from './types/User';
 
 // eslint-disable-next-line operator-linebreak
 const BASE_URL =
-  'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
+  'https://mate-academy.github.io/react_dynamic-list-of-todos/api/';
 
 // This function creates a promise
 // that is resolved after a given delay
@@ -18,7 +18,7 @@ function get<T>(url: string): Promise<T> {
   const fullURL = BASE_URL + url + '.json';
 
   // we add some delay to see how the loader works
-  return wait(300)
+  return wait(1000)
     .then(() => fetch(fullURL))
     .then(res => res.json());
 }
