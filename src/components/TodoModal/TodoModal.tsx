@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import { getUser } from '../../api';
 
 type Props = {
   todo: Todo;
-  selectedUser: User | null;
-  isUserLoading: boolean;
+  selectedTodo: Todo;
   onCloseTodoModal: () => void;
 };
 
 export const TodoModal: React.FC<Props> = ({
   todo,
-  selectedUser,
-  isUserLoading,
+  selectedTodo,
   onCloseTodoModal,
 }) => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!selectedTodo) {
+      return;
+    }
+
+    setIsUserLoading(true);
+
+    getUser(selectedTodo.userId)
+      .then(setSelectedUser)
+      .catch(() => {})
+      .finally(() => {
+        setIsUserLoading(false);
+      });
+  }, [selectedTodo]);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />

@@ -8,17 +8,13 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
-import { User } from './types/User';
 import { getTodos } from './api';
-import { getUser } from './api';
 import { FilterStatus } from './types/FilterStatus';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isTodosLoading, setTodosLoading] = useState<boolean>(true);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null); // Modal state
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [filterTodo, setFilterTodo] = useState<FilterStatus>('all');
   const [inputQuery, setInputQuery] = useState<string>('');
 
@@ -62,23 +58,6 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  // FIND USER
-
-  useEffect(() => {
-    if (!selectedTodo) {
-      return;
-    }
-
-    setIsUserLoading(true);
-
-    getUser(selectedTodo.userId)
-      .then(setSelectedUser)
-      .catch(() => {})
-      .finally(() => {
-        setIsUserLoading(false);
-      });
-  }, [selectedTodo]);
-
   return (
     <>
       <div className="section">
@@ -111,8 +90,7 @@ export const App: React.FC = () => {
       {selectedTodo && (
         <TodoModal
           todo={selectedTodo}
-          selectedUser={selectedUser}
-          isUserLoading={isUserLoading}
+          selectedTodo={selectedTodo}
           onCloseTodoModal={handleCloseTodoModal}
         />
       )}
