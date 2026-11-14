@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  const filterTodos = (status: string) => {
+  const handleStatusChange = (status: string) => {
     setSelectedStatus(status);
   };
 
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 selectedStatus={selectedStatus}
-                onStatusChange={filterTodos}
+                onStatusChange={handleStatusChange}
                 query={query}
                 setQuery={setQuery}
               />

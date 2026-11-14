@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 type TodoListProps = {
@@ -40,9 +41,10 @@ export const TodoList: React.FC<TodoListProps> = ({
             </td>
             <td>
               <p
-                className={
-                  todo.completed ? 'has-text-success' : 'has-text-danger'
-                }
+                className={classNames({
+                  'has-text-success': todo.completed,
+                  'has-text-danger': !todo.completed,
+                })}
               >
                 {todo.title}
               </p>
@@ -57,9 +59,10 @@ export const TodoList: React.FC<TodoListProps> = ({
               >
                 <span className="icon">
                   <i
-                    className={`far ${
-                      todo.id === selectedTodo?.id ? 'fa-eye-slash' : 'fa-eye'
-                    }`}
+                    className={classNames('far', {
+                      'fa-eye-slash': todo.id === selectedTodo?.id,
+                      'fa-eye': todo.id !== selectedTodo?.id,
+                    })}
                   />
                 </span>
               </button>
