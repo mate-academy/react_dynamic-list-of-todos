@@ -62,13 +62,11 @@ export const App: React.FC = () => {
       default:
         setFilteredTodos(toDoList);
     }
-  }, [selectedFilter]);
 
-  useEffect(() => {
     setFilteredTodos(
       toDoList.filter(todo => todo.title.includes(searchString)),
     );
-  }, [searchString]);
+  }, [selectedFilter, searchString, toDoList]);
 
   return (
     <>
