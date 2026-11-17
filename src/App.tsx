@@ -64,7 +64,7 @@ export const App: React.FC = () => {
     }
 
     setFilteredTodos(
-      toDoList.filter(todo => todo.title.includes(searchString)),
+      filteredTodos.filter(todo => todo.title.includes(searchString)),
     );
   }, [selectedFilter, searchString, toDoList]);
 
