@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 
 export const TodoList: React.FC<{
@@ -24,11 +25,9 @@ export const TodoList: React.FC<{
       {todos.map(todo => (
         <tr
           data-cy="todo"
-          className={
-            selectedTodo && selectedTodo.id === todo.id
-              ? 'has-background-info-light'
-              : ''
-          }
+          className={classNames({
+            'has-background-info-light': selectedTodo?.id === todo.id,
+          })}
           key={todo.id}
         >
           <td className="is-vcentered">{todo.id}</td>

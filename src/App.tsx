@@ -19,8 +19,8 @@ export const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const todoToShow = todos.find(todo => todo.id === selectedTodo?.id);
-  const onCloseModal = () => setSelectedTodo(undefined);
-  const onClearFilter = () => setQuery('');
+  const handleCloseModal = () => setSelectedTodo(undefined);
+  const handleClearFilter = () => setQuery('');
   const visibleTodos = todos.filter(todo => {
     const matchesStatus =
       status === 'all' ||
@@ -52,7 +52,7 @@ export const App: React.FC = () => {
                 onStatusChange={setStatus}
                 query={query}
                 onQueryChange={setQuery}
-                onClearFilter={onClearFilter}
+                onClearFilter={handleClearFilter}
               />
             </div>
 
@@ -69,7 +69,7 @@ export const App: React.FC = () => {
       </div>
 
       {selectedTodo && todoToShow && (
-        <TodoModal todo={todoToShow} onCloseModal={onCloseModal} />
+        <TodoModal todo={todoToShow} onCloseModal={handleCloseModal} />
       )}
     </>
   );
