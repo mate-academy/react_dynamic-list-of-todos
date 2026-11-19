@@ -13,7 +13,7 @@ export const TodoFilter = ({
   onQueryChange: (query: string) => void;
   onClearFilter: () => void;
 }) => (
-  <form className="field has-addons">
+  <form className="field has-addons" onSubmit={event => event.preventDefault()}>
     <p className="control">
       <span className="select">
         <select
