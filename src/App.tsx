@@ -46,7 +46,7 @@ export const App: React.FC = () => {
     });
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     userRequestId.current += 1;
     setSelectedTodo(null);
     setSelectedUser(null);
@@ -101,7 +101,7 @@ export const App: React.FC = () => {
           todo={selectedTodo}
           user={selectedUser}
           isLoading={isLoadingUser}
-          onClose={closeModal}
+          onClose={handleClose}
         />
       )}
     </>
