@@ -31,7 +31,7 @@ export const App: React.FC = () => {
     });
   }, []);
 
-  const selectTodo = (todo: Todo) => {
+  const handleTodoSelect = (todo: Todo) => {
     const requestId = ++userRequestId.current;
 
     setSelectedTodo(todo);
@@ -55,9 +55,9 @@ export const App: React.FC = () => {
 
   const visibleTodos = todos.filter(todo => {
     const matchesStatus =
-      status === 'all'
-      || (status === 'completed' && todo.completed)
-      || (status === 'active' && !todo.completed);
+      status === 'all' ||
+      (status === 'completed' && todo.completed) ||
+      (status === 'active' && !todo.completed);
     const matchesQuery = todo.title
       .toLowerCase()
       .includes(query.trim().toLowerCase());
@@ -82,15 +82,15 @@ export const App: React.FC = () => {
             </div>
 
             <div className="block">
-              {isLoadingTodos
-                ? <Loader />
-                : (
-                  <TodoList
-                    todos={visibleTodos}
-                    selectedTodoId={selectedTodo?.id}
-                    onTodoSelected={selectTodo}
-                  />
-                )}
+              {isLoadingTodos ? (
+                <Loader />
+              ) : (
+                <TodoList
+                  todos={visibleTodos}
+                  selectedTodoId={selectedTodo?.id}
+                  onTodoSelected={handleTodoSelect}
+                />
+              )}
             </div>
           </div>
         </div>
